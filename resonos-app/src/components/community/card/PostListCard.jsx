@@ -12,10 +12,10 @@ const BoardListCard = ({title}) => {
 
   return (
     <li onClick={handleNavigate}>
-      <p>{title}</p>
+      <p className='ellipsis'>{title}</p>
       <div>
         <span className='post-name'>게시판이름</span>
-        <span className='date'>10:05</span>
+        <span className='date'>1998-02-10</span>
       </div>
     </li>
   )
