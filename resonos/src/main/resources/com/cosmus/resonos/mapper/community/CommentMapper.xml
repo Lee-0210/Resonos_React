@@ -1,47 +1,51 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  
 <mapper namespace="com.cosmus.resonos.mapper.community.CommentMapper">
 
-  <select id="list" resultType="Comment">
+  <resultMap id="CommentResultMap" type="com.cosmus.resonos.domain.community.Comment">
+    <id property="id" column="id"/>
+    <result property="content" column="content"/>
+    <result property="type" column="type"/>
+    <result property="targetId" column="target_id"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="userId" column="user_id"/>
+  </resultMap>
+
+  <select id="list" resultType="com.cosmus.resonos.domain.community.Comment">
     SELECT * FROM comment
   </select>
 
-  <insert id="insert">
-    INSERT INTO comment(
-    )
-    VALUES (
-    )
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO comment (content, type, target_id, created_at, user_id)
+    VALUES (#{content}, #{type}, #{targetId}, #{createdAt}, #{userId})
   </insert>
 
   <update id="update">
     UPDATE comment
-    <set>
-      updated_at = now()
-    </set>
-    WHERE -- key 지정 필요
+    SET content = #{content},
+        type = #{type},
+        target_id = #{targetId},
+        user_id = #{userId}
+    WHERE id = #{id}
   </update>
 
   <delete id="delete">
-    DELETE FROM comment WHERE -- key 지정 필요
+    DELETE FROM comment WHERE id = #{id}
   </delete>
 
-  <update id="completeAll">
-    UPDATE comment SET -- 수정필드 없음
-  </update>
-
-  <delete id="deleteAll">
-    DELETE FROM comment
-  </delete>
   <select id="findByTarget" resultMap="CommentResultMap">
     SELECT * FROM comment WHERE type = #{type} AND target_id = #{targetId} ORDER BY created_at DESC
   </select>
-  <!-- 댓글 개수 조회 -->
+
+  <select id="select" resultMap="CommentResultMap">
+    SELECT * FROM comment WHERE id = #{id}
+  </select>
+
   <select id="countByUserId" resultType="int">
     SELECT COUNT(*) FROM comment WHERE user_id = #{userId}
   </select>
-
 
 </mapper>
