@@ -3,17 +3,26 @@
   max-width: 1440px;
   width: 100%;
 }
-.commu .post-name, .commu .date {
+.commu .board-name, .commu .date {
   font-size: 1.4rem;
   color: #b1b1b1;
 }
 .commu .date {margin-left: 15px;}
 .commu li {cursor: pointer;}
+.commu li:hover .focus {
+  text-decoration: underline;
+}
 .ellipsis {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.commu ul {padding-left: 0;}
+.commu .main {color: var(--main-color);}
+.commu h3 {margin-bottom: 10px; color: var(--main-color);}
+.commu .post-title, .commu .board-title
+{color: var(--main-color); font-size: 1.4rem;}
+.commu .focus {max-width: 70%; display: inline-block;}
 
 /* ===== 인덱스 페이지 ===== */
 .commu.index {
@@ -35,7 +44,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 30px;
+  gap: 10px;
 }
 
 /* 주요 소식 */
@@ -50,22 +59,26 @@
 .commu.index .bottom {
   display: flex;
   justify-content: space-between;
+  margin-top: 15px;
 }
+
 /* 최신글, 인기글, 갤러리 */
+.commu.index .post-area + .post-area {margin-top: 33px;}
 .commu.index .post-area {
   padding: 20px 30px;
   background-color: #1C202A;
   border-radius: 20px;
 }
-.commu.index .post-area {margin-top: 15px;}
 .commu.index .post-area h3, .commu.index .right-card h3 {
   color: var(--main-color); margin-bottom: 10px;
 }
-.commu.index .post-area ul {padding-left: 0;}
 .commu.index .post-area li {display: flex; padding: 10px 0; justify-content: space-between}
 .commu.index .post-area li p:first-child {
   font-size: 1.4rem;
   width: 75%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 
@@ -78,19 +91,13 @@
   border-radius: 20px;
 }
 .commu.index .right-card ul {padding-left: 0;}
-.commu.index .right-card li {padding: 5px 0; font-size: 1.4rem;}
+.commu.index .right-card li {padding: 7.5px 0; font-size: 1.4rem;}
 .commu.index .right-card.ranking li {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 .commu.index .right-card.ranking p {font-size: 1.4rem}
-
-@media screen and (max-width: 768px) {
-  .commu.index .bottom {flex-direction: column;}
-
-  .commu.index .right {flex-direction: row; margin-top: 30px;}
-}
 
 /* ===== 게시판 페이지 ===== */
 .commu.board {
@@ -110,6 +117,7 @@
   border-radius: 20px;
   height: 150px;
   flex: 0.49;
+  min-width: 0;
 }
 .commu.board .board-info > div {
   display: flex;
@@ -118,7 +126,7 @@
 }
 .commu.board .top > div h3 {color: var(--main-color); margin-bottom: 10px;}
 .commu.board .board-info > div + div {margin-top: 10px;}
-.commu.board .board-info span {font-size: 1.4rem;}
+.commu.board .board-info span {font-size: 1.4rem; width: 55px;}
 .commu.board .board-info p {max-width: 80%;}
 
 /* 게시글 리스트 */
@@ -136,6 +144,13 @@
   justify-content: space-between;
   padding: 10px 0;
 }
+.commu.board .post-list li p:first-child
+, .commu.board .notice-area li p:first-child
+{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 .commu.board ul.custom-pagination li button {
   font-size: 1.4rem;
 }
@@ -145,4 +160,55 @@
   padding: 20px 30px;
   border: 2px solid var(--main-color);
   border-radius: 20px;
+}
+
+/* ===== 검색 결과 페이지 ===== */
+.commu.search {padding: 0 100px;}
+.commu.search h3 {display: inline-block;}
+.commu.search .count {margin-left: 15px;}
+/* 컨테이너 */
+.commu.search > div > div {
+  padding: 20px 30px;
+  border-radius: 20px;
+  min-height: 450px;
+  background-color: var(--container-color);
+  position: relative;
+}
+.commu.search > div + div {
+  margin-top: 50px;
+}
+.commu.search > div > div button {
+  position: absolute;
+  right: 40px;
+  bottom: 20px;
+  color: var(--main-color);
+  font-weight: bold;
+}
+
+/* 게시판 결과 컨테이너 */
+.commu.search .board-result li {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 0;
+  font-size: 1.4rem;
+}
+
+/* 게시글 결과 컨테이너 */
+.commu.search .post-result li {
+  padding: 10px 0;
+}
+
+/* 검색결과 텍스트 */
+.commu.search h2 {
+  margin-bottom: 50px;
+  font-size: 2.5rem;
+}
+
+@media screen and (max-width: 768px) {
+  .commu.index .bottom {flex-direction: column;}
+
+  .commu.index .right {flex-direction: row; margin-top: 30px;}
+  .commu.board {padding: 0;}
+  .commu.search {padding: 0;}
 }

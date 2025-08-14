@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const BoardListCard = ({title}) => {
+const BoardListCard = ({title, date}) => {
 
   const navigate = useNavigate()
 
@@ -12,10 +12,14 @@ const BoardListCard = ({title}) => {
 
   return (
     <li onClick={handleNavigate}>
-      <p className='ellipsis'>{title}</p>
+      <p>
+        <span className='focus ellipsis'>{title}</span>
+        <span className='main'>[150]</span>
+        &nbsp;❤️(20)
+      </p>
       <div>
-        <span className='post-name'>게시판이름</span>
-        <span className='date'>1998-02-10</span>
+        <span className='board-name'>게시판이름</span>
+        <span className='date'>{date != null ? date : '1998-02-10 10:10:10'}</span>
       </div>
     </li>
   )

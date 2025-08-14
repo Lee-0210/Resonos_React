@@ -27,27 +27,27 @@ const Index = () => {
           <div className='post-area'>
             <h3>최신글</h3>
             <ul>
-              <PostListCard title={'최근 게시글 제목'} />
-              <PostListCard title={'최근 게시글 제목'} />
-              <PostListCard title={'최근 게시글 제목'} />
-              <PostListCard title={'최근 게시글 제목'} />
-              <PostListCard title={'최근 게시글 제목'} />
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
             </ul>
           </div>
           {/* 인기글 */}
           <div className='post-area'>
             <h3>인기글</h3>
             <ul>
-              <PostListCard title={'인기 게시글 제목'} />
-              <PostListCard title={'인기 게시글 제목'} />
-              <PostListCard title={'인기 게시글 제목'} />
-              <PostListCard title={'인기 게시글 제목'} />
-              <PostListCard title={'인기 게시글 제목'} />
-              <PostListCard title={'인기 게시글 제목'} />
-              <PostListCard title={'인기 게시글 제목'} />
-              <PostListCard title={'인기 게시글 제목'} />
-              <PostListCard title={'인기 게시글 제목'} />
-              <PostListCard title={'인기 게시글 제목'} />
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
             </ul>
           </div>
           {/* 이미지 갤러리 */}

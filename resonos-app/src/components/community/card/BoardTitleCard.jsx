@@ -12,10 +12,9 @@ const BoardTitleCard = ({title}) => {
 
   return (
     <li
-      className='ellipsis'
       onClick={handleNavigate}
     >
-      {title}
+      <span className='ellipsis focus'>{title}</span>
     </li>
   )
 }
