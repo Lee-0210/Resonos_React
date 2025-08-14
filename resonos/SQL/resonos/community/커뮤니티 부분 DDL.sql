@@ -61,7 +61,7 @@ CREATE TABLE `com_vote` (
     `post_id` BIGINT NOT NULL,
     `title` VARCHAR(100) NOT NULL,
     `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-    `closed_at` TIMESTMAP NULL,
+    `closed_at` TIMESTAMP NULL,
     `is_completed` BOOLEAN NOT NULL DEFAULT 0
 );
 
@@ -98,7 +98,7 @@ CREATE TABLE `board_post` (
 DROP TABLE IF EXISTS `likes_dislikes`;
 
 CREATE TABLE `likes_dislikes` (
-    `id` BIGINT NOT NULL,
+    `id` BIGINT,
     `type` ENUM('post', 'comment') NOT NULL,
     `user_id` BIGINT NOT NULL,
     `is_likes` BOOLEAN NOT NULL,
