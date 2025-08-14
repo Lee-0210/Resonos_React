@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.Pagination;
-import com.cosmus.resonos.domain.community.Comment;
-import com.cosmus.resonos.service.community.CommentService;
+import com.cosmus.resonos.domain.community.Com_vote;
+import com.cosmus.resonos.service.community.Com_voteService;
 import com.github.pagehelper.PageInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/comment")
-public class CommentController {
+@RequestMapping("/com_vote")
+public class Com_voteController {
 
     @Autowired
-    private CommentService commentService;
+    private Com_voteService com_voteService;
 
     @GetMapping()
     public ResponseEntity<?> getAll(
@@ -42,13 +42,13 @@ public class CommentController {
         @ModelAttribute Pagination pagination
     ) {
         try {
-            PageInfo<Comment> pageInfo = commentService.list(page, size);
+            PageInfo<Com_vote> pageInfo = com_voteService.list(page, size);
             pagination.setPage(page);
             pagination.setSize(size);
             pagination.setTotal(pageInfo.getTotal());
 
             Map<String, Object> response = new HashMap<>();
-            List<Comment> list = pageInfo.getList();
+            List<Com_vote> list = pageInfo.getList();
             response.put("list", list);
             response.put("pagination", pagination);
 
@@ -60,9 +60,9 @@ public class CommentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOne(@PathVariable("id") Long  id) {
+    public ResponseEntity<?> getOne(@PathVariable("id") Long id) {
         try {
-            Comment entity = commentService.selectById(String.valueOf(id));
+            Com_vote entity = com_voteService.selectById(String.valueOf(id));
             if (entity == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -74,9 +74,9 @@ public class CommentController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> create(@RequestBody Comment entity) {
+    public ResponseEntity<?> create(@RequestBody Com_vote entity) {
         try {
-            boolean result = commentService.insert(entity);
+            boolean result = com_voteService.insert(entity);
             if (result)
                 return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
             else
@@ -88,9 +88,9 @@ public class CommentController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> update(@RequestBody Comment entity) {
+    public ResponseEntity<?> update(@RequestBody Com_vote entity) {
         try {
-            boolean result = commentService.updateById(entity);
+            boolean result = com_voteService.updateById(entity);
             if (result)
                 return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
             else
@@ -102,9 +102,9 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> destroy(@PathVariable("id")  Long id) {
+    public ResponseEntity<?> destroy(@PathVariable("id") Long id) {
         try {
-            boolean result = commentService.deleteById(String.valueOf(id));
+            boolean result = com_voteService.deleteById(String.valueOf(id));
             if (result)
                 return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
             else
@@ -119,7 +119,7 @@ public class CommentController {
     @DeleteMapping("/all")
     public ResponseEntity<?> deleteAll() {
         try {
-            boolean result = commentService.deleteAll();
+            boolean result = com_voteService.deleteAll();
             if (result)
                 return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
             else

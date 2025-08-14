@@ -1,11 +1,13 @@
 package com.cosmus.resonos.service.community;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.community.Community;
 import com.cosmus.resonos.mapper.community.CommunityMapper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class CommunityServiceImpl implements CommunityService {
@@ -14,27 +16,57 @@ public class CommunityServiceImpl implements CommunityService {
     private CommunityMapper communityMapper;
 
     @Override
-    public List<Community> list() throws Exception {
+    public List<Community> list() throws Exception{
         return communityMapper.list();
     }
 
     @Override
-    public Community select(Long id) throws Exception {
-        return communityMapper.select(id);
+    public PageInfo<Community> list(int page, int size) throws Exception{
+        // PageHelper 사용 예시 (필요에 따라 import, 의존 추가 필요)
+        com.github.pagehelper.PageHelper.startPage(page, size);
+        List<Community> list = communityMapper.list();
+        return new PageInfo<>(list);
     }
 
     @Override
-    public boolean insert(Community community) throws Exception {
-        return communityMapper.insert(community) > 0;
+    public Community select(Long no) throws Exception{
+        return communityMapper.select(no);
     }
 
     @Override
-    public boolean update(Community community) throws Exception {
-        return communityMapper.update(community) > 0;
+    public Community selectById(String id) throws Exception{
+        return communityMapper.selectById(id);
     }
 
     @Override
-    public boolean delete(Long id) throws Exception {
-        return communityMapper.delete(id) > 0;
+    public boolean insert(Community entity) throws Exception{
+        return communityMapper.insert(entity) > 0;
+    }
+
+    @Override
+    public boolean update(Community entity) throws Exception{
+        return communityMapper.update(entity) > 0;
+    }
+
+    @Override
+    public boolean updateById(Community entity) throws Exception{
+        return communityMapper.updateById(entity) > 0;
+    }
+
+    @Override
+    public boolean delete(Long no) throws Exception{
+        return communityMapper.delete(no) > 0;
+    }
+
+    @Override
+    public boolean deleteById(String id) throws Exception{
+        return communityMapper.deleteById(id) > 0;
+    }
+
+    
+
+    @Override
+    public boolean deleteAll() throws Exception {
+        return communityMapper.deleteAll() > 0;
     }
 }

@@ -3,21 +3,21 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.community.CommunityMapper">
+<mapper namespace="com.cosmus.resonos.mapper.community.Likes_dislikesMapper">
 
-  <select id="list" resultType="Community">
-    SELECT * FROM community
+  <select id="list" resultType="Likes_dislikes">
+    SELECT * FROM likes_dislikes
   </select>
 
   <insert id="insert">
-    INSERT INTO community(
+    INSERT INTO likes_dislikes(
     )
     VALUES (
     )
   </insert>
 
   <update id="update">
-    UPDATE community
+    UPDATE likes_dislikes
     <set>
       updated_at = now()
     </set>
@@ -25,14 +25,14 @@
   </update>
 
   <delete id="delete">
-    DELETE FROM community WHERE -- key 지정 필요
+    DELETE FROM likes_dislikes WHERE -- key 지정 필요
   </delete>
 
   <update id="completeAll">
-    UPDATE community SET -- 수정필드 없음
+    UPDATE likes_dislikes SET -- 수정필드 없음
   </update>
 
   <delete id="deleteAll">
-    DELETE FROM community
+    DELETE FROM likes_dislikes
   </delete>
 </mapper>

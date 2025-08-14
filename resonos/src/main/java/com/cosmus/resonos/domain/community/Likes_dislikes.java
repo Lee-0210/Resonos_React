@@ -6,23 +6,19 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class Comment {
+public class Likes_dislikes {
 
 
     private Long id; 
 
-    private String content; 
-
-    private Date created_at; 
+    private String type; 
 
     private Long user_id; 
 
-    private String type; 
+    private Boolean is_likes; 
 
     private Long target_id; 
 
-    private Long board_post_id; 
-
-    private Long parent_comment_id; 
+    private Date created_at; 
 
 }

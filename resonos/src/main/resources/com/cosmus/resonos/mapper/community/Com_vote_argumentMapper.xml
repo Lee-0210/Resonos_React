@@ -3,21 +3,21 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cosmus.resonos.mapper.community.CommunityMapper">
+<mapper namespace="com.cosmus.resonos.mapper.community.Com_vote_argumentMapper">
 
-  <select id="list" resultType="Community">
-    SELECT * FROM community
+  <select id="list" resultType="Com_vote_argument">
+    SELECT * FROM com_vote_argument
   </select>
 
   <insert id="insert">
-    INSERT INTO community(
+    INSERT INTO com_vote_argument(
     )
     VALUES (
     )
   </insert>
 
   <update id="update">
-    UPDATE community
+    UPDATE com_vote_argument
     <set>
       updated_at = now()
     </set>
@@ -25,14 +25,14 @@
   </update>
 
   <delete id="delete">
-    DELETE FROM community WHERE -- key 지정 필요
+    DELETE FROM com_vote_argument WHERE -- key 지정 필요
   </delete>
 
   <update id="completeAll">
-    UPDATE community SET -- 수정필드 없음
+    UPDATE com_vote_argument SET -- 수정필드 없음
   </update>
 
   <delete id="deleteAll">
-    DELETE FROM community
+    DELETE FROM com_vote_argument
   </delete>
 </mapper>

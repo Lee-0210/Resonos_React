@@ -6,27 +6,24 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class Community {
+public class Board_post {
 
 
     private Long id; 
 
-    private Long category_id; 
+    private String title; 
 
-    private Long creator_id; 
+    private String content; 
 
-    private String name; 
-
-    private String description; 
+    private String type; 
 
     private Date created_at; 
 
-    private String CREATE; 
+    private Long community_id; 
 
     private Long user_id; 
 
-    private Long com_id; 
-
+    private Long views; 
 
 
 }
