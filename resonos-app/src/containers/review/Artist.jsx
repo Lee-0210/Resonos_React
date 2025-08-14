@@ -112,9 +112,9 @@ const Artist = () => {
       <ArtistTop7 styles={styles} artist={artist} top7Tracks={top7Tracks} 
                   track={track}/>
       <ArtistRecent styles={styles} artist={artist} recentReviews={recentReviews} />
-      <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
+      {/* <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
                   artist={artist} track={track} userVotedMoodId={userVotedMoodId}
-                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats} />
+                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats} /> */}
     </div>
   )
 }

@@ -423,10 +423,10 @@ body {
   gap: 3px;
 }
 .score-info div p {
-  width: 90px;
+  width: 120px;
 }
 .score-info div span {
-  width: 20px;
+  width: 50px;
   text-align: end;
 }
 .pl-list>p:first-child {
@@ -778,7 +778,7 @@ input[type="number"]::-webkit-inner-spin-button {
     color: white;
 }
 .vote-result-view>ul li span:last-child {
-    width: 30px;
+    width: 50px;
     color: var(--main-color);
 }
 /* 슬라이드바 박스 슬라이드 */

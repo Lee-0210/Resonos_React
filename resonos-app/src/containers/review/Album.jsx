@@ -9,6 +9,7 @@ import AlbumStatus from '../../components/review/album/AlbumStatus';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
 import TextPressure from '../../assets/TextPressure';
+import Element from '../../components/review/album/Element';
 
 
 
@@ -47,6 +48,7 @@ const Album = () => {
   const [reviewType, setReviewType] = useState("")
 
   const [loading, setLoading] = useState(false)
+  const [newReview, setNewReview] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,6 +87,18 @@ const Album = () => {
           setIsAdmin(data.isAdmin);
           setUserId(data.userId);
           setReviewType(data.reviewType);
+
+          if (data.album.releaseDate) {
+            const releaseDate = new Date(album.releaseDate);
+            const formattedDate = releaseDate.toLocaleDateString('ko-KR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit'
+            });
+            album.releaseDate = formattedDate;
+          }
+
+
         } catch (error) {
           console.error('API 호출 실패:', error);
         } finally {
@@ -95,13 +109,7 @@ const Album = () => {
 
     fetchData();
   }, [id]);
-  const releaseDate = new Date(album.releaseDate);
-  const formattedDate = releaseDate.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
-  album.releaseDate = formattedDate;
+
 
 
 
@@ -126,6 +134,54 @@ const Album = () => {
     toggleLike(userId, album);
   }
 
+  // 리뷰 작성 함수
+  const handleSubmitReview = async (reviewForm) => {
+    if (!userId) {
+      swal.fire('로그인이 필요합니다', '리뷰 작성은 로그인 후 가능합니다.', 'warning');
+      return;
+    }
+    if (!album.id) {
+      swal.fire('오류', '앨범 정보를 찾을 수 없습니다.', 'error');
+      return;
+    }
+
+    try {
+      console.log(reviewForm)
+      const response = await api.writeAlbumReview(album.id, reviewForm);
+
+      swal.fire('성공', '리뷰가 성공적으로 작성되었습니다.', 'success');
+      const updatedResponse = response.data
+      setNewReview(updatedResponse.review);
+      setScore(updatedResponse.score);
+      setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
+
+    } catch (error) {
+      console.error('리뷰 작성 실패:', error);
+      swal.fire('오류', '리뷰 작성 중 오류가 발생했습니다.', 'error');
+    }
+  };
+
+  // 리뷰 삭제
+  const deleteReview = async (albumId, reviewId) => {
+    try {
+      const response = await api.deleteAlbumReview(albumId, reviewId);
+      console.log(response.data)
+      const data = response.data
+      swal.fire('성공', '리뷰가 성공적으로 삭제되었습니다.', 'success')
+      // 1. 기존 reviews 배열에서 삭제된 리뷰(reviewId)를 제외한 새로운 배열 생성
+      setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
+      // 2. 서버에서 받은 최신 점수로 상태 업데이트
+      setScore(data.score);
+
+    } catch (error) {
+      console.error(error)
+      swal.fire('실패', '리뷰 삭제 중 오류 발생.', 'error')
+    }
+  }
+  useEffect(() => {
+    console.log('isAlbumLikedByUser 상태 변경됨:', isAlbumLikedByUser);
+  }, [isAlbumLikedByUser]);
+
   if (loading) {
     return (
       <div style={{ position: 'relative', height: '300px' }}>
@@ -147,7 +203,6 @@ const Album = () => {
   return (
     <>
       <div className={styles.albumWrapper}>
-        
         <AlbumInfo handleLikeClick={handleLikeClick} styles={styles}
           album={album} artist={artist} score={score}
           isAlbumLikedByUser={isAlbumLikedByUser} albumLikeCount={albumLikeCount}
@@ -158,10 +213,11 @@ const Album = () => {
           argValues={argValues} emptyPlayList={emptyPlayList}
           playLists={playLists} />
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
-          score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null} />
-        {/* <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
+          score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null}
+          handleSubmitReview={handleSubmitReview} deleteReview={deleteReview} />
+        <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
-          isAdmin={isAdmin} /> */}
+          isAdmin={isAdmin} />
       </div>
     </>
   )

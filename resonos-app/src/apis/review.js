@@ -20,6 +20,34 @@ export const toggleLike = async (userId, albumId) => {
 }
 
 // 앨범 리뷰 작성시 리뷰와 갱신된 점수 반환
+export const writeAlbumReview = async (albumId, Review) => {
+  const data = Review
+  return await api.post('/albums/reviews', data, {
+    params : {
+      id : albumId
+    }
+  })
+}
+
+// 리뷰 삭제 삭제 후 변경된 점수 리턴
+export const deleteAlbumReview = async (albumId, reviewId) => {
+  return await api.delete(`/albums/reviews/${reviewId}`,{
+    params : {
+      id : albumId
+    }
+  })
+}
+
+// 앨범 리뷰 수정
+export const updateAlbumReview = async (albumId, content, rating) => {
+  const data = {content, rating}
+  return await api.put('/albums/reviews', data, {
+    params : {
+      id : albumId
+    }
+  })
+}
+
 
 // 트랙 초기 페이지
 export const getTrackPage = async (id) => {

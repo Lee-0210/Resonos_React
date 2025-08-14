@@ -4,7 +4,7 @@ import InfoScore from '../common/InfoScore'
 
 
 const AlbumInfo = ({ score, handleLikeClick,isAlbumLikedByUser, albumLikeCount, userId, styles, album, artist, tracks }) => {
-  console.log(tracks)
+  console.log(isAlbumLikedByUser)
   return (
     <>
       {/* 앨범 카드 */}
