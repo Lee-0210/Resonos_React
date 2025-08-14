@@ -41,8 +41,11 @@ export default function useRadarChart(canvasRef, argValues, isArgEmpty) {
         const ctx = canvasRef.current.getContext('2d');
 
         // 2. data를 동적으로 생성
-        const labels = Object.keys(argValues); // argValues의 키를 라벨로 사용
-        const values = Object.values(argValues); // argValues의 값을 데이터로 사용
+        const labels = ['스토리텔링', '멜로디', '통일성', '가사', '사운드', '독창성']
+        const values = [
+            argValues.storytelling, argValues.melody, argValues.cohesiveness,
+            argValues.lyric, argValues.sound, argValues.creativity
+            ]
 
         // 3. 차트 인스턴스 생성 또는 업데이트
         if (chartInstanceRef.current) {

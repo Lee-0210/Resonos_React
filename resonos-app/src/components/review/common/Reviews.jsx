@@ -32,7 +32,7 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, loginUser, hasNex
                   <p className="content-text" style={{ color: 'gray' }}>
                     누적된 신고로 인해 블라인드 처리된 리뷰입니다.
                     <button
-                      className="btn btn-gold show-blind-btn"
+                      className={`btn ${styles.btnGold} show-blind-btn`}
                       data-review-id={rv.id}
                       style={{ fontSize: '1.4rem' }}
                       // onClick={() => handleShowBlindContent(rv.id)}

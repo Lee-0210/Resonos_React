@@ -1,25 +1,79 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import TextPressure from '../../../assets/TextPressure';
 
 const BandsintownWidget = ({ artistName }) => {
 
+  const [isReady, setIsReady] = useState(false);
+
   useEffect(() => {
-    if (artistName) {
-      const timer = setTimeout(() => {
+    if (!artistName) {
+      return;
+    }
+
+    const scriptId = 'bandsintown-widget-script';
+
+    // 1. 스크립트가 이미 로드되었는지 확인
+    if (window.Bandsintown) {
+      window.Bandsintown.init();
+      setIsReady(true);
+      return;
+    }
+
+    // 2. 스크립트가 없으면 동적으로 스크립트 추가
+    if (!document.getElementById(scriptId)) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = "https://widgetv3.bandsintown.com/main.min.js";
+      script.async = true;
+
+      // 3. 스크립트 로드 완료 시 위젯 초기화
+      script.onload = () => {
         if (window.Bandsintown) {
           window.Bandsintown.init();
-          console.log("밴즈인타운 초기화 성공! 🥳");
-        } else {
-          console.warn("Bandsintown 스크립트가 아직 로드되지 않았습니다.");
+          setIsReady(true);
         }
-      }, 500); // 3초는 너무 길 수 있으니 0.5초로 조정
+      };
 
-      return () => clearTimeout(timer);
+      document.body.appendChild(script);
     }
   }, [artistName]);
 
   // artistName이 유효할 때만 위젯 div를 반환
   if (!artistName) {
-    return null;
+    return (
+      <div style={{ height: '160px' }}>
+        <TextPressure
+          text="Something goes wrong..."
+          flex={true}
+          alpha={false}
+          stroke={false}
+          width={true}
+          weight={true}
+          italic={true}
+          textColor="#ffffff"
+          strokeColor="#ff0000"
+          minFontSize={36}
+        />
+      </div>
+    )
+  }
+  if (!isReady) {
+    return (
+      <div style={{ height: '160px' }}>
+        <TextPressure
+          text="LOADING...!"
+          flex={true}
+          alpha={false}
+          stroke={false}
+          width={true}
+          weight={true}
+          italic={true}
+          textColor="#ffffff"
+          strokeColor="#ff0000"
+          minFontSize={36}
+        />
+      </div>
+    )
   }
 
   return (

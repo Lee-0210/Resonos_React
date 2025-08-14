@@ -9,6 +9,7 @@ import AlbumStatus from '../../components/review/album/AlbumStatus';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
 import TextPressure from '../../assets/TextPressure';
+import Element from '../../components/review/album/Element';
 
 
 
@@ -147,7 +148,6 @@ const Album = () => {
   return (
     <>
       <div className={styles.albumWrapper}>
-        
         <AlbumInfo handleLikeClick={handleLikeClick} styles={styles}
           album={album} artist={artist} score={score}
           isAlbumLikedByUser={isAlbumLikedByUser} albumLikeCount={albumLikeCount}
@@ -159,9 +159,9 @@ const Album = () => {
           playLists={playLists} />
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
           score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null} />
-        {/* <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
+        <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
-          isAdmin={isAdmin} /> */}
+          isAdmin={isAdmin} />
       </div>
     </>
   )

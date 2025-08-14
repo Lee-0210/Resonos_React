@@ -33,10 +33,10 @@ const AlbumStatus = ({styles, album, top5List, isArgEmpty, argValues, emptyPlayL
             <p>아직 아무도 투표하지 않았어요</p>
           ) : (
             <div className={styles.scoreInfo}>
-              {argValues && Object.entries(argValues).map((label,score) => (
-                <div key={label}>
-                  <span>{label} : </span>
-                  <span>{score}점</span>
+              {argValues && Object.entries(argValues).map(([key,value]) => (
+                <div key={key}>
+                  <p>{key} : </p>
+                  <span>{value}점</span>
                 </div>
               ))}
             </div>

@@ -4,7 +4,6 @@ import BandsintownWidget from './BandsInTown';
 
 const ArtistRecent = ({ styles, artist, recentReviews }) => {
 
-
   return (
     <>
       <div className={styles.infoCard}>

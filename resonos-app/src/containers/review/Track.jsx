@@ -103,8 +103,8 @@ const Track = () => {
       <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
         score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType} />
       <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
-        userId={userId} artist={artist} track={track}
-        userVotedMoodId={userVotedMoodId} moodLabels={moodLabels} />
+        userId={userId} artist={artist} track={track} moodValues={moodValues}
+        moodStats={moodStats} userVotedMoodId={userVotedMoodId} moodLabels={moodLabels} />
     </div>
   )
 }

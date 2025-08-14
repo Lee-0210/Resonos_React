@@ -1,27 +1,22 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import useMoodChart from '../../../assets/useMoodChart';
 
-const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track, userVotedMoodId, moodLabels }) => {
+const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track, userVotedMoodId, moodLabels, moodValues }) => {
   const chartRef = useRef(null);
 
-  // useEffect(() => {
-  //   if (!isMoodEmpty && chartRef.current) {
-  //     // 차트 라이브러리를 사용하여 여기에 차트를 그리는 로직을 구현합니다.
-  //     // 예: new Chart(chartRef.current, { ... config ... });
-  //     console.log("차트 렌더링 로직 실행");
-  //   }
-  // }, [isMoodEmpty]);
+  useMoodChart(chartRef, moodLabels, moodValues);
 
   return (
     <>
       {/* 분위기 */}
       <div className={styles.moodCard}>
         <div className={styles.chart}>
-          {/* {isMoodEmpty ? (
+          {isMoodEmpty ? (
             <p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>
           ) : (
-            <canvas id="hexRadarChart" ref={chartRef}></canvas>
-          )} */}
+            <canvas id="hexRadarChart" ref={chartRef} style={{ width: '100%', maxWidth: '400px', height: 'auto' }}></canvas>
+          )}
         </div>
         <div className={styles.moodVote}>
           <div className={styles.voteHeader}>
