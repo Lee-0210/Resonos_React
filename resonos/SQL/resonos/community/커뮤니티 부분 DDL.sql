@@ -1,3 +1,4 @@
+-- Active: 1750388008084@@127.0.0.1@3306@resonos
 DROP TABLE IF EXISTS `community_category`;
 
 CREATE TABLE `community_category` (
@@ -62,7 +63,7 @@ CREATE TABLE `com_vote` (
     `title` VARCHAR(100) NOT NULL,
     `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     `closed_at` TIMESTAMP NULL,
-    `is_completed` BOOLEAN NOT NULL DEFAULT 0
+    `is_completed` BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 DROP TABLE IF EXISTS `comment`;
