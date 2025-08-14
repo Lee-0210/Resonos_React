@@ -181,7 +181,6 @@ const LoginContextProvider = ({children}) => {
   useEffect(() => {
     const savedIsLogin = sessionStorage.getItem('isLogin')
     const rememberMe = localStorage.getItem('rememberMe')
-    console.log("자동 로그인 :", rememberMe)
     if(!rememberMe) return
     if(!savedIsLogin || savedIsLogin == false) {
       autoLogin()
