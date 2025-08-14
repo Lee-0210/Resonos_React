@@ -42,7 +42,7 @@ const AlbumStatus = ({styles, album, top5List, isArgEmpty, argValues, emptyPlayL
             </div>
           )}
         </div>
-        <div className="info pl-list">
+        <div className={`${styles.info} ${styles.plList}`}>
           <p className={styles.headline}>{`${album.title}💽의 트랙이 포함된 플리🎶`}</p>
           {emptyPlayList || playLists.length === 0 ? (
             <>

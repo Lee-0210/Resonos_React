@@ -76,8 +76,7 @@ public class AlbumController {
     // 폼에 리뷰아이디넣어야함
     @PutMapping("/reviews")
     // @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'ALBUM', authentication)")
-    public ResponseEntity<?> update(@RequestParam("id") String albumId, Long reviewId,
-            @RequestBody @Valid ReviewForm form) {
+    public ResponseEntity<?> update(@RequestParam("id") String albumId, @RequestBody @Valid ReviewForm form) {
 
         return combinedAlbumService.update(albumId, form.getId(), form);
     }

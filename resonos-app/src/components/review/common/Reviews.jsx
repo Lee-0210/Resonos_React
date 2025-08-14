@@ -1,6 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const Reviews = ({ styles, reviews, reviewType, size, isAdmin, loginUser, hasNext}) => {
+const Reviews = ({ styles, reviews, reviewType, size, isAdmin, userId, hasNext, deleteReview}) => {
+  const [showBlindContent, setShowBlindContent] = useState({});
+  const [editingReviewId, setEditingReviewId] = useState(null);
+
+  const handleShowBlindContent = (reviewId) => {
+    setShowBlindContent(prevState => ({
+      ...prevState,
+      [reviewId]: !prevState[reviewId]
+    }));
+  };
+
+  const handleEditClick = (review) => {
+    if (editingReviewId === review.id) {
+      setEditingReviewId(null);
+    } else {
+      setEditingReviewId(review.id);
+    }
+  };
+
+  const handleDeleteReview = (rv) => {
+    deleteReview(rv.albumId, rv.id)
+  }
+
   return (
     <>
       {reviews.slice(0, size).map((rv, index) => (
@@ -35,7 +57,7 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, loginUser, hasNex
                       className={`btn ${styles.btnGold} show-blind-btn`}
                       data-review-id={rv.id}
                       style={{ fontSize: '1.4rem' }}
-                      // onClick={() => handleShowBlindContent(rv.id)}
+                      onClick={() => handleShowBlindContent(rv.id)}
                     >
                       블라인드 내용 보기
                     </button>
@@ -44,7 +66,7 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, loginUser, hasNex
                     className="blind-content"
                     id={`blind-content-${rv.id}`}
                     style={{
-                      // display: showBlindContent[rv.id] ? 'block' : 'none',
+                      display: showBlindContent[rv.id] ? 'block' : 'none',
                       color: 'gray',
                       marginTop: '0.5rem',
                     }}
@@ -55,19 +77,19 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, loginUser, hasNex
               )}
             </>
           ) : (
-            <div className="review-content">
+            <div className="review-content" style={{ display: editingReviewId === rv.id ? 'none' : 'block' }}>
               <p className="content-text">{rv.content}</p>
             </div>
           )}
 
-          <form className={styles.editForm} style={{ display: 'none' }}>
+          <form className={styles.editForm} style={{ display: editingReviewId === rv.id ? 'block' : 'none' }}>
             <div className={styles.reply}>
-              <textarea className={styles.editContent} required></textarea>
+              <textarea className={styles.editContent} required defaultValue={rv.content}></textarea>
               <div className={styles.scoreAndSubmit}>
-                <input type="number" className={styles.editRating} min="0" max="100" required />
-                <div className="button-box">
-                  <button type="submit" className="btn btn-gold">수정 완료</button>
-                  <button type="button" className="btn btn-danger">취소</button>
+                <input type="number" className={styles.editRating} min="0" max="100" required defaultValue={rv.rating} />
+                <div className="d-flex gap-3">
+                  <button type="submit" className="btn btn-primary">수정 완료</button>
+                  <button type="button" className="btn btn-danger" onClick={() => setEditingReviewId(null)}>취소</button>
                 </div>
               </div>
             </div>
@@ -88,11 +110,11 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, loginUser, hasNex
 
             <button className={styles.reportBtn} data-review-id={rv.id} data-review-type={reviewType}>🚨</button>
             {isAdmin && <span style={{ color: 'red' }}>{rv.dislikes}</span>}
-            {(isAdmin || (loginUser && loginUser.id === rv.userId)) && (
-              <span>
-                <a href="#" className="edit-btn" data-id={rv.id}>수정</a>
-                <a href="#" className="del-btn" data-id={rv.id}>삭제</a>
-              </span>
+            {(isAdmin || (userId === rv.userId)) && (
+              <div className="d-flex gap-3">
+                <a href="#" className="btn btn-primary" data-id={rv.id} onClick={(e) => { e.preventDefault(); handleEditClick(rv); }}>수정</a>
+                <a href="#" className="btn btn-danger" data-id={rv.id} onClick={(e) => {e.preventDefault(); handleDeleteReview(rv); }} >삭제</a>
+              </div>
             )}
           </div>
         </li>

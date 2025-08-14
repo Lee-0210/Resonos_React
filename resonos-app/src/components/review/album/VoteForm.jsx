@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
-const VoteForm = ({userVote, albumId}) => {
-    const [lyric, setLyric] = useState(50);
-    const [sound, setSound] = useState(50);
-    const [melody, setMelody] = useState(50);
-    const [storytelling, setStorytelling] = useState(50);
-    const [cohesiveness, setCohesiveness] = useState(50);
-    const [creativity, setCreativity] = useState(50);
+const VoteForm = ({styles, userVote, albumId}) => {
+    const [lyric, setLyric] = useState(userVote?.lyric || '평가전');
+    const [sound, setSound] = useState(userVote?.sound || '평가전');
+    const [melody, setMelody] = useState(userVote?.melody || '평가전');
+    const [storytelling, setStorytelling] = useState(userVote?.storytelling || '평가전');
+    const [cohesiveness, setCohesiveness] = useState(userVote?.cohesiveness || '평가전');
+    const [creativity, setCreativity] = useState(userVote?.creativity || '평가전');
 
     const [isEditing, setIsEditing] = useState(false); // State to toggle between view and edit mode
+
+    
 
     const handleSliderChange = (e, setter) => {
         setter(parseInt(e.target.value));
@@ -31,8 +33,9 @@ const VoteForm = ({userVote, albumId}) => {
     };
 
     return (
+      <>
         <div className="d-flex gap-5">
-            <div id="vote-result-view" className="vote-result-view">
+            <div id="vote-result-view" className={styles.voteResultView}>
                 <ul>
                     <li><span>가사 : </span><span id="lyric-view">{lyric}</span></li>
                     <li><span>사운드 : </span><span id="sound-view">{sound}</span></li>
@@ -41,11 +44,11 @@ const VoteForm = ({userVote, albumId}) => {
                     <li><span>유기성 : </span><span id="cohesiveness-view">{cohesiveness}</span></li>
                     <li><span>독창성 : </span><span id="creativity-view">{creativity}</span></li>
                 </ul>
-                <button id="edit-btn" className="btn btn-gold" onClick={handleEditClick}>수정</button>
+                <button id="edit-btn" className={`btn ${styles.btnGold}`} onClick={handleEditClick}>{userVote === null ? '투표하기' : '수정하기'}</button>
             </div>
             {isEditing && ( // Conditionally render the form when editing
-                <form id="vote-form" className="vote-form">
-                    <div className="vote-row">
+                <form id="vote-form" className={styles.voteForm}>
+                    <div className={styles.voteRow}>
                         <label className="vote-label">가사</label>
                         <input
                             type="range"
@@ -68,7 +71,7 @@ const VoteForm = ({userVote, albumId}) => {
                         />
                         <br />
                     </div>
-                    <div className="vote-row">
+                    <div className={styles.voteRow}>
                         <label className="vote-label">사운드</label>
                         <input
                             type="range"
@@ -91,7 +94,7 @@ const VoteForm = ({userVote, albumId}) => {
                         />
                         <br />
                     </div>
-                    <div className="vote-row">
+                    <div className={styles.voteRow}>
                         <label className="vote-label">멜로디</label>
                         <input
                             type="range"
@@ -114,7 +117,7 @@ const VoteForm = ({userVote, albumId}) => {
                         />
                         <br />
                     </div>
-                    <div className="vote-row">
+                    <div className={styles.voteRow}>
                         <label className="vote-label">스토리텔링</label>
                         <input
                             type="range"
@@ -137,7 +140,7 @@ const VoteForm = ({userVote, albumId}) => {
                         />
                         <br />
                     </div>
-                    <div className="vote-row">
+                    <div className={styles.voteRow}>
                         <label className="vote-label">유기성</label>
                         <input
                             type="range"
@@ -160,7 +163,7 @@ const VoteForm = ({userVote, albumId}) => {
                         />
                         <br />
                     </div>
-                    <div className="vote-row">
+                    <div className={styles.voteRow}>
                         <label className="vote-label">독창성</label>
                         <input
                             type="range"
@@ -183,10 +186,12 @@ const VoteForm = ({userVote, albumId}) => {
                         />
                         <br />
                     </div>
-                    <button type="button" id="save-btn" className="btn btn-gold" onClick={handleSaveClick}>저장</button>
+                    <button type="button" id="save-btn" className={`btn ${styles.btnGold}`} onClick={handleSaveClick}>저장</button>
                 </form>
             )}
         </div>
+        <div></div>
+      </>
     );
 };
 

@@ -14,7 +14,6 @@ import {
 export default function useRadarChart(canvasRef, argValues, isArgEmpty) {
     const chartInstanceRef = useRef(null);
     useEffect(() => {
-        console.log('Chart 객체:', Chart)
         // 2. Chart.js에 모듈을 수동으로 등록
         Chart.register(
             RadialLinearScale,
@@ -24,7 +23,6 @@ export default function useRadarChart(canvasRef, argValues, isArgEmpty) {
             Tooltip,
             Legend
         );
-        console.log('Chart 객체:', Chart)
         if (!canvasRef.current) {
             return;
         }
@@ -41,7 +39,7 @@ export default function useRadarChart(canvasRef, argValues, isArgEmpty) {
         const ctx = canvasRef.current.getContext('2d');
 
         // 2. data를 동적으로 생성
-        const labels = ['스토리텔링', '멜로디', '통일성', '가사', '사운드', '독창성']
+        const labels = ['스토리텔링', '멜로디', '유기성', '가사', '사운드', '독창성']
         const values = [
             argValues.storytelling, argValues.melody, argValues.cohesiveness,
             argValues.lyric, argValues.sound, argValues.creativity

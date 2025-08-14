@@ -24,7 +24,7 @@ const Element = ({ album, isArgEmpty, userVote, styles, userId, argValues }) => 
           </div>
           {/* 로그인 여부에 따른 투표 UI */}
           {userId !== null ?(
-            <VoteForm albumId={album.id} userVote={userVote} />
+            <VoteForm albumId={album.id} userVote={userVote} styles={styles} />
           ) : (
             <p className={styles.headline} style={{ paddingTop: '35px' }}>
               로그인후 점수투표가 가능합니다
