@@ -17,6 +17,9 @@ body {font-size: 1.6rem;}
   --background-color : #181C23;
   /* 컨테이너 크기 */
   --container : 1440px;
+
+  /* 커뮤니티 컨테이너 컬러 */
+  --container-color: #1C202A;
 }
 
 body {

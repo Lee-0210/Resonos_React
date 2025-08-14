@@ -38,7 +38,8 @@ const Header = ({ currentUser = {} }) => {
             loginButton.addEventListener('click', e => {
                 e.preventDefault();
                 sessionStorage.setItem('returnTo', location.pathname + location.search);
-                window.location.href = '/login';
+                navigate('/login')
+                // window.location.href = '/login';
             });
         }
     }, [location]);
@@ -53,7 +54,10 @@ const Header = ({ currentUser = {} }) => {
             return;
         }
 
-        navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+        if(path === 'community')
+            navigate(`/community/search?q=${encodeURIComponent(trimmed)}`);
+        else
+            navigate(`/search?q=${encodeURIComponent(trimmed)}`);
     };
 
     return (
@@ -124,7 +128,7 @@ const Header = ({ currentUser = {} }) => {
                                 type="search"
                                 name="q"
                                 className="form-control search-box"
-                                placeholder="앨범, 트랙, 아티스트..."
+                                placeholder={`${path === 'community' ? '게시판, 게시글...' : '앨범, 트랙, 아티스트...'}`}
                                 value={searchValue}
                                 onChange={(e) => setSearchValue(e.target.value)}
                             />

@@ -13,7 +13,7 @@ const BoardRankingCard = ({title, rank}) => {
 
   return (
     <li onClick={handleNavigate}>
-      <p className='ellipsis'>{title}</p><span>{rank}</span>
+      <p className='ellipsis focus'>{title}</p><span>{rank}</span>
     </li>
   )
 }

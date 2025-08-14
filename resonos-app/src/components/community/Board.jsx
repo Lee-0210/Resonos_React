@@ -23,7 +23,7 @@ const BoardDetail = () => {
             <p className='ellipsis'>2025-08-14</p>
           </div>
           <div>
-            <span>소개글</span>
+            <span>한줄소개</span>
             <p className='ellipsis'>비정한 세상 피토하는 음악</p>
           </div>
         </div>
@@ -31,29 +31,31 @@ const BoardDetail = () => {
       {/* 게시글 목록 */}
       <div className="post-list">
         <h3>최근 게시글 📃</h3>
-        <ul>
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-        </ul>
+          <ul>
+            <PostListCard title={'게시글 제목'}/>
+            <PostListCard title={'게시글 제목'}/>
+            <PostListCard title={'게시글 제목'}/>
+            <PostListCard title={'게시글 제목'}/>
+            <PostListCard title={'게시글 제목'}/>
+            <PostListCard title={'게시글 제목'}/>
+            <PostListCard title={'게시글 제목'}/>
+            <PostListCard title={'게시글 제목'}/>
+            <PostListCard title={'게시글 제목'}/>
+            <PostListCard title={'게시글 제목'}/>
+          </ul>
         <Pagination />
       </div>
       {/* 하단 */}
       <div className="notice-area">
-        <h3>공지사항 & 이벤트 💥 </h3>
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <PostListCard title={'게시글 제목'} />
-          <Pagination />
+        <h3>공지사항 & 이벤트 📢 </h3>
+          <ul>
+            <PostListCard title={'게시글 제목'} />
+            <PostListCard title={'게시글 제목'} />
+            <PostListCard title={'게시글 제목'} />
+            <PostListCard title={'게시글 제목'} />
+            <PostListCard title={'게시글 제목'} />
+            <Pagination />
+          </ul>
       </div>
     </main>
   )
