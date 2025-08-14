@@ -56,7 +56,7 @@ import SetNotification from './pages/user/SetNotification';
 import FindId from './pages/user/FindId';
 import FindPw from './pages/user/FindPw';
 import Index from './pages/community/Index';
-import ThemeToggle from './components/admin/first/ThemeToggle';
+import Board from './pages/community/Board';
 
 
 
@@ -143,8 +143,9 @@ const App = () => {
           <Route path="/admin/qna" element={<AdminLayout><AdminQnAPage /></AdminLayout>} />
 
           {/* 자유 커뮤니티 */}
+          {/* 커뮤니티 url 은 /community 로 시작 */}
           <Route path="/community" element={<Index />} />
-
+          <Route path="/community/boards/:id" element={<Board />} />
 
         </Routes>
       </LoginContextProvider>

@@ -6,13 +6,14 @@ const BoardRankingCard = ({title, rank}) => {
   const navigate = useNavigate()
 
   const handleNavigate = () => {
-    // TODO: 게시글 ID 받아와서 navigate
     alert('데이터 주세요')
+    // TODO: 게시글 ID 받아와서 navigate
+    navigate('/community/boards/98')
   }
 
   return (
-    <li>
-      <p>{title}</p><span>{rank}</span>
+    <li onClick={handleNavigate}>
+      <p className='ellipsis'>{title}</p><span>{rank}</span>
     </li>
   )
 }
