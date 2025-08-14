@@ -612,3 +612,87 @@ div.admin.mb-3 button {
   display: flex;
   align-items: center;
 }
+
+
+
+
+/* ===========================
+   라이트 모드 전역 변수
+   기본 admin.css Dark 테마와 동일한 구조
+=========================== */
+html[data-theme="light"] {
+  --main-color: #C28B00;                /* 골드 계열 포인트 */
+  --silver-color: #333;                 /* 본문 텍스트 */
+  --background-color: #f8f9fa;          /* 전체 배경 */
+  --text-color: #000;                    /* 일반 텍스트 색상 */
+
+  --card-bg: #ffffff;                   /* 카드 배경 */
+  --card-border: #ddd;                   /* 카드 경계 */
+  --border-color: #ccc;                  /* 표 테두리 등 구분선 */
+  --hover-bg: rgba(0, 0, 0, 0.05);        /* Hover 시 배경 */
+
+  --danger-color: #dc3545;               /* 경고 빨강 */
+
+  /* 폰트 동일 */
+  --font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-strong: 0 4px 14px rgba(0, 0, 0, 0.15);
+
+  /* 크기 동일 */
+  --font-size-sm: 1.6rem;
+  --font-size-md: 2.0rem;
+  --font-size-lg: 2.4rem;
+}
+
+/* 라이트 모드 전용 요소 색상 최적화 */
+html[data-theme="light"] body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+html[data-theme="light"] .resonos-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-color);
+}
+
+html[data-theme="light"] .admin .navbar {
+  background: var(--card-bg) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+html[data-theme="light"] .admin .navbar-nav .nav-link:hover,
+html[data-theme="light"] .admin .navbar-nav .nav-link:focus {
+  color: var(--main-color) !important;
+}
+
+html[data-theme="light"] .list-group-item {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+html[data-theme="light"] .btn-gold {
+  background: var(--main-color);
+  color: #fff;
+}
+
+html[data-theme="light"] .btn-outline-gold {
+  background: none;
+  color: var(--main-color);
+  border-color: var(--main-color);
+}
+
+html[data-theme="light"] .search-bar,
+html[data-theme="light"] .form-control,
+html[data-theme="light"] .form-select {
+  background: #fff;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+html[data-theme="light"] .table-dark {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}

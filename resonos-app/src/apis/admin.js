@@ -419,11 +419,13 @@ export const deleteNotice = (id) =>
 // 기본 경로
 const qnaPath = "/admin/qna";
 
-// QnA 목록 조회 (선택적으로 qnaId 단건조회 지원)
-export const getQnaList = (page = 1, size = 10, keyword = "", qnaId = null) =>
-  axios.get(qnaPath, {
-    params: { page, size, keyword, ...(qnaId ? { qnaId } : {}) }
-  });
+// 목록
+export const getQnaList = (page = 1, size = 10, keyword = '') =>
+  axios.get('/admin/qna', { params: { page, size, keyword } });
+
+// 상세
+export const getQnaDetail = (id) =>
+  axios.get(`/admin/qna/${id}`);
 
 // QnA 답변 등록
 export const createQnaAnswer = (qnaId, content) =>

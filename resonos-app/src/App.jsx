@@ -56,6 +56,7 @@ import SetNotification from './pages/user/SetNotification';
 import FindId from './pages/user/FindId';
 import FindPw from './pages/user/FindPw';
 import Index from './pages/community/Index';
+import ThemeToggle from './components/admin/first/ThemeToggle';
 
 
 
@@ -66,6 +67,8 @@ import Index from './pages/community/Index';
 const App = () => {
 
   return (
+    <>
+
     <BrowserRouter>
       <LoginContextProvider>
         <Routes>
@@ -146,6 +149,7 @@ const App = () => {
         </Routes>
       </LoginContextProvider>
     </BrowserRouter>
+    </>
   )
 }
 

@@ -4,6 +4,7 @@ import MenuRows from '../../components/admin/second/MenuRows';
 import { getAdminIndex } from '../../apis/admin';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import QuickMenu from '../../components/admin/first/QuickMenu';
+import ThemeToggle from '../../components/admin/first/ThemeToggle';
 
 
 const AdminContainer = () => {
@@ -66,6 +67,7 @@ const AdminContainer = () => {
         <StatusCards stats={stats} />
         <MenuRows menuData={menuData} />
          <QuickMenu menuData={menuData} />
+         <ThemeToggle />
     </>
   ) 
 };

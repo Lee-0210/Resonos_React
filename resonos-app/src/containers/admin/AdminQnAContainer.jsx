@@ -1,11 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  getQnaList,
-  createQnaAnswer,
-  updateQnaAnswer,
-  deleteQnaAnswer,
-  deleteQna
-} from "../../apis/admin";
+import { getQnaList, getQnaDetail, createQnaAnswer, updateQnaAnswer, deleteQnaAnswer, deleteQna } from "../../apis/admin";
 import TabsGeneric from "../../components/admin/first/TabsGeneric";
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import TableContentGeneric from "../../components/admin/first/TableContentGeneric";
@@ -59,18 +53,27 @@ const AdminQnAContainer = () => {
     }
   };
 
-  /** 상세 조회 */
+  // 상세 조회
   const fetchQnaDetail = async (id) => {
     try {
-      const res = await getQnaList(1, 10, "", id);
+      const res = await getQnaDetail(id);
       if (res.data.success) {
-        setCurrentQna(res.data.currentQna || null);
+        setCurrentQna(res.data.qna);
         setAnswers(res.data.answers || []);
       }
     } catch (err) {
       console.error("QnA 상세 조회 실패", err);
     }
   };
+  // 목록 클릭 기능 및 토글 
+  const handleRowClick = (row) => {
+  if (currentQna?.id === row.id) {
+    setCurrentQna(null);
+    setAnswers([]);
+  } else {
+    fetchQnaDetail(row.id);
+  }
+};
 
   useEffect(() => {
     fetchQnaList();
@@ -145,20 +148,21 @@ const AdminQnAContainer = () => {
             <TableContentGeneric
               items={dataForTab}
               columns={qnaColumns}
-              onRowClick={(row) => fetchQnaDetail(row.id)}
+              onRowClick={handleRowClick}   
             />
             {pagination.totalPages > 1 && (
-              <Pagination
-                page={page}
-                first={1}
-                last={pagination.totalPages}
-                prev={page > 1 ? page - 1 : 1}
-                next={page < pagination.totalPages ? page + 1 : pagination.totalPages}
-                start={Math.max(1, page - 4)}
-                end={Math.min(pagination.totalPages, page + 5)}
-                pageUri={`/admin/qna?keyword=${encodeURIComponent(keyword)}`}
-                onPageChange={setPage}
-              />
+            <Pagination
+              page={page}
+              first={1}
+              last={pagination.totalPages}
+              prev={page > 1 ? page - 1 : 1}
+              next={page < pagination.totalPages ? page + 1 : pagination.totalPages}
+              start={Math.max(1, page - 4)}
+              end={Math.min(pagination.totalPages, page + 5)}
+              pageUri={`/admin/qna?keyword=${encodeURIComponent(keyword)}`}
+              onPageChange={setPage}   // ✅
+            />
+
             )}
           </div>
 

@@ -85,6 +85,7 @@ public class AdminRoleManageController {
         String username = payload.get("username");
         String auth = payload.get("auth");
         userService.deleteSpecificAuth(username, auth);
+        log.info("Deleting auth: username={}, auth={}", username, auth);
         return ResponseEntity.ok(Map.of("success", true));
     }
 

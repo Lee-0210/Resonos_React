@@ -49,5 +49,25 @@
     SELECT * FROM qna WHERE status = 'NO_ANSWER' ORDER BY created_at DESC
   </select>
 
+  <select id="getAnswered" resultMap="QnaResultMap">
+    SELECT * FROM qna WHERE status = 'ANSWERED' AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+    ORDER BY created_at DESC LIMIT #{index}, #{size}
+  </select>
+
+  <select id="getNoAnswer" resultMap="QnaResultMap">
+    SELECT * FROM qna WHERE status = 'NO_ANSWER' AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+    ORDER BY created_at DESC LIMIT #{index}, #{size}
+  </select>
+
+  <select id="getAll" resultMap="QnaResultMap">
+    SELECT * FROM qna WHERE (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+    ORDER BY created_at DESC LIMIT #{index}, #{size}
+  </select> 
+  <select id="count" resultType="long">
+    SELECT COUNT(*) 
+    FROM qna 
+    WHERE (title LIKE CONCAT('%', #{keyword}, '%') 
+          OR content LIKE CONCAT('%', #{keyword}, '%'))
+  </select>
 
 </mapper>

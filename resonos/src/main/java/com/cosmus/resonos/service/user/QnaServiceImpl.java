@@ -49,4 +49,25 @@ public class QnaServiceImpl implements QnaService {
     public List<Qna> listNoAnswer() throws Exception {
         return qnaMapper.listNoAnswer();
     }
+
+    @Override
+    public long count(String keyword) {
+        return qnaMapper.count(keyword);
+    }
+
+    @Override
+    public List<Qna> getAll(String keyword, long index, long size) {
+        return qnaMapper.getAll(keyword, index, size);
+    }
+
+
+    @Override
+    public List<Qna> getNoAnswer(String keyword, long index, long size) {
+        return qnaMapper.getNoAnswer(keyword, index, size);
+    }
+
+    @Override
+    public List<Qna> getAnswered(String keyword, long index, long size) {
+        return qnaMapper.getAnswered(keyword, index, size);
+    }
 }
