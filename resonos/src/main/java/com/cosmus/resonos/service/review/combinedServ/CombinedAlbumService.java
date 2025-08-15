@@ -81,6 +81,7 @@ public class CombinedAlbumService {
                 userVote = chartElementService.getUserVote(loginUser.getId(), albumId);
                 pageDTO.setUserVote(userVote);
                 pageDTO.setUserId(loginUser.getId());
+                pageDTO.setAdmin(user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
             }
             // 로그인시 리뷰 좋아요 여부 매핑
             if (loginUser != null && reviews != null && !reviews.isEmpty()) {
@@ -171,18 +172,16 @@ public class CombinedAlbumService {
     }
 
     // 리뷰 더보기
-    // 추후 어드민 관련 로직 추가해야함
-    public ResponseEntity<?> loadMoreReviews(String albumId, int page, int size,
-                   @AuthenticationPrincipal CustomUser user) {
+    public ResponseEntity<?> loadMoreReviews(String albumId, int page, int size, CustomUser user) {
 
         Users loginUsers = null;
         if (user != null) {
             loginUsers = user.getUser();
         }
 
-        List<AlbumReview> allReviews = albumReviewService.getMoreReviews(albumId, page, size);
-        boolean hasNext = allReviews.size() > size;
-        List<AlbumReview> reviews = hasNext ? allReviews.subList(0, size) : allReviews;
+        List<AlbumReview> moreReviews = albumReviewService.getMoreReviews(albumId, page, size);
+        boolean hasNext = moreReviews.size() > size;
+        List<AlbumReview> reviews = hasNext ? moreReviews.subList(0, size) : moreReviews;
 
         Map<String, Object> reviewMap = new HashMap<>();
         reviewMap.put("hasNext", hasNext);

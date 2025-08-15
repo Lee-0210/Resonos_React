@@ -109,7 +109,7 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, userId, hasNext, 
             <span id={`like-count-${rv.id}`}>{rv.likes}</span>
 
             <button className={styles.reportBtn} data-review-id={rv.id} data-review-type={reviewType}>🚨</button>
-            {isAdmin && <span style={{ color: 'red' }}>{rv.dislikes}</span>}
+            {isAdmin && (<span style={{ color: 'red' }}>{rv.dislikes}</span>)}
             {(isAdmin || (userId === rv.userId)) && (
               <div className="d-flex gap-3">
                 <a href="#" className="btn btn-primary" data-id={rv.id} onClick={(e) => { e.preventDefault(); handleEditClick(rv); }}>수정</a>

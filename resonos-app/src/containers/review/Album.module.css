@@ -154,6 +154,7 @@ body {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: flex-start;
+    gap: 10px;
 }
 /* 점수 */
 .score-bar {

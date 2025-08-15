@@ -115,7 +115,7 @@ class AlbumReviewServiceImpl implements AlbumReviewService {
     @Override
     public List<AlbumReview> getMoreReviews(String albumId, int page, int size) {
         int offset = (page - 1) * size;
-        List<AlbumReview> reviews = mapper.selectPagedReviewsWithReviewer(albumId, size + 1, offset);
+        List<AlbumReview> reviews = mapper.selectPagedReviewsWithReviewer(albumId, size, offset);
         for (AlbumReview review : reviews) {
             if(review.getBlinded() == false) {
                 if( review.getDislikes() > 5 ) {

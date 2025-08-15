@@ -19,15 +19,15 @@ const Album = () => {
   const id = searchParams.get('id');
 
   // 앨범 기본 정보
-  const [album, setAlbum] = useState({});
-  const [artist, setArtist] = useState({});
+  const [album, setAlbum] = useState(null);
+  const [artist, setArtist] = useState(null);
   const [tracks, setTracks] = useState([]);
   const [top5List, setTop5List] = useState([]);
-  const [topTrack, setTopTrack] = useState({});
+  const [topTrack, setTopTrack] = useState(null);
 
   // 리뷰 및 좋아요 정보
   const [reviews, setReviews] = useState([]);
-  const [score, setScore] = useState({});
+  const [score, setScore] = useState(null);
   const [albumLikeCount, setAlbumLikeCount] = useState(0);
   const [isAlbumLikedByUser, setIsAlbumLikedByUser] = useState(false);
   const [hasNext, setHasNext] = useState(false);
@@ -38,17 +38,17 @@ const Album = () => {
 
   // 앨범 6요소 및 투표 정보
   const [isArgEmpty, setIsArgEmpty] = useState(true);
-  const [argValues, setArgValues] = useState({});
-  const [userVote, setUserVote] = useState({});
+  const [argValues, setArgValues] = useState(null);
+  const [userVote, setUserVote] = useState(null);
 
   // 기타 정보
   const [tags, setTags] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [userId, setUserId] = useState({});
+  const [userId, setUserId] = useState(null);
   const [reviewType, setReviewType] = useState("")
 
-  const [loading, setLoading] = useState(false)
-  const [newReview, setNewReview] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,18 +73,18 @@ const Album = () => {
           setReviews(data.reviews);
           setScore(data.score);
           setAlbumLikeCount(data.albumLikeCount);
-          setIsAlbumLikedByUser(data.isAlbumLikedByUser);
+          setIsAlbumLikedByUser(data.albumLikedByUser);
           setHasNext(data.hasNext);
 
           setEmptyPlayList(data.emptyPlayList);
           setPlayLists(data.playLists);
 
-          setIsArgEmpty(data.isArgEmpty);
+          setIsArgEmpty(data.argEmpty);
           setArgValues(data.argValues);
           setUserVote(data.userVote);
 
           setTags(data.tags);
-          setIsAdmin(data.isAdmin);
+          setIsAdmin(data.admin);
           setUserId(data.userId);
           setReviewType(data.reviewType);
 
@@ -95,7 +95,10 @@ const Album = () => {
               month: '2-digit',
               day: '2-digit'
             });
-            album.releaseDate = formattedDate;
+            setAlbum(prevAlbum => ({
+              ...prevAlbum,
+              releaseDate: formattedDate
+            }));
           }
 
 
@@ -103,6 +106,7 @@ const Album = () => {
           console.error('API 호출 실패:', error);
         } finally {
           setLoading(false);
+          console.log('페이지 데이터 로딩 완료');
         }
       }
     };
@@ -151,7 +155,6 @@ const Album = () => {
 
       swal.fire('성공', '리뷰가 성공적으로 작성되었습니다.', 'success');
       const updatedResponse = response.data
-      setNewReview(updatedResponse.review);
       setScore(updatedResponse.score);
       setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
 

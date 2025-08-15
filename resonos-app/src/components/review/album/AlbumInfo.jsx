@@ -4,7 +4,7 @@ import InfoScore from '../common/InfoScore'
 
 
 const AlbumInfo = ({ score, handleLikeClick,isAlbumLikedByUser, albumLikeCount, userId, styles, album, artist, tracks }) => {
-  console.log(isAlbumLikedByUser)
+
   return (
     <>
       {/* 앨범 카드 */}
@@ -21,7 +21,11 @@ const AlbumInfo = ({ score, handleLikeClick,isAlbumLikedByUser, albumLikeCount, 
           <Link to={`/artists?id=${artist.id}`}>
             <p>{artist.name}</p>
           </Link>
-          <p>{album.label}</p>
+          {album.lable != null && album.lable !== '' ? (
+            <p>{album.label}</p>
+          ) : (
+            <></>
+          )}
           <div className={styles.reviewSection}>
             <InfoScore styles={styles} score={score} />
           </div>

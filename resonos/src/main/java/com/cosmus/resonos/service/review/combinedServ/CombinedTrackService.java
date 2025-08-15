@@ -133,8 +133,8 @@ public class CombinedTrackService {
                 trackPageDTO.setUserVotedMoodId(trackMoodVoteService.getUserVotedMoodId(loginUser.getId(), trackId));
                 // 유저의 트랙 좋아요 유무
                 trackPageDTO.setTrackLikedByUser(likedTrackService.isLikedByUser(loginUser.getId(), trackId));
-            }
-            else {
+                trackPageDTO.setAdmin(user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
+            } else {
                 // 비로그인유저는 그냥 리뷰
                 trackPageDTO.setReviews(reviews);
             }

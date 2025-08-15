@@ -13,7 +13,7 @@ const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track, userVote
       <div className={styles.moodCard}>
         <div className={styles.chart}>
           {isMoodEmpty ? (
-            <p id="headline">아직 아무도 분위기에 투표하지 않았어요 😅</p>
+            <p className={styles.subtitle}>아직 아무도 분위기에 투표하지 않았어요 😅</p>
           ) : (
             <canvas id="hexRadarChart" ref={chartRef} style={{ width: '100%', maxWidth: '400px', height: 'auto' }}></canvas>
           )}

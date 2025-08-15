@@ -48,6 +48,8 @@ export const updateAlbumReview = async (albumId, content, rating) => {
   })
 }
 
+// 앨범 리뷰 더보기
+
 
 // 트랙 초기 페이지
 export const getTrackPage = async (id) => {

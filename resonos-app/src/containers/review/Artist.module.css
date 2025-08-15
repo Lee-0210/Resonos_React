@@ -197,6 +197,7 @@ body {
     flex-direction: column;
     justify-content: space-evenly;
     min-width: 180px;
+    gap: 10px;
 }
 
 .artist-card .disco-graphy {

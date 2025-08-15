@@ -60,7 +60,7 @@ const Artist = () => {
 
         // API 응답 데이터를 각각의 useState에 설정
         setArtist(data.artist);
-        setIsArtistFollowed(data.isArtistFollowed);
+        setIsArtistFollowed(data.artistFollowed);
         setFollowCount(data.followCount);
         setAlbums(data.albums);
         setAlbumCount(data.albumCount);
@@ -68,7 +68,7 @@ const Artist = () => {
         setTop7Tracks(data.top7Tracks);
         setTrack(data.track);
         setUserVotedMoodId(data.userVotedMoodId);
-        setIsMoodEmpty(data.isMoodEmpty);
+        setIsMoodEmpty(data.moodEmpty);
         setMoodLabels(data.moodLabels);
         setMoodValues(data.moodValues);
         setMoodStats(data.moodStats);
@@ -112,9 +112,9 @@ const Artist = () => {
       <ArtistTop7 styles={styles} artist={artist} top7Tracks={top7Tracks} 
                   track={track}/>
       <ArtistRecent styles={styles} artist={artist} recentReviews={recentReviews} />
-      {/* <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
+      <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
                   artist={artist} track={track} userVotedMoodId={userVotedMoodId}
-                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats} /> */}
+                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats} />
     </div>
   )
 }
