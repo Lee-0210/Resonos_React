@@ -178,13 +178,16 @@ public class CombinedAlbumService {
         if (user != null) {
             loginUsers = user.getUser();
         }
-
+        Pagination pagination = new Pagination(page, size, 10, albumReviewService.countByAlbumId(albumId));
+        
         List<AlbumReview> moreReviews = albumReviewService.getMoreReviews(albumId, page, size);
-        boolean hasNext = moreReviews.size() > size;
+        // boolean hasNext = moreReviews.size() > size;
+        boolean hasNext = pagination.getLast() > page;
         List<AlbumReview> reviews = hasNext ? moreReviews.subList(0, size) : moreReviews;
 
         Map<String, Object> reviewMap = new HashMap<>();
         reviewMap.put("hasNext", hasNext);
+        reviewMap.put("page", pagination.getNext());
 
         if (loginUsers != null && !reviews.isEmpty()) {
             List<Long> reviewIds = reviews.stream().map(AlbumReview::getId).toList();

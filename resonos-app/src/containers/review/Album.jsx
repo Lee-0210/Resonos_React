@@ -185,6 +185,16 @@ const Album = () => {
     console.log('isAlbumLikedByUser 상태 변경됨:', isAlbumLikedByUser);
   }, [isAlbumLikedByUser]);
 
+  // 리뷰 더보기
+  const loadAlbumReviews = async (page) => {
+    try {
+      const response = await api.moreAlbumReview(id, page);
+      console.log(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   if (loading) {
     return (
       <div style={{ position: 'relative', height: '300px' }}>
@@ -217,7 +227,8 @@ const Album = () => {
           playLists={playLists} />
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
           score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null}
-          handleSubmitReview={handleSubmitReview} deleteReview={deleteReview} />
+          handleSubmitReview={handleSubmitReview} deleteReview={deleteReview} 
+          loadAlbumReviews={loadAlbumReviews} />
         <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
           isAdmin={isAdmin} />

@@ -49,7 +49,14 @@ export const updateAlbumReview = async (albumId, content, rating) => {
 }
 
 // 앨범 리뷰 더보기
-
+export const moreAlbumReview = async (albumId, page) => {
+  return await api.get('/albums/reviews/more', {
+    params : {
+      id : albumId,
+      page : page
+    }
+  })
+}
 
 // 트랙 초기 페이지
 export const getTrackPage = async (id) => {
