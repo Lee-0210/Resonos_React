@@ -39,8 +39,8 @@ export const deleteAlbumReview = async (albumId, reviewId) => {
 }
 
 // 앨범 리뷰 수정
-export const updateAlbumReview = async (albumId, content, rating) => {
-  const data = {content, rating}
+export const updateAlbumReview = async (albumId, id, content, rating) => {
+  const data = {id, rating, content}
   return await api.put('/albums/reviews', data, {
     params : {
       id : albumId

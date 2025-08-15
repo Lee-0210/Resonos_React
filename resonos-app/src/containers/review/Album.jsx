@@ -48,7 +48,7 @@ const Album = () => {
   const [reviewType, setReviewType] = useState("")
 
   const [loading, setLoading] = useState(true)
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(2)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,8 +88,8 @@ const Album = () => {
           setUserId(data.userId);
           setReviewType(data.reviewType);
 
-          if (data.album.releaseDate) {
-            const releaseDate = new Date(album.releaseDate);
+          if (data.album && data.album.releaseDate) {
+            const releaseDate = new Date(data.album.releaseDate);
             const formattedDate = releaseDate.toLocaleDateString('ko-KR', {
               year: 'numeric',
               month: '2-digit',
@@ -138,7 +138,7 @@ const Album = () => {
     toggleLike(userId, album);
   }
 
-  // 리뷰 작성 함수
+  // 리뷰 작성
   const handleSubmitReview = async (reviewForm) => {
     if (!userId) {
       swal.fire('로그인이 필요합니다', '리뷰 작성은 로그인 후 가능합니다.', 'warning');
@@ -181,15 +181,35 @@ const Album = () => {
       swal.fire('실패', '리뷰 삭제 중 오류 발생.', 'error')
     }
   }
-  useEffect(() => {
-    console.log('isAlbumLikedByUser 상태 변경됨:', isAlbumLikedByUser);
-  }, [isAlbumLikedByUser]);
+
+  // 리뷰 수정
+  const updateReview = async (reviewForm) => {
+    try {
+      const reponse = await api.updateAlbumReview(id, reviewForm.id, reviewForm.content, reviewForm.rating);
+      const data = reponse.data
+      console.log(data)
+      setReviews(prevReviews => prevReviews.map(review =>
+        review.id === data.review.id
+          ? { ...review, content: data.review.content, rating: data.review.rating }
+          : review
+      ));
+      setScore(data.score)
+      swal.fire('성공', '리뷰가 성공적으로 수정되었습니다.', 'success')
+    } catch (error) {
+      console.error(error)
+      swal.fire('실패', '리뷰 수정 중 오류 발생.', 'error')
+    }
+  }
 
   // 리뷰 더보기
   const loadAlbumReviews = async (page) => {
     try {
       const response = await api.moreAlbumReview(id, page);
       console.log(response.data)
+      const data = response.data
+      setReviews(prevReviews => [...prevReviews, ...data.review]);
+      setPage(page + 1)
+      setHasNext(data.hasNext);
     } catch (error) {
       console.error(error)
     }
@@ -227,8 +247,8 @@ const Album = () => {
           playLists={playLists} />
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
           score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null}
-          handleSubmitReview={handleSubmitReview} deleteReview={deleteReview} 
-          loadAlbumReviews={loadAlbumReviews} />
+          handleSubmitReview={handleSubmitReview} deleteReview={deleteReview}
+          loadAlbumReviews={loadAlbumReviews} page={page} updateReview={updateReview} />
         <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
           isAdmin={isAdmin} />
