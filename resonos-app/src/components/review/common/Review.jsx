@@ -6,7 +6,8 @@ import Reviews from './Reviews'
 import ReviewForm from './ReviewForm'
 
 const Review = ({ reviewType, score, styles, reviews, hasNext,
-      userId, isAdmin, album, track, handleSubmitReview, deleteReview }) => {
+      userId, isAdmin, album, track, handleSubmitReview, deleteReview,
+      loadAlbumReviews, page, updateReview }) => {
   return (
     <>
       {/* 평점 리뷰 */}
@@ -27,7 +28,7 @@ const Review = ({ reviewType, score, styles, reviews, hasNext,
             {reviews != null && reviews.length > 0 ? (
               <Reviews reviews={reviews} reviewType={reviewType} size={10}
                 isAdmin={isAdmin} hasNext={hasNext} styles={styles}
-                userId={userId} deleteReview={deleteReview} />
+                userId={userId} deleteReview={deleteReview} updateReview={updateReview} />
             )
               :
               <>
@@ -37,7 +38,7 @@ const Review = ({ reviewType, score, styles, reviews, hasNext,
           {hasNext && (
             <div className="d-flex justify-content-center mb-1">
               <div className="more-box d-flex gap-3">
-                <button id="load-more-btn" className={`btn ${styles['btn-gold']}`}>
+                <button id="load-more-btn" onClick={()=> loadAlbumReviews(page)} className={`btn ${styles['btn-gold']}`}>
                   리뷰 더보기
                 </button>
               </div>

@@ -1,12 +1,12 @@
 package com.cosmus.resonos.service.review.combinedServ;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.CustomUser;
@@ -178,24 +178,28 @@ public class CombinedAlbumService {
         if (user != null) {
             loginUsers = user.getUser();
         }
-
+        Pagination pagination = new Pagination(page, size, 10, albumReviewService.countByAlbumId(albumId));
+        
         List<AlbumReview> moreReviews = albumReviewService.getMoreReviews(albumId, page, size);
-        boolean hasNext = moreReviews.size() > size;
+        // boolean hasNext = moreReviews.size() > size;
+        boolean hasNext = pagination.getLast() > page;
         List<AlbumReview> reviews = hasNext ? moreReviews.subList(0, size) : moreReviews;
 
         Map<String, Object> reviewMap = new HashMap<>();
         reviewMap.put("hasNext", hasNext);
+        reviewMap.put("page", pagination.getNext());
 
         if (loginUsers != null && !reviews.isEmpty()) {
+            List<AlbumReview> loggedReview = new ArrayList<>();
             List<Long> reviewIds = reviews.stream().map(AlbumReview::getId).toList();
             List<Long> likedIds = reviewLikeService.getUserLikedReviewIds("ALBUM", reviewIds,
                     loginUsers.getId());
             for (AlbumReview r : reviews) {
                 r.setIsLikedByCurrentUser(likedIds.contains(r.getId()));
-                List<AlbumReview> review = List.of(r);
-                reviewMap.put("review", review);
+                loggedReview.add(r);
             }
-        }
+            reviewMap.put("review", loggedReview);
+        } else reviewMap.put("review", reviews);
 
         return new ResponseEntity<>(reviewMap, HttpStatus.OK);
     }

@@ -66,17 +66,17 @@ public class AlbumController {
     @GetMapping("/reviews/more")
     public ResponseEntity<?> loadMoreReviews(@RequestParam("id") String albumId,
             @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size,
+            // @RequestParam(name = "size", defaultValue = "10") int size,
             @AuthenticationPrincipal CustomUser user) throws Exception {
 
-        return combinedAlbumService.loadMoreReviews(albumId, page, size, user);
+        return combinedAlbumService.loadMoreReviews(albumId, page, 10, user);
     }
 
     // 리뷰 수정
     // 폼에 리뷰아이디넣어야함
     @PutMapping("/reviews")
     // @PreAuthorize("@reviewAuth.isAuthorOrAdmin(#p1, 'ALBUM', authentication)")
-    public ResponseEntity<?> update(@RequestParam("id") String albumId, @RequestBody @Valid ReviewForm form) {
+    public ResponseEntity<?> update(@RequestParam("id") String albumId, @RequestBody ReviewForm form) {
 
         return combinedAlbumService.update(albumId, form.getId(), form);
     }

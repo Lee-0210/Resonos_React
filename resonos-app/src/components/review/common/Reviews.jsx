@@ -1,8 +1,18 @@
 import React, { useState } from 'react'
 
-const Reviews = ({ styles, reviews, reviewType, size, isAdmin, userId, hasNext, deleteReview}) => {
+const Reviews = ({ styles, reviews, reviewType, isAdmin, userId, deleteReview, updateReview }) => {
   const [showBlindContent, setShowBlindContent] = useState({});
   const [editingReviewId, setEditingReviewId] = useState(null);
+  const [content, setContent] = useState('');
+  const [rating, setRating] = useState('');
+
+  const handleUpdateReview = (e,id) => {
+    e.preventDefault()
+    updateReview({id, content, rating})
+    setEditingReviewId(null);
+    setContent('');
+    setRating('');
+  }
 
   const handleShowBlindContent = (reviewId) => {
     setShowBlindContent(prevState => ({
@@ -14,8 +24,12 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, userId, hasNext, 
   const handleEditClick = (review) => {
     if (editingReviewId === review.id) {
       setEditingReviewId(null);
+      setContent('');
+      setRating('');
     } else {
       setEditingReviewId(review.id);
+      setContent(review.content);
+      setRating(review.rating);
     }
   };
 
@@ -25,7 +39,7 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, userId, hasNext, 
 
   return (
     <>
-      {reviews.slice(0, size).map((rv, index) => (
+      {reviews.map((rv, index) => (
         <li
           key={rv.id}
           className={styles.comment}
@@ -84,11 +98,16 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, userId, hasNext, 
 
           <form className={styles.editForm} style={{ display: editingReviewId === rv.id ? 'block' : 'none' }}>
             <div className={styles.reply}>
-              <textarea className={styles.editContent} required defaultValue={rv.content}></textarea>
+              <textarea className={styles.editContent} required
+              value={content}
+              onChange={(e) => (setContent(e.target.value))}>
+              </textarea>
               <div className={styles.scoreAndSubmit}>
-                <input type="number" className={styles.editRating} min="0" max="100" required defaultValue={rv.rating} />
+                <input type="number" className={styles.editRating}
+                  min="0" max="100" required value={rating}
+                  onChange={(e) => (setRating(e.target.value))} />
                 <div className="d-flex gap-3">
-                  <button type="submit" className="btn btn-primary">수정 완료</button>
+                  <button type="submit" className="btn btn-primary" onClick={(e) => handleUpdateReview(e,rv.id) } >수정 완료</button>
                   <button type="button" className="btn btn-danger" onClick={() => setEditingReviewId(null)}>취소</button>
                 </div>
               </div>
@@ -113,13 +132,12 @@ const Reviews = ({ styles, reviews, reviewType, size, isAdmin, userId, hasNext, 
             {(isAdmin || (userId === rv.userId)) && (
               <div className="d-flex gap-3">
                 <a href="#" className="btn btn-primary" data-id={rv.id} onClick={(e) => { e.preventDefault(); handleEditClick(rv); }}>수정</a>
-                <a href="#" className="btn btn-danger" data-id={rv.id} onClick={(e) => {e.preventDefault(); handleDeleteReview(rv); }} >삭제</a>
+                <a href="#" className="btn btn-danger" data-id={rv.id} onClick={(e) => { e.preventDefault(); handleDeleteReview(rv); }} >삭제</a>
               </div>
             )}
           </div>
         </li>
       ))}
-      <li id="has-next-flag" style={{ display: 'none' }} data-has-next={hasNext}></li>
     </>
   )
 }
