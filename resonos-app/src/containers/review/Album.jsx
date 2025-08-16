@@ -212,7 +212,7 @@ const Album = () => {
   }
 
   // 리뷰 더보기
-  const loadAlbumReviews = async (page) => {
+  const loadMoreReviews = async (page) => {
     try {
       const response = await api.moreAlbumReview(id, page);
       console.log(response.data)
@@ -312,7 +312,7 @@ const Album = () => {
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
           score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null}
           handleSubmitReview={handleSubmitReview} deleteReview={deleteReview}
-          loadAlbumReviews={loadAlbumReviews} page={page} updateReview={updateReview}
+          loadMoreReviews={loadMoreReviews} page={page} updateReview={updateReview}
           toggleReviewLike={toggleReviewLike} reportReview={reportReview} />
         <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}

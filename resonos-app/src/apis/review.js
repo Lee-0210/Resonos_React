@@ -86,6 +86,30 @@ export const getTrackPage = async (id) => {
   });
 }
 
+// 트랙 좋아요
+export const toggleTrackLike = async (dto) => {
+  return await api.post('/tracks/like', dto)
+}
+
+// 트랙 플레이리스트에 추가
+export const addTrackToPlaylist = async (plId, trackId) => {
+  return await api.post(`/tracks/playlists/${plId}`, null, {
+    params : {
+      id : trackId
+    }
+  })
+}
+
+// 트랙 리뷰 더보기
+export const moreTrackReview = async (trackId, page) => {
+  return await api.get('/tracks/more', {
+    params : {
+      id : trackId,
+      page : page
+    }
+  })
+}
+
 // 트랙 분위기 투표
 export const voteTrackMood = async (dto) => {
   return await api.post('/tracks/vote', dto)
