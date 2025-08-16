@@ -99,6 +99,23 @@ const Artist = () => {
     }
   }
 
+  // 아티스트 분위기 투표
+  const voteMood = async (dto) => {
+    try {
+      const response = await api.voteArtistMood(dto)
+      console.log(response.data)
+      const data = response.data
+      if(data != null) {
+        setUserVotedMoodId(data.votedMoodId)
+        setMoodLabels(data.labels)
+        setMoodValues(data.values)
+      }
+      swal.fire('성공', '투표가 성공적으로 저장되었습니다.', 'success')
+    } catch (error) {
+      
+    }
+  }
+
   if (loading) {
     return (
       <div style={{ position: 'relative', height: '300px' }}>
@@ -127,7 +144,8 @@ const Artist = () => {
       <ArtistRecent styles={styles} artist={artist} recentReviews={recentReviews} />
       <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
                   artist={artist} track={track} userVotedMoodId={userVotedMoodId}
-                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats} />
+                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats}
+                  voteMood={voteMood} />
     </div>
   )
 }

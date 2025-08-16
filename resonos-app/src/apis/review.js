@@ -100,3 +100,8 @@ export const getArtistPage = async (id) => {
 export const toggleArtistLike = async (dto) => {
   return await api.post('/artists/toggle-like', dto)
 }
+
+// 아티스트 분위기 투표
+export const voteArtistMood = async (dto) => {
+  return await api.post('/artists/vote-mood', dto)
+}

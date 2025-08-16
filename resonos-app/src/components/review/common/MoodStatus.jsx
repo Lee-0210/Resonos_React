@@ -1,9 +1,25 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useMoodChart from '../../../assets/useMoodChart';
 
-const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track, userVotedMoodId, moodLabels, moodValues }) => {
+const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track,
+              userVotedMoodId, moodLabels, moodValues, voteMood }) => {
   const chartRef = useRef(null);
+
+  const [selectedMoodId, setSelectedMoodId] = useState(userVotedMoodId)
+
+  useEffect(() => {
+    setSelectedMoodId(userVotedMoodId)
+  }, [userVotedMoodId])
+  
+  const handleMoodVote = (userId,artistId,selectedMoodId) => {
+    const dto = {
+      userId: userId,
+      artistId: artistId,
+      mood: selectedMoodId
+    }
+    voteMood(dto)
+  }
 
   useMoodChart(chartRef, moodLabels, moodValues);
 
@@ -32,12 +48,13 @@ const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track, userVote
             {tags && tags.map(tag => (
               <label
                 key={tag.id}
-                className={`btn ${styles.btnGold} ${styles.moodOption} ${userVotedMoodId === tag.id ? styles.selected : ''}`}>
+                className={`btn ${styles.btnGold} ${styles.moodOption} ${selectedMoodId === tag.id ? styles.selected : ''}`}>
                 <input
                   type="radio"
                   name="moodVote"
                   value={tag.id}
-                  checked={userVotedMoodId === tag.id}
+                  checked={selectedMoodId === tag.id}
+                  onChange={() => setSelectedMoodId(tag.id)}
                   hidden
                 />
                 <span>{tag.name}</span>
@@ -45,7 +62,8 @@ const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track, userVote
             ))}
           </div>
           {userId && (
-            <button className={`btn ${styles['btn-gold']}`} id="submitMoodVote">
+            <button className={`btn ${styles['btn-gold']}`}
+              onClick={()=>handleMoodVote(userId,artist.id,selectedMoodId)} id="submitMoodVote">
               투표하기
             </button>
           )}
