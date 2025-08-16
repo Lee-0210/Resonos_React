@@ -225,6 +225,28 @@ const Album = () => {
     }
   }
 
+  // 리뷰 좋아요
+  const toggleReviewLike = async (reviewId) => {
+    try {
+      const response = await api.likeAlbumReview(reviewId)
+      const data = response.data
+      console.log(response)
+      setReviews(prevReviews => prevReviews.map(review => {
+        if (review.id === reviewId) {
+          return { ...review, likes: data.likeCount,
+            isLikedByCurrentUser: data.liked }
+        } 
+        return review
+      }))
+    } catch (error) {
+      if (error.response.data === 'User is null') {
+        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+      } else {
+        swal.fire('실패', '좋아요 실패', 'error')
+      }
+    }
+  }
+
   // 6요소 투표
   const voteElement = async (element) => {
     try {
@@ -272,7 +294,8 @@ const Album = () => {
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
           score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null}
           handleSubmitReview={handleSubmitReview} deleteReview={deleteReview}
-          loadAlbumReviews={loadAlbumReviews} page={page} updateReview={updateReview} />
+          loadAlbumReviews={loadAlbumReviews} page={page} updateReview={updateReview}
+          toggleReviewLike={toggleReviewLike} />
         <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
           isAdmin={isAdmin} voteElement={voteElement} />

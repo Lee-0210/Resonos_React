@@ -29,7 +29,7 @@ export const writeAlbumReview = async (albumId, Review) => {
   })
 }
 
-// 리뷰 삭제 삭제 후 변경된 점수 리턴
+// 앨범 리뷰 삭제 삭제 후 변경된 점수 리턴
 export const deleteAlbumReview = async (albumId, reviewId) => {
   return await api.delete(`/albums/reviews/${reviewId}`,{
     params : {
@@ -46,6 +46,11 @@ export const updateAlbumReview = async (albumId, id, content, rating) => {
       id : albumId
     }
   })
+}
+
+// 앨범 리뷰 좋아요
+export const likeAlbumReview = async (reviewId) => {
+  return await api.post(`/albums/reviews/${reviewId}`)
 }
 
 // 앨범 리뷰 더보기
