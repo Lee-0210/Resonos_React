@@ -341,6 +341,16 @@ body {
     padding: 5px 10px 10px 10px;
 }
 
+.top5track > p:first-child,
+.arg-vote p ,
+.mood-vote p ,
+.review-card > p:first-child, 
+.album-moods > p:first-child, 
+.pl-list > p:first-child {
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--main-color);
+}
+
 .concert-schedule {
     width: 300px;
     /* ✅ 고정 너비로 설정 */

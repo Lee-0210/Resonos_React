@@ -53,7 +53,6 @@ const Artist = () => {
       try {
         setLoading(true); // 로딩 상태 시작
 
-        // 백엔드 API 엔드포인트 URL
         const response = await api.getArtistPage(id);
         const data = response.data;
         console.log(data)
@@ -86,6 +85,38 @@ const Artist = () => {
     fetchData();
   }, [id]);
 
+  // 아티스트 좋아요
+  const likeArtist = async (dto) => {
+    try {
+      const response = await api.toggleArtistLike(dto);
+      console.log(response.data)
+      setIsArtistFollowed(response.data.followed);
+      setFollowCount(response.data.count)
+    } catch (error) {
+      if (error.response.data === 'User is null') {
+        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+      }
+    }
+  }
+
+  // 아티스트 분위기 투표
+  const voteMood = async (dto) => {
+    const artistDTO = {...dto, artistId: id}
+    try {
+      const response = await api.voteArtistMood(artistDTO)
+      console.log(response.data)
+      const data = response.data
+      if(data != null) {
+        setUserVotedMoodId(data.votedMoodId)
+        setMoodLabels(data.labels)
+        setMoodValues(data.values)
+      }
+      swal.fire('성공', '투표가 성공적으로 저장되었습니다.', 'success')
+    } catch (error) {
+      
+    }
+  }
+
   if (loading) {
     return (
       <div style={{ position: 'relative', height: '300px' }}>
@@ -108,13 +139,14 @@ const Artist = () => {
     <div className={styles.taWrapper}>
       <ArtistInfo styles={styles} artist={artist} albumCount={albumCount}
                   trackCount={trackCount} userId={userId} isArtistFollowed={isArtistFollowed}
-                  followCount={followCount} albums={albums} />
+                  followCount={followCount} albums={albums} likeArtist={likeArtist} />
       <ArtistTop7 styles={styles} artist={artist} top7Tracks={top7Tracks} 
                   track={track}/>
       <ArtistRecent styles={styles} artist={artist} recentReviews={recentReviews} />
       <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
                   artist={artist} track={track} userVotedMoodId={userVotedMoodId}
-                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats} />
+                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats}
+                  voteMood={voteMood} />
     </div>
   )
 }

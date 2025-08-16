@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -151,7 +149,7 @@ public class TrackReviewServiceImpl implements TrackReviewService {
     @Override
     public List<TrackReview> getMoreReviews(String trackId, int page, int size) {
         int offset = (page - 1) * size;
-        List<TrackReview> reviews = mapper.selectPagedReviewsWithReviewer(trackId, size + 1, offset);
+        List<TrackReview> reviews = mapper.selectPagedReviewsWithReviewer(trackId, size, offset);
         for (TrackReview review : reviews) {
             if (review.getBlinded() == false) {
                 if (review.getDislikes() > 5) {
@@ -160,7 +158,7 @@ public class TrackReviewServiceImpl implements TrackReviewService {
                 }
             }
         }
-        return reviews; // ⭐ 1개 더 가져옴
+        return reviews;
     }
 
     public boolean hasNextPage(String trackId, int page, int size) {

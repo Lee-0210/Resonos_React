@@ -25,7 +25,6 @@ import com.cosmus.resonos.service.review.TrackService;
 import com.cosmus.resonos.service.review.combinedServ.CombinedTrackService;
 import com.cosmus.resonos.validation.ReviewForm;
 
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,12 +62,12 @@ public class TrackController {
 
     // 리뷰 더보기
     @GetMapping("/more")
-    public ResponseEntity<?> loadMoreReviews(@RequestParam("trackId") String trackId,
+    public ResponseEntity<?> loadMoreReviews(@RequestParam("id") String trackId,
             @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size,
+            // @RequestParam(name = "size", defaultValue = "10") int size,
             @AuthenticationPrincipal CustomUser principal) {
 
-        return combinedTrackService.loadMoreReviews(trackId, page, size, principal);
+        return combinedTrackService.loadMoreReviews(trackId, page, 10, principal);
     }
 
     // 리뷰 수정시 업데이트된 리뷰와 점수리턴
@@ -113,23 +112,12 @@ public class TrackController {
         return combinedTrackService.toggleTrackLike(dto);
     }
 
-    // 트랙에서 플레이리스트 추가시 플레이리스트 새로 조회후 리턴
-    @GetMapping("/playlists")
-    public ResponseEntity<?> getPlaylists(@AuthenticationPrincipal CustomUser loginUser) {
-        return combinedTrackService.getPlaylists(loginUser);
-    }
-
     // 플레이리스트에 해당 트랙 추가
-    @PostMapping("/playlists")
-    public ResponseEntity<?> addTrackToPlaylist(@RequestBody Long playlistId, @RequestParam("id") String id) {
+    @PostMapping("/playlists/{playlistId}")
+    public ResponseEntity<?> addTrackToPlaylist(@PathVariable("playlistId") Long playlistId, @RequestParam("id") String id
+                                , @AuthenticationPrincipal CustomUser user) {
 
-        return combinedTrackService.addTrackToPlaylist(playlistId, id);
-    }
-
-    // 플레이리스트 비동기 갱신
-    @GetMapping("/refreshPlaylist")
-    public ResponseEntity<?> refreshPlaylist(@RequestParam("id") String id ) {
-        return combinedTrackService.refreshPlaylist(id);
+        return combinedTrackService.addTrackToPlaylist(playlistId, id, user);
     }
 
 
