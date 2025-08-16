@@ -8,6 +8,8 @@ import Review from '../../components/review/common/Review';
 import MoodStatus from '../../components/review/common/MoodStatus';
 import TextPressure from '../../assets/TextPressure';
 import TrackStatus from '../../components/review/track/TrackStatus';
+import swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
 
 const Track = () => {
 
@@ -104,7 +106,7 @@ const Track = () => {
       console.log(plId, trackId)
       const response = await api.addTrackToPlaylist(plId, trackId)
       console.log(response.data)
-      
+
     } catch (error) {
       if (error.response.data === 'User is null') {
         swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
@@ -125,7 +127,96 @@ const Track = () => {
       setPage(page + 1)
       setHasNext(data.hasNext);
     } catch (error) {
-      
+
+    }
+  }
+
+  // 리뷰 좋아요
+  const toggleReviewLike = async (reviewId) => {
+    try {
+      const response = await api.likeTrackReview(reviewId)
+      const data = response.data
+      console.log(response)
+      setReviews(prevReviews => prevReviews.map(review => {
+        if (review.id === reviewId) {
+          return {
+            ...review, likes: data.likeCount,
+            isLikedByCurrentUser: data.liked
+          }
+        }
+        return review
+      }))
+    } catch (error) {
+      if (error.response.data === 'User is null') {
+        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+      } else {
+        swal.fire('실패', '좋아요 실패', 'error')
+      }
+    }
+  }
+
+  // 리뷰 신고
+  const reportReview = async (reviewId) => {
+    try {
+      const response = await api.reportTrackReview(reviewId)
+      const data = response.data
+      console.log(response.data)
+      swal.fire('신고 완료', `해당 리뷰의 신고 건수는 ${data}건 입니다`, 'success')
+    } catch (error) {
+      if (error.response.data === 'User is null') {
+        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+      } else {
+        swal.fire('실패', '신고 실패', 'error')
+      }
+    }
+  }
+
+  // 리뷰 등록
+  const handleSubmitReview = async (reviewForm) => {
+    if (!userId) {
+      swal.fire('로그인이 필요합니다', '리뷰 작성은 로그인 후 가능합니다.', 'warning');
+      return;
+    }
+    if (!track.id) {
+      swal.fire('오류', '트랙 정보를 찾을 수 없습니다.', 'error');
+      return;
+    }
+    try {
+      const response = await api.writeTrackReview(track.id, reviewForm);
+      console.log(response.data)
+      swal.fire('성공', '리뷰가 성공적으로 작성되었습니다.', 'success');
+      const updatedResponse = response.data
+      setScore(updatedResponse.score);
+      setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
+    } catch (error) {
+      console.error('리뷰 작성 실패:', error);
+      swal.fire('오류', '리뷰 작성 중 오류가 발생했습니다.', 'error');
+    }
+
+  }
+
+  // 리뷰 삭제
+  const deleteReview = async (trackId, reviewId) => {
+    const result = await swal.fire({
+      title: '정말 삭제하시겠습니까?',
+      text: '삭제된 리뷰는 복구할 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소'
+    })
+    if (result.isConfirmed) {
+      try {
+        const response = await api.deleteTrackReview(trackId, reviewId)
+        console.log(response.data)
+        const data = response.data
+        swal.fire('성공', '리뷰가 성공적으로 삭제되었습니다.', 'success')
+        setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
+        setScore(data.score)
+      } catch (error) {
+        console.error(error)
+        swal.fire('실패', '리뷰 삭제 중 오류 발생.', 'error')
+      }
     }
   }
 
@@ -176,7 +267,8 @@ const Track = () => {
       <MvAndStreaming styles={styles} tracks={null} track={track} />
       <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
         score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType}
-        loadMoreReviews={loadMoreReviews} page={page} />
+        loadMoreReviews={loadMoreReviews} page={page} toggleReviewLike={toggleReviewLike}
+        reportReview={reportReview} deleteReview={deleteReview} handleSubmitReview={handleSubmitReview} />
       <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
         userId={userId} artist={artist} track={track} moodValues={moodValues}
         moodStats={moodStats} userVotedMoodId={userVotedMoodId} moodLabels={moodLabels}

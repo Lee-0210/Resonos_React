@@ -48,7 +48,7 @@ const Reviews = ({ styles, reviews, reviewType, isAdmin, userId,
 
   // 리뷰 삭제
   const handleDeleteReview = (rv) => {
-    deleteReview(rv.albumId, rv.id)
+    deleteReview(reviewType === 'ALBUM' ? rv.albumId : rv.trackId, rv.id)
   }
 
   return (
