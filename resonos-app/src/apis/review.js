@@ -53,6 +53,11 @@ export const likeAlbumReview = async (reviewId) => {
   return await api.post(`/albums/reviews/${reviewId}`)
 }
 
+// 앨범 리뷰 신고
+export const reportAlbumReview = async (reviewId) => {
+  return await api.post(`/albums/report/${reviewId}`)
+}
+
 // 앨범 리뷰 더보기
 export const moreAlbumReview = async (albumId, page) => {
   return await api.get('/albums/reviews/more', {

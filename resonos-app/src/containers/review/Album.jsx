@@ -246,6 +246,21 @@ const Album = () => {
       }
     }
   }
+  // 리뷰 신고
+  const reportReview = async (reviewId) => {
+    try {
+      const response = await api.reportAlbumReview(reviewId)
+      const data = response.data
+      console.log(response)
+      swal.fire('신고 완료', `해당 리뷰의 신고 건수는 ${data.reportCount}건 입니다`, 'success' )
+    } catch (error) {
+      if (error.response.data === 'User is null') {
+        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+      } else {
+        swal.fire('실패', '좋아요 실패', 'error')
+      }
+    }
+  }
 
   // 6요소 투표
   const voteElement = async (element) => {
@@ -295,7 +310,7 @@ const Album = () => {
           score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null}
           handleSubmitReview={handleSubmitReview} deleteReview={deleteReview}
           loadAlbumReviews={loadAlbumReviews} page={page} updateReview={updateReview}
-          toggleReviewLike={toggleReviewLike} />
+          toggleReviewLike={toggleReviewLike} reportReview={reportReview} />
         <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
           isAdmin={isAdmin} voteElement={voteElement} />

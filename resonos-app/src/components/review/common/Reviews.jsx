@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-const Reviews = ({ styles, reviews, reviewType, isAdmin,
-          userId, deleteReview, updateReview, toggleReviewLike }) => {
+const Reviews = ({ styles, reviews, reviewType, isAdmin, userId,
+   deleteReview, updateReview, toggleReviewLike, reportReview }) => {
   const [showBlindContent, setShowBlindContent] = useState({});
   const [editingReviewId, setEditingReviewId] = useState(null);
   const [content, setContent] = useState('');
@@ -28,9 +28,15 @@ const Reviews = ({ styles, reviews, reviewType, isAdmin,
   };
 
   // 리뷰 좋아요
-  const handleReviewLike = (id) => {
-    toggleReviewLike(id)
+  const handleReviewLike = (reviewId) => {
+    toggleReviewLike(reviewId)
   }
+
+  // 리뷰 신고
+  const handleReportReview = (reviewId) => {
+    reportReview(reviewId)
+  }
+
 
   // 블라인드 리뷰 내용 보기
   const handleShowBlindContent = (reviewId) => {
@@ -136,7 +142,12 @@ const Reviews = ({ styles, reviews, reviewType, isAdmin,
             </button>
             <span id={`like-count-${rv.id}`}>{rv.likes}</span>
 
-            <button className={styles.reportBtn} data-review-id={rv.id} data-review-type={reviewType}>🚨</button>
+            <button 
+            className={styles.reportBtn}
+            data-review-id={rv.id}
+            data-review-type={reviewType}
+            onClick={() => handleReportReview(rv.id)}
+            >🚨</button>
             {isAdmin && (<span style={{ color: 'red' }}>{rv.dislikes}</span>)}
             {(isAdmin || (userId === rv.userId)) && (
               <div className="d-flex gap-3">
