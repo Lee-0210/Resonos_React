@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 
-const Reviews = ({ styles, reviews, reviewType, isAdmin, userId, deleteReview, updateReview }) => {
+const Reviews = ({ styles, reviews, reviewType, isAdmin, userId,
+   deleteReview, updateReview, toggleReviewLike, reportReview }) => {
   const [showBlindContent, setShowBlindContent] = useState({});
   const [editingReviewId, setEditingReviewId] = useState(null);
   const [content, setContent] = useState('');
   const [rating, setRating] = useState('');
 
+  // 리뷰 수정
   const handleUpdateReview = (e,id) => {
     e.preventDefault()
     updateReview({id, content, rating})
@@ -13,14 +15,6 @@ const Reviews = ({ styles, reviews, reviewType, isAdmin, userId, deleteReview, u
     setContent('');
     setRating('');
   }
-
-  const handleShowBlindContent = (reviewId) => {
-    setShowBlindContent(prevState => ({
-      ...prevState,
-      [reviewId]: !prevState[reviewId]
-    }));
-  };
-
   const handleEditClick = (review) => {
     if (editingReviewId === review.id) {
       setEditingReviewId(null);
@@ -33,6 +27,26 @@ const Reviews = ({ styles, reviews, reviewType, isAdmin, userId, deleteReview, u
     }
   };
 
+  // 리뷰 좋아요
+  const handleReviewLike = (reviewId) => {
+    toggleReviewLike(reviewId)
+  }
+
+  // 리뷰 신고
+  const handleReportReview = (reviewId) => {
+    reportReview(reviewId)
+  }
+
+
+  // 블라인드 리뷰 내용 보기
+  const handleShowBlindContent = (reviewId) => {
+    setShowBlindContent(prevState => ({
+      ...prevState,
+      [reviewId]: !prevState[reviewId]
+    }));
+  };
+
+  // 리뷰 삭제
   const handleDeleteReview = (rv) => {
     deleteReview(rv.albumId, rv.id)
   }
@@ -122,12 +136,18 @@ const Reviews = ({ styles, reviews, reviewType, isAdmin, userId, deleteReview, u
               data-review-id={rv.id}
               data-review-type={reviewType}
               data-liked={rv.isLikedByCurrentUser}
+              onClick={() => handleReviewLike(rv.id)}
             >
               {rv.isLikedByCurrentUser ? '❤️' : '🤍'}
             </button>
             <span id={`like-count-${rv.id}`}>{rv.likes}</span>
 
-            <button className={styles.reportBtn} data-review-id={rv.id} data-review-type={reviewType}>🚨</button>
+            <button 
+            className={styles.reportBtn}
+            data-review-id={rv.id}
+            data-review-type={reviewType}
+            onClick={() => handleReportReview(rv.id)}
+            >🚨</button>
             {isAdmin && (<span style={{ color: 'red' }}>{rv.dislikes}</span>)}
             {(isAdmin || (userId === rv.userId)) && (
               <div className="d-flex gap-3">

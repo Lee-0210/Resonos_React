@@ -7,7 +7,7 @@ import ReviewForm from './ReviewForm'
 
 const Review = ({ reviewType, score, styles, reviews, hasNext,
       userId, isAdmin, album, track, handleSubmitReview, deleteReview,
-      loadAlbumReviews, page, updateReview }) => {
+      loadAlbumReviews, page, updateReview, toggleReviewLike, reportReview }) => {
   return (
     <>
       {/* 평점 리뷰 */}
@@ -28,7 +28,8 @@ const Review = ({ reviewType, score, styles, reviews, hasNext,
             {reviews != null && reviews.length > 0 ? (
               <Reviews reviews={reviews} reviewType={reviewType} size={10}
                 isAdmin={isAdmin} hasNext={hasNext} styles={styles}
-                userId={userId} deleteReview={deleteReview} updateReview={updateReview} />
+                userId={userId} deleteReview={deleteReview} updateReview={updateReview}
+                toggleReviewLike={toggleReviewLike} reportReview={reportReview} />
             )
               :
               <>

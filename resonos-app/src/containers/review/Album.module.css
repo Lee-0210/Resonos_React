@@ -667,7 +667,7 @@ body {
 /* 점수 슬라이더 css */
 .arg-card input[type="range"] {
   -webkit-appearance: none;
-  width: 200px;
+  width: 150px;
   height: 10px;
   background: transparent;
   border: 2px solid var(--main-color);
@@ -771,7 +771,6 @@ input[type="number"]::-webkit-inner-spin-button {
     display: flex;
     align-items: center;
     justify-content: start;
-    gap: 10px;
     height: 28px;
 }
 .vote-result-view>ul li span:first-child {

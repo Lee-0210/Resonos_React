@@ -166,19 +166,29 @@ const Album = () => {
 
   // 리뷰 삭제
   const deleteReview = async (albumId, reviewId) => {
-    try {
-      const response = await api.deleteAlbumReview(albumId, reviewId);
-      console.log(response.data)
-      const data = response.data
-      swal.fire('성공', '리뷰가 성공적으로 삭제되었습니다.', 'success')
-      // 1. 기존 reviews 배열에서 삭제된 리뷰(reviewId)를 제외한 새로운 배열 생성
-      setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
-      // 2. 서버에서 받은 최신 점수로 상태 업데이트
-      setScore(data.score);
+    const result = await swal.fire({
+      title: '정말 삭제하시겠습니까?',
+      text: '삭제된 리뷰는 복구할 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소'
+    })
+    if (result.isConfirmed) {
+      try {
+        const response = await api.deleteAlbumReview(albumId, reviewId);
+        console.log(response.data)
+        const data = response.data
+        swal.fire('성공', '리뷰가 성공적으로 삭제되었습니다.', 'success')
+        // 1. 기존 reviews 배열에서 삭제된 리뷰(reviewId)를 제외한 새로운 배열 생성
+        setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
+        // 2. 서버에서 받은 최신 점수로 상태 업데이트
+        setScore(data.score);
 
-    } catch (error) {
-      console.error(error)
-      swal.fire('실패', '리뷰 삭제 중 오류 발생.', 'error')
+      } catch (error) {
+        console.error(error)
+        swal.fire('실패', '리뷰 삭제 중 오류 발생.', 'error')
+      }
     }
   }
 
@@ -210,6 +220,60 @@ const Album = () => {
       setReviews(prevReviews => [...prevReviews, ...data.review]);
       setPage(page + 1)
       setHasNext(data.hasNext);
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  // 리뷰 좋아요
+  const toggleReviewLike = async (reviewId) => {
+    try {
+      const response = await api.likeAlbumReview(reviewId)
+      const data = response.data
+      console.log(response)
+      setReviews(prevReviews => prevReviews.map(review => {
+        if (review.id === reviewId) {
+          return { ...review, likes: data.likeCount,
+            isLikedByCurrentUser: data.liked }
+        } 
+        return review
+      }))
+    } catch (error) {
+      if (error.response.data === 'User is null') {
+        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+      } else {
+        swal.fire('실패', '좋아요 실패', 'error')
+      }
+    }
+  }
+  // 리뷰 신고
+  const reportReview = async (reviewId) => {
+    try {
+      const response = await api.reportAlbumReview(reviewId)
+      const data = response.data
+      console.log(response)
+      swal.fire('신고 완료', `해당 리뷰의 신고 건수는 ${data.reportCount}건 입니다`, 'success' )
+    } catch (error) {
+      if (error.response.data === 'User is null') {
+        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+      } else {
+        swal.fire('실패', '좋아요 실패', 'error')
+      }
+    }
+  }
+
+  // 6요소 투표
+  const voteElement = async (element) => {
+    try {
+      const response = await api.voteElement(id, element);
+      const data = response.data
+      console.log(data)
+      setUserVote(data.userArg)
+      setArgValues(data.avgArg)
+      if (data.userArg != null) {
+        setIsArgEmpty(false)
+      }
+      swal.fire('성공', '투표가 성공적으로 저장되었습니다.', 'success')
     } catch (error) {
       console.error(error)
     }
@@ -248,10 +312,11 @@ const Album = () => {
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
           score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null}
           handleSubmitReview={handleSubmitReview} deleteReview={deleteReview}
-          loadAlbumReviews={loadAlbumReviews} page={page} updateReview={updateReview} />
+          loadAlbumReviews={loadAlbumReviews} page={page} updateReview={updateReview}
+          toggleReviewLike={toggleReviewLike} reportReview={reportReview} />
         <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
-          isAdmin={isAdmin} />
+          isAdmin={isAdmin} voteElement={voteElement} />
       </div>
     </>
   )

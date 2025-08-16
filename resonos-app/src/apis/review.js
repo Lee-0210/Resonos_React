@@ -29,7 +29,7 @@ export const writeAlbumReview = async (albumId, Review) => {
   })
 }
 
-// 리뷰 삭제 삭제 후 변경된 점수 리턴
+// 앨범 리뷰 삭제 삭제 후 변경된 점수 리턴
 export const deleteAlbumReview = async (albumId, reviewId) => {
   return await api.delete(`/albums/reviews/${reviewId}`,{
     params : {
@@ -48,12 +48,31 @@ export const updateAlbumReview = async (albumId, id, content, rating) => {
   })
 }
 
+// 앨범 리뷰 좋아요
+export const likeAlbumReview = async (reviewId) => {
+  return await api.post(`/albums/reviews/${reviewId}`)
+}
+
+// 앨범 리뷰 신고
+export const reportAlbumReview = async (reviewId) => {
+  return await api.post(`/albums/report/${reviewId}`)
+}
+
 // 앨범 리뷰 더보기
 export const moreAlbumReview = async (albumId, page) => {
   return await api.get('/albums/reviews/more', {
     params : {
       id : albumId,
       page : page
+    }
+  })
+}
+
+// 앨범 6요소 투표
+export const voteElement = async (albumId, element) => {
+  return await api.post('/albums/vote', element, {
+    params : {
+      id : albumId
     }
   })
 }

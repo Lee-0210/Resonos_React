@@ -3,7 +3,7 @@ import VoteForm from './VoteForm'
 import useRadarChart from '../../../assets/useElementChart'
 
 
-const Element = ({ album, isArgEmpty, userVote, styles, userId, argValues }) => {
+const Element = ({ album, isArgEmpty, userVote, styles, userId, argValues, voteElement }) => {
   const canvasRef = useRef(null);
   useRadarChart(canvasRef, argValues, isArgEmpty);
 
@@ -24,7 +24,8 @@ const Element = ({ album, isArgEmpty, userVote, styles, userId, argValues }) => 
           </div>
           {/* 로그인 여부에 따른 투표 UI */}
           {userId !== null ?(
-            <VoteForm albumId={album.id} userVote={userVote} styles={styles} />
+            <VoteForm albumId={album.id} userVote={userVote} styles={styles}
+                  voteElement={voteElement} userId={userId} />
           ) : (
             <p className={styles.headline} style={{ paddingTop: '35px' }}>
               로그인후 점수투표가 가능합니다
