@@ -101,8 +101,9 @@ const Artist = () => {
 
   // 아티스트 분위기 투표
   const voteMood = async (dto) => {
+    const artistDTO = {...dto, artistId: id}
     try {
-      const response = await api.voteArtistMood(dto)
+      const response = await api.voteArtistMood(artistDTO)
       console.log(response.data)
       const data = response.data
       if(data != null) {

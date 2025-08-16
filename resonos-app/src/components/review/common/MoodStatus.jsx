@@ -12,10 +12,9 @@ const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track,
     setSelectedMoodId(userVotedMoodId)
   }, [userVotedMoodId])
   
-  const handleMoodVote = (userId,artistId,selectedMoodId) => {
+  const handleMoodVote = (userId,selectedMoodId) => {
     const dto = {
       userId: userId,
-      artistId: artistId,
       mood: selectedMoodId
     }
     voteMood(dto)
@@ -63,7 +62,7 @@ const MoodStatus = ({ styles, isMoodEmpty, tags, userId, artist, track,
           </div>
           {userId && (
             <button className={`btn ${styles['btn-gold']}`}
-              onClick={()=>handleMoodVote(userId,artist.id,selectedMoodId)} id="submitMoodVote">
+              onClick={()=>handleMoodVote(userId,selectedMoodId)} id="submitMoodVote">
               투표하기
             </button>
           )}

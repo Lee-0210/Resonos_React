@@ -86,6 +86,10 @@ export const getTrackPage = async (id) => {
   });
 }
 
+// 트랙 분위기 투표
+export const voteTrackMood = async (dto) => {
+  return await api.post('/tracks/vote', dto)
+}
 
 // 아티스트 초기 페이지
 export const getArtistPage = async (id) => {

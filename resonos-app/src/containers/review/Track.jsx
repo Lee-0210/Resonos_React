@@ -35,7 +35,7 @@ const Track = () => {
   const [userPlaylist, setUserPlaylist] = useState([]);
   const [userId, setUserId] = useState(null);
   const [reviewType, setReviewType] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchTrackData = async () => {
@@ -57,24 +57,44 @@ const Track = () => {
         setMoodStats(data.moodStats);
         setMoodLabels(data.moodLabels);
         setMoodValues(data.moodValues);
-        setIsMoodEmpty(data.isMoodEmpty);
+        setIsMoodEmpty(data.moodEmpty);
         setTrackLikeCount(data.trackLikeCount);
         setEmptyPlayList(data.emptyPlayList);
         setPlayLists(data.playLists);
         setTags(data.tags);
-        setIsAdmin(data.isAdmin);
+        setIsAdmin(data.admin);
         setIsTrackLikedByUser(data.isTrackLikedByUser);
         setUserPlaylist(data.userPlaylist);
         setUserId(data.userId);
         setReviewType(data.reviewType);
-        setLoading(false);
 
       } catch (err) {
         console.error(err)
+      } finally {
+        setLoading(false);
       }
     };
     fetchTrackData();
   }, [id]);
+
+  // 트랙 분위기 투표
+  const voteMood = async (dto) => {
+    const trackDTO = { ...dto, trackId: id }
+    try {
+      const response = await api.voteTrackMood(trackDTO)
+      console.log(response.data)
+      const data = response.data
+      if (data != null) {
+        setUserVotedMoodId(data.votedMoodId)
+        setMoodLabels(data.labels)
+        setMoodValues(data.values)
+        setIsMoodEmpty(false)
+      }
+      swal.fire('성공', '투표가 성공적으로 저장되었습니다.', 'success')
+    } catch (error) {
+
+    }
+  }
 
   if (loading) {
     return (
@@ -104,7 +124,8 @@ const Track = () => {
         score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType} />
       <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
         userId={userId} artist={artist} track={track} moodValues={moodValues}
-        moodStats={moodStats} userVotedMoodId={userVotedMoodId} moodLabels={moodLabels} />
+        moodStats={moodStats} userVotedMoodId={userVotedMoodId} moodLabels={moodLabels}
+        voteMood={voteMood} />
     </div>
   )
 }
