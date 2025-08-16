@@ -46,8 +46,8 @@ public class TrackController {
     }
 
     // 트랙 리뷰 작성 후 리뷰와 점수 리턴
-    @PostMapping
-    public ResponseEntity<?> trackReviewPost(@RequestParam("id") String trackId, ReviewForm f,
+    @PostMapping("/reviews")
+    public ResponseEntity<?> trackReviewPost(@RequestParam("id") String trackId,@RequestBody ReviewForm f,
                         @AuthenticationPrincipal CustomUser user) {
 
         return combinedTrackService.reviewPost(trackId, f, user);
@@ -78,8 +78,8 @@ public class TrackController {
     }
 
     // 리뷰 삭제시 트랙 점수 새로 리턴
-    @DeleteMapping("/reviews")
-    public ResponseEntity<?> deleteAndRefresh(@RequestParam("id") String trackId, @RequestBody Long reviewId ) {
+    @DeleteMapping("/reviews/{reviewId}")
+    public ResponseEntity<?> deleteAndRefresh(@RequestParam("id") String trackId, @PathVariable("reviewId") Long reviewId ) {
 
         return combinedTrackService.reviewDelete(reviewId, trackId);
     }

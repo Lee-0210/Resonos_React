@@ -110,6 +110,35 @@ export const moreTrackReview = async (trackId, page) => {
   })
 }
 
+// 트랙 리뷰 좋아요
+export const likeTrackReview = async (reviewId) => {
+  return await api.post(`/tracks/reviews/${reviewId}`)
+}
+
+// 트랙 리뷰 신고
+export const reportTrackReview = async (reviewId) => {
+  return await api.post(`/tracks/report/${reviewId}`)
+}
+
+// 트랙 리뷰 작성시 리뷰와 갱신된 점수 반환
+export const writeTrackReview = async (trackId, Review) => {
+  const data = Review
+  return await api.post('/tracks/reviews', data, {
+    params : {
+      id : trackId
+    }
+  })
+}
+
+// 트랙 리뷰 삭제 후 변경된 점수 리턴
+export const deleteTrackReview = async (trackId, reviewId) => {
+  return await api.delete(`/tracks/reviews/${reviewId}`,{
+    params : {
+      id : trackId
+    }
+  })
+}
+
 // 트랙 분위기 투표
 export const voteTrackMood = async (dto) => {
   return await api.post('/tracks/vote', dto)

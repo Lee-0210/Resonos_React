@@ -56,7 +56,7 @@ public class AlbumController {
 
     // 앨범 리뷰 작성 작성후에 리뷰와 갱신된 점수 리턴
     @PostMapping("/reviews")
-    public ResponseEntity<?> albumReviewPost(@RequestParam("id") String albumId, @RequestBody @Valid ReviewForm form,
+    public ResponseEntity<?> albumReviewPost(@RequestParam("id") String albumId, @RequestBody ReviewForm form,
             @AuthenticationPrincipal CustomUser user) {
 
         return combinedAlbumService.albumReviewPost(albumId, form, user);

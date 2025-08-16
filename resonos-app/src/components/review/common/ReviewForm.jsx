@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const ReviewForm = ({ styles, albumId, trackId, handleSubmitReview}) => {
+const ReviewForm = ({ styles, albumId, trackId, reviewType, handleSubmitReview}) => {
   const [content, setContent] = useState('');
   const [rating, setRating] = useState('');
 
