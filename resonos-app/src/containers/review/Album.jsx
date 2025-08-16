@@ -270,6 +270,9 @@ const Album = () => {
       console.log(data)
       setUserVote(data.userArg)
       setArgValues(data.avgArg)
+      if (data.userArg != null) {
+        setIsArgEmpty(false)
+      }
       swal.fire('성공', '투표가 성공적으로 저장되었습니다.', 'success')
     } catch (error) {
       console.error(error)

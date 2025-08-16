@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const VoteForm = ({ styles, userVote, voteElement }) => {
+const VoteForm = ({ styles, userVote, voteElement, albumId, userId }) => {
   const [lyric, setLyric] = useState(userVote?.lyric ?? 0);
   const [sound, setSound] = useState(userVote?.sound ?? 0);
   const [melody, setMelody] = useState(userVote?.melody ?? 0);
@@ -29,14 +29,14 @@ const VoteForm = ({ styles, userVote, voteElement }) => {
   const handleSaveClick = (e, userVote) => {
     e.preventDefault();
     const element = {
-      userId: userVote.userId,
+      userId: userId,
       lyric: lyric,
       sound: sound,
       melody: melody,
       storytelling: storytelling,
       cohesiveness: cohesiveness,
       creativity: creativity,
-      albumId: userVote.albumId
+      albumId: albumId
     }
     voteElement(element);
     setIsEditing(false);
