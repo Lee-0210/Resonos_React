@@ -53,7 +53,6 @@ const Artist = () => {
       try {
         setLoading(true); // 로딩 상태 시작
 
-        // 백엔드 API 엔드포인트 URL
         const response = await api.getArtistPage(id);
         const data = response.data;
         console.log(data)
@@ -86,6 +85,20 @@ const Artist = () => {
     fetchData();
   }, [id]);
 
+  // 아티스트 좋아요
+  const likeArtist = async (dto) => {
+    try {
+      const response = await api.toggleArtistLike(dto);
+      console.log(response.data)
+      setIsArtistFollowed(response.data.followed);
+      setFollowCount(response.data.count)
+    } catch (error) {
+      if (error.response.data === 'User is null') {
+        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+      }
+    }
+  }
+
   if (loading) {
     return (
       <div style={{ position: 'relative', height: '300px' }}>
@@ -108,7 +121,7 @@ const Artist = () => {
     <div className={styles.taWrapper}>
       <ArtistInfo styles={styles} artist={artist} albumCount={albumCount}
                   trackCount={trackCount} userId={userId} isArtistFollowed={isArtistFollowed}
-                  followCount={followCount} albums={albums} />
+                  followCount={followCount} albums={albums} likeArtist={likeArtist} />
       <ArtistTop7 styles={styles} artist={artist} top7Tracks={top7Tracks} 
                   track={track}/>
       <ArtistRecent styles={styles} artist={artist} recentReviews={recentReviews} />

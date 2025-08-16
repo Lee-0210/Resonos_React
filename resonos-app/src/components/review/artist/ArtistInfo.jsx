@@ -1,7 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ArtistInfo = ({ styles, artist, albumCount, trackCount, userId, isArtistFollowed, followCount, albums }) => {
+const ArtistInfo = ({ styles, artist, albumCount, trackCount,
+            userId, isArtistFollowed, followCount, albums,
+            likeArtist }) => {
+
+  const handleLikeArtist = (userId,artistId) => {
+    const dto = {
+      userId: userId,
+      artistId: artistId
+    }
+    likeArtist(dto);
+  }
 
   return (
     <>
@@ -22,6 +32,7 @@ const ArtistInfo = ({ styles, artist, albumCount, trackCount, userId, isArtistFo
                 data-artist-id={artist.id}
                 data-user-id={userId ? userId : 0}
                 data-followed={isArtistFollowed}
+                onClick={()=>handleLikeArtist(userId,artist.id)}
               >
                 <span id="followText">
                   {isArtistFollowed ? '팔로우❤️' : '팔로우🤍'}

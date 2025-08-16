@@ -95,3 +95,8 @@ export const getArtistPage = async (id) => {
     }
   })
 }
+
+// 아티스트 좋아요
+export const toggleArtistLike = async (dto) => {
+  return await api.post('/artists/toggle-like', dto)
+}
