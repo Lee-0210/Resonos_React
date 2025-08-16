@@ -15,13 +15,7 @@ const ReviewForm = ({ styles, albumId, trackId, reviewType, handleSubmitReview})
   return (
     <div className={styles.reply}>
       <form id="reviewForm" onSubmit={handleFormSubmit}>
-        {albumId != null ? (
-          <input type="hidden" id="albumId" value={albumId} />
-        ) :
-        (
-          <input type="hidden" id="trackId" value={trackId} />
-        )
-        }
+        
         <textarea
           id="content"
           placeholder="리뷰를 입력해주세요"

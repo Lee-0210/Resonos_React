@@ -57,7 +57,7 @@ const Review = ({ reviewType, score, styles, reviews, hasNext,
             </div>
           ) : (
             <ReviewForm styles={styles} reviewType={reviewType}
-             albumId={album.id} trackId={track.id} handleSubmitReview={handleSubmitReview} />
+            handleSubmitReview={handleSubmitReview} />
           )}
         </div>
       </div>
