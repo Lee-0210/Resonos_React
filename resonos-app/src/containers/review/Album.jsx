@@ -166,19 +166,29 @@ const Album = () => {
 
   // 리뷰 삭제
   const deleteReview = async (albumId, reviewId) => {
-    try {
-      const response = await api.deleteAlbumReview(albumId, reviewId);
-      console.log(response.data)
-      const data = response.data
-      swal.fire('성공', '리뷰가 성공적으로 삭제되었습니다.', 'success')
-      // 1. 기존 reviews 배열에서 삭제된 리뷰(reviewId)를 제외한 새로운 배열 생성
-      setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
-      // 2. 서버에서 받은 최신 점수로 상태 업데이트
-      setScore(data.score);
+    const result = await swal.fire({
+      title: '정말 삭제하시겠습니까?',
+      text: '삭제된 리뷰는 복구할 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소'
+    })
+    if (result.isConfirmed) {
+      try {
+        const response = await api.deleteAlbumReview(albumId, reviewId);
+        console.log(response.data)
+        const data = response.data
+        swal.fire('성공', '리뷰가 성공적으로 삭제되었습니다.', 'success')
+        // 1. 기존 reviews 배열에서 삭제된 리뷰(reviewId)를 제외한 새로운 배열 생성
+        setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
+        // 2. 서버에서 받은 최신 점수로 상태 업데이트
+        setScore(data.score);
 
-    } catch (error) {
-      console.error(error)
-      swal.fire('실패', '리뷰 삭제 중 오류 발생.', 'error')
+      } catch (error) {
+        console.error(error)
+        swal.fire('실패', '리뷰 삭제 중 오류 발생.', 'error')
+      }
     }
   }
 
@@ -210,6 +220,20 @@ const Album = () => {
       setReviews(prevReviews => [...prevReviews, ...data.review]);
       setPage(page + 1)
       setHasNext(data.hasNext);
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  // 6요소 투표
+  const voteElement = async (element) => {
+    try {
+      const response = await api.voteElement(id, element);
+      const data = response.data
+      console.log(data)
+      setUserVote(data.userArg)
+      setArgValues(data.avgArg)
+      swal.fire('성공', '투표가 성공적으로 저장되었습니다.', 'success')
     } catch (error) {
       console.error(error)
     }
@@ -251,7 +275,7 @@ const Album = () => {
           loadAlbumReviews={loadAlbumReviews} page={page} updateReview={updateReview} />
         <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
           argValues={argValues} userVote={userVote} userId={userId}
-          isAdmin={isAdmin} />
+          isAdmin={isAdmin} voteElement={voteElement} />
       </div>
     </>
   )

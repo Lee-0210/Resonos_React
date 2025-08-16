@@ -58,6 +58,15 @@ export const moreAlbumReview = async (albumId, page) => {
   })
 }
 
+// 앨범 6요소 투표
+export const voteElement = async (albumId, element) => {
+  return await api.post('/albums/vote', element, {
+    params : {
+      id : albumId
+    }
+  })
+}
+
 // 트랙 초기 페이지
 export const getTrackPage = async (id) => {
   return await api.get('/tracks', {
