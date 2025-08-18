@@ -60,6 +60,7 @@ import Board from './pages/community/Board';
 import CommuSearch from './pages/community/CommuSearch';
 import SearchMore from './pages/community/SearchMore';
 import Post from './pages/community/Post';
+import CreateUpdate from './pages/community/CreateUpdate';
 
 
 
@@ -150,8 +151,10 @@ const App = () => {
           <Route path="/community" element={<Index />} />
           <Route path="/community/boards/:id" element={<Board />} />
           <Route path="/community/search" element={<CommuSearch />} />
+          <Route path='/community/boards/:boardId/posts/:postId' element={<Post />} />
+          <Route path='/community/edit/boards/:boardId/posts/:postId' element={<CreateUpdate />} />
+          <Route path='/community/create/boards/:boardId' element={<CreateUpdate />} />
           <Route path="/community/search/more" element={<SearchMore />} />
-          <Route path='/community/boards/:id/posts/:id' element={<Post />} />
 
         </Routes>
       </LoginContextProvider>
