@@ -17,4 +17,7 @@ public class BoardPost {
     private String userNickname;
     private int postLikes;
     private int postDislikes;
+
+    // 커뮤니티 정보, 이름 
+    private Community community;
 }

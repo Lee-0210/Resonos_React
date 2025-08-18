@@ -17,6 +17,8 @@ const PostComment = () => {
           </div>
           <div className="comment-info">
             <p>2025. 08. 18. 11:34:14</p>
+            <p>👍 12</p>
+            <p>👎 1</p>
           </div>
           <div className="reply-comment">
             <div className="user">
@@ -27,6 +29,8 @@ const PostComment = () => {
             </div>
             <div className="comment-info">
               <p>2025. 08. 18. 11:34:14</p>
+              <p>👍 12</p>
+              <p>👎 1</p>
             </div>
           </div>
           <div className="reply-comment">
@@ -38,6 +42,8 @@ const PostComment = () => {
             </div>
             <div className="comment-info">
               <p>2025. 08. 18. 11:34:14</p>
+              <p>👍 12</p>
+              <p>👎 1</p>
             </div>
           </div>
         </div>
@@ -50,6 +56,8 @@ const PostComment = () => {
           </div>
           <div className="comment-info">
             <p>2025. 08. 18. 11:34:14</p>
+            <p>👍 12</p>
+            <p>👎 1</p>
           </div>
           <div className="reply-comment">
             <div className="user">
@@ -60,6 +68,8 @@ const PostComment = () => {
             </div>
             <div className="comment-info">
               <p>2025. 08. 18. 11:34:14</p>
+              <p>👍 12</p>
+              <p>👎 1</p>
             </div>
           </div>
         </div>

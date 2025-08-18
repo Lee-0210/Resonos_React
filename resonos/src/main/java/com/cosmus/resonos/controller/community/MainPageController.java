@@ -1,5 +1,6 @@
 package com.cosmus.resonos.controller.community;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,7 @@ public class MainPageController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
 
+                log.info("요청 들어옴.");
         try {
             Map<String, Object> response = new HashMap<>();
 
@@ -60,8 +62,10 @@ public class MainPageController {
 
             // 4. 실시간 인기글
             PageInfo<BoardPost> realTimePage = boardPostService.getRealTimePopularPosts(page, size);
-            response.put("realTimePopularPosts", realTimePage.getList());
+            List<BoardPost> realTimePosts = realTimePage.getList() != null ? realTimePage.getList() : new ArrayList<>();
+            response.put("realTimePopularPosts", realTimePosts);
             response.put("realTimePopularPagination", new Pagination(realTimePage));
+
 
             // 5. 게시판 순위 Top5
             List<CommunityCategory> topCategories = communityCategoryService.getTopCategories(5);
@@ -70,7 +74,8 @@ public class MainPageController {
             // 6. 신설 게시판
             List<CommunityCategory> newCategories = communityCategoryService.getNewCategories(5);
             response.put("newCategories", newCategories);
-
+            log.info("데이터 문제 없음");
+          
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -85,6 +90,7 @@ public class MainPageController {
             @RequestParam("q") String query,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
+        log.info("query : {}", query);
 
         try {
             Map<String, Object> response = new HashMap<>();
@@ -108,7 +114,7 @@ public class MainPageController {
     // 게시판 상세
     @GetMapping("/boards/{categoryId}")
     public ResponseEntity<?> getBoardDetail(
-            @PathVariable Long categoryId,
+            @PathVariable("categoryId") Long categoryId,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
 

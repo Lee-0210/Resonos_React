@@ -41,6 +41,21 @@
   color: var(--main-color);
 }
 
+.commu h3 + button {
+  color: white;
+  background-color: var(--main-color);
+  border-radius: 20px;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+  border: 0.1px solid var(--main-color);
+  transition: all 0.3s;
+  font-size: 1.4rem;
+}
+.commu h3 + button:hover {
+  color: var(--main-color);
+  background-color: inherit;
+}
+
 .commu .post-title,
 .commu .board-title {
   color: var(--main-color);
@@ -377,7 +392,9 @@
   }
 }
 
-
+.commu.index .right {margin-top: 30px; gap:30px;}
+.commu.board {padding: 0;}
+.commu.search {padding: 0;}
 
 
 
@@ -421,6 +438,7 @@
 
 .post-wrapper .post-content {
   max-width: 1440px;
+  width: 100%;
   padding: 0 75px;
   border-bottom: 1px solid var(--main-color);
   margin-bottom: 30px;
@@ -485,6 +503,11 @@
   width: 100%;
   border-bottom: 1px solid var(--main-color);
 }
+.post-wrapper .comments .comment-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 .post-wrapper .comment .reply-comment {
   padding: 10px 0px 0px 20px;
 }
@@ -515,9 +538,13 @@
   display: flex;
   align-items: center;
 }
-.post-wrapper .headline {font-size: 2.4rem !important; font-weight: bold; color: var(--main-color);}
-.post-wrapper .subtitle {font-size: 2rem !important;}
-.post-wrapper .btn-gold {
+.post-wrapper .headline,
+.wysiwyg-wrapper .headline {font-size: 2.4rem !important; font-weight: bold; color: var(--main-color);}
+.post-wrapper .subtitle,
+.wysiwyg-wrapper .subtitle {font-size: 2rem !important;}
+
+.post-wrapper .btn-gold,
+.wysiwyg-wrapper .btn-gold {
     appearance: none;      /* 브라우저 기본 라디오 버튼 제거 */
     border: 1px solid var(--main-color);
     color: var(--main-color);
@@ -526,12 +553,64 @@
     font-weight: bold;
     font-size: 1.6rem;
     padding: 5px;
-  .commu.index .right {margin-top: 30px; gap:30px;}
-  .commu.board {padding: 0;}
-  .commu.search {padding: 0;}
-}
-.post-wrapper .btn-gold:hover,
-.post-wrapper .btn-gold.selected {
+  }
+
+.wysiwyg-wrapper .btn-gold:hover,
+.post-wrapper .btn-gold:hover {
     background: var(--main-color);
     color: var(--background-color);
+}
+
+.ck-editor__editable.ck-read-only {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.ck.ck-sticky-panel__content {
+  border: none !important;
+  box-shadow: none !important; /* 그림자까지 제거 */
+}
+
+.wysiwyg-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.wysiwyg-wrapper .ws-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding-top: 100px;
+  max-width: 1440px;
+  width: 100%;
+}
+.ws-wrapper .title-and-writer {
+  display: flex;
+  justify-content: start;
+  padding-bottom: 30px;
+  gap: 10px;
+}
+.ws-wrapper .title-and-writer .title-box {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ws-wrapper .title-and-writer .title-box input {
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  background: transparent;
+  color: white;
+  padding: 5px;
+}
+
+.wysiwyg-wrapper .cke {
+  margin-bottom: 30px;
+}
+
+.wysiwyg-wrapper .actions {
+  width: 300px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.wysiwyg-wrapper .actions .btn {
+  padding: 5px 30px;
 }

@@ -1,19 +1,19 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const BoardTitleCard = ({title}) => {
+const BoardTitleCard = ({item}) => {
 
   const navigate = useNavigate()
 
   const handleNavigate = () => {
-    navigate('/community/boards/98/posts/98')
+    navigate(`/community/boards/${item?.id}`)
   }
 
   return (
     <li
       onClick={handleNavigate}
     >
-      <span className='ellipsis focus'>{title}</span>
+      <span className='ellipsis focus'>{item?.name}</span>
     </li>
   )
 }

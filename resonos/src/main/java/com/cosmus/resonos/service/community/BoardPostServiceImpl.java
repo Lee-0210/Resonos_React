@@ -79,7 +79,8 @@ public class BoardPostServiceImpl implements BoardPostService {
     @Override
     public PageInfo<BoardPost> getRealTimePopularPosts(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        return new PageInfo<>(boardPostMapper.selectRealTimePopularPosts());
+        List<BoardPost> list = boardPostMapper.selectRealTimePopularPosts(); // null 체크
+        return new PageInfo<>(list);
     }
 
     @Override
@@ -98,5 +99,7 @@ public class BoardPostServiceImpl implements BoardPostService {
     public List<BoardPost> getNoticesByCategoryId(Long categoryId, int limit) {
         return boardPostMapper.selectNoticesByCategoryId(categoryId, limit);
     }
+
+
 
 }

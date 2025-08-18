@@ -1,19 +1,19 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const BoardRankingCard = ({board}) => {
+const PostTitleCard = ({item}) => {
 
   const navigate = useNavigate()
 
   const handleNavigate = () => {
-    navigate(`/community/boards/${board.id}`)
+    navigate(`/community/boards/${item?.community?.id}/posts/${item?.id}`)
   }
 
   return (
     <li onClick={handleNavigate}>
-      <p className='ellipsis focus'>{board.name}</p><span>{board.id}</span>
+      <span className='ellipsis focus'>{item?.title}</span>
     </li>
   )
 }
 
-export default BoardRankingCard
+export default PostTitleCard
