@@ -3,14 +3,31 @@ import PostListCard from './card/PostListCard'
 import Pagination from '../Pagination/Pagination'
 import { Link } from 'react-router-dom'
 
-const BoardDetail = () => {
+const BoardDetail = ({setOnModal, isManager}) => {
   return (
     <main className="commu board">
       {/* 상단 */}
       <div className='top'>
         {/* 음악 재생 */}
         <div>
-          <h3>매니저의 추천곡 🎵</h3>
+          <div className="d-flex justify-content-between align-items-center">
+            <h3>매니저의 추천곡 🎵</h3>
+            {
+              isManager.current
+              ?
+              <button onClick={() => setOnModal(true)}>설정</button>
+              :
+              <></>
+            }
+          </div>
+          <iframe
+            src={`https://open.spotify.com/embed/track/010ZkIVv6Ay5vqqHVCCiKB?utm_source=generator`}
+            width="100%"
+            height="150"
+            frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
         </div>
         {/* 게시판 정보 */}
         <div className="board-info">

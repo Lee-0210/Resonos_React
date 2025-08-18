@@ -4,6 +4,7 @@ import PostListCard from './card/PostListCard'
 import BoardRankingCard from './card/BoardRankingCard'
 import BoardTitleCard from './card/BoardTitleCard'
 import { Link } from 'react-router-dom'
+import PostTitleCard from './card/PostTitleCard'
 
 const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCategories, newCategories}) => {
 
@@ -61,11 +62,11 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
           <div className='right-card'>
             <h3>실시간 인기글</h3>
             <ul>
-              <BoardTitleCard title={'실시간 인기글 제목'} />
-              <BoardTitleCard title={'실시간 인기글 제목'} />
-              <BoardTitleCard title={'실시간 인기글 제목'} />
-              <BoardTitleCard title={'실시간 인기글 제목'} />
-              <BoardTitleCard title={'실시간 인기글 제목'} />
+              {
+                realTimePopularPosts.map(post => (
+                  <PostTitleCard key={post.id} item={post} />
+                ))
+              }
             </ul>
           </div>
           {/* 게시판 순위 */}

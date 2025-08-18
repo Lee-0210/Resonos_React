@@ -63,15 +63,18 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.deleteById(id) > 0;
     }
 
-    
-
     @Override
     public boolean deleteAll() throws Exception {
         return commentMapper.deleteAll() > 0;
     }
 
-        @Override
+    @Override
     public List<Comment> findByTarget(String type, Long targetId) throws Exception {
         return commentMapper.findByTarget(type, targetId);
+    }
+
+    @Override
+    public List<Comment> selectWithLikesDislikes(Long communityId, Long postId) throws Exception {
+        return commentMapper.selectWithLikesDislikes(communityId, postId);
     }
 }
