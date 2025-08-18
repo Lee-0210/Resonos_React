@@ -1,28 +1,26 @@
 package com.cosmus.resonos.domain.community;
 
 import java.util.Date;
-import java.util.UUID;
 
 import lombok.Data;
 
 @Data
 public class Comment {
 
+    private Long id;
 
-    private Long id; 
+    private String content;
 
-    private String content; 
+    private Date createdAt;
 
-    private Date created_at; 
+    private Long userId;
 
-    private Long user_id; 
+    private String type;
 
-    private String type; 
+    private Long targetId;
 
-    private Long target_id; 
+    private Long boardPostId;
 
-    private Long board_post_id; 
-
-    private Long parent_comment_id; 
+    private Long parentCommentId;
 
 }

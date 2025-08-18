@@ -72,6 +72,7 @@ public class MainPageController {
             List<CommunityCategory> newCategories = communityCategoryService.getNewCategories(5);
             response.put("newCategories", newCategories);
             log.info("데이터 문제 없음");
+          
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {

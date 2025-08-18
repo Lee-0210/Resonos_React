@@ -174,3 +174,24 @@ ADD CONSTRAINT `FK_user_TO_board_post_1` FOREIGN KEY (`user_id`) REFERENCES `use
 
 ALTER TABLE `likes_dislikes`
 ADD CONSTRAINT `FK_user_TO_likes_dislikes_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+
+
+-- SET FOREIGN_KEY_CHECKS = 0;
+
+-- TRUNCATE TABLE likes_dislikes;
+-- TRUNCATE TABLE comment;
+-- TRUNCATE TABLE vote_status;
+-- TRUNCATE TABLE vote_result;
+-- TRUNCATE TABLE com_vote_argument;
+-- TRUNCATE TABLE com_vote;
+-- TRUNCATE TABLE board_post;
+-- TRUNCATE TABLE com_manager;
+-- TRUNCATE TABLE community;
+-- TRUNCATE TABLE community_category;
+
+-- SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+SELECT * FROM community LIMIT 10;

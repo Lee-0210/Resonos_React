@@ -367,7 +367,7 @@ input::placeholder {color: #bbb !important;}
   text-decoration: underline;
   color: var(--main-color);
 }
-.like {
+.con .like {
   font-size: 2.5rem;
   color: #D4B97F;
   margin-left: 8px;

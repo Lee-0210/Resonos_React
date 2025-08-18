@@ -1,8 +1,11 @@
 package com.cosmus.resonos.controller.community;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,12 +21,21 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.service.badge.BadgeGrantService;
 import com.cosmus.resonos.service.community.BoardPostService;
+import com.cosmus.resonos.service.community.CommentService;
+import com.cosmus.resonos.service.community.LikesDislikesService;
 
 @RestController
 @RequestMapping("/board-posts")
 public class BoardPostController {
 
-    private final BoardPostService boardPostService;
+    @Autowired
+    private BoardPostService boardPostService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private LikesDislikesService likesDislikesService;
 
     @Autowired
     private BadgeGrantService badgeGrantService;
@@ -34,7 +46,7 @@ public class BoardPostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BoardPost>> getAllPosts() {
+    public ResponseEntity<?> getAllPosts() {
         try {
             List<BoardPost> posts = boardPostService.list();
             return ResponseEntity.ok(posts);
@@ -44,20 +56,25 @@ public class BoardPostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BoardPost> getPost(@PathVariable Long id) {
+    public ResponseEntity<?> getPost(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+        
         try {
-            BoardPost post = boardPostService.select(id);
-            if (post == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(post);
+            // BoardPost post = boardPostService.select(id);
+            // if (post == null) {
+            //     return ResponseEntity.notFound().build();
+            // }
+            // return ResponseEntity.ok(post);
+            response.put("boardPost", boardPostService.select(id));
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            e.printStackTrace();
+            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping
-    public ResponseEntity<String> createPost(@RequestBody BoardPost post,
+    public ResponseEntity<?> createPost(@RequestBody BoardPost post,
                                             @AuthenticationPrincipal CustomUser customUser) {
         try {
             // 1. 게시글 저장 서비스 호출
@@ -84,7 +101,7 @@ public class BoardPostController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePost(@PathVariable Long id, @RequestBody BoardPost post) {
+    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody BoardPost post) {
         try {
             post.setId(id);
             boolean success = boardPostService.update(post);
@@ -98,7 +115,7 @@ public class BoardPostController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable Long id) {
+    public ResponseEntity<?> deletePost(@PathVariable Long id) {
         try {
             boolean success = boardPostService.delete(id);
             if (success) {
@@ -112,7 +129,7 @@ public class BoardPostController {
 
     // 커뮤니티별 게시글 목록 조회
     @GetMapping("/community/{communityId}")
-    public ResponseEntity<List<BoardPost>> getPostsByCommunity(@PathVariable Long communityId) {
+    public ResponseEntity<?> getPostsByCommunity(@PathVariable Long communityId) {
         try {
             List<BoardPost> posts = boardPostService.findByCommunity(communityId);
             return ResponseEntity.ok(posts);

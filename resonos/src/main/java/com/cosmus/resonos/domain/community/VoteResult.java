@@ -11,11 +11,11 @@ public class VoteResult {
 
     private Long id; 
 
-    private Long vote_id; 
+    private Long voteId; 
 
-    private Long arg_id; 
+    private Long argId; 
 
     private Integer count; 
 
-    private Date created_at; 
+    private Date createdAt; 
 }

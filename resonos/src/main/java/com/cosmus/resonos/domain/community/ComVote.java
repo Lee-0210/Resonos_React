@@ -11,14 +11,14 @@ public class ComVote {
 
     private Long id; 
 
-    private Long post_id; 
+    private Long postId; 
 
     private String title; 
 
-    private Date created_at; 
+    private Date createdAt; 
 
-    private String closed_at; 
+    private String closedAt; 
 
-    private Boolean is_completed; 
+    private Boolean isCompleted; 
 
 }
