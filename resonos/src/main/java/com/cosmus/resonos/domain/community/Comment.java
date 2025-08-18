@@ -23,4 +23,12 @@ public class Comment {
 
     private Long parentCommentId;
 
+    private Long communityId;
+
+    private String userNickname;
+
+    private int commentLikes;
+
+    private int commentDislikes;
+
 }

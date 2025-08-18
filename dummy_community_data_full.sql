@@ -414,3 +414,28 @@ INSERT INTO vote_status(id, arg_id, user_id, created_at) VALUES(97, 79, 13, '202
 INSERT INTO vote_status(id, arg_id, user_id, created_at) VALUES(98, 105, 8, '2025-07-26 11:51:58');
 INSERT INTO vote_status(id, arg_id, user_id, created_at) VALUES(99, 3, 35, '2025-08-12 11:51:58');
 INSERT INTO vote_status(id, arg_id, user_id, created_at) VALUES(100, 39, 19, '2025-08-09 11:51:58');
+
+-- 1. 14번 커뮤니티의 1번 게시글 (이미 존재한다고 가정)
+
+-- 2. 댓글 삽입 (게시글 1번에 달린 댓글)
+INSERT INTO comment (content, user_id, type, target_id, board_post_id, parent_comment_id)
+VALUES
+('첫 번째 댓글입니다.', 2, 'posts', 1, 1, NULL), -- 댓글 1
+('두 번째 댓글입니다.', 3, 'posts', 1, 1, NULL), -- 댓글 2
+('첫 번째 댓글에 대한 답글입니다.', 4, 'comment', 1, 1, 1); -- 대댓글 (댓글1에 대한 답글)
+;
+-- 3. 게시글 좋아요/싫어요
+INSERT INTO likes_dislikes (type, user_id, is_likes, target_id)
+VALUES
+('post', 2, TRUE, 1),  -- user2가 게시글 1번 좋아요
+('post', 3, TRUE, 1),  -- user3가 게시글 1번 좋아요
+('post', 4, FALSE, 1); -- user4가 게시글 1번 싫어요
+;
+-- 4. 댓글 좋아요/싫어요
+INSERT INTO likes_dislikes (type, user_id, is_likes, target_id)
+VALUES
+('comment', 1, TRUE, 1),  -- user1이 댓글 1번 좋아요
+('comment', 5, FALSE, 1), -- user5가 댓글 1번 싫어요
+('comment', 2, TRUE, 2),  -- user2가 댓글 2번 좋아요
+('comment', 3, TRUE, 3);  -- user3가 대댓글(댓글3) 좋아요
+;

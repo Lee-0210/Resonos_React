@@ -1,6 +1,7 @@
 package com.cosmus.resonos.domain.community;
 
 import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -13,4 +14,7 @@ public class BoardPost {
     private Long communityId;
     private Long userId;
     private Long views;
+    private String userNickname;
+    private int postLikes;
+    private int postDislikes;
 }
