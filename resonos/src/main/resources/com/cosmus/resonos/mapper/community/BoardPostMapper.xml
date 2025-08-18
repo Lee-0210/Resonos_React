@@ -19,6 +19,7 @@
     <result property="userNickname" column="user_nickname"/>
     <result property="postLikes" column="post_likes"/>
     <result property="postDislikes" column="post_dislikes"/>
+    <result property="commentCount" column="comment_count"/>
 
     <association property="community" javaType="com.cosmus.resonos.domain.community.Community">
         <id property="id" column="community_id"/>
@@ -93,38 +94,63 @@
   </select>
 
   <!-- 커뮤 메인 -->
+  <!-- Hot Posts (조회수 기준) -->
   <select id="selectHotPosts" resultMap="BoardPostResultMap">
-    SELECT id, title, content, type, created_at, community_id, user_id, views
-    FROM board_post
-    ORDER BY views DESC
+    SELECT bp.*,
+          c.name AS community_name,
+          (SELECT COUNT(*) 
+            FROM comment cm
+            WHERE cm.board_post_id = bp.id) AS comment_count
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    ORDER BY bp.views DESC
     LIMIT #{limit}
   </select>
 
+  <!-- 전체 게시글 -->
   <select id="selectAll" resultMap="BoardPostResultMap">
-    SELECT bp.*, c.name AS community_name
+    SELECT bp.*,
+          c.name AS community_name,
+          (SELECT COUNT(*) 
+            FROM comment cm
+            WHERE cm.board_post_id = bp.id) AS comment_count
     FROM board_post bp
     LEFT JOIN community c ON bp.community_id = c.id
     ORDER BY bp.created_at DESC
   </select>
 
+  <!-- 인기 게시글 -->
   <select id="selectPopularPosts" resultMap="BoardPostResultMap">
-    SELECT bp.*, c.name AS community_name
+    SELECT bp.*,
+          c.name AS community_name,
+          (SELECT COUNT(*) 
+            FROM comment cm
+            WHERE cm.board_post_id = bp.id) AS comment_count
     FROM board_post bp
     LEFT JOIN community c ON bp.community_id = c.id
     ORDER BY bp.views DESC, bp.created_at DESC
   </select>
 
+  <!-- 실시간 인기 게시글 (72시간 기준) -->
   <select id="selectRealTimePopularPosts" resultMap="BoardPostResultMap">
-    SELECT bp.*, c.name AS community_name
+    SELECT bp.*,
+          c.name AS community_name,
+          (SELECT COUNT(*) 
+            FROM comment cm
+            WHERE cm.board_post_id = bp.id) AS comment_count
     FROM board_post bp
-    <!-- 72시간 -->
     LEFT JOIN community c ON bp.community_id = c.id
     WHERE bp.created_at >= NOW() - INTERVAL 72 HOUR
     ORDER BY bp.views DESC, bp.created_at DESC
   </select>
 
+  <!-- 검색 게시글 -->
   <select id="searchPosts" resultMap="BoardPostResultMap" parameterType="string">
-    SELECT bp.*, c.name AS community_name
+    SELECT bp.*,
+          c.name AS community_name,
+          (SELECT COUNT(*) 
+            FROM comment cm
+            WHERE cm.board_post_id = bp.id) AS comment_count
     FROM board_post bp
     LEFT JOIN community c ON bp.community_id = c.id
     <where>
@@ -136,16 +162,25 @@
     ORDER BY bp.created_at DESC
   </select>
 
+  <!-- 카테고리별 게시글 -->
   <select id="selectByCategoryId" resultMap="BoardPostResultMap">
-    SELECT bp.*, c.category_id AS categoryId
+    SELECT bp.*,
+          c.category_id AS categoryId,
+          (SELECT COUNT(*) 
+            FROM comment cm
+            WHERE cm.board_post_id = bp.id) AS comment_count
     FROM board_post bp
     LEFT JOIN community c ON bp.community_id = c.id
     WHERE c.id = #{categoryId}
     ORDER BY bp.created_at DESC
   </select>
 
+  <!-- 공지 게시글 -->
   <select id="selectNoticesByCategoryId" resultMap="BoardPostResultMap">
-    SELECT bp.*
+    SELECT bp.*,
+          (SELECT COUNT(*) 
+            FROM comment cm
+            WHERE cm.board_post_id = bp.id) AS comment_count
     FROM board_post bp
     INNER JOIN user u ON bp.user_id = u.id
     INNER JOIN user_auth ua ON ua.username = u.username
@@ -155,6 +190,7 @@
     ORDER BY bp.created_at DESC
     LIMIT #{limit}
   </select>
+
 
   <!-- 게시판 대표 음악 설정 -->
   <update id="setTrack">
@@ -169,5 +205,12 @@
     SET thumbnail_url = #{thumbnailUrl}
     WHERE id = #{postId}
   </update>
+
+  <!-- 댓글 수 -->
+  <select id="getCommentCount" resultType="int">
+    SELECT COUNT(*)
+    FROM comment
+    WHERE board_post_id = #{postId}
+  </select>
 
 </mapper>

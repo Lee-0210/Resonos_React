@@ -10,29 +10,39 @@
   </select>
 
   <insert id="insert">
-    INSERT INTO community(
-    )
-    VALUES (
-    )
+    INSERT INTO community (name, description, created_at, updated_at, track_id)
+    VALUES (#{name}, #{description}, NOW(), NOW(), #{trackId})
+    FROM community
   </insert>
 
   <update id="update">
-    UPDATE community
-    <set>
-      updated_at = now()
-    </set>
-    WHERE -- key 지정 필요
+    UPDATE community SET
+      name = #{name},
+      description = #{description},
+      updated_at = NOW(),
+      track_id = #{trackId}
+    WHERE id = #{id}
+    FROM community
   </update>
 
   <delete id="delete">
-    DELETE FROM community WHERE -- key 지정 필요
+    DELETE FROM community WHERE id = #{id}
   </delete>
 
   <update id="completeAll">
-    UPDATE community SET -- 수정필드 없음
+    UPDATE community SET
+      status = 'completed'
+    WHERE status = 'in_progress'
   </update>
 
   <delete id="deleteAll">
     DELETE FROM community
   </delete>
+
+  <update id="setTrack">
+    UPDATE community SET
+      track_id = #{trackId}
+    WHERE id = #{categoryId}
+  </update>
+  
 </mapper>
