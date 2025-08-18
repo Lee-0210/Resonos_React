@@ -488,6 +488,11 @@
   width: 100%;
   border-bottom: 1px solid var(--main-color);
 }
+.post-wrapper .comments .comment-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 .post-wrapper .comment .reply-comment {
   padding: 10px 0px 0px 20px;
 }
