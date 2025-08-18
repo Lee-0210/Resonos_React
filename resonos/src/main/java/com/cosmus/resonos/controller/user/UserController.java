@@ -258,16 +258,10 @@ public class UserController {
       response.put("artistList", artistList);
       response.put("trackList", trackList);
       response.put("albumList", albumList);
-      response.put("loginUser", loginUser);
-      response.put("user", user);
       response.put("followerCount", followerCount);
       response.put("followCount", followCount);
       response.put("playlists", playlists);
       response.put("isOwner", isOwner);
-
-      if (loginUser != null) {
-        response.put("loginUser", loginUser.getUser());
-      }
 
       return new ResponseEntity<>(response, HttpStatus.OK);
     } catch(Exception e) {

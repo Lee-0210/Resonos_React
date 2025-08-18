@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import InfoScore from './InfoScore'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import ReviewScore from './ReviewScore'
 import Reviews from './Reviews'
 import ReviewForm from './ReviewForm'
@@ -8,6 +8,31 @@ import ReviewForm from './ReviewForm'
 const Review = ({ reviewType, score, styles, reviews, hasNext,
       userId, isAdmin, album, track, handleSubmitReview, deleteReview,
       loadMoreReviews, page, updateReview, toggleReviewLike, reportReview }) => {
+
+  const location = useLocation();
+
+  // 해당 댓글로 이동
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const reviewId = params.get("reviewId");
+
+    if (reviewId) {
+      const target = document.querySelector(`[data-review-id="${reviewId}"]`);
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+        target.style.transition = "background 0.3s";
+        target.style.background = "rgba(255,255,255,0.3)";
+
+        setTimeout(() => {
+          target.style.background = "";
+        }, 1500);
+      }
+    }
+  }, [location.search]);
+
   return (
     <>
       {/* 평점 리뷰 */}
