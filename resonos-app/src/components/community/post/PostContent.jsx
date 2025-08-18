@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const PostContent = () => {
+const PostContent = ({ content, likes, dislikes }) => {
   return (
     <div className="post-content">
       <div className="content">
@@ -17,7 +17,7 @@ const PostContent = () => {
           컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시
           컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용</p> */}
         <CKEditor editor={ClassicEditor}
-          // data={board.content}           // 조회할 데이터 컨텐츠 
+          data={content}           // 조회할 데이터 컨텐츠 
           disabled={true}
           config={{
             toolbar: [],
@@ -28,11 +28,11 @@ const PostContent = () => {
         <div className="anybody">
           <div className="like btn btn-gold">
             <p>👍</p>
-            <p>123</p>
+            <p>{likes}</p>
           </div>
           <div className="dislike btn btn-gold">
             <p>👎</p>
-            <p>12</p>
+            <p>{dislikes}</p>
           </div>
           <div className="report btn btn-gold">
             <p>🚨</p>
