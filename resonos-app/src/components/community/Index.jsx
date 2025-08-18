@@ -5,23 +5,20 @@ import BoardRankingCard from './card/BoardRankingCard'
 import BoardTitleCard from './card/BoardTitleCard'
 import { Link } from 'react-router-dom'
 
-const Index = () => {
+const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCategories, newCategories}) => {
+
   return (
     <main className='commu index'>
       {/* 화제글 */}
       <div className='main-news'>
-        <Link to="boards/98/posts/98">
-          <img src="/img/profileImg.png" alt="썸네일" />
-          <p>화제글 제목</p>
-        </Link>
-        <Link to="boards/98/posts/98">
-          <img src="/img/profileImg.png" alt="썸네일" />
-          <p>화제글 제목</p>
-        </Link>
-        <Link to="boards/98/posts/98">
-          <img src="/img/profileImg.png" alt="썸네일" />
-          <p>화제글 제목</p>
-        </Link>
+        {
+          hotPosts.map(hotPost => (
+            <Link to="boards/98/posts/98" key={hotPost.id}>
+              <img src="/img/profileImg.png" alt="썸네일" />
+              <p>{hotPost.title}</p>
+            </Link>
+          ))
+        }
       </div>
         <div className='bottom'>
           <div className="left">
@@ -29,32 +26,22 @@ const Index = () => {
           <div className='post-area'>
             <h3>최신글</h3>
             <ul>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
+              {
+                latestPosts.map(post => (
+                  <PostListCard key={post.id} post={post}/>
+                ))
+              }
             </ul>
           </div>
           {/* 인기글 */}
           <div className='post-area'>
             <h3>인기글</h3>
             <ul>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
-              <PostListCard title={'인기 게시글 제목'} date={'10:55'}/>
+              {
+                popularPosts.map(post => (
+                  <PostListCard key={post.id} post={post}/>
+                ))
+              }
             </ul>
           </div>
           {/* 이미지 갤러리 */}
@@ -85,22 +72,22 @@ const Index = () => {
           <div className='right-card ranking'>
             <h3>게시판 순위 Top5</h3>
             <ul>
-              <BoardRankingCard title={'게시판 이름'} rank={1} />
-              <BoardRankingCard title={'게시판 이름'} rank={2} />
-              <BoardRankingCard title={'게시판 이름'} rank={3} />
-              <BoardRankingCard title={'게시판 이름'} rank={4} />
-              <BoardRankingCard title={'게시판 이름'} rank={5} />
+              {
+                topCategories.map(board => (
+                  <BoardRankingCard key={board.id} board={board} rank={1} />
+                ))
+              }
             </ul>
           </div>
           {/* 신설 게시판 */}
           <div className='right-card'>
             <h3>신설 게시판</h3>
             <ul>
-              <BoardTitleCard title={'신설된 게시판 이름'} />
-              <BoardTitleCard title={'신설된 게시판 이름'} />
-              <BoardTitleCard title={'신설된 게시판 이름'} />
-              <BoardTitleCard title={'신설된 게시판 이름'} />
-              <BoardTitleCard title={'신설된 게시판 이름'} />
+              {
+                newCategories.map(board => (
+                  <BoardTitleCard item={board} key={board.id} />
+                ))
+              }
             </ul>
           </div>
         </div>

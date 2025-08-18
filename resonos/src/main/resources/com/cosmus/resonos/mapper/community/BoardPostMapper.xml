@@ -80,7 +80,7 @@
     LEFT JOIN users AS u ON u.id = bp.user_id
     WHERE bp.id = #{id}
   </select>
-  
+
   <!-- 커뮤 메인 -->
   <select id="selectHotPosts" resultMap="BoardPostResultMap">
     SELECT id, title, content, type, created_at, community_id, user_id, views
