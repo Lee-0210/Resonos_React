@@ -1,17 +1,17 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const BoardRankingCard = ({title, rank}) => {
+const BoardRankingCard = ({board}) => {
 
   const navigate = useNavigate()
 
   const handleNavigate = () => {
-    navigate('/community/boards/98')
+    navigate(`/community/boards/${board.id}`)
   }
 
   return (
     <li onClick={handleNavigate}>
-      <p className='ellipsis focus'>{title}</p><span>{rank}</span>
+      <p className='ellipsis focus'>{board.name}</p><span>{board.id}</span>
     </li>
   )
 }
