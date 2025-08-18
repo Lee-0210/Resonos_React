@@ -44,4 +44,6 @@ public interface BoardPostService {
     public boolean setTrack(@Param("postId") Long postId, @Param("trackId") Long trackId) throws Exception;
     // 게시판 테이블 thumbnail_url 컬럼 추가
     public boolean setThumbnailUrl(@Param("postId") Long postId, @Param("thumbnailUrl") String thumbnailUrl) throws Exception;
+    // 게시글 댓글 수 가져오기
+    public int getCommentCount(Long postId) throws Exception;
 }

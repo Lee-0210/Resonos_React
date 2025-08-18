@@ -27,5 +27,7 @@ public class Community {
     private Long comId; 
 
 
+    // track_id 추가
+    private String trackId;
 
 }

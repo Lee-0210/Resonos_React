@@ -110,5 +110,11 @@ public class BoardPostServiceImpl implements BoardPostService {
         return boardPostMapper.setThumbnailUrl(postId, thumbnailUrl);
     }
 
+    @Override
+    public int getCommentCount(Long postId) throws Exception {
+        return boardPostMapper.getCommentCount(postId);
+    }
+
+
 
 }

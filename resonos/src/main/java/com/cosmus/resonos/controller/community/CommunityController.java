@@ -35,30 +35,6 @@ public class CommunityController {
     @Autowired
     private CommunityService communityService;
 
-    // @GetMapping()
-    // public ResponseEntity<?> getAll(
-    //     @RequestParam(value ="page", defaultValue = "1", required = false) int page,
-    //     @RequestParam(value ="size", defaultValue = "10", required = false) int size,
-    //     @ModelAttribute Pagination pagination
-    // ) {
-    //     try {
-    //         PageInfo<Community> pageInfo = communityService.list(page, size);
-    //         pagination.setPage(page);
-    //         pagination.setSize(size);
-    //         pagination.setTotal(pageInfo.getTotal());
-
-    //         Map<String, Object> response = new HashMap<>();
-    //         List<Community> list = pageInfo.getList();
-    //         response.put("list", list);
-    //         response.put("pagination", pagination);
-
-    //         return new ResponseEntity<>(response, HttpStatus.OK);
-    //     } catch (Exception e) {
-    //         log.error("Error in getAll", e);
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable("id") Long id) {
         try {
@@ -87,9 +63,10 @@ public class CommunityController {
         }
     }
 
-    @PutMapping()
-    public ResponseEntity<?> update(@RequestBody Community entity) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody Community entity) {
         try {
+            entity.setId(id);
             boolean result = communityService.updateById(entity);
             if (result)
                 return new ResponseEntity<>("SUCCESS", HttpStatus.OK);

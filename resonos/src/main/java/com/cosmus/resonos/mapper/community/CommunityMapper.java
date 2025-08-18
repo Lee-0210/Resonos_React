@@ -9,4 +9,6 @@ public interface CommunityMapper extends BaseMapper<Community> {
 
     int completeAll() throws Exception;
     int deleteAll() throws Exception;
+    // 게시판 대표 음악 설정
+    boolean setTrack(Long categoryId, Long trackId) throws Exception;
 }

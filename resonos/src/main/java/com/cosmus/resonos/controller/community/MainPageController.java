@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,7 @@ import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.CommunityCategory;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommunityCategoryService;
+import com.cosmus.resonos.service.community.CommunityService;
 import com.github.pagehelper.PageInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +37,9 @@ public class MainPageController {
 
     @Autowired
     private CommunityCategoryService communityCategoryService;
+
+    @Autowired
+    private CommunityService communityService;
 
     // 메인 페이지 데이터
     @GetMapping("/")
@@ -76,7 +79,8 @@ public class MainPageController {
             List<CommunityCategory> newCategories = communityCategoryService.getNewCategories(5);
             response.put("newCategories", newCategories);
             log.info("데이터 문제 없음");
-          
+
+
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -137,7 +141,7 @@ public class MainPageController {
             response.put("pagination", new Pagination(postPage));
             // 게시판 대표 음악 설정
             // 게시판 테이블 thumbnail_url 컬럼 추가
-            response.put("trackId", boardPostService.setTrack(categoryId, trackId));
+            response.put("trackId", communityService.setTrack(categoryId, trackId));
             response.put("thumbnailUrl", boardPostService.setThumbnailUrl(categoryId, thumbnailUrl));
 
             return new ResponseEntity<>(response, HttpStatus.OK);

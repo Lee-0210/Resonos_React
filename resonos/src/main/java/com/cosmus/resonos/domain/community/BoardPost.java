@@ -21,6 +21,8 @@ public class BoardPost {
     // 실제DB상 없음 
     // 커뮤니티 정보, 이름 
     private Community community;
+    // 댓글 수
+    private int commentCount;
 
     // 컬럼 추가
     // 게시판 대표 음악 설정

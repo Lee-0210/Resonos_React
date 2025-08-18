@@ -69,4 +69,14 @@ public class CommunityServiceImpl implements CommunityService {
     public boolean deleteAll() throws Exception {
         return communityMapper.deleteAll() > 0;
     }
+
+    @Override
+    public Long setTrack(Long categoryId, Long trackId) throws Exception {
+        if (communityMapper.setTrack(categoryId, trackId)) {
+            return trackId;
+        } else {
+            throw new Exception("Failed to set track for community category");
+        }
+    }
+
 }
