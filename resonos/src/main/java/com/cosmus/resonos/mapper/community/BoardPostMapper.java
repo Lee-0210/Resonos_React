@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.cosmus.resonos.domain.community.BoardPost;
+import com.github.pagehelper.PageInfo;
 
 @Mapper
 public interface BoardPostMapper {
@@ -24,4 +25,20 @@ public interface BoardPostMapper {
     public int countAll() throws Exception;
     // 게시글 구하기
     public int countByUserId(Long userId);
+
+    // 커뮤 main
+    // 주요뉴스 (가장 화제글 3개 + 썸네일) - 예시: 조회수 기준
+    public List<BoardPost> selectHotPosts(int limit);
+    // 전체 게시글 조회
+    public List<BoardPost> selectAll();
+    // 인기글 (오늘기준 댓글 수, 오늘기준 좋아요 수 많은 거 10개)
+    public List<BoardPost> selectPopularPosts();
+    // 실시간 인기글 (시간당 댓글 수, 시간당 좋아요 수 상위 5개)
+    public List<BoardPost> selectRealTimePopularPosts();
+    // 검색
+    public List<BoardPost> searchPosts(String query);
+    // 카테고리별 게시글 조회
+    public List<BoardPost> selectByCategoryId(Long categoryId);
+    // 공지사항 (매니저 작성글) - 예시로 5개만 가져오도록
+    public List<BoardPost> selectNoticesByCategoryId(Long categoryId, int limit);
 }

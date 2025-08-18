@@ -5,34 +5,75 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.community.CommunityCategoryMapper">
 
+  <!-- 전체 카테고리 리스트 -->
   <select id="list" resultType="CommunityCategory">
     SELECT * FROM community_category
   </select>
 
+  <!-- 새 카테고리 추가 -->
   <insert id="insert">
-    INSERT INTO community_category(
-    )
-    VALUES (
-    )
+    INSERT INTO community_category (is_kor, name)
+    VALUES (#{isKor}, #{name})
   </insert>
 
+  <!-- 카테고리 수정 -->
   <update id="update">
     UPDATE community_category
     <set>
-      updated_at = now()
+      name = #{name},
+      is_kor = #{isKor}
     </set>
-    WHERE -- key 지정 필요
+    WHERE id = #{id}
   </update>
 
+  <!-- 카테고리 삭제 -->
   <delete id="delete">
-    DELETE FROM community_category WHERE -- key 지정 필요
+    DELETE FROM community_category WHERE id = #{id}
   </delete>
 
-  <update id="completeAll">
-    UPDATE community_category SET -- 수정필드 없음
-  </update>
-
+  <!-- 전체 카테고리 삭제 -->
   <delete id="deleteAll">
     DELETE FROM community_category
   </delete>
+
+  <!-- 커뮤 메인: 게시판 순위 Top5 (게시글 수 기준) -->
+  <select id="getTopCategories" resultType="CommunityCategory">
+    SELECT c.*, 
+           (SELECT COUNT(*) FROM board_post b WHERE b.community_id = c.id) AS post_count
+    FROM community_category c
+    ORDER BY post_count DESC
+    LIMIT 5
+  </select>
+
+  <!-- 신설 게시판 (최근 개설된 게시판 5개) -->
+  <select id="getNewCategories" resultType="CommunityCategory">
+    SELECT * FROM community_category
+    ORDER BY created_at DESC
+    LIMIT 5
+  </select>
+
+  <!-- 검색 키워드 포함 카테고리 -->
+  <select id="searchCategories" resultType="CommunityCategory">
+    SELECT * FROM community_category
+    WHERE name LIKE CONCAT('%', #{query}, '%')
+    ORDER BY created_at DESC
+    LIMIT #{pageSize} OFFSET #{pageNum}
+  </select>
+
+  <!-- 게시판 순위 Top5 페이징 적용 -->
+  <select id="getTopCategoriesPaged" resultType="CommunityCategory">
+    SELECT c.*, 
+           (SELECT COUNT(*) FROM board_post b WHERE b.community_id = c.id) AS post_count
+    FROM community_category c
+    ORDER BY post_count DESC
+    LIMIT #{pageSize} OFFSET #{pageNum}
+  </select>
+
+  <!-- 신설 게시판 페이징 적용 -->
+  <select id="getNewCategoriesPaged" resultType="CommunityCategory">
+    SELECT * FROM community_category
+    ORDER BY created_at DESC
+    LIMIT #{pageSize} OFFSET #{pageNum}
+  </select>
+
 </mapper>

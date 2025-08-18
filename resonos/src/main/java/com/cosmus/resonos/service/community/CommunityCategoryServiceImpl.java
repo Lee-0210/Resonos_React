@@ -69,4 +69,36 @@ public class CommunityCategoryServiceImpl implements CommunityCategoryService {
     public boolean deleteAll() throws Exception {
         return communityCategoryMapper.deleteAll() > 0;
     }
+
+    @Override
+    public List<CommunityCategory> getTopCategories(int limit) throws Exception {
+        return communityCategoryMapper.getTopCategories(limit);
+    }
+
+    @Override
+    public List<CommunityCategory> getNewCategories(int limit) throws Exception {
+        return communityCategoryMapper.getNewCategories(limit);
+    }
+
+    @Override
+    public PageInfo<CommunityCategory> searchCategories(String query, int pageNum, int pageSize) throws Exception {
+        com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
+        List<CommunityCategory> list = communityCategoryMapper.searchCategories(query, pageNum, pageSize).getList();
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<CommunityCategory> getTopCategories(int pageNum, int pageSize) throws Exception {
+        com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
+        List<CommunityCategory> list = communityCategoryMapper.getTopCategories(pageNum, pageSize).getList();
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<CommunityCategory> getNewCategories(int pageNum, int pageSize) throws Exception {
+        com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
+        List<CommunityCategory> list = communityCategoryMapper.getNewCategories(pageNum, pageSize).getList();
+        return new PageInfo<>(list);
+    }
+
 }

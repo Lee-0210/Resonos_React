@@ -35,29 +35,29 @@ public class CommunityController {
     @Autowired
     private CommunityService communityService;
 
-    @GetMapping()
-    public ResponseEntity<?> getAll(
-        @RequestParam(value ="page", defaultValue = "1", required = false) int page,
-        @RequestParam(value ="size", defaultValue = "10", required = false) int size,
-        @ModelAttribute Pagination pagination
-    ) {
-        try {
-            PageInfo<Community> pageInfo = communityService.list(page, size);
-            pagination.setPage(page);
-            pagination.setSize(size);
-            pagination.setTotal(pageInfo.getTotal());
+    // @GetMapping()
+    // public ResponseEntity<?> getAll(
+    //     @RequestParam(value ="page", defaultValue = "1", required = false) int page,
+    //     @RequestParam(value ="size", defaultValue = "10", required = false) int size,
+    //     @ModelAttribute Pagination pagination
+    // ) {
+    //     try {
+    //         PageInfo<Community> pageInfo = communityService.list(page, size);
+    //         pagination.setPage(page);
+    //         pagination.setSize(size);
+    //         pagination.setTotal(pageInfo.getTotal());
 
-            Map<String, Object> response = new HashMap<>();
-            List<Community> list = pageInfo.getList();
-            response.put("list", list);
-            response.put("pagination", pagination);
+    //         Map<String, Object> response = new HashMap<>();
+    //         List<Community> list = pageInfo.getList();
+    //         response.put("list", list);
+    //         response.put("pagination", pagination);
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error in getAll", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    //         return new ResponseEntity<>(response, HttpStatus.OK);
+    //     } catch (Exception e) {
+    //         log.error("Error in getAll", e);
+    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable("id") Long id) {
