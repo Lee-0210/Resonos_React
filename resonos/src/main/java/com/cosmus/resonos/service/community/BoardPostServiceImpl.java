@@ -100,6 +100,15 @@ public class BoardPostServiceImpl implements BoardPostService {
         return boardPostMapper.selectNoticesByCategoryId(categoryId, limit);
     }
 
+    @Override
+    public boolean setTrack(Long postId, Long trackId) throws Exception {
+        return boardPostMapper.setTrack(postId, trackId);
+    }
+
+    @Override
+    public boolean setThumbnailUrl(Long postId, String thumbnailUrl) throws Exception {
+        return boardPostMapper.setThumbnailUrl(postId, thumbnailUrl);
+    }
 
 
 }

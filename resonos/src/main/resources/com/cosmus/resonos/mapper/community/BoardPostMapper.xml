@@ -14,10 +14,13 @@
     <result property="communityId" column="community_id"/>
     <result property="userId" column="user_id"/>
     <result property="views" column="views"/>
+    <result property="trackId" column="track_id"/>
+    <result property="thumbnailUrl" column="thumbnail_url"/>
 
     <association property="community" javaType="com.cosmus.resonos.domain.community.Community">
         <id property="id" column="community_id"/>
         <result property="name" column="community_name"/>
+        <result property="categoryId" column="category_id"/>
     </association>
 
   </resultMap>
@@ -107,6 +110,7 @@
     SELECT bp.*, c.name AS community_name
     FROM board_post bp
     <!-- 72시간 -->
+    LEFT JOIN community c ON bp.community_id = c.id
     WHERE bp.created_at >= NOW() - INTERVAL 72 HOUR
     ORDER BY bp.views DESC, bp.created_at DESC
   </select>
@@ -125,17 +129,37 @@
   </select>
 
   <select id="selectByCategoryId" resultMap="BoardPostResultMap">
-    SELECT * FROM board_post
-    WHERE category_id = #{categoryId}
-    ORDER BY created_at DESC
+    SELECT bp.*, c.category_id AS categoryId
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    WHERE c.id = #{categoryId}
+    ORDER BY bp.created_at DESC
   </select>
 
   <select id="selectNoticesByCategoryId" resultMap="BoardPostResultMap">
-    SELECT * FROM board_post
-    WHERE category_id = #{categoryId} AND is_notice = 1
-    ORDER BY created_at DESC
+    SELECT bp.*
+    FROM board_post bp
+    INNER JOIN user u ON bp.user_id = u.id
+    INNER JOIN user_auth ua ON ua.username = u.username
+    INNER JOIN community c ON bp.community_id = c.id
+    WHERE ua.auth = 'ROLE_ADMIN'
+      AND c.category_id = #{categoryId}
+    ORDER BY bp.created_at DESC
     LIMIT #{limit}
   </select>
 
+  <!-- 게시판 대표 음악 설정 -->
+  <update id="setTrack">
+    UPDATE board_post
+    SET track_id = #{trackId}
+    WHERE id = #{postId}
+  </update>
+
+  <!-- 게시판 테이블 thumbnail_url 컬럼 추가 -->
+  <update id="setThumbnailUrl">
+    UPDATE board_post
+    SET thumbnail_url = #{thumbnailUrl}
+    WHERE id = #{postId}
+  </update>
 
 </mapper>

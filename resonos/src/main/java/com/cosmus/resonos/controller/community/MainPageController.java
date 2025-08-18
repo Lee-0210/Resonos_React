@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -117,7 +118,10 @@ public class MainPageController {
     public ResponseEntity<?> getBoardDetail(
             @PathVariable("categoryId") Long categoryId,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "trackId", required = false) Long trackId,
+            @RequestParam(value = "thumbnailUrl", required = false) String thumbnailUrl
+            ) {
 
         try {
             CommunityCategory category = communityCategoryService.select(categoryId);
@@ -131,6 +135,10 @@ public class MainPageController {
             response.put("posts", postPage.getList());
             response.put("notices", notices);
             response.put("pagination", new Pagination(postPage));
+            // 게시판 대표 음악 설정
+            // 게시판 테이블 thumbnail_url 컬럼 추가
+            response.put("trackId", boardPostService.setTrack(categoryId, trackId));
+            response.put("thumbnailUrl", boardPostService.setThumbnailUrl(categoryId, thumbnailUrl));
 
             return new ResponseEntity<>(response, HttpStatus.OK);
 
