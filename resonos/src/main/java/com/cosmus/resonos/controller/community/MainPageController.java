@@ -89,7 +89,8 @@ public class MainPageController {
     public ResponseEntity<?> search(
             @RequestParam("q") String query,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam("type") String type) {
         log.info("query : {}", query);
 
         try {

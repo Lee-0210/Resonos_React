@@ -104,24 +104,25 @@
   </select>
 
   <select id="selectRealTimePopularPosts" resultMap="BoardPostResultMap">
-    SELECT *
-    FROM board_post
+    SELECT bp.*, c.name AS community_name
+    FROM board_post bp
     <!-- 72시간 -->
-    WHERE created_at >= NOW() - INTERVAL 72 HOUR
-    ORDER BY views DESC, created_at DESC
+    WHERE bp.created_at >= NOW() - INTERVAL 72 HOUR
+    ORDER BY bp.views DESC, bp.created_at DESC
   </select>
 
   <select id="searchPosts" resultMap="BoardPostResultMap" parameterType="string">
-    SELECT * FROM board_post
+    SELECT bp.*, c.name AS community_name
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
     <where>
       <if test="query != null and query.trim() != ''">
-        (title LIKE CONCAT('%', #{query}, '%')
-        OR content LIKE CONCAT('%', #{query}, '%'))
+        (bp.title LIKE CONCAT('%', #{query}, '%')
+        OR bp.content LIKE CONCAT('%', #{query}, '%'))
       </if>
     </where>
-    ORDER BY created_at DESC
+    ORDER BY bp.created_at DESC
   </select>
-
 
   <select id="selectByCategoryId" resultMap="BoardPostResultMap">
     SELECT * FROM board_post
