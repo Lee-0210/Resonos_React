@@ -58,6 +58,7 @@ import FindPw from './pages/user/FindPw';
 import Index from './pages/community/Index';
 import Board from './pages/community/Board';
 import CommuSearch from './pages/community/CommuSearch';
+import SearchMore from './pages/community/SearchMore';
 
 
 
@@ -148,6 +149,7 @@ const App = () => {
           <Route path="/community" element={<Index />} />
           <Route path="/community/boards/:id" element={<Board />} />
           <Route path="/community/search" element={<CommuSearch />} />
+          <Route path="/community/search/more" element={<SearchMore />} />
 
         </Routes>
       </LoginContextProvider>
