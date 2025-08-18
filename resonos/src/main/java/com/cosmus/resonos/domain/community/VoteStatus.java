@@ -11,10 +11,10 @@ public class VoteStatus {
 
     private Long id; 
 
-    private Long arg_id; 
+    private Long argId; 
 
-    private Long user_id; 
+    private Long userId; 
 
-    private Date created_at; 
+    private Date createdAt; 
 
 }

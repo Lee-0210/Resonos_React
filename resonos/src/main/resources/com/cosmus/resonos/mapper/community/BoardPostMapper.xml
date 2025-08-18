@@ -21,7 +21,9 @@
   </select>
 
   <select id="select" resultMap="BoardPostResultMap">
-    SELECT * FROM board_post WHERE id = #{id}
+    SELECT *
+    FROM board_post
+    WHERE id = #{id}
   </select>
 
   <insert id="insert">
@@ -56,6 +58,23 @@
     SELECT COUNT(*) FROM board_post WHERE user_id = #{userId}
   </select>
 
+  <select id="selectWithLikesDislikes" resultMap="BoardPostResultMap">
+    SELECT
+      bp.*,
+      u.nickname AS user_nickname,
+      (SELECT COUNT(*)
+        FROM likes_dislikes ld
+        WHERE ld.type = 'post' AND ld.target_id = bp.id AND ld.is_likes = 1)
+      AS post_likes,
+      (SELECT COUNT(*)
+        FROM likes_dislikes ld
+        WHERE ld.type = 'post' AND ld.target_id = bp.id AND ld.is_likes = 0)
+      AS post_dislikes
+    FROM board_post bp
+    LEFT JOIN users AS u ON u.id = bp.user_id
+    WHERE bp.id = #{id}
+  </select>
+  
   <!-- 커뮤 메인 -->
   <select id="selectHotPosts" resultMap="BoardPostResultMap">
     SELECT id, title, content, type, created_at, community_id, user_id, views
