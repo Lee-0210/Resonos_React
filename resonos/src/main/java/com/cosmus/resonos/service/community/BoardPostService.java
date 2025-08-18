@@ -19,4 +19,6 @@ public interface BoardPostService {
     public List<BoardPost> findByCommunity(Long communityId) throws Exception;
     // 어드민 통계용
     public int countAll() throws Exception;
+    // 조회 + 좋아요 싫어요 수
+    public BoardPost selectWithLikesDislikes(Long id) throws Exception;
 }

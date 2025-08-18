@@ -12,6 +12,8 @@
     <result property="targetId" column="target_id"/>
     <result property="createdAt" column="created_at"/>
     <result property="userId" column="user_id"/>
+    <result property="boardPostId" column="board_post_id"/>
+    <result property="parentCommentId" column="parent_comment_id"/>
   </resultMap>
 
   <select id="list" resultType="com.cosmus.resonos.domain.community.Comment">
@@ -46,6 +48,24 @@
 
   <select id="countByUserId" resultType="int">
     SELECT COUNT(*) FROM comment WHERE user_id = #{userId}
+  </select>
+
+  <select id="selectWithLikesDislikes" resultMap="CommentResultMap">
+    SELECT 
+      c.*,
+      u.nickname AS user_nickname,
+      (SELECT COUNT(*)
+        FROM likes_dislikes ld
+        WHERE ld.type = 'comment' AND ld.target_id = c.id AND ld.is_likes = 1)
+      AS comment_likes,
+      (SELECT COUNT(*)
+        FROM likes_dislikes ld
+        WHERE ld.type = 'comment' AND ld.target_id = c.id AND ld.is_likes = 0)
+      AS comment_dislikes
+    FROM comment c
+    LEFT JOIN users u ON u.id = c.user_id
+    WHERE c.board_post_id = #{postId}
+    ORDER BY c.created_at DESC
   </select>
 
 </mapper>

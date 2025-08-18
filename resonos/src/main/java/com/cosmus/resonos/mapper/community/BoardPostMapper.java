@@ -24,4 +24,6 @@ public interface BoardPostMapper {
     public int countAll() throws Exception;
     // 게시글 구하기
     public int countByUserId(Long userId);
+    // 조회 + 좋아요 싫어요 수
+    public BoardPost selectWithLikesDislikes(Long id) throws Exception;
 }

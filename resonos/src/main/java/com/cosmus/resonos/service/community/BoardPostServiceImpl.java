@@ -1,6 +1,8 @@
 package com.cosmus.resonos.service.community;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.community.BoardPost;
@@ -9,7 +11,8 @@ import com.cosmus.resonos.mapper.community.BoardPostMapper;
 @Service
 public class BoardPostServiceImpl implements BoardPostService {
 
-    private final BoardPostMapper boardPostMapper;
+    @Autowired
+    private BoardPostMapper boardPostMapper;
 
     public BoardPostServiceImpl(BoardPostMapper boardPostMapper) {
         this.boardPostMapper = boardPostMapper;
@@ -47,5 +50,10 @@ public class BoardPostServiceImpl implements BoardPostService {
     @Override
     public int countAll() throws Exception {
         return boardPostMapper.countAll();
+    }
+
+    @Override
+    public BoardPost selectWithLikesDislikes(Long id) throws Exception {
+        return boardPostMapper.selectWithLikesDislikes(id);
     }
 }

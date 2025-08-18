@@ -1,7 +1,6 @@
 package com.cosmus.resonos.domain.community;
 
 import java.util.Date;
-import java.util.UUID;
 
 import lombok.Data;
 
@@ -11,21 +10,21 @@ public class Community {
 
     private Long id; 
 
-    private Long category_id; 
+    private Long categoryId; 
 
-    private Long creator_id; 
+    private Long creatorId; 
 
     private String name; 
 
     private String description; 
 
-    private Date created_at; 
+    private Date createdAt; 
 
     private String CREATE; 
 
-    private Long user_id; 
+    private Long userId; 
 
-    private Long com_id; 
+    private Long comId; 
 
 
 

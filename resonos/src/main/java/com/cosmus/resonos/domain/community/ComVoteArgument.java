@@ -10,7 +10,7 @@ public class ComVoteArgument {
 
     private Long id; 
 
-    private Long vote_id; 
+    private Long voteId; 
 
     private String content; 
 
