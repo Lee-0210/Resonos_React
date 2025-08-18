@@ -493,7 +493,7 @@ a:hover > .mypage-card {
   background: #222;
   color: #fffbe6;
 }
-.con .btn-gold {
+.con .btn-gold, .modal-track .btn-gold {
   background: #D4B97F;
   color: #181C23;
   border: none;
@@ -505,7 +505,7 @@ a:hover > .mypage-card {
   margin-bottom: 20px;
   transition: background 0.2s, color 0.2s;
 }
-.con .btn-gold:hover, .btn-gold:focus {
+.con .btn-gold:hover, .btn-gold:focus, .modal-track .btn-gold:hover {
   background: #fffbe6;
   color: #181C23;
 }
