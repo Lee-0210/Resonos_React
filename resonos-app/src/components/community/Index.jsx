@@ -8,17 +8,19 @@ import { Link } from 'react-router-dom'
 const Index = () => {
   return (
     <main className='commu index'>
-      {/* 주요 소식 */}
+      {/* 화제글 */}
       <div className='main-news'>
-        <h2>주요 소식</h2>
-        <Link to="#">
-          <img width="150px" height="120px" src="/img/profileImg.png" alt="썸네일" />
+        <Link to="boards/98/posts/98">
+          <img src="/img/profileImg.png" alt="썸네일" />
+          <p>화제글 제목</p>
         </Link>
-        <Link to="#">
-          <img width="150px" height="120px" src="/img/profileImg.png" alt="썸네일" />
+        <Link to="boards/98/posts/98">
+          <img src="/img/profileImg.png" alt="썸네일" />
+          <p>화제글 제목</p>
         </Link>
-        <Link to="#">
-          <img width="150px" height="120px" src="/img/profileImg.png" alt="썸네일" />
+        <Link to="boards/98/posts/98">
+          <img src="/img/profileImg.png" alt="썸네일" />
+          <p>화제글 제목</p>
         </Link>
       </div>
         <div className='bottom'>
@@ -27,6 +29,11 @@ const Index = () => {
           <div className='post-area'>
             <h3>최신글</h3>
             <ul>
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
+              <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
               <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
               <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>
               <PostListCard title={'최근 게시글 제목'} date={'10:55'}/>

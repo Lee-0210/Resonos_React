@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Footer.css'
+import {LoginContext} from '../../contexts/LoginContextProvider';
 
 const Footer = () => {
     const [selected, setSelected] = useState('terms');
+    const { path } = useContext(LoginContext)
 
     const infoMap = {
         terms: {
@@ -40,9 +42,12 @@ const Footer = () => {
                         style={{ width: '300px', height: '300px' }}
                     >
                         <div className="footer-logo-img d-flex justify-content-center align-items-center">
-                            <Link className="navbar-brand d-flex align-items-center" to="/list/main">
+                            <Link
+                                className="navbar-brand d-flex align-items-center"
+                                to={`${path === 'community' ? '/community' : '/list/main'}`}
+                            >
                                 <img
-                                    src="/img/resonosPlusLogo.png"
+                                    src={`${path === 'community' ? '/img/resonosLogo.png' : '/img/resonosPlusLogo.png'}`}
                                     alt="Main Page Logo"
                                     className="logo-img"
                                     style={{ maxWidth: '100%', maxHeight: '100%' }}

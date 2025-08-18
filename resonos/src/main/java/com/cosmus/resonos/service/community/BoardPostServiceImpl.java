@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.mapper.community.BoardPostMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class BoardPostServiceImpl implements BoardPostService {
@@ -56,4 +58,45 @@ public class BoardPostServiceImpl implements BoardPostService {
     public BoardPost selectWithLikesDislikes(Long id) throws Exception {
         return boardPostMapper.selectWithLikesDislikes(id);
     }
+    // 커뮤 main
+    @Override
+    public List<BoardPost> getHotPosts(int limit) {
+        return boardPostMapper.selectHotPosts(limit);
+    }
+
+    @Override
+    public PageInfo<BoardPost> list(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(boardPostMapper.selectAll());
+    }
+
+    @Override
+    public PageInfo<BoardPost> getPopularPosts(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(boardPostMapper.selectPopularPosts());
+    }
+
+    @Override
+    public PageInfo<BoardPost> getRealTimePopularPosts(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(boardPostMapper.selectRealTimePopularPosts());
+    }
+
+    @Override
+    public PageInfo<BoardPost> searchPosts(String query, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(boardPostMapper.searchPosts(query));
+    }
+
+    @Override
+    public PageInfo<BoardPost> listByCategoryId(Long categoryId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(boardPostMapper.selectByCategoryId(categoryId));
+    }
+
+    @Override
+    public List<BoardPost> getNoticesByCategoryId(Long categoryId, int limit) {
+        return boardPostMapper.selectNoticesByCategoryId(categoryId, limit);
+    }
+
 }

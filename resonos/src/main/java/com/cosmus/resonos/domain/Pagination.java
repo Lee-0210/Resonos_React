@@ -1,5 +1,7 @@
 package com.cosmus.resonos.domain;
 
+import com.github.pagehelper.PageInfo;
+
 import lombok.Data;
 
 /**
@@ -93,6 +95,12 @@ public class Pagination {
         this.total = total;
         calc();
     }
+
+    // PageInfo 기반 생성자 추가
+    public Pagination(PageInfo<?> pageInfo) {
+        this(pageInfo.getPageNum(), pageInfo.getPageSize(), COUNT, pageInfo.getTotal());
+    }
+
 
 
 

@@ -26,18 +26,19 @@
     WHERE id = #{id}
   </select>
 
-  <insert id="insert" >
-    INSERT INTO board_post (title, content, type, created_at, community_id, user_id)
-    VALUES (#{title}, #{content}, #{type}, #{createdAt}, #{communityId}, #{userId})
+  <insert id="insert">
+    INSERT INTO board_post (title, content, type, created_at, community_id, user_id, views)
+    VALUES (#{title}, #{content}, #{type}, #{createdAt}, #{communityId}, #{userId}, #{views})
   </insert>
 
-  <update id="update" >
+  <update id="update">
     UPDATE board_post
     SET title = #{title},
         content = #{content},
         type = #{type},
         community_id = #{communityId},
-        user_id = #{userId}
+        user_id = #{userId},
+        views = #{views}
     WHERE id = #{id}
   </update>
 
@@ -53,7 +54,6 @@
     SELECT COUNT(*) FROM report
   </select>
 
-  <!-- 게시글 수 세기 -->
   <select id="countByUserId" resultType="int">
     SELECT COUNT(*) FROM board_post WHERE user_id = #{userId}
   </select>
@@ -73,6 +73,54 @@
     FROM board_post bp
     LEFT JOIN users AS u ON u.id = bp.user_id
     WHERE bp.id = #{id}
+  </select>
+  
+  <!-- 커뮤 메인 -->
+  <select id="selectHotPosts" resultMap="BoardPostResultMap">
+    SELECT id, title, content, type, created_at, community_id, user_id, views
+    FROM board_post
+    ORDER BY views DESC
+    LIMIT #{limit}
+  </select>
+
+  <select id="selectAll" resultMap="BoardPostResultMap">
+    SELECT * FROM board_post ORDER BY created_at DESC
+  </select>
+
+  <select id="selectPopularPosts" resultMap="BoardPostResultMap">
+    SELECT id, title, content, type, created_at, community_id, user_id, views,
+           comment_count, like_count
+    FROM board_post
+    WHERE DATE(created_at) = CURDATE()
+    ORDER BY comment_count DESC, like_count DESC
+  </select>
+
+  <select id="selectRealTimePopularPosts" resultMap="BoardPostResultMap">
+    SELECT id, title, content, type, created_at, community_id, user_id, views,
+           comment_count, like_count
+    FROM board_post
+    WHERE created_at >= NOW() - INTERVAL 1 HOUR
+    ORDER BY comment_count DESC, like_count DESC
+  </select>
+
+  <select id="searchPosts" resultMap="BoardPostResultMap">
+    SELECT * FROM board_post
+    WHERE title LIKE CONCAT('%', #{query}, '%')
+       OR content LIKE CONCAT('%', #{query}, '%')
+    ORDER BY created_at DESC
+  </select>
+
+  <select id="selectByCategoryId" resultMap="BoardPostResultMap">
+    SELECT * FROM board_post
+    WHERE category_id = #{categoryId}
+    ORDER BY created_at DESC
+  </select>
+
+  <select id="selectNoticesByCategoryId" resultMap="BoardPostResultMap">
+    SELECT * FROM board_post
+    WHERE category_id = #{categoryId} AND is_notice = 1
+    ORDER BY created_at DESC
+    LIMIT #{limit}
   </select>
 
 </mapper>
