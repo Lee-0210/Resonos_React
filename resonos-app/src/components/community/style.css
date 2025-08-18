@@ -41,6 +41,21 @@
   color: var(--main-color);
 }
 
+.commu h3 + button {
+  color: white;
+  background-color: var(--main-color);
+  border-radius: 20px;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+  border: 0.1px solid var(--main-color);
+  transition: all 0.3s;
+  font-size: 1.4rem;
+}
+.commu h3 + button:hover {
+  color: var(--main-color);
+  background-color: inherit;
+}
+
 .commu .post-title,
 .commu .board-title {
   color: var(--main-color);

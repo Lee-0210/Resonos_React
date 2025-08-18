@@ -9,9 +9,7 @@ const PostListCard = ({post}) => {
   const params = useParams()
 
   const handleNavigate = () => {
-    // TODO: 게시글 ID 받아와서 navigate
-    // alert('데이터 주세요')
-    navigate('/community/boards/1/posts/1')
+    navigate(`/community/boards/${post.community.id}/posts/${post.id}`)
   }
 
   useEffect(() => {
@@ -26,7 +24,7 @@ const PostListCard = ({post}) => {
         &nbsp;❤️(20)
       </p>
       <div>
-        <span className='board-name'>게시판이름</span>
+        <span className='board-name'>{post?.community?.name}</span>
         <span className='date'>{formatDate(post?.createdAt)}</span>
       </div>
     </li>
