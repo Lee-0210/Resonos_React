@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 -- Active: 1745889699154@@127.0.0.1@3306@resonos
+=======
+-- Active: 1751337677491@@127.0.0.1@3306@resonos
+>>>>>>> main
 DROP TABLE IF EXISTS `community_category`;
 
 CREATE TABLE `community_category` (

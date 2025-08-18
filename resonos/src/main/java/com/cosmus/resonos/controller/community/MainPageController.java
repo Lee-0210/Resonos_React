@@ -87,6 +87,7 @@ public class MainPageController {
             @RequestParam("q") String query,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
+        log.info("query : {}", query);
 
         try {
             Map<String, Object> response = new HashMap<>();
@@ -110,7 +111,7 @@ public class MainPageController {
     // 게시판 상세
     @GetMapping("/boards/{categoryId}")
     public ResponseEntity<?> getBoardDetail(
-            @PathVariable Long categoryId,
+            @PathVariable("categoryId") Long categoryId,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
 
