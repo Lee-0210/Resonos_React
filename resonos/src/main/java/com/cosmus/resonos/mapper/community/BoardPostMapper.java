@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.community.BoardPost;
-import com.github.pagehelper.PageInfo;
 
 @Mapper
 public interface BoardPostMapper {
@@ -41,7 +40,11 @@ public interface BoardPostMapper {
     // 검색
     public List<BoardPost> searchPosts(String query);
     // 카테고리별 게시글 조회
-    public List<BoardPost> selectByCategoryId(Long categoryId);
+    public List<BoardPost> selectByCategoryId(@Param("categoryId") Long categoryId);
     // 공지사항 (매니저 작성글) - 예시로 5개만 가져오도록
-    public List<BoardPost> selectNoticesByCategoryId(Long categoryId, int limit);
+    public List<BoardPost> selectNoticesByCategoryId(@Param("categoryId") Long categoryId, @Param("limit") int limit);
+    // 게시판 대표 음악 설정
+    public boolean setTrack(@Param("postId") Long postId, @Param("trackId") Long trackId) throws Exception;
+    // 게시판 테이블 thumbnail_url 컬럼 추가
+    public boolean setThumbnailUrl(@Param("postId") Long postId, @Param("thumbnailUrl") String thumbnailUrl) throws Exception;
 }

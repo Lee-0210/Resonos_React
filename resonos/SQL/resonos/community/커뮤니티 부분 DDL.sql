@@ -1,8 +1,4 @@
-<<<<<<< HEAD
--- Active: 1745889699154@@127.0.0.1@3306@resonos
-=======
 -- Active: 1751337677491@@127.0.0.1@3306@resonos
->>>>>>> main
 DROP TABLE IF EXISTS `community_category`;
 
 CREATE TABLE `community_category` (
@@ -78,6 +74,8 @@ CREATE TABLE `comment` (
 
 DROP TABLE IF EXISTS `board_post`;
 
+-- board_post 대표 음악 설정
+-- board_post 테이블 thumbnail_url 컬럼 추가
 CREATE TABLE `board_post` (
     `id` BIGINT NOT NULL,
     `title` VARCHAR(200) NOT NULL,
@@ -86,8 +84,12 @@ CREATE TABLE `board_post` (
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `community_id` BIGINT NOT NULL,
     `user_id` BIGINT NOT NULL,
-    `views` BIGINT NOT NULL DEFAULT 0
+    `views` BIGINT NOT NULL DEFAULT 0,
+    `track_id` VARCHAR(200) NULL,
+    `thumbnail_url` VARCHAR(200) NULL DEFAULT '/img/profileImg.png'
 );
+
+select * from board_post;
 
 DROP TABLE IF EXISTS `likes_dislikes`;
 
@@ -110,6 +112,8 @@ CREATE TABLE `community` (
     `description` TEXT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+
 
 ALTER TABLE `community_category` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
 
@@ -179,6 +183,9 @@ ADD CONSTRAINT `FK_user_TO_board_post_1` FOREIGN KEY (`user_id`) REFERENCES `use
 ALTER TABLE `likes_dislikes`
 ADD CONSTRAINT `FK_user_TO_likes_dislikes_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
+ALTER TABLE `board_post`
+ADD CONSTRAINT `FK_track_TO_board_post_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
+
 
 
 -- SET FOREIGN_KEY_CHECKS = 0;
@@ -198,4 +205,13 @@ ADD CONSTRAINT `FK_user_TO_likes_dislikes_1` FOREIGN KEY (`user_id`) REFERENCES 
 
 
 
-SELECT * FROM community LIMIT 10;
+-- drop table `likes_dislikes`;
+-- drop table `comment`;
+-- drop table `vote_status`;
+-- drop table `vote_result`;
+-- drop table `com_vote_argument`;
+-- drop table `com_vote`;
+-- drop table `board_post`;
+-- drop table `com_manager`;
+-- drop table `community`;
+-- drop table `community_category`;
