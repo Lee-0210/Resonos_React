@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.service.badge.BadgeGrantService;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommentService;
-import com.cosmus.resonos.service.community.LikesDislikesService;
 
 @RestController
-@RequestMapping("/board-posts")
+@RequestMapping("/community/boards/{communityId}/posts")
 public class BoardPostController {
 
     @Autowired
@@ -33,9 +33,6 @@ public class BoardPostController {
 
     @Autowired
     private CommentService commentService;
-
-    @Autowired
-    private LikesDislikesService likesDislikesService;
 
     @Autowired
     private BadgeGrantService badgeGrantService;
@@ -55,8 +52,11 @@ public class BoardPostController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getPost(@PathVariable Long id) {
+    @GetMapping("/{postId}")
+    public ResponseEntity<?> getPost(
+        @PathVariable("communityId") Long communityId,
+        @PathVariable("postId") Long postId
+    ) {
         Map<String, Object> response = new HashMap<>();
         
         try {
@@ -65,7 +65,19 @@ public class BoardPostController {
             //     return ResponseEntity.notFound().build();
             // }
             // return ResponseEntity.ok(post);
-            response.put("boardPost", boardPostService.select(id));
+
+            // 게시글 + 좋아요/싫어요 수
+            BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId);
+            if (post == null) {
+                return ResponseEntity.notFound().build();
+            }
+            response.put("post", post);
+
+            // 댓글 + 좋아요/싫어요 수
+            // 댓글 리스트 반환 (각 댓글에 작성자, 내용, 작성일, 좋아요/싫어요 수 포함)
+            List<Comment> comments = commentService.selectWithLikesDislikes(communityId, postId);
+            response.put("comments", comments);
+
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -128,13 +140,13 @@ public class BoardPostController {
     }
 
     // 커뮤니티별 게시글 목록 조회
-    @GetMapping("/community/{communityId}")
-    public ResponseEntity<?> getPostsByCommunity(@PathVariable Long communityId) {
-        try {
-            List<BoardPost> posts = boardPostService.findByCommunity(communityId);
-            return ResponseEntity.ok(posts);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
-    }
+    // @GetMapping("/community/{communityId}")
+    // public ResponseEntity<?> getPostsByCommunity(@PathVariable Long communityId) {
+    //     try {
+    //         List<BoardPost> posts = boardPostService.findByCommunity(communityId);
+    //         return ResponseEntity.ok(posts);
+    //     } catch (Exception e) {
+    //         return ResponseEntity.status(500).build();
+    //     }
+    // }
 }

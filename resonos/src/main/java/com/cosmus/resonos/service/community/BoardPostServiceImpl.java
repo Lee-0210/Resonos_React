@@ -55,8 +55,8 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public BoardPost selectWithLikesDislikes(Long id) throws Exception {
-        return boardPostMapper.selectWithLikesDislikes(id);
+    public BoardPost selectWithLikesDislikes(Long communityId, Long postId) throws Exception {
+        return boardPostMapper.selectWithLikesDislikes(communityId, postId);
     }
     // 커뮤 main
     @Override

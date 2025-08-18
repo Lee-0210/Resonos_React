@@ -3,6 +3,7 @@ package com.cosmus.resonos.mapper.community;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.github.pagehelper.PageInfo;
@@ -26,7 +27,8 @@ public interface BoardPostMapper {
     // 게시글 구하기
     public int countByUserId(Long userId);
     // 조회 + 좋아요 싫어요 수
-    public BoardPost selectWithLikesDislikes(Long id) throws Exception;
+    public BoardPost selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId) throws Exception;
+  
     // 커뮤 main
     // 주요뉴스 (가장 화제글 3개 + 썸네일) - 예시: 조회수 기준
     public List<BoardPost> selectHotPosts(int limit);
