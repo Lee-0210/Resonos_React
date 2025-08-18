@@ -42,6 +42,7 @@ public class MainPageController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
 
+                log.info("요청 들어옴.");
         try {
             Map<String, Object> response = new HashMap<>();
 
@@ -70,7 +71,8 @@ public class MainPageController {
             // 6. 신설 게시판
             List<CommunityCategory> newCategories = communityCategoryService.getNewCategories(5);
             response.put("newCategories", newCategories);
-
+            log.info("데이터 문제 없음");
+          
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {

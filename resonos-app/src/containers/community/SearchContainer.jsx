@@ -20,6 +20,10 @@ const SearchContainer = () => {
     })
   }
 
+  useEffectt(() => {
+
+  }, [])
+
   return (
     <>
       <Header />
