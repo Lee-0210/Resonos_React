@@ -47,19 +47,38 @@
   gap: 80px;
 }
 
-/* 주요 소식 */
+/* 화제글 */
 .commu.index .main-news {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   height: 150px;
 }
-.commu.index .main-news h2 {color: var(--main-color);}
-
 .commu.index .bottom {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 25px;
+}
+.commu.index .main-news a {
+  position: relative;
+  width: 23%;
+}
+.commu.index .main-news img {
+  width: 100%;
+  height: 150px;
+  border-radius: 20px;
+}
+.commu.index .main-news p {
+  width: 100%;
+  height: 45px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  color: white;
+  font-size: 1.4rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 0 0 20px 20px;
 }
 
 /* 최신글, 인기글, 갤러리 */
