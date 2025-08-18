@@ -1,5 +1,6 @@
 package com.cosmus.resonos.controller.community;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +62,10 @@ public class MainPageController {
 
             // 4. 실시간 인기글
             PageInfo<BoardPost> realTimePage = boardPostService.getRealTimePopularPosts(page, size);
-            response.put("realTimePopularPosts", realTimePage.getList());
+            List<BoardPost> realTimePosts = realTimePage.getList() != null ? realTimePage.getList() : new ArrayList<>();
+            response.put("realTimePopularPosts", realTimePosts);
             response.put("realTimePopularPagination", new Pagination(realTimePage));
+
 
             // 5. 게시판 순위 Top5
             List<CommunityCategory> topCategories = communityCategoryService.getTopCategories(5);
