@@ -7,9 +7,7 @@ const PostContainer = () => {
   return (
     <>
       <Header />
-      <div className="post-wrapper">
-        <PostDetail />
-      </div>
+      <PostDetail />
       <Footer />
     </>
   )
