@@ -16,6 +16,6 @@ export const getBoardData = async id => {
 }
 
 /* 게시글 상세 */
-export const getPostData = async id => {
-  return api.get('/community/posts')
+export const getPostData = async (ids) => {
+  return api.get(`/community/boards/${ids.boardId}/posts/${ids.postId}`)
 }
