@@ -7,7 +7,8 @@ const BoardListCard = ({title, date}) => {
 
   const handleNavigate = () => {
     // TODO: 게시글 ID 받아와서 navigate
-    alert('데이터 주세요')
+    // alert('데이터 주세요')
+    navigate('/community/boards/1/posts/1')
   }
 
   return (

@@ -197,6 +197,7 @@ body {
     flex-direction: column;
     justify-content: space-evenly;
     min-width: 180px;
+    gap: 10px;
 }
 
 .artist-card .disco-graphy {
@@ -338,6 +339,16 @@ body {
     border-radius: 10px;
     border: 2px solid var(--main-color);
     padding: 5px 10px 10px 10px;
+}
+
+.top5track > p:first-child,
+.arg-vote p ,
+.mood-vote p ,
+.review-card > p:first-child, 
+.album-moods > p:first-child, 
+.pl-list > p:first-child {
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--main-color);
 }
 
 .concert-schedule {

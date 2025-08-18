@@ -14,7 +14,8 @@ DROP TABLE IF EXISTS
         liked_playlist, liked_track, qna_answer, qna, community,
         track_mood_vote, artist_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
         notice, setting, badge, policy, external_api_config, plugin,
-        track, artist, user, role, tag, user_activity_log;
+        track, artist, user, role, tag, user_activity_log,
+        community_category, likes_dislikes, com_manager, vote_result, vote_status, com_vote_argument, com_vote;
 
 
 
@@ -35,7 +36,8 @@ BEGIN
         track_mood_vote, artist_mood_vote, user_sanction, admin_log, user_role, review_like, review_report,
         notice, setting, badge, policy, external_api_config, plugin,
         track, artist, user, role, tag, user_activity_log,
-        badge_condition;
+        badge_condition,
+        community_category, likes_dislikes, com_manager, vote_result, vote_status, com_vote_argument, com_vote;
 
     CREATE TABLE IF NOT EXISTS `notice` (
         `id` BIGINT NOT NULL,
@@ -65,10 +67,11 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS `community` (
         `id` BIGINT NOT NULL,
+        `category_id` BIGINT NOT NULL,
+        `creator_id` BIGINT NOT NULL,
         `name` VARCHAR(200) NOT NULL,
         `description` TEXT NULL,
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        `creator_id` BIGINT NOT NULL
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS `qna` (
@@ -189,7 +192,9 @@ BEGIN
         `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
         `user_id` BIGINT NOT NULL,
         `type` ENUM('posts', 'playlist', 'comment') NOT NULL,
-        `target_id` BIGINT NOT NULL
+        `target_id` BIGINT NOT NULL,
+        `board_post_id` BIGINT NOT NULL,
+        `parent_comment_id` BIGINT NULL
     );
 
     CREATE TABLE IF NOT EXISTS `playlist` (
@@ -268,7 +273,8 @@ BEGIN
         `type` VARCHAR(50) NULL,
         `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `community_id` BIGINT NOT NULL,
-        `user_id` BIGINT NOT NULL
+        `user_id` BIGINT NOT NULL,
+        `views` BIGINT NOT NULL DEFAULT 0
     );
 
     CREATE TABLE IF NOT EXISTS `chart_entry` (
@@ -424,24 +430,77 @@ BEGIN
         `username` VARCHAR(100) NOT NULL,
         `auth` VARCHAR(100) NOT NULL
     );
--- 1. 테이블 생성 (id에 PK, AUTO_INCREMENT 없이)
-CREATE TABLE IF NOT EXISTS user_badge_log (
-    id BIGINT NOT NULL,
-    user_id BIGINT NOT NULL,
-    badge_id BIGINT NOT NULL,
-    action VARCHAR(10) NOT NULL,
-    actor_id BIGINT DEFAULT NULL,
-    reason VARCHAR(255) DEFAULT NULL,
-    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_ubl_user_badge_created (user_id, badge_id, created_at)
-);
 
-CREATE TABLE IF NOT EXISTS  `user_notification` (
-    `user_id` BIGINT NOT NULL,
-    `type` enum('comment','mention','like','follow','reply','badge','qna','announcement','system') NOT NULL,
-    `is_enabled` tinyint(1) NOT NULL DEFAULT '1'
-);
+    -- 1. 테이블 생성 (id에 PK, AUTO_INCREMENT 없이)
+    CREATE TABLE IF NOT EXISTS user_badge_log (
+        id BIGINT NOT NULL,
+        user_id BIGINT NOT NULL,
+        badge_id BIGINT NOT NULL,
+        action VARCHAR(10) NOT NULL,
+        actor_id BIGINT DEFAULT NULL,
+        reason VARCHAR(255) DEFAULT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_ubl_user_badge_created (user_id, badge_id, created_at)
+    );
 
+    CREATE TABLE IF NOT EXISTS `user_notification` (
+        `user_id` BIGINT NOT NULL,
+        `type` enum('comment','mention','like','follow','reply','badge','qna','announcement','system') NOT NULL,
+        `is_enabled` tinyint(1) NOT NULL DEFAULT '1'
+    );
+
+    CREATE TABLE IF NOT EXISTS `community_category` (
+        `id` BIGINT NOT NULL,
+        `is_kor` BOOLEAN NOT NULL DEFAULT 1,
+        `name` VARCHAR(200) NOT NULL,
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS `com_manager` (
+        `id` BIGINT NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        `com_id` BIGINT NOT NULL,
+        `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS `vote_result` (
+        `id` BIGINT NOT NULL,
+        `vote_id` BIGINT NOT NULL,
+        `arg_id` BIGINT NOT NULL,
+        `count` INT NOT NULL,
+        `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS `vote_status` (
+        `id` BIGINT NOT NULL,
+        `arg_id` BIGINT NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS `com_vote_argument` (
+        `id` BIGINT NOT NULL,
+        `vote_id` BIGINT NOT NULL,
+        `content` VARCHAR(100) NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS `com_vote` (
+        `id` BIGINT NOT NULL,
+        `post_id` BIGINT NOT NULL,
+        `title` VARCHAR(100) NOT NULL,
+        `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+        `closed_at` TIMESTAMP NULL,
+        `is_completed` BOOLEAN NOT NULL DEFAULT FALSE
+    );
+
+    CREATE TABLE IF NOT EXISTS `likes_dislikes` (
+        `id` BIGINT,
+        `type` ENUM('post', 'comment') NOT NULL,
+        `user_id` BIGINT NOT NULL,
+        `is_likes` BOOLEAN NOT NULL,
+        `target_id` BIGINT NOT NULL,
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
 
     -- 4. PK, AUTO_INCREMENT, UNIQUE, FK 일괄 추가
 
@@ -488,6 +547,13 @@ CREATE TABLE IF NOT EXISTS  `user_notification` (
     ALTER TABLE `review_like` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `review_report` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
     ALTER TABLE `user_auth` MODIFY COLUMN `no` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`no`);
+    ALTER TABLE `community_category` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `com_manager` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `vote_result` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `vote_status` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `com_vote_argument` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `com_vote` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+    ALTER TABLE `likes_dislikes` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
 
     -- UNIQUE
     ALTER TABLE `user` ADD UNIQUE KEY `UK_username` (`username`);
@@ -512,6 +578,7 @@ CREATE TABLE IF NOT EXISTS  `user_notification` (
     ALTER TABLE `qna_answer` ADD CONSTRAINT `FK_qna_TO_qna_answer_1` FOREIGN KEY (`qna_id`) REFERENCES `qna` (`id`);
     ALTER TABLE `qna_answer` ADD CONSTRAINT `FK_user_TO_qna_answer_1` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`);
     ALTER TABLE `community` ADD CONSTRAINT `FK_user_TO_community_1` FOREIGN KEY (`creator_id`) REFERENCES `user` (`id`);
+    ALTER TABLE `community` ADD CONSTRAINT `FK_community_category_TO_community_1` FOREIGN KEY (`category_id`) REFERENCES `community_category` (`id`);
     ALTER TABLE `qna` ADD CONSTRAINT `FK_user_TO_qna_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `liked_track` ADD CONSTRAINT `FK_user_TO_liked_track_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
     ALTER TABLE `liked_track` ADD CONSTRAINT `FK_track_TO_liked_track_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
@@ -524,6 +591,8 @@ CREATE TABLE IF NOT EXISTS  `user_notification` (
     ALTER TABLE `chart_element` ADD CONSTRAINT `FK_album_TO_chart_element_1` FOREIGN KEY (`album_id`) REFERENCES `album` (`id`) ON DELETE CASCADE;
     ALTER TABLE `chart_element` ADD CONSTRAINT `FK_user_TO_chart_element_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
     ALTER TABLE `comment` ADD CONSTRAINT `FK_user_TO_comment_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+    ALTER TABLE `comment` ADD CONSTRAINT `FK_board_post_TO_comment_1` FOREIGN KEY (`board_post_id`) REFERENCES `board_post` (`id`);
+    ALTER TABLE `comment` ADD CONSTRAINT `FK_comment_TO_comment_1` FOREIGN KEY (`parent_comment_id`) REFERENCES `comment` (`id`);
     ALTER TABLE `playlist` ADD CONSTRAINT `FK_user_TO_playlist_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
     ALTER TABLE `album` ADD CONSTRAINT `FK_artist_TO_album_1` FOREIGN KEY (`artist_id`) REFERENCES `artist` (`id`) ON DELETE CASCADE;
     ALTER TABLE `user_sanction` ADD CONSTRAINT `FK_user_TO_user_sanction_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
@@ -563,6 +632,15 @@ CREATE TABLE IF NOT EXISTS  `user_notification` (
     ALTER TABLE `review_like` ADD CONSTRAINT `FK_user_TO_review_like_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
     ALTER TABLE `review_report` ADD CONSTRAINT `FK_user_TO_review_report_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
     ALTER TABLE `user_notification` ADD CONSTRAINT `FK_user_TO_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+    ALTER TABLE `com_manager` ADD CONSTRAINT `FK_user_TO_com_manager_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+    ALTER TABLE `com_manager` ADD CONSTRAINT `FK_community_TO_com_manager_1` FOREIGN KEY (`com_id`) REFERENCES `community` (`id`);
+    ALTER TABLE `vote_result` ADD CONSTRAINT `FK_com_vote_TO_vote_result_1` FOREIGN KEY (`vote_id`) REFERENCES `com_vote` (`id`);
+    ALTER TABLE `vote_result` ADD CONSTRAINT `FK_com_vote_argument_TO_vote_result_1` FOREIGN KEY (`arg_id`) REFERENCES `com_vote_argument` (`id`);
+    ALTER TABLE `vote_status` ADD CONSTRAINT `FK_com_vote_argument_TO_vote_status_1` FOREIGN KEY (`arg_id`) REFERENCES `com_vote_argument` (`id`);
+    ALTER TABLE `vote_status` ADD CONSTRAINT `FK_user_TO_vote_status_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+    ALTER TABLE `com_vote_argument` ADD CONSTRAINT `FK_com_vote_TO_com_vote_argument_1` FOREIGN KEY (`vote_id`) REFERENCES `com_vote` (`id`);
+    ALTER TABLE `com_vote` ADD CONSTRAINT `FK_board_post_TO_com_vote_1` FOREIGN KEY (`post_id`) REFERENCES `board_post` (`id`);
+    ALTER TABLE `likes_dislikes` ADD CONSTRAINT `FK_user_TO_likes_dislikes_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 -- 2. id 컬럼에 PK + AUTO_INCREMENT 추가 (이미 PK면 MODIFY 만)
 ALTER TABLE user_badge_log

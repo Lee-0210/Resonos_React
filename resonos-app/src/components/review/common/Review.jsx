@@ -5,7 +5,9 @@ import ReviewScore from './ReviewScore'
 import Reviews from './Reviews'
 import ReviewForm from './ReviewForm'
 
-const Review = ({ reviewType, score, styles, reviews, hasNext, userId, isAdmin, album, track }) => {
+const Review = ({ reviewType, score, styles, reviews, hasNext,
+      userId, isAdmin, album, track, handleSubmitReview, deleteReview,
+      loadMoreReviews, page, updateReview, toggleReviewLike, reportReview }) => {
   return (
     <>
       {/* 평점 리뷰 */}
@@ -24,8 +26,10 @@ const Review = ({ reviewType, score, styles, reviews, hasNext, userId, isAdmin, 
         <div className="review-container">
           <ul className={styles.reviewList}>
             {reviews != null && reviews.length > 0 ? (
-              <Reviews reviews={reviews} reviewType={reviewType} size={5}
-                isAdmin={isAdmin} hasNext={hasNext} styles={styles} />
+              <Reviews reviews={reviews} reviewType={reviewType} size={10}
+                isAdmin={isAdmin} hasNext={hasNext} styles={styles}
+                userId={userId} deleteReview={deleteReview} updateReview={updateReview}
+                toggleReviewLike={toggleReviewLike} reportReview={reportReview} />
             )
               :
               <>
@@ -35,7 +39,7 @@ const Review = ({ reviewType, score, styles, reviews, hasNext, userId, isAdmin, 
           {hasNext && (
             <div className="d-flex justify-content-center mb-1">
               <div className="more-box d-flex gap-3">
-                <button id="load-more-btn" className={`btn ${styles['btn-gold']}`}>
+                <button id="load-more-btn" onClick={()=> loadMoreReviews(page)} className={`btn ${styles['btn-gold']}`}>
                   리뷰 더보기
                 </button>
               </div>
@@ -52,7 +56,8 @@ const Review = ({ reviewType, score, styles, reviews, hasNext, userId, isAdmin, 
               </Link>
             </div>
           ) : (
-            <ReviewForm styles={styles} reviewType={reviewType} albumId={album.id} trackId={track} />
+            <ReviewForm styles={styles} reviewType={reviewType}
+            handleSubmitReview={handleSubmitReview} />
           )}
         </div>
       </div>

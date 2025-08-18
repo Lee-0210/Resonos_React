@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.community.VoteResultMapper">
+
+  <select id="list" resultType="VoteResult">
+    SELECT * FROM vote_result
+  </select>
+
+  <insert id="insert">
+    INSERT INTO vote_result(
+    )
+    VALUES (
+    )
+  </insert>
+
+  <update id="update">
+    UPDATE vote_result
+    <set>
+      updated_at = now()
+    </set>
+    WHERE -- key 지정 필요
+  </update>
+
+  <delete id="delete">
+    DELETE FROM vote_result WHERE -- key 지정 필요
+  </delete>
+
+  <update id="completeAll">
+    UPDATE vote_result SET -- 수정필드 없음
+  </update>
+
+  <delete id="deleteAll">
+    DELETE FROM vote_result
+  </delete>
+</mapper>

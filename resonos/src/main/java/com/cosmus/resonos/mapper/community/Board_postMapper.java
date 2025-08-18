@@ -1,12 +1,12 @@
-package com.cosmus.resonos.mapper.community;
+// package com.cosmus.resonos.mapper.community;
 
-import org.apache.ibatis.annotations.Mapper;
+// import org.apache.ibatis.annotations.Mapper;
 
-import com.cosmus.resonos.domain.community.Board_post;
+// import com.cosmus.resonos.domain.community.Board_post;
 
-@Mapper
-public interface Board_postMapper extends BaseMapper<Board_post> {
+// @Mapper
+// public interface Board_postMapper extends BaseMapper<Board_post> {
 
-    int completeAll() throws Exception;
-    int deleteAll() throws Exception;
-}
+//     int completeAll() throws Exception;
+//     int deleteAll() throws Exception;
+// }

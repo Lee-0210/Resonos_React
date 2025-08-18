@@ -59,6 +59,7 @@ import Index from './pages/community/Index';
 import Board from './pages/community/Board';
 import CommuSearch from './pages/community/CommuSearch';
 import SearchMore from './pages/community/SearchMore';
+import Post from './pages/community/Post';
 
 
 
@@ -150,6 +151,7 @@ const App = () => {
           <Route path="/community/boards/:id" element={<Board />} />
           <Route path="/community/search" element={<CommuSearch />} />
           <Route path="/community/search/more" element={<SearchMore />} />
+          <Route path='/community/boards/:id/posts/:id' element={<Post />} />
 
         </Routes>
       </LoginContextProvider>

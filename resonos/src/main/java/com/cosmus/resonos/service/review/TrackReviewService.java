@@ -3,7 +3,6 @@ package com.cosmus.resonos.service.review;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.review.TrackReview;
 import com.cosmus.resonos.domain.review.TrackScore;
