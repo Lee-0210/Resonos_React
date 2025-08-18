@@ -1,8 +1,16 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const BoardResultCard = ({rank}) => {
+
+  const navigate = useNavigate()
+
+  const handleNavigate = () => {
+    navigate('/community/boards/98')
+  }
+
   return (
-    <li>
+    <li onClick={handleNavigate}>
       <span className='board-title focus'>게시판 이름</span>
       <span>{rank}위</span>
       <div>

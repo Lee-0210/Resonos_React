@@ -1,6 +1,7 @@
 import React from 'react'
 import PostListCard from './card/PostListCard'
 import Pagination from '../Pagination/Pagination'
+import { Link } from 'react-router-dom'
 
 const BoardDetail = () => {
   return (
@@ -16,7 +17,9 @@ const BoardDetail = () => {
           <h3>게시판 정보 📝</h3>
           <div>
             <span>매니저</span>
-            <p className='ellipsis'>한지용</p>
+            <p className='ellipsis'>
+              <Link className="main" to="/users/2">한지용</Link>
+            </p>
           </div>
           <div>
             <span>생성일</span>
