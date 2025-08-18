@@ -30,6 +30,8 @@
   justify-content: space-between;
   border: 2px solid var(--main-color);
   border-radius: 20px;
+  width: 90%;
+  margin: 100px auto;
 }
 /* 왼쪽 */
 .commu.index .left {
@@ -94,7 +96,7 @@
 .commu.index .post-area li {display: flex; padding: 10px 0; justify-content: space-between}
 .commu.index .post-area li p:first-child {
   font-size: 1.4rem;
-  width: 75%;
+  max-width: 75%;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -264,7 +266,7 @@
 @media screen and (max-width: 768px) {
   .commu.index .bottom {flex-direction: column;}
 
-  .commu.index .right {flex-direction: row; margin-top: 30px;}
+  .commu.index .right {margin-top: 30px; gap:30px;}
   .commu.board {padding: 0;}
   .commu.search {padding: 0;}
 }

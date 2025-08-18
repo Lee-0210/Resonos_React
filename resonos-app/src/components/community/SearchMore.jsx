@@ -6,7 +6,14 @@ import PostResultCard from './card/PostResultCard'
 const SearchMore = ({keyword, type}) => {
   return (
     <main className="commu more">
-      <h2>검색결과 : "{keyword}"</h2>
+      {
+        keyword == null || keyword == ''
+        ?
+          <></>
+        :
+          <h2>검색결과 : "{keyword}"</h2>
+      }
+
       {
         type === 'board'
         ?
