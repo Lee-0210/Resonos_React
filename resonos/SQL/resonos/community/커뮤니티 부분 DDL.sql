@@ -1,21 +1,10 @@
--- Active: 1750388008084@@127.0.0.1@3306@resonos
+-- Active: 1745889699154@@127.0.0.1@3306@resonos
 DROP TABLE IF EXISTS `community_category`;
 
 CREATE TABLE `community_category` (
     `id` BIGINT NOT NULL,
     `is_kor` BOOLEAN NOT NULL DEFAULT 1,
     `name` VARCHAR(200) NOT NULL,
-    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-DROP TABLE IF EXISTS `community`;
-
-CREATE TABLE `community` (
-    `id` BIGINT NOT NULL,
-    `category_id` BIGINT NOT NULL,
-    `creator_id` BIGINT NOT NULL,
-    `name` VARCHAR(200) NOT NULL,
-    `description` TEXT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -104,6 +93,17 @@ CREATE TABLE `likes_dislikes` (
     `user_id` BIGINT NOT NULL,
     `is_likes` BOOLEAN NOT NULL,
     `target_id` BIGINT NOT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS `community`;
+
+CREATE TABLE `community` (
+    `id` BIGINT NOT NULL,
+    `category_id` BIGINT NOT NULL,
+    `creator_id` BIGINT NOT NULL,
+    `name` VARCHAR(200) NOT NULL,
+    `description` TEXT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
