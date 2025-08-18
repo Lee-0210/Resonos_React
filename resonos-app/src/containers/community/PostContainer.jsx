@@ -1,14 +1,14 @@
 import React from 'react'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
-import Post from '../../pages/community/Post'
+import PostDetail from '../../components/community/Post'
 
 const PostContainer = () => {
   return (
     <>
       <Header />
       <div className="post-wrapper">
-        <Post />
+        <PostDetail />
       </div>
       <Footer />
     </>
