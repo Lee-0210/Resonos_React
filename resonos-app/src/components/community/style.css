@@ -58,6 +58,8 @@
   justify-content: space-between;
   border: 2px solid var(--main-color);
   border-radius: 20px;
+  width: 90%;
+  margin: 100px auto;
 }
 
 /* 왼쪽 */
@@ -74,10 +76,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 10px;
+  gap: 80px;
 }
 
-/* 주요 소식 */
+/* 화제글 */
 .commu.index .main-news {
   display: flex;
   align-items: center;
@@ -92,7 +94,28 @@
 .commu.index .bottom {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin-top: 25px;
+}
+.commu.index .main-news a {
+  position: relative;
+  width: 23%;
+}
+.commu.index .main-news img {
+  width: 100%;
+  height: 150px;
+  border-radius: 20px;
+}
+.commu.index .main-news p {
+  width: 100%;
+  height: 45px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  color: white;
+  font-size: 1.4rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 0 0 20px 20px;
 }
 
 /* 최신글, 인기글, 갤러리 */
@@ -120,7 +143,7 @@
 
 .commu.index .post-area li p:first-child {
   font-size: 1.4rem;
-  width: 75%;
+  max-width: 75%;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -260,6 +283,7 @@
 /* 컨테이너 */
 .commu.search>div>div {
   padding: 20px 30px;
+  padding-bottom: 40px;
   border-radius: 20px;
   min-height: 450px;
   background-color: var(--container-color);
@@ -276,6 +300,10 @@
   bottom: 20px;
   color: var(--main-color);
   font-weight: bold;
+  transition: 0.3s;
+}
+.commu.search > div > div button:hover {
+  transform: scale(1.1);
 }
 
 /* 게시판 결과 컨테이너 */
@@ -288,14 +316,46 @@
 }
 
 /* 게시글 결과 컨테이너 */
-.commu.search .post-result li {
+.commu.search .post-result li, .commu.more .more-post li {
   padding: 10px 0;
 }
 
 /* 검색결과 텍스트 */
-.commu.search h2 {
+.commu.search h2, .commu.more h2 {
   margin-bottom: 50px;
   font-size: 2.5rem;
+}
+
+/* ===== 검색결과 더보기 페이지 ===== */
+.commu.more {
+  padding: 0 100px;
+}
+.commu.more .more-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+.commu.more .more-card {
+  border: 2px solid var(--main-color);
+  border-radius: 20px;
+  padding: 20px;
+  min-width: 0;
+}
+.commu.more .more-card li {
+  padding: 5px 0;
+  display: flex;
+}
+.commu.more .more-card li span:first-child {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.commu.more h3:hover {
+  text-decoration: underline;
+}
+.commu.more li:hover span:first-child {
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 768px) {
@@ -466,6 +526,9 @@
     font-weight: bold;
     font-size: 1.6rem;
     padding: 5px;
+  .commu.index .right {margin-top: 30px; gap:30px;}
+  .commu.board {padding: 0;}
+  .commu.search {padding: 0;}
 }
 .post-wrapper .btn-gold:hover,
 .post-wrapper .btn-gold.selected {
