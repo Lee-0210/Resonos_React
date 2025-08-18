@@ -12,9 +12,11 @@ const SearchContainer = () => {
   const q = searchParams.get('q');
 
   const onNavigate = type => {
-    navigate("/SearchMore", {
-      keyword: q,
-      type
+    navigate("/community/search/more", {
+      state: {
+        keyword: q,
+        type
+      }
     })
   }
 
