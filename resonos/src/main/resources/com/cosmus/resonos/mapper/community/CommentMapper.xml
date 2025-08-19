@@ -27,8 +27,8 @@
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO comment (content, type, target_id, created_at, user_id, community_id, board_post_id, guest_nickname, guest_password)
-    VALUES (#{content}, #{type}, #{targetId}, #{createdAt}, #{userId}, #{communityId}, #{boardPostId}, #{guestNickname}, #{guestPassword})
+    INSERT INTO comment (content, type, target_id, user_id, board_post_id, guest_nickname, guest_password)
+    VALUES (#{content}, #{type}, #{targetId}, #{userId}, #{boardPostId}, #{guestNickname}, #{guestPassword})
   </insert>
 
   <update id="update">

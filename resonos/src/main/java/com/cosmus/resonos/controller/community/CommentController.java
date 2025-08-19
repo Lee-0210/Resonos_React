@@ -77,16 +77,17 @@ public class CommentController {
 
     @PostMapping()
     public ResponseEntity<?> create(
-        @PathVariable("communityId") Long communityId,
         @PathVariable("postId") Long postId,
         @RequestBody Comment request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
+        System.out.println("loginUser : " + loginUser);
         try {
             Comment comment = new Comment();
             comment.setContent(request.getContent());
             comment.setType("posts");
             comment.setTargetId(postId);
+            comment.setBoardPostId(postId);
 
             if (loginUser != null) {
                 // 로그인 상태
@@ -98,7 +99,7 @@ public class CommentController {
                 commentService.writeComment(comment, null);
             }
 
-            return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
+            return new ResponseEntity<>(comment.getId().toString(), HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("댓글 작성 실패", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

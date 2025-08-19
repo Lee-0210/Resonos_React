@@ -108,6 +108,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void writeComment(Comment comment, CustomUser loginUser) throws Exception {
+        // System.out.println("loginUser : " + loginUser);
         if (loginUser != null) {
             // 로그인 상태 → userId 설정
             comment.setUserId(loginUser.getId());
@@ -116,7 +117,10 @@ public class CommentServiceImpl implements CommentService {
         } else {
             // 비로그인 상태 → guest 정보 입력됨
             comment.setUserId(null);
-            // guestPassword는 반드시 암호화해서 저장!
+            if (comment.getGuestPassword() == null || comment.getGuestPassword().isBlank()) {
+                throw new IllegalArgumentException("비밀번호를 입력하세요.");
+            }
+            // password 암호화
             comment.setGuestPassword(passwordEncoder.encode(comment.getGuestPassword()));
         }
 
