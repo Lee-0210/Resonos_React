@@ -42,15 +42,15 @@ public class BoardPostController {
         this.boardPostService = boardPostService;
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllPosts() {
-        try {
-            List<BoardPost> posts = boardPostService.list();
-            return ResponseEntity.ok(posts);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).build();
-        }
-    }
+    // @GetMapping
+    // public ResponseEntity<?> getAllPosts() {
+    //     try {
+    //         List<BoardPost> posts = boardPostService.list();
+    //         return ResponseEntity.ok(posts);
+    //     } catch (Exception e) {
+    //         return ResponseEntity.status(500).build();
+    //     }
+    // }
 
     @GetMapping("/{postId}")
     public ResponseEntity<?> getPost(
@@ -78,59 +78,59 @@ public class BoardPostController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> createPost(@RequestBody BoardPost post,
-                                            @AuthenticationPrincipal CustomUser customUser) {
-        try {
-            // 1. 게시글 저장 서비스 호출
-            boolean success = boardPostService.insert(post);
+    // @PostMapping
+    // public ResponseEntity<?> createPost(@RequestBody BoardPost post,
+    //                                         @AuthenticationPrincipal CustomUser customUser) {
+    //     try {
+    //         // 1. 게시글 저장 서비스 호출
+    //         boolean success = boardPostService.insert(post);
 
-            // 2. 게시글 저장 성공 시 배지 자동 지급 트리거
-            if (success && customUser != null) {
-                // customUser.getUser().getId()로 현재 로그인 유저의 id 추출
-                badgeGrantService.checkAndGrantBadges(customUser.getUser().getId());
-            }
+    //         // 2. 게시글 저장 성공 시 배지 자동 지급 트리거
+    //         if (success && customUser != null) {
+    //             // customUser.getUser().getId()로 현재 로그인 유저의 id 추출
+    //             badgeGrantService.checkAndGrantBadges(customUser.getUser().getId());
+    //         }
 
-            // 3. 성공 응답 반환
-            if (success) {
-                return ResponseEntity.ok("Board post created");
-            }
-            // 4. 실패 시 500 반환
-            return ResponseEntity.status(500).body("Failed to create board post");
-        } catch (Exception e) {
-            // 5. 예외 발생 시 에러 메시지와 함께 500 반환
-            return ResponseEntity.status(500).body("Failed to create board post: " + e.getMessage());
-        }
-    }
+    //         // 3. 성공 응답 반환
+    //         if (success) {
+    //             return ResponseEntity.ok("Board post created");
+    //         }
+    //         // 4. 실패 시 500 반환
+    //         return ResponseEntity.status(500).body("Failed to create board post");
+    //     } catch (Exception e) {
+    //         // 5. 예외 발생 시 에러 메시지와 함께 500 반환
+    //         return ResponseEntity.status(500).body("Failed to create board post: " + e.getMessage());
+    //     }
+    // }
 
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody BoardPost post) {
-        try {
-            post.setId(id);
-            boolean success = boardPostService.update(post);
-            if (success) {
-                return ResponseEntity.ok("Board post updated");
-            }
-            return ResponseEntity.status(500).body("Failed to update board post");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to update board post: " + e.getMessage());
-        }
-    }
+    // @PutMapping("/{id}")
+    // public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody BoardPost post) {
+    //     try {
+    //         post.setId(id);
+    //         boolean success = boardPostService.update(post);
+    //         if (success) {
+    //             return ResponseEntity.ok("Board post updated");
+    //         }
+    //         return ResponseEntity.status(500).body("Failed to update board post");
+    //     } catch (Exception e) {
+    //         return ResponseEntity.status(500).body("Failed to update board post: " + e.getMessage());
+    //     }
+    // }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable Long id) {
-        try {
-            boolean success = boardPostService.delete(id);
-            if (success) {
-                return ResponseEntity.ok("Board post deleted");
-            }
-            return ResponseEntity.status(500).body("Failed to delete board post");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to delete board post: " + e.getMessage());
-        }
-    }
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<?> deletePost(@PathVariable Long id) {
+    //     try {
+    //         boolean success = boardPostService.delete(id);
+    //         if (success) {
+    //             return ResponseEntity.ok("Board post deleted");
+    //         }
+    //         return ResponseEntity.status(500).body("Failed to delete board post");
+    //     } catch (Exception e) {
+    //         return ResponseEntity.status(500).body("Failed to delete board post: " + e.getMessage());
+    //     }
+    // }
 
     // 커뮤니티별 게시글 목록 조회
     // @GetMapping("/community/{communityId}")
