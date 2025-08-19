@@ -536,6 +536,9 @@
   padding: 5px 0px;
   cursor: pointer;
 }
+.post-wrapper .comments .comment .comment-contentr {
+  padding: 5px 0px;
+}
 .post-wrapper .comments .comment-info {
   display: flex;
   align-items: center;
