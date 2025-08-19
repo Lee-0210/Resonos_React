@@ -5,6 +5,19 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.community.CommunityMapper">
 
+  <resultMap id="CommunityResultMap" type="com.cosmus.resonos.domain.community.Community">
+      <id property="id" column="id"/>
+      <result property="categoryId" column="category_id"/>
+      <result property="creatorId" column="creator_id"/>
+      <result property="name" column="name"/>
+      <result property="description" column="description"/>
+      <result property="createdAt" column="created_at"/>
+      <result property="trackId" column="track_id"/>
+      <result property="intro" column="intro"/>
+      <!-- user 테이블의 nickname을 가져와서 creatorName에 매핑 -->
+      <result property="creatorName" column="creator_name"/>
+  </resultMap>
+
   <select id="list" resultType="Community">
     SELECT * FROM community
   </select>
@@ -40,8 +53,13 @@
   </delete>
 
   <!-- select  -->
-  <select id="select" resultType="Community">
-    SELECT * FROM community WHERE id = #{id}
+  <select id="select" resultMap="CommunityResultMap">
+      SELECT 
+          c.*,
+          u.nickname AS creator_name
+      FROM community c
+      LEFT JOIN user u ON c.creator_id = u.id
+      WHERE c.id = #{id}
   </select>
 
   <update id="setTrack">

@@ -180,11 +180,6 @@ public class MainPageController {
             // 커뮤니티 정보 전달 
             response.put("community", community);
 
-            // creatorId - 이름
-            // community - creatorId 으로 사용자 이름 조회
-            String creatorName = userService.getUserNameById(community.getCreatorId());
-            response.put("creatorName", creatorName);
-
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
