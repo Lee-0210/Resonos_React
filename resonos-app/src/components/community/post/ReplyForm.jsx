@@ -1,8 +1,8 @@
 import React from 'react'
 
-const PostForm = () => {
+const ReplyForm = () => {
   return (
-    <div className="post-form">
+    <div className='reply-form'>
       <form>
         {true && (
           <div className="for-unlogin">
@@ -21,4 +21,4 @@ const PostForm = () => {
   )
 }
 
-export default PostForm
+export default ReplyForm
