@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/community/boards/{communityId}/posts")
+@RequestMapping("/community/boards/{communityId}/posts/{postId}/comments")
 public class CommentController {
 
     @Autowired
@@ -75,10 +75,11 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/{postId}")
+    @PostMapping("/{commentId}")
     public ResponseEntity<?> create(
         @PathVariable("communityId") Long communityId,
         @PathVariable("postId") Long postId,
+        @PathVariable("commentId") Long commentId,
         @RequestBody Comment request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
