@@ -34,4 +34,8 @@ public class Comment {
 
     private List<Comment> replies;
 
+    private String guestNickname;
+
+    private String guestPassword;
+
 }
