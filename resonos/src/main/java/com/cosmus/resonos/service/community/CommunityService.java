@@ -12,4 +12,7 @@ public interface CommunityService extends BaseService<Community> {
     // Long 에서 boolean 으로 수정함
     boolean setTrack(@Param("categoryId") Long categoryId, @Param("trackId") String trackId) throws Exception;
 
+    // 한줄 소개 설정
+    boolean setIntro(@Param("communityId") Long communityId, @Param("intro") String intro) throws Exception;
+
 }

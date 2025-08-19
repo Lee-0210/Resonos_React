@@ -76,4 +76,9 @@ public class CommunityServiceImpl implements CommunityService {
         return communityMapper.setTrack(categoryId, categoryId) > 0;
     }
 
+    @Override
+    public boolean setIntro(Long communityId, String intro) throws Exception {
+        return communityMapper.setIntro(communityId, intro) > 0;
+    }
+
 }

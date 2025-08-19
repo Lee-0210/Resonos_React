@@ -44,5 +44,12 @@
       track_id = #{trackId}
     WHERE id = #{categoryId}
   </update>
-  
+
+  <!-- 한줄 소개 설정 -->
+  <update id="setIntro">
+    UPDATE community SET
+      intro = #{intro}
+    WHERE id = #{communityId}
+  </update>
+
 </mapper>

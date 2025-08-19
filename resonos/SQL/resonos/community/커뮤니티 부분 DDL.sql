@@ -111,9 +111,9 @@ CREATE TABLE `community` (
     `name` VARCHAR(200) NOT NULL,
     `description` TEXT NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `track_id` VARCHAR(200) NULL
+    `track_id` VARCHAR(200) NULL,
+    `intro` VARCHAR(200) NULL
 );
-
 
 
 ALTER TABLE `community_category` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);

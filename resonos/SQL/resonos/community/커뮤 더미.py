@@ -16,20 +16,26 @@ def load_track_ids(filepath):
 
 track_ids = load_track_ids(TRACK_PATH)
 
-# 기존 설정값 및 데이터 생성 준비
+# ------------------------------
+# 설정값
+# ------------------------------
 N_USER = 50
 N_CATEGORY = 5
 N_COMMUNITY = 20
 N_MANAGER = 30
-N_POST = 40         
+N_POST = 40
+N_COMMENT = 80
 N_VOTE = 40
 N_ARGUMENT = 3
 N_VOTE_RESULT = 60
 N_VOTE_STATUS = 100
+N_LIKES = 100
 
 sqls = []
 
-# users 생성 (단순 예시)
+# ------------------------------
+# user 더미 생성
+# ------------------------------
 users = list(range(1, N_USER + 1))
 for uid in users:
     username = f"user{uid}"
@@ -38,14 +44,17 @@ for uid in users:
     created_at = datetime.now() - timedelta(days=random.randint(0, 30))
     sqls.append(
         f"INSERT INTO user(id, username, email, password, nickname, created_at, updated_at) "
-        f"VALUES({uid}, '{username}', '{email}', 'password', '{nickname}', '{created_at.strftime('%Y-%m-%d %H:%M:%S')}', '{created_at.strftime('%Y-%m-%d %H:%M:%S')}');"
+        f"VALUES({uid}, '{username}', '{email}', 'password', '{nickname}', "
+        f"'{created_at.strftime('%Y-%m-%d %H:%M:%S')}', '{created_at.strftime('%Y-%m-%d %H:%M:%S')}');"
     )
 
-# 1. community_category 생성
+# ------------------------------
+# community_category
+# ------------------------------
 category_names = ['음악', '영화', '게임', '책', '기타']
 categories = []
 for cid in range(1, N_CATEGORY + 1):
-    name = category_names[(cid-1) % len(category_names)]
+    name = category_names[(cid - 1) % len(category_names)]
     created_at = datetime.now()
     categories.append(cid)
     sqls.append(
@@ -53,22 +62,37 @@ for cid in range(1, N_CATEGORY + 1):
         f"VALUES({cid}, 1, '{name}', '{created_at.strftime('%Y-%m-%d %H:%M:%S')}');"
     )
 
-# 2. community 생성
+# ------------------------------
+# community
+# ------------------------------
 communities = []
 for com_id in range(1, N_COMMUNITY + 1):
     category_id = random.choice(categories)
     creator_id = random.choice(users)
     name = f"커뮤니티{com_id}"
     description = f"커뮤니티 설명 {com_id}"
+    intro = f"인트로 {com_id}"
     created_at = datetime.now() - timedelta(days=random.randint(0, 30))
+    track_id = random.choice(track_ids) if track_ids else f"track{random.randint(1, 1000)}"
+
     communities.append(com_id)
     sqls.append(
-        f"INSERT INTO community(id, category_id, creator_id, name, description, created_at) "
-        f"VALUES({com_id}, {category_id}, {creator_id}, '{name}', '{description}', '{created_at.strftime('%Y-%m-%d %H:%M:%S')}');"
+        "INSERT INTO community(id, category_id, creator_id, name, description, created_at, track_id, intro) "
+        "VALUES({}, {}, {}, '{}', '{}', '{}', '{}', '{}');".format(
+            com_id,
+            category_id,
+            creator_id,
+            name.replace("'", "''"),
+            description.replace("'", "''"),
+            created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            track_id,
+            intro.replace("'", "''")
+        )
     )
 
-# 3. board_post 생성
-communities = list(range(1, N_COMMUNITY + 1))  # 위에서 만든 커뮤니티 리스트 가정
+# ------------------------------
+# board_post
+# ------------------------------
 posts = []
 for post_id in range(1, N_POST + 1):
     community_id = random.choice(communities)
@@ -76,26 +100,51 @@ for post_id in range(1, N_POST + 1):
     title = f"게시글{post_id}"
     content = f"게시글 내용 {post_id}"
     created_at = datetime.now() - timedelta(days=random.randint(0, 30))
-    # track_id는 파일에 있는 리스트에서 랜덤 선택
     track_id = random.choice(track_ids) if track_ids else f"track{random.randint(1, 1000)}"
     thumbnail_url = "/img/profileImg.png"
     posts.append(post_id)
     sqls.append(
         "INSERT INTO board_post(id, community_id, user_id, title, content, created_at, type, views, track_id, thumbnail_url) "
-        "VALUES({}, {}, {}, '{}', '{}', '{}', NULL, 0, '{}', '{}');".format(
+        "VALUES({}, {}, {}, '{}', '{}', '{}', NULL, {}, '{}', '{}');".format(
             post_id,
             community_id,
             user_id,
-            title.replace("'", "''"),      # 작은따옴표 이스케이프
-            content.replace("'", "''"),    # 작은따옴표 이스케이프
+            title.replace("'", "''"),
+            content.replace("'", "''"),
             created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            random.randint(0, 100),
             track_id,
             thumbnail_url
         )
     )
 
+# ------------------------------
+# comment (일반 댓글 + 대댓글)
+# ------------------------------
+comments = []
+for comment_id in range(1, N_COMMENT + 1):
+    board_post_id = random.choice(posts)
+    user_id = random.choice(users)
+    content = f"댓글 내용 {comment_id}"
+    created_at = datetime.now() - timedelta(days=random.randint(0, 30))
+    parent_id = random.choice(comments) if comments and random.random() < 0.3 else "NULL"  # 30% 확률 대댓글
+    comments.append(comment_id)
+    sqls.append(
+        "INSERT INTO comment(id, content, created_at, user_id, type, target_id, board_post_id, parent_comment_id) "
+        "VALUES({}, '{}', '{}', {}, 'posts', {}, {}, {});".format(
+            comment_id,
+            content.replace("'", "''"),
+            created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            user_id,
+            board_post_id,
+            board_post_id,
+            parent_id if parent_id != "NULL" else "NULL"
+        )
+    )
 
-# 4. com_manager 생성
+# ------------------------------
+# com_manager
+# ------------------------------
 for manager_id in range(1, N_MANAGER + 1):
     user_id = random.choice(users)
     com_id = random.choice(communities)
@@ -105,7 +154,9 @@ for manager_id in range(1, N_MANAGER + 1):
         f"VALUES({manager_id}, {user_id}, {com_id}, '{created_at.strftime('%Y-%m-%d %H:%M:%S')}');"
     )
 
-# 5. com_vote 생성
+# ------------------------------
+# com_vote
+# ------------------------------
 votes = []
 for vote_id in range(1, N_VOTE + 1):
     post_id = random.choice(posts)
@@ -120,7 +171,9 @@ for vote_id in range(1, N_VOTE + 1):
         f"'{closed_at.strftime('%Y-%m-%d %H:%M:%S')}', {is_completed});"
     )
 
-# 6. com_vote_argument 생성
+# ------------------------------
+# com_vote_argument
+# ------------------------------
 arguments = []
 for arg_id in range(1, N_VOTE * N_ARGUMENT + 1):
     vote_id = random.choice(votes)
@@ -131,7 +184,9 @@ for arg_id in range(1, N_VOTE * N_ARGUMENT + 1):
         f"VALUES({arg_id}, {vote_id}, '{content}');"
     )
 
-# 7. vote_result 생성
+# ------------------------------
+# vote_result
+# ------------------------------
 for result_id in range(1, N_VOTE_RESULT + 1):
     vote_id = random.choice(votes)
     arg_id = random.choice(arguments)
@@ -142,7 +197,9 @@ for result_id in range(1, N_VOTE_RESULT + 1):
         f"VALUES({result_id}, {vote_id}, {arg_id}, {count}, '{created_at.strftime('%Y-%m-%d %H:%M:%S')}');"
     )
 
-# 8. vote_status 생성
+# ------------------------------
+# vote_status
+# ------------------------------
 for status_id in range(1, N_VOTE_STATUS + 1):
     arg_id = random.choice(arguments)
     user_id = random.choice(users)
@@ -152,7 +209,28 @@ for status_id in range(1, N_VOTE_STATUS + 1):
         f"VALUES({status_id}, {arg_id}, {user_id}, '{created_at.strftime('%Y-%m-%d %H:%M:%S')}');"
     )
 
-# 파일 저장
+# ------------------------------
+# likes_dislikes
+# ------------------------------
+for like_id in range(1, N_LIKES + 1):
+    user_id = random.choice(users)
+    is_likes = random.choice([0, 1])
+    # 게시글/댓글 랜덤 선택
+    if random.random() < 0.5:
+        target_id = random.choice(posts)
+        type_choice = 'post'
+    else:
+        target_id = random.choice(comments)
+        type_choice = 'comment'
+    created_at = datetime.now() - timedelta(days=random.randint(0, 30))
+    sqls.append(
+        f"INSERT INTO likes_dislikes(id, type, user_id, is_likes, target_id, created_at) "
+        f"VALUES({like_id}, '{type_choice}', {user_id}, {is_likes}, {target_id}, '{created_at.strftime('%Y-%m-%d %H:%M:%S')}');"
+    )
+
+# ------------------------------
+# SQL 파일 저장
+# ------------------------------
 output_file = 'dummy_community_data_full.sql'
 with open(output_file, 'w', encoding='utf-8') as f:
     for line in sqls:
