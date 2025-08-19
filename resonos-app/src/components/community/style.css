@@ -266,6 +266,7 @@
   min-height: 520px;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .commu.board .post-list li,
@@ -530,7 +531,7 @@
 }
 .post-wrapper .comments .comment a {
   display: inline-block;
-  
+
 }
 .post-wrapper .comments .comment .comment-content {
   padding: 5px 0px;

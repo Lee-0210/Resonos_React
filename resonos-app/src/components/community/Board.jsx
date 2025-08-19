@@ -42,7 +42,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices}) => {
           <div>
             <span>매니저</span>
             <p className='ellipsis'>
-              <Link className="main" to={`/users/${board?.creatorId}`}>한지용</Link>
+              <Link className="main" to={`/users/${board?.creatorId}`}>{board?.creatorName}</Link>
             </p>
           </div>
           <div>

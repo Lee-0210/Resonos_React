@@ -63,7 +63,7 @@
 
   <!-- select  -->
   <select id="select" resultMap="CommunityResultMap">
-      SELECT 
+      SELECT
           c.*,
           u.nickname AS creator_name
       FROM community c

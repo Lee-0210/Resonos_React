@@ -9,23 +9,23 @@ import lombok.Data;
 public class Community {
 
 
-    private Long id; 
+    private Long id;
 
-    private Long categoryId; 
+    private Long categoryId;
 
-    private Long creatorId; 
+    private Long creatorId;
 
-    private String name; 
+    private String name;
 
-    private String description; 
+    private String description;
 
-    private Date createdAt; 
+    private Date createdAt;
 
-    private String CREATE; 
+    private String CREATE;
 
-    private Long userId; 
+    private Long userId;
 
-    private Long comId; 
+    private Long comId;
 
 
     // track_id 추가
@@ -34,9 +34,9 @@ public class Community {
     // 한줄 소개
     private String intro;
 
-    // DB에 없는 필드 
+    // DB에 없는 필드
     // creatorId - 이름
     private String creatorName;
-    
+
     private List<BoardPost> boardPosts;
 }
