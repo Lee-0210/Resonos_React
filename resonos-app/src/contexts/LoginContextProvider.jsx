@@ -46,7 +46,7 @@ const LoginContextProvider = ({children}) => {
     console.log(`password : ${password}`)
 
     try {
-      const response = await auth.login(username, password)
+      const response = await auth.login(username, password, rememberMe)
       const data = response.data
       const status = response.status
       console.dir(`data : ${data}`)
@@ -62,9 +62,6 @@ const LoginContextProvider = ({children}) => {
           localStorage.removeItem('username')
           localStorage.removeItem('rememberId')
         }
-
-        if(rememberMe) localStorage.setItem('rememberMe', true)
-        else localStorage.removeItem('rememberMe')
 
         // 로그인 세팅 - loginSetting()
         loginSetting(data)
@@ -180,8 +177,6 @@ const LoginContextProvider = ({children}) => {
 
   useEffect(() => {
     const savedIsLogin = sessionStorage.getItem('isLogin')
-    const rememberMe = localStorage.getItem('rememberMe')
-    if(!rememberMe) return
     if(!savedIsLogin || savedIsLogin == false) {
       autoLogin()
     }

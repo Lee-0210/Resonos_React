@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import {formatDateNotDay} from '../../../apis/util'
+import {formatDateNotDay, formatDateNotTime} from '../../../apis/util'
 import * as cr from '../../../apis/community'
 
-const PostListCard = ({post}) => {
+const PostListCard = ({post, isBoard}) => {
 
   const navigate = useNavigate()
   const params = useParams()
@@ -12,20 +12,20 @@ const PostListCard = ({post}) => {
     navigate(`/community/boards/${post.community.id}/posts/${post.id}`)
   }
 
-  useEffect(() => {
-
-  }, [])
-
   return (
     <li onClick={handleNavigate}>
       <p>
         <span className='focus ellipsis'>{post?.title}</span>
-        <span className='main'>[150]</span>
+        <span className='main'>[{post?.commentCount}]</span>
         &nbsp;👍({post?.postLikes})
       </p>
       <div>
         <span className='board-name'>{post?.community?.name}</span>
-        <span className='date'>{formatDateNotDay(post?.createdAt)}</span>
+        <span className='date'>
+          {
+            isBoard ? formatDateNotTime(post?.createdAt) : formatDateNotDay(post?.createdAt)
+          }
+        </span>
       </div>
     </li>
   )

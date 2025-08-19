@@ -14,7 +14,9 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
       <div className='main-news'>
         {
           hotPosts.map(hotPost => (
-            <Link to="boards/98/posts/98" key={hotPost.id}>
+            <Link
+              to={`boards/${hotPost.community.id}/posts/${hotPost.id}`} key={hotPost.id}
+            >
               <img src="/img/profileImg.png" alt="썸네일" />
               <p>{hotPost.title}</p>
             </Link>
@@ -40,7 +42,7 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
             <ul>
               {
                 popularPosts.map(post => (
-                  <PostListCard key={post.id} post={post}/>
+                  <PostListCard key={post.id} post={post} isBoard={true}/>
                 ))
               }
             </ul>
@@ -74,8 +76,12 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
             <h3>게시판 순위 Top5</h3>
             <ul>
               {
-                topCategories.map(board => (
-                  <BoardRankingCard key={board.id} board={board} rank={1} />
+                topCategories.map((board, index) => (
+                  <BoardRankingCard
+                    key={board.id}
+                    board={board}
+                    rank={index}
+                  />
                 ))
               }
             </ul>

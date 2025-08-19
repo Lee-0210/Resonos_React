@@ -9,8 +9,15 @@ import TrackModalCommunity from '../../components/user/modal/TrackModalCommunity
 
 const BoardContainer = () => {
 
+  // 트랙
   const [onModal, setOnModal] = useState(false)
   const [trackList, setTrackList] = useState([])
+
+  // 게시판
+  const [board, setBoard] = useState()
+  const [posts, setPosts] = useState([])
+  const [notices, setNotices] = useState([])
+
 
   const isManager = useRef(true)
 
@@ -19,7 +26,7 @@ const BoardContainer = () => {
   // 게시판 대표음악 설정
   const setMusic = async (trackId) => {
     try {
-      alert(trackId)
+      const response = await cr
     } catch(e) {
       console.error('error :', e)
     }
@@ -66,7 +73,11 @@ const BoardContainer = () => {
     try {
       const response = await cr.getBoardData(params.id)
       if(response.status === 200) {
-        console.log(response.data)
+        const data = response.data
+        console.log(data)
+        setBoard(data.categoryInfo)
+        setPosts(data.posts)
+        setNotices(data.notices)
       }
     } catch (e) {
       console.error('error :', e.response)
@@ -85,6 +96,9 @@ const BoardContainer = () => {
         <BoardDetail
           setOnModal={setOnModal}
           isManager={isManager}
+          board={board}
+          posts={posts}
+          notices={notices}
         />
         <TrackModalCommunity
           onModal={onModal}
