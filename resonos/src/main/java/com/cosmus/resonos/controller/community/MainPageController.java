@@ -71,11 +71,11 @@ public class MainPageController {
             response.put("realTimePopularPosts", realTimePosts);
             response.put("realTimePopularPagination", new Pagination(realTimePage));
 
-            // 5. 카테고리 순위 Top5 
+            // 5. 카테고리 순위 Top5
             List<CommunityCategory> topCategories = communityCategoryService.getTopCategories(5);
             response.put("topCategories", topCategories);
 
-            // 6. 카테고리 신설 
+            // 6. 카테고리 신설
             List<CommunityCategory> newCategories = communityCategoryService.getNewCategories(5);
             response.put("newCategories", newCategories);
             log.info("데이터 문제 없음");
@@ -87,7 +87,7 @@ public class MainPageController {
             // 8. 신설 게시판 - communityService
             List<Community> newCommunities = communityService.getNewCommunities(5);
             response.put("newCommunities", newCommunities);
-            
+
 
 
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -104,7 +104,7 @@ public class MainPageController {
             @RequestParam(value="q", required = false) String query,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam("type") String type) {
+            @RequestParam(value = "type", required = false) String type) {
 
         log.info("query: {}, type: {}", query, type);
 
@@ -117,18 +117,18 @@ public class MainPageController {
                 response.put("searchedCategories", catPage.getList());
                 response.put("categoryPagination", new Pagination(catPage));
 
-                // 모든 커뮤니티 + 키워드 포함 
-                PageInfo<Community> commPage = communityService.searchCommunities(query, page, size);                
-                
+                // 모든 커뮤니티 + 키워드 포함
+                PageInfo<Community> commPage = communityService.searchCommunities(query, page, size);
+
                 response.put("searchedCommunities", commPage.getList());
                 response.put("communityPagination", new Pagination(commPage));
 
-                // 모든 커뮤니티 
+                // 모든 커뮤니티
                 List<Community> allCommunities = communityService.getAllCommunities();
                 response.put("allCommunities", allCommunities);
 
             } else if ("post".equalsIgnoreCase(type)) {
-                // 게시글 검색 + 키워드 포함 
+                // 게시글 검색 + 키워드 포함
                 PageInfo<BoardPost> postPage = boardPostService.searchPosts(query, page, size);
                 response.put("searchedPosts", postPage.getList());
                 response.put("postPagination", new Pagination(postPage));
@@ -137,8 +137,18 @@ public class MainPageController {
                 List<BoardPost> allPosts = boardPostService.getAllPosts();
                 response.put("allPosts", allPosts);
             } else {
-                // type이 없거나 잘못된 경우
-                return new ResponseEntity<>("Invalid type parameter", HttpStatus.BAD_REQUEST);
+                // type 이 없는 경우는 더보기 전 페이지
+
+                // 모든 커뮤니티 + 키워드 포함
+                PageInfo<Community> commPage = communityService.searchCommunities(query, page, size);
+                response.put("searchedCommunities", commPage.getList());
+                response.put("communityPagination", new Pagination(commPage));
+
+                // 게시글 검색 + 키워드 포함
+                PageInfo<BoardPost> postPage = boardPostService.searchPosts(query, page, size);
+                response.put("searchedPosts", postPage.getList());
+                response.put("postPagination", new Pagination(postPage));
+                return new ResponseEntity<>(response, HttpStatus.OK);
             }
 
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -173,7 +183,7 @@ public class MainPageController {
             // response.put("trackId", communityService.setTrack(categoryId, trackId));
             // response.put("thumbnailUrl", boardPostService.setThumbnailUrl(categoryId, thumbnailUrl));
 
-            // 커뮤니티 정보 전달 
+            // 커뮤니티 정보 전달
             response.put("community", community);
 
             return new ResponseEntity<>(response, HttpStatus.OK);

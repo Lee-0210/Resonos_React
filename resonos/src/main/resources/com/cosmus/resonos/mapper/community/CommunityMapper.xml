@@ -63,7 +63,7 @@
 
   <!-- 게시판 순위 Top5 - communityService -->
   <select id="getTopCommunities" resultType="Community">
-    SELECT bp.*     
+    SELECT bp.*
     FROM board_post bp
     LEFT JOIN community c ON bp.community_id = c.id
     WHERE bp.community_id = #{communityId}
@@ -90,8 +90,7 @@
     FROM community c
     <where>
       <if test="query != null and query.trim() != ''">
-        (bp.title LIKE CONCAT('%', #{query}, '%')
-        OR bp.content LIKE CONCAT('%', #{query}, '%'))
+        c.name LIKE CONCAT('%', #{query}, '%')
       </if>
     </where>
     ORDER BY c.created_at DESC
