@@ -16,6 +16,15 @@
       <result property="intro" column="intro"/>
       <!-- user 테이블의 nickname을 가져와서 creatorName에 매핑 -->
       <result property="creatorName" column="creator_name"/>
+
+    <!-- 게시글 목록 -->
+    <collection property="boardPosts" ofType="com.cosmus.resonos.domain.community.BoardPost">
+        <id property="id" column="board_post_id"/>
+        <result property="title" column="board_post_title"/>
+        <result property="content" column="board_post_content"/>
+        <result property="createdAt" column="board_post_created_at"/>
+        <result property="userNickname" column="user_nickname"/>
+    </collection>
   </resultMap>
 
   <select id="list" resultType="Community">
@@ -103,9 +112,26 @@
   </select>
 
   <!-- 모든 커뮤니티 + 키워드 -->
-  <select id="searchCommunities" resultType="Community">
-    SELECT c.*
+  <select id="searchCommunities" resultMap="CommunityResultMap" parameterType="string">
+    SELECT 
+      c.id,
+      c.category_id,
+      c.creator_id,
+      u.nickname AS creator_name,
+      c.name,
+      c.description,
+      c.created_at,
+      c.track_id,
+      c.intro,
+      bp.id AS board_post_id,
+      bp.title AS board_post_title,
+      bp.content AS board_post_content,
+      bp.created_at AS board_post_created_at,
+      u2.nickname AS user_nickname
     FROM community c
+    LEFT JOIN user u ON u.id = c.creator_id
+    LEFT JOIN board_post bp ON bp.community_id = c.id
+    LEFT JOIN user u2 ON u2.id = bp.user_id
     <where>
       <if test="query != null and query.trim() != ''">
         c.name LIKE CONCAT('%', #{query}, '%')
@@ -113,5 +139,8 @@
     </where>
     ORDER BY c.created_at DESC
   </select>
+
+
+
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.cosmus.resonos.domain.community;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -36,4 +37,6 @@ public class Community {
     // DB에 없는 필드 
     // creatorId - 이름
     private String creatorName;
+    
+    private List<BoardPost> boardPosts;
 }
