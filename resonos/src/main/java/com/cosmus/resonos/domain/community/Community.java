@@ -30,4 +30,7 @@ public class Community {
     // track_id 추가
     private String trackId;
 
+    // 한줄 소개
+    private String intro;
+
 }
