@@ -450,4 +450,11 @@ public class UserServiceImpl implements UserService {
         public List<Users> listPagingA(long index, long size) throws Exception {
             return userMapper.listPagingA(index, size);
         }
+
+        // react - 커뮤 메인
+        // community - creatorId 으로 사용자 이름 조회
+        @Override
+        public String getUserNameById(Long userId) throws Exception {
+            return userMapper.getUserNameById(userId);
+        }
 }

@@ -226,7 +226,6 @@
       ORDER BY bp.created_at DESC
   </select>
 
-
 <!-- // getNoticesByCommunityId  -->
   <select id="getNoticesByCommunityId" resultMap="BoardPostResultMap">
     SELECT bp.*,

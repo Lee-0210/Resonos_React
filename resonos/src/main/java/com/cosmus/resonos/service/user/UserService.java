@@ -116,4 +116,8 @@ public interface UserService {
     public long countAllUsers() throws Exception;
     // listPaging
     public List<Users> listPagingA(@Param("index") long index,@Param("size") long size) throws Exception;
+
+    // 커뮤 메인 
+    // 커뮤니티 생성자 이름 조회
+    public String getUserNameById(Long userId) throws Exception;
 }

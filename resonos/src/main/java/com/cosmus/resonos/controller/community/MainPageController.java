@@ -22,6 +22,7 @@ import com.cosmus.resonos.domain.community.CommunityCategory;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommunityCategoryService;
 import com.cosmus.resonos.service.community.CommunityService;
+import com.cosmus.resonos.service.user.UserService;
 import com.github.pagehelper.PageInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,9 @@ public class MainPageController {
 
     @Autowired
     private CommunityService communityService;
+
+    @Autowired
+    private UserService userService;
 
     // 메인 페이지 데이터
     @GetMapping("/")
@@ -169,6 +173,12 @@ public class MainPageController {
             response.put("pagination", new Pagination(postPage));
             // 커뮤니티 정보 전달 
             response.put("community", community);
+
+            // creatorId - 이름
+            // community - creatorId 으로 사용자 이름 조회
+            String creatorName = userService.getUserNameById(community.getCreatorId());
+            response.put("creatorName", creatorName);
+
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
