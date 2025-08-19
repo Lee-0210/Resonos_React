@@ -1,6 +1,9 @@
 package com.cosmus.resonos.service.community;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,7 +77,26 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> selectWithLikesDislikes(Long communityId, Long postId) throws Exception {
-        return commentMapper.selectWithLikesDislikes(communityId, postId);
+    public List<Comment> selectWithLikesDislikes(Long postId) throws Exception {
+        List<Comment> comments = commentMapper.selectWithLikesDislikes(postId);
+
+        List<Comment> rootComments = new ArrayList<>();
+        Map<Long, List<Comment>> repliesMap = new HashMap<>();
+
+        for (Comment c : comments) {
+            if (c.getParentCommentId() == null) {
+                rootComments.add(c); // 최상위 댓글
+            } else {
+                repliesMap.computeIfAbsent(c.getParentCommentId(), k -> new ArrayList<>()).add(c); // 대댓글 모음
+            }
+        }
+
+        for (Comment root : rootComments) {
+            List<Comment> replies = repliesMap.getOrDefault(root.getId(), new ArrayList<>());
+            replies.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())); // 최신순 정렬
+            root.setReplies(replies);
+        }
+
+        return rootComments;
     }
 }

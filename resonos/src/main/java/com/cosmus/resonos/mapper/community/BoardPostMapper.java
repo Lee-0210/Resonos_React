@@ -27,7 +27,7 @@ public interface BoardPostMapper {
     public int countByUserId(Long userId);
     // 조회 + 좋아요 싫어요 수
     public BoardPost selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId) throws Exception;
-  
+
     // 커뮤 main
     // 주요뉴스 (가장 화제글 3개 + 썸네일) - 예시: 조회수 기준
     public List<BoardPost> selectHotPosts(int limit);

@@ -1,6 +1,7 @@
 package com.cosmus.resonos.service.community;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 

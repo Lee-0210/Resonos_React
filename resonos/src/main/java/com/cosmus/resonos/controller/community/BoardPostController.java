@@ -58,14 +58,7 @@ public class BoardPostController {
         @PathVariable("postId") Long postId
     ) {
         Map<String, Object> response = new HashMap<>();
-        
         try {
-            // BoardPost post = boardPostService.select(id);
-            // if (post == null) {
-            //     return ResponseEntity.notFound().build();
-            // }
-            // return ResponseEntity.ok(post);
-
             // 게시글 + 좋아요/싫어요 수
             BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId);
             if (post == null) {
@@ -75,7 +68,7 @@ public class BoardPostController {
 
             // 댓글 + 좋아요/싫어요 수
             // 댓글 리스트 반환 (각 댓글에 작성자, 내용, 작성일, 좋아요/싫어요 수 포함)
-            List<Comment> comments = commentService.selectWithLikesDislikes(communityId, postId);
+            List<Comment> comments = commentService.selectWithLikesDislikes(postId);
             response.put("comments", comments);
 
             return new ResponseEntity<>(response, HttpStatus.OK);

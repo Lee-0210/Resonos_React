@@ -18,6 +18,6 @@ public interface CommentMapper extends BaseMapper<Comment> {
     // 댓글 수 구하기
     public int countByUserId(@Param("userId") Long userId);
     // 조회 + 좋아요 싫어요 수
-    public List<Comment> selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId) throws Exception;
+    public List<Comment> selectWithLikesDislikes(@Param("postId") Long postId) throws Exception;
 
 }

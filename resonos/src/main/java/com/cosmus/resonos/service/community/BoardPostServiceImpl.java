@@ -58,6 +58,7 @@ public class BoardPostServiceImpl implements BoardPostService {
     public BoardPost selectWithLikesDislikes(Long communityId, Long postId) throws Exception {
         return boardPostMapper.selectWithLikesDislikes(communityId, postId);
     }
+
     // 커뮤 main
     @Override
     public List<BoardPost> getHotPosts(int limit) {
@@ -114,7 +115,5 @@ public class BoardPostServiceImpl implements BoardPostService {
     public int getCommentCount(Long postId) throws Exception {
         return boardPostMapper.getCommentCount(postId);
     }
-
-
 
 }
