@@ -33,24 +33,27 @@ const PostComment = ({ comments, commentCount }) => {
               <p>👍 {com.commentLikes}</p>
               <p>👎 {com.commentDislikes}</p>
             </div>
-            {replyTo === idx && (
-              <ReplyForm />
-            )}
+            
             {com.replies && (com.replies.map((rep, rIdx) =>
               <div className="reply-comment" key={rIdx}>
                 <div className="user">
-                  <p>이준영</p>
+                  <Link to={`/users/${rep.userId}`}>
+                    <p>{rep.userNickname}</p>
+                  </Link>
                 </div>
-                <div className="comment-content">
-                  <p>인정하는 부분이지 말입니다 악</p>
+                <div className="comment-contentr">
+                  <p>{rep.content}</p>
                 </div>
                 <div className="comment-info">
-                  <p>2025. 08. 18. 11:34:14</p>
-                  <p>👍 12</p>
-                  <p>👎 1</p>
+                  <p>{rep.createdAt}</p>
+                  <p>👍 {com.commentLikes}</p>
+                  <p>👎 {com.commentDislikes}</p>
                 </div>
               </div>
             ))}
+            {replyTo === idx && (
+              <ReplyForm />
+            )}
           </div>
         )))}
       </div>
