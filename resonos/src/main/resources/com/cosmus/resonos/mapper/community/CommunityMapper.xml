@@ -39,10 +39,15 @@
     DELETE FROM community
   </delete>
 
+  <!-- select  -->
+  <select id="select" resultType="Community">
+    SELECT * FROM community WHERE id = #{id}
+  </select>
+
   <update id="setTrack">
     UPDATE community SET
       track_id = #{trackId}
-    WHERE id = #{categoryId}
+    WHERE id = #{communityId}
   </update>
 
   <!-- 한줄 소개 설정 -->
@@ -51,5 +56,45 @@
       intro = #{intro}
     WHERE id = #{communityId}
   </update>
+
+  <select id="selectById" resultType="Community">
+    SELECT * FROM community WHERE id = #{id}
+  </select>
+
+  <!-- 게시판 순위 Top5 - communityService -->
+  <select id="getTopCommunities" resultType="Community">
+    SELECT bp.*     
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    WHERE bp.community_id = #{communityId}
+    ORDER BY bp.created_at DESC
+  </select>
+
+  <!-- 신설 게시판 - communityService -->
+  <select id="getNewCommunities" resultType="Community">
+    SELECT *
+    FROM community
+    ORDER BY created_at DESC
+    LIMIT #{limit}
+  </select>
+
+  <!-- 모든 커뮤니티 조회 -->
+  <select id="getAllCommunities" resultType="Community">
+    SELECT *
+    FROM community
+  </select>
+
+  <!-- 모든 커뮤니티 + 키워드 -->
+  <select id="searchCommunities" resultType="Community">
+    SELECT c.*
+    FROM community c
+    <where>
+      <if test="query != null and query.trim() != ''">
+        (bp.title LIKE CONCAT('%', #{query}, '%')
+        OR bp.content LIKE CONCAT('%', #{query}, '%'))
+      </if>
+    </where>
+    ORDER BY c.created_at DESC
+  </select>
 
 </mapper>
