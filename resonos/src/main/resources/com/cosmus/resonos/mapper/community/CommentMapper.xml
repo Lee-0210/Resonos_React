@@ -62,14 +62,14 @@
         FROM likes_dislikes ld
         WHERE ld.type = 'comment'
           AND ld.target_id = c.id
-          AND ld.is_likes = 1)
-        AS comment_likes,
+          AND ld.is_likes = 1
+      ) AS comment_likes,
       (SELECT COUNT(*)
         FROM likes_dislikes ld
         WHERE ld.type = 'comment'
           AND ld.target_id = c.id
-          AND ld.is_likes = 0)
-        AS comment_dislikes
+          AND ld.is_likes = 0
+      ) AS comment_dislikes
     FROM comment c
     LEFT JOIN user u ON u.id = c.user_id
     WHERE c.board_post_id = #{postId}
