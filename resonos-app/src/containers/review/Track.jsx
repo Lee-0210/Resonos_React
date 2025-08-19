@@ -95,7 +95,14 @@ const Track = () => {
       setTrackLikeCount(data.count)
     } catch (error) {
       if (error.response.data === 'User is null') {
-        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
@@ -106,13 +113,34 @@ const Track = () => {
       console.log(plId, trackId)
       const response = await api.addTrackToPlaylist(plId, trackId)
       console.log(response.data)
-
+      swal.fire({
+        title: '성공',
+        text: '플레이리스트에 추가되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     } catch (error) {
       if (error.response.data === 'User is null') {
-        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
       else {
-        swal.fire('실패', '플레이리스트에 이미 있거나 오류가 발생했습니다.', 'error')
+        swal.fire({
+          title: '실패',
+          text: '플레이리스트에 이미 있거나 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
@@ -148,9 +176,23 @@ const Track = () => {
       }))
     } catch (error) {
       if (error.response.data === 'User is null') {
-        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       } else {
-        swal.fire('실패', '좋아요 실패', 'error')
+        swal.fire({
+          title: '실패',
+          text: '좋아요 실패',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
@@ -161,12 +203,33 @@ const Track = () => {
       const response = await api.reportTrackReview(reviewId)
       const data = response.data
       console.log(response.data)
-      swal.fire('신고 완료', `해당 리뷰의 신고 건수는 ${data}건 입니다`, 'success')
+      swal.fire({
+        title: '신고 완료',
+        text: `해당 리뷰의 신고 건수는 ${data}건 입니다`,
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     } catch (error) {
       if (error.response.data === 'User is null') {
-        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       } else {
-        swal.fire('실패', '신고 실패', 'error')
+        swal.fire({
+          title: '실패',
+          text: '신고 실패',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
@@ -174,23 +237,51 @@ const Track = () => {
   // 리뷰 등록
   const handleSubmitReview = async (reviewForm) => {
     if (!userId) {
-      swal.fire('로그인이 필요합니다', '리뷰 작성은 로그인 후 가능합니다.', 'warning');
+      swal.fire({
+        title: '로그인이 필요합니다',
+        text: '로그인시 사용 가능한 기능입니다.',
+        icon: 'warning',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
       return;
     }
     if (!track.id) {
-      swal.fire('오류', '트랙 정보를 찾을 수 없습니다.', 'error');
+      swal.fire({
+        title: '오류',
+        text: '트랙 정보를 찾을 수 없습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
       return;
     }
     try {
       const response = await api.writeTrackReview(track.id, reviewForm);
       console.log(response.data)
-      swal.fire('성공', '리뷰가 성공적으로 작성되었습니다.', 'success');
+      swal.fire({
+        title: '리뷰 작성 완료',
+        text: '리뷰가 성공적으로 작성되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
       const updatedResponse = response.data
       setScore(updatedResponse.score);
       setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
     } catch (error) {
       console.error('리뷰 작성 실패:', error);
-      swal.fire('오류', '리뷰 작성 중 오류가 발생했습니다.', 'error');
+      swal.fire({
+        title: '오류',
+        text: '리뷰 작성 중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
 
   }
@@ -204,18 +295,35 @@ const Track = () => {
       showCancelButton: true,
       confirmButtonText: '삭제',
       cancelButtonText: '취소'
+      , customClass: {
+        popup: 'album-wrapper'
+      }
     })
     if (result.isConfirmed) {
       try {
         const response = await api.deleteTrackReview(trackId, reviewId)
         console.log(response.data)
         const data = response.data
-        swal.fire('성공', '리뷰가 성공적으로 삭제되었습니다.', 'success')
+        swal.fire({
+          title: '삭제 완료',
+          text: '리뷰가 성공적으로 삭제되었습니다.',
+          icon: 'success',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
         setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
         setScore(data.score)
       } catch (error) {
         console.error(error)
-        swal.fire('실패', '리뷰 삭제 중 오류 발생.', 'error')
+        swal.fire({
+          title: '오류',
+          text: '리뷰 삭제 중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
@@ -233,7 +341,14 @@ const Track = () => {
         setMoodValues(data.values)
         setIsMoodEmpty(false)
       }
-      swal.fire('성공', '투표가 성공적으로 저장되었습니다.', 'success')
+      swal.fire({
+        title: '성공',
+        text: '투표가 성공적으로 저장되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     } catch (error) {
 
     }
