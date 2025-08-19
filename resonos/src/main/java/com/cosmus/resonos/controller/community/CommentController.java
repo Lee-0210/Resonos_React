@@ -103,26 +103,44 @@ public class CommentController {
                 commentService.writeComment(comment, null);
             }
 
-            return new ResponseEntity<>(comment.getId().toString(), HttpStatus.CREATED);
+            return new ResponseEntity<>(comment, HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("댓글 작성 실패", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // @PutMapping()
-    // public ResponseEntity<?> update(@RequestBody Comment entity) {
-    //     try {
-    //         boolean result = commentService.updateById(entity);
-    //         if (result)
-    //             return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-    //         else
-    //             return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
-    //     } catch (Exception e) {
-    //         log.error("Error in update", e);
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    @PutMapping("/{commentId}")
+    public ResponseEntity<?> update(
+        @PathVariable("postId") Long postId,
+        @PathVariable("commentId") Long commentId,
+        @RequestBody Comment request,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) {
+        try {
+            Comment comment = commentService.select(commentId);
+            if (comment == null) return new ResponseEntity<>("댓글이 없습니다.", HttpStatus.NOT_FOUND);
+
+            if (loginUser != null) {
+                if (!loginUser.getId().equals(comment.getUserId())) {
+                    return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                if (request.getGuestPassword() == null ||
+                    !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+                }
+            }
+
+            comment.setContent(request.getContent());
+            boolean result = commentService.updateById(comment);
+            return result ? new ResponseEntity<>("SUCCESS", HttpStatus.OK)
+                          : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("Error in update", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     // @DeleteMapping("/{id}")
     // public ResponseEntity<?> destroy(@PathVariable("id")  Long id) {

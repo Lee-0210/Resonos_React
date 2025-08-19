@@ -19,5 +19,9 @@ public interface CommentService extends BaseService<Comment> {
     // 조회 + 좋아요 싫어요 수
     public List<Comment> selectWithLikesDislikes(@Param("postId") Long postId) throws Exception;
 
+    // 댓글/대댓글 작성
     public void writeComment(Comment comment, CustomUser loginUser) throws Exception;
+
+    // 비로그인 댓글 비밀번호 체크
+    public boolean checkGuestPassword(Comment comment, String rawPassword) throws Exception;
 }
