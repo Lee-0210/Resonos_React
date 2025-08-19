@@ -1,19 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Pagination from '../../Pagination/Pagination'
+import ReplyForm from './ReplyForm'
+import { Link } from 'react-router-dom'
 
 const PostComment = ({ comments, commentCount }) => {
+
+  const [replyTo, setReplyTo] = useState(null)
+
+  const handleReplyClick = (i) => {
+    setReplyTo(replyTo === i ? null : i)
+  }
+
+
   return (
     <div className="post-comment">
       <div className="comment-count">
         <p className='subtitle'>댓글 {commentCount} 개</p>
       </div>
       <div className="comments">
-        {comments && (comments.map((com) => (
-          <div className="comment">
+        {comments && (comments.map((com, idx) => (
+          <div className="comment" key={idx}>
             <div className="user">
-              <p>{com.userNickname}</p>
+              <Link to={`/users/${com.userId}`}>
+                <p>{com.userNickname}</p>
+              </Link>
             </div>
-            <div className="comment-content">
+            <div className="comment-content" onClick={() => handleReplyClick(idx)}>
               <p>{com.content}</p>
             </div>
             <div className="comment-info">
@@ -21,8 +33,11 @@ const PostComment = ({ comments, commentCount }) => {
               <p>👍 {com.commentLikes}</p>
               <p>👎 {com.commentDislikes}</p>
             </div>
-            {com.replies && (com.replies.map((rep) =>
-              <div className="reply-comment">
+            {replyTo === idx && (
+              <ReplyForm />
+            )}
+            {com.replies && (com.replies.map((rep, rIdx) =>
+              <div className="reply-comment" key={rIdx}>
                 <div className="user">
                   <p>이준영</p>
                 </div>

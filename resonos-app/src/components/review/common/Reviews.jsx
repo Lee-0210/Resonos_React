@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 const Reviews = ({ styles, reviews, reviewType, isAdmin, userId,
    deleteReview, updateReview, toggleReviewLike, reportReview }) => {
@@ -63,9 +64,9 @@ const Reviews = ({ styles, reviews, reviewType, isAdmin, userId,
           data-album-id={reviewType === 'ALBUM' ? rv.albumId : null}
         >
           <div className={styles.nameAndScore}>
-            <a href={`/users/${rv.reviewer.id}`}>
+            <Link to={`/users/${rv.reviewer.id}`}>
               <p>{rv.reviewer.nickname}</p>
-            </a>
+            </Link>
             {rv.critic && <span>✅</span>}
             <span> 🔮<span>{rv.rating}</span></span>
           </div>

@@ -5,6 +5,8 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const PostContent = ({ content, likes, dislikes, boardId, postId }) => {
+
+
   return (
     <div className="post-content">
       <div className="content">
