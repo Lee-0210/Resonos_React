@@ -3,11 +3,13 @@ import MoreBoardCard from './card/MoreBoardCard'
 import Pagination from '../Pagination/Pagination'
 import PostResultCard from './card/PostResultCard'
 
-const SearchMore = ({keyword, type}) => {
+const SearchMore = ({keyword, type, searchedBoard, searchedPost, pagination, onPageChange}) => {
+
+  console.log(searchedBoard)
   return (
     <main className="commu more">
       {
-        keyword == null || keyword == ''
+          keyword == null || keyword == ''
         ?
           <></>
         :
@@ -18,36 +20,33 @@ const SearchMore = ({keyword, type}) => {
         type === 'board'
         ?
         <div className="more-board">
-          <MoreBoardCard />
-          <MoreBoardCard />
-          <MoreBoardCard />
-          <MoreBoardCard />
-          <MoreBoardCard />
-          <MoreBoardCard />
-          <MoreBoardCard />
-          <MoreBoardCard />
-          <MoreBoardCard />
+          {
+            searchedBoard?.map(board => (
+              <MoreBoardCard
+                key={board.id}
+                board={board}
+              />
+            ))
+          }
         </div>
         :
         <>
         <div className="more-post">
           <ul>
-            <PostResultCard />
-            <PostResultCard />
-            <PostResultCard />
-            <PostResultCard />
-            <PostResultCard />
-            <PostResultCard />
-            <PostResultCard />
-            <PostResultCard />
-            <PostResultCard />
-            <PostResultCard />
+            {
+              searchedPost?.map(post => (
+                <PostResultCard
+                  key={post.id}
+                  post={post}
+                />
+              ))
+            }
           </ul>
         </div>
         </>
     }
 
-      <Pagination />
+      <Pagination pagination={pagination} onPageChange={onPageChange} />
     </main>
   )
 }

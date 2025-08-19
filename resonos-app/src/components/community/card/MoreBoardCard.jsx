@@ -13,10 +13,10 @@ const MoreCard = ({board}) => {
     <div className="more-card">
       <h3>
         <Link
-          to={`/community/boards/98`}
+          to={`/community/boards/${board.id}`}
           className="main"
         >
-          게시판 이름
+          {board.name}
         </Link>
       </h3>
       <ul>

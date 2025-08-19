@@ -43,7 +43,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     // 1. JWT 추출 (Authorization 헤더 대신 쿠키에서)
     String jwt = null;
-    if(request.getCookies() != null) {
+    String authHeader = request.getHeader("Authorization");
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+      jwt = authHeader.substring(7);
+    }
+    
+    if(jwt == null && request.getCookies() != null) {
       for(Cookie cookie : request.getCookies()) {
         if("jwt".equals(cookie.getName())) {
           jwt = cookie.getValue();

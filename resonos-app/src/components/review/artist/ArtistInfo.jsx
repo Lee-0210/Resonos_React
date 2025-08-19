@@ -1,11 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const ArtistInfo = ({ styles, artist, albumCount, trackCount,
-            userId, isArtistFollowed, followCount, albums,
-            likeArtist }) => {
+  userId, isArtistFollowed, followCount, albums,
+  likeArtist }) => {
 
-  const handleLikeArtist = (userId,artistId) => {
+  const handleLikeArtist = (userId, artistId) => {
     const dto = {
       userId: userId,
       artistId: artistId
@@ -32,7 +36,7 @@ const ArtistInfo = ({ styles, artist, albumCount, trackCount,
                 data-artist-id={artist.id}
                 data-user-id={userId ? userId : 0}
                 data-followed={isArtistFollowed}
-                onClick={()=>handleLikeArtist(userId,artist.id)}
+                onClick={() => handleLikeArtist(userId, artist.id)}
               >
                 <span id="followText">
                   {isArtistFollowed ? '팔로우❤️' : '팔로우🤍'}
@@ -46,24 +50,32 @@ const ArtistInfo = ({ styles, artist, albumCount, trackCount,
           <div className={styles.graphyHeader}>
             <p className={styles.headline}>디스코 그래피</p>
           </div>
-          <div className={styles.albumContainer}>
-            {/* 반복문 구간 */}
+          {/* Swiper 컨테이너 */}
+          <Swiper
+            spaceBetween={30}          // 슬라이드 간격(px)
+            slidesPerView={3}         // 한 화면에 보일 슬라이드 수
+          // navigation
+          // pagination={{ clickable: true }}
+          className={styles.albumContainer}
+          >
             {albums && albums.map((album) => (
-              <Link key={album.id} to={`/albums?id=${album.id}`}>
-                <div className={styles.album}>
-                  <div className={styles.albumImg}>
-                    <img src={album.coverImage} alt="" />
-                    <span className="center-pin"></span>
+              <SwiperSlide key={album.id}>
+                <Link to={`/albums?id=${album.id}`}>
+                  <div className={styles.album}>
+                    <div className={styles.albumImg}>
+                      <img src={album.coverImage} alt={album.title} />
+                      <span className="center-pin"></span>
+                    </div>
+                    <div className={styles.albumInfo}>
+                      <p className={styles.subtitle}>{album.title}</p>
+                      <p>{new Date(album.releaseDate).toLocaleDateString()}</p>
+                      <p>{album.label}</p>
+                    </div>
                   </div>
-                  <div className={styles.albumInfo}>
-                    <p className={styles.subtitle}>{album.title}</p>
-                    <p>{new Date(album.releaseDate).toLocaleDateString()}</p>
-                    <p>{album.label}</p>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
         </div>
       </div>
     </>
