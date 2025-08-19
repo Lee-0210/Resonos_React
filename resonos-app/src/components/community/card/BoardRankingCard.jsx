@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const BoardRankingCard = ({board}) => {
+const BoardRankingCard = ({board, rank}) => {
 
   const navigate = useNavigate()
 
@@ -11,7 +11,7 @@ const BoardRankingCard = ({board}) => {
 
   return (
     <li onClick={handleNavigate}>
-      <p className='ellipsis focus'>{board.name}</p><span>{board.id}</span>
+      <p className='ellipsis focus'>{board.name}</p><span>{rank + 1}</span>
     </li>
   )
 }

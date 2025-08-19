@@ -67,6 +67,18 @@
   display: inline-block;
 }
 
+.relative {position: relative;}
+
+.no-content {
+  text-align: center;
+  margin: auto;
+  font-size: 1.4rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 /* ===== 인덱스 페이지 ===== */
 .commu.index {
   padding: 30px;
@@ -251,6 +263,9 @@
   padding: 20px 30px;
   border: 2px solid var(--main-color);
   border-radius: 20px;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
 }
 
 .commu.board .post-list li,
@@ -274,12 +289,19 @@
 .commu.board ul.custom-pagination {
   margin-top: 0;
 }
+.commu.board nav {
+  margin-top: auto !important;
+}
 
 /* 게시판 공지사항 */
 .commu.board .notice-area {
   padding: 20px 30px;
   border: 2px solid var(--main-color);
   border-radius: 20px;
+  min-height: 303px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 /* ===== 검색 결과 페이지 ===== */
@@ -355,6 +377,7 @@
   border-radius: 20px;
   padding: 20px;
   min-width: 0;
+  min-height: 253px;
 }
 .commu.more .more-card li {
   padding: 5px 0;

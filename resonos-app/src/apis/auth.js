@@ -4,8 +4,8 @@ import api from './api';
 export const join = data => api.post('/users', data);
 
 // 로그인
-export const login = (username, password) => {
-  const data = { username, password }
+export const login = (username, password, rememberMe) => {
+  const data = { username, password, rememberMe }
   return api.post('/login', data, {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
