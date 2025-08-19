@@ -18,8 +18,15 @@ body {
     color: white;
 }
 
-.headline {font-size: 2.4rem !important; font-weight: bold; color: var(--main-color);}
-.subtitle {font-size: 2rem !important;}
+.headline {
+    font-size: 2.4rem !important;
+    font-weight: bold;
+    color: var(--main-color);
+}
+
+.subtitle {
+    font-size: 2rem !important;
+}
 
 /* 애니메이션 */
 @keyframes spin360 {
@@ -214,7 +221,7 @@ body {
 .album-container {
     display: flex;
     gap: 15px;
-    padding-top: 10px;
+    padding: 10px;
 }
 
 .album {
@@ -249,6 +256,7 @@ body {
     border-radius: 50%;
     border: 2px solid var(--main-color);
 }
+
 .iframe-card {
     display: flex;
     padding: 10px;
@@ -261,18 +269,24 @@ body {
     align-items: center;
     gap: 10px;
 }
-.spotify{
-  flex:1 1 auto;        /* 👉 grow 1 / shrink 1 / basis 500px  */
-  min-width:260px;       /* 더 작아질 때의 하한선(선택사항)      */
-  height:152px;          /* 고정 높이 유지                       */
-  max-width: 510px;
+
+.spotify {
+    flex: 1 1 auto;
+    /* 👉 grow 1 / shrink 1 / basis 500px  */
+    min-width: 260px;
+    /* 더 작아질 때의 하한선(선택사항)      */
+    height: 152px;
+    /* 고정 높이 유지                       */
+    max-width: 510px;
 }
+
 .spotify iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  border-radius: 12px;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 12px;
 }
+
 .hottest-card {
     display: flex;
     gap: 20px;
@@ -341,12 +355,12 @@ body {
     padding: 5px 10px 10px 10px;
 }
 
-.top5track > p:first-child,
-.arg-vote p ,
-.mood-vote p ,
-.review-card > p:first-child, 
-.album-moods > p:first-child, 
-.pl-list > p:first-child {
+.top5track>p:first-child,
+.arg-vote p,
+.mood-vote p,
+.review-card>p:first-child,
+.album-moods>p:first-child,
+.pl-list>p:first-child {
     margin-bottom: 5px;
     border-bottom: 1px solid var(--main-color);
 }
@@ -529,13 +543,6 @@ body {
 }
 
 /* 드래그 슬라이드 css */
-/* ───── [A] 슬라이드·스냅·3장 노출 ───── */
-.album-container {
-    overflow-x: hidden;
-    /* 스크롤바 감춤 (자동 슬라이드용)  */
-    position: relative;
-    /* JS에서 폭 계산용 */
-}
 
 .album-track {
     /* ➜ 트랙용 래퍼를 JS가 생성 */
@@ -567,10 +574,8 @@ body {
 }
 
 .album-container {
-    padding-bottom: 30px;
     display: flex;
     gap: 15px;
-    padding-top: 10px;
     overflow-x: auto;
     max-width: calc(330px * 3 + 15px * 2);
     /* 3장 보여주기 */
@@ -580,11 +585,13 @@ body {
 }
 
 .album-container .album {
-    flex: 0 0 330px;
-    /* flex-grow:0, flex-shrink:0, flex-basis:330px */
+    width: 330px;
+    /* 카드 크기 고정 */
     scroll-snap-align: start;
-    flex-shrink: 0;
-    /* 명확하게 줄어들지 않게 */
+    /* 줄어들지 않게 */
+    border: 2px solid var(--main-color);
+    border-radius: 10px;
+    padding: 10px;
 }
 
 /* 글자가 넘칠 때 ... 으로 대체 */

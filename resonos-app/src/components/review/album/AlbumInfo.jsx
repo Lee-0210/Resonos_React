@@ -1,9 +1,13 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import InfoScore from '../common/InfoScore'
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 
-const AlbumInfo = ({ score, handleLikeClick,isAlbumLikedByUser, albumLikeCount, userId, styles, album, artist, tracks }) => {
+const AlbumInfo = ({ score, handleLikeClick, isAlbumLikedByUser, albumLikeCount, userId, styles, album, artist, tracks }) => {
 
   return (
     <>
@@ -48,23 +52,29 @@ const AlbumInfo = ({ score, handleLikeClick,isAlbumLikedByUser, albumLikeCount, 
             <div className={styles.trackHeader}>
               <p className={styles.headline}>{`${album.title}💽 Tracks`}</p>
             </div>
-            <div className={styles.trackContainer}>
+            <Swiper
+              className={styles.trackContainer}
+              spaceBetween={30}
+              slidesPerView={3}
+            >
               {tracks.map((track) => (
-                <Link key={track.id} to={`/tracks?id=${track.id}`}>
-                  <div className={styles.track}>
-                    <div className={styles.trackImg}>
-                      <img src={album.coverImage} alt={track.title} />
-                      <span className={styles.centerPin}></span>
+                <SwiperSlide key={track.id}>
+                  <Link to={`/tracks?id=${track.id}`}>
+                    <div className={styles.track}>
+                      <div className={styles.trackImg}>
+                        <img src={album.coverImage} alt={track.title} />
+                        <span className={styles.centerPin}></span>
+                      </div>
+                      <div className={styles.trackInfo}>
+                        <p id="subtitle">{track.title}</p>
+                        <p>{track.formattedDuration}</p>
+                        <p>{`${track.trackNo}th Track`}</p>
+                      </div>
                     </div>
-                    <div className={styles.trackInfo}>
-                      <p id="subtitle">{track.title}</p>
-                      <p>{track.formattedDuration}</p>
-                      <p>{`${track.trackNo}th Track`}</p>
-                    </div>
-                  </div>
-                </Link>
+                  </Link>
+                </SwiperSlide>
               ))}
-            </div>
+            </Swiper>
           </div>
         )}
       </div>
