@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import InfoScore from '../common/InfoScore';
 import Swal from 'sweetalert2';
 
+
 const TrackInfo = ({ styles, track, album, artist, score,
           userId, isTrackLikedByUser, trackLikeCount, toggleLike,
           addTrackToPlaylist, userPlaylist }) => {
@@ -22,6 +23,9 @@ const TrackInfo = ({ styles, track, album, artist, score,
         title: "플레이리스트가 없습니다.",
         text: "먼저 플레이리스트를 만들어주세요.",
         icon: "warning",
+        customClass: {
+          popup: 'album-wrapper'
+        }
       });
       return;
     }
@@ -48,6 +52,9 @@ const TrackInfo = ({ styles, track, album, artist, score,
           return false;
         }
         return playlistId;
+      },
+      customClass: {
+        popup: 'album-wrapper'
       }
     }).then((result) => {
       if (result.isConfirmed) {
