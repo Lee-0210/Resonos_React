@@ -18,6 +18,7 @@ const Post = () => {
 
   const [isLoading, setIsLoading] = useState(true)
 
+  // 게시판 초기 로딩
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,6 +53,15 @@ const Post = () => {
 
   }, [boardId, postId])
 
+  const postComment = async (data) => {
+    try {
+      const response = await api.postComment(data,{boardId, postId})
+      console.log(response)
+    } catch (error) {
+      
+    }
+  }
+
   if (isLoading) {
     return (
       <div style={{ position: 'relative', height: '300px' }}>
@@ -78,7 +88,7 @@ const Post = () => {
           <PostContent content={post.content} likes={post.postLikes} dislikes={post.postDislikes}
                       boardId={boardId} postId={postId} />
           <PostComment comments={comments} commentCount={post.commentCount} />
-          <PostForm />
+          <PostForm postComment={postComment} userId={post.userId} />
         </div>
       </div>
     </>

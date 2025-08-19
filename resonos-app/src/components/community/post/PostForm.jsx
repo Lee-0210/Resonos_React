@@ -1,20 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const PostForm = () => {
+const PostForm = ({ postComment }) => {
+
+  const [nick, setNick] = useState('')
+  const [tempPw, setTempPw] = useState('')
+  const [content, setContent] = useState('')
+
+  const isLogin = sessionStorage.getItem('isLogin')
+
+  const handlePostComment = (e) => {
+    e.preventDefault();
+    if(isLogin) {
+      const data = {
+        content : content
+      }
+      postComment(data)
+    }
+    else {
+      const data = {
+        content : content,
+        guestNickname : nick,
+        guestPassword : tempPw
+      }
+      postComment(data)
+    }
+
+    setContent('')
+    setNick('')
+    setTempPw('')
+  }
+
   return (
     <div className="post-form">
-      <form>
-        {true && (
+      <form onSubmit={handlePostComment}>
+        {!isLogin && (
           <div className="for-unlogin">
             <input id="nickname" type="text" 
-            placeholder='ㅇㅇ' required/>
+            placeholder='ㅇㅇ' onChange={(e) => setNick(e.target.value)} required/>
             <input id="tempPw" type="password"
-            placeholder='비밀번호' required />
+            placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
           </div>
         )}
-        <textarea name="" id="" required></textarea>
+        <textarea id="content" value={content} required onChange={(e) => setContent(e.target.value)}></textarea>
         <div className="comment-submit">
-          <button className='btn btn-gold'>댓글 작성</button>
+          <button type='submit'  className='btn btn-gold'>댓글 작성</button>
         </div>
       </form>
     </div>
