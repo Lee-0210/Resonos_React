@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import BoardDetail from '../../components/community/Board'
@@ -6,8 +6,11 @@ import * as cr from '../../apis/community'
 import * as ur from '../../apis/user'
 import { useParams } from 'react-router-dom'
 import TrackModalCommunity from '../../components/user/modal/TrackModalCommunity'
+import { LoginContext } from '../../contexts/LoginContextProvider'
 
 const BoardContainer = () => {
+
+  const {userInfo} = useContext(LoginContext)
 
   // 트랙
   const [onModal, setOnModal] = useState(false)
@@ -18,15 +21,20 @@ const BoardContainer = () => {
   const [posts, setPosts] = useState([])
   const [notices, setNotices] = useState([])
 
-
-  const isManager = useRef(true)
+  const isManager = useRef(false)
 
   const params = useParams()
 
   // 게시판 대표음악 설정
   const setMusic = async (trackId) => {
     try {
-      const response = await cr
+      const response = await cr.changeTrack(board.id, trackId)
+      if(response.status === 200) {
+        setBoard(prev => ({
+          ...prev,
+          trackId: response.data
+        }))
+      }
     } catch(e) {
       console.error('error :', e)
     }
@@ -75,9 +83,10 @@ const BoardContainer = () => {
       if(response.status === 200) {
         const data = response.data
         console.log(data)
-        setBoard(data.categoryInfo)
+        setBoard(data.community)
         setPosts(data.posts)
         setNotices(data.notices)
+        isManager.current = data.community.creatorId === userInfo.id
       }
     } catch (e) {
       console.error('error :', e.response)

@@ -89,7 +89,7 @@ public class CommunityController {
         try {
             boolean result = communityService.setTrack(id, entity.getTrackId());
             if (result)
-                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+                return new ResponseEntity<>(entity.getTrackId(), HttpStatus.OK);
             else
                 return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
@@ -104,7 +104,7 @@ public class CommunityController {
         try {
             boolean result = communityService.setIntro(id, entity.getIntro());
             if (result)
-                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+                return new ResponseEntity<>(entity.getIntro(), HttpStatus.OK);
             else
                 return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {

@@ -27,7 +27,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices}) => {
             <p className='no-content'>대표음악이 없습니다.</p>
             :
             <iframe
-              src={`https://open.spotify.com/embed/track/010ZkIVv6Ay5vqqHVCCiKB?utm_source=generator`}
+            src={`https://open.spotify.com/embed/track/${board.trackId}?utm_source=generator`}
               width="100%"
               height="150"
               frameBorder="0"
@@ -51,7 +51,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices}) => {
           </div>
           <div>
             <span>한줄소개</span>
-            <p className='ellipsis'>비정한 세상 피토하는 음악</p>
+            <p className='ellipsis'>{board?.description}</p>
           </div>
         </div>
       </div>
