@@ -110,7 +110,8 @@ CREATE TABLE `community` (
     `creator_id` BIGINT NOT NULL,
     `name` VARCHAR(200) NOT NULL,
     `description` TEXT NULL,
-    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `track_id` VARCHAR(200) NULL
 );
 
 
@@ -185,6 +186,8 @@ ADD CONSTRAINT `FK_user_TO_likes_dislikes_1` FOREIGN KEY (`user_id`) REFERENCES 
 
 ALTER TABLE `board_post`
 ADD CONSTRAINT `FK_track_TO_board_post_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
+
+ALTER TABLE `community` ADD CONSTRAINT `FK_track_TO_community_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
 
 
 

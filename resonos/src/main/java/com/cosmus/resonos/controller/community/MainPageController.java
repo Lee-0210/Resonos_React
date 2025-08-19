@@ -122,9 +122,7 @@ public class MainPageController {
     public ResponseEntity<?> getBoardDetail(
             @PathVariable("categoryId") Long categoryId,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "trackId", required = false) Long trackId,
-            @RequestParam(value = "thumbnailUrl", required = false) String thumbnailUrl
+            @RequestParam(value = "size", defaultValue = "10") int size
             ) {
 
         try {
@@ -139,10 +137,6 @@ public class MainPageController {
             response.put("posts", postPage.getList());
             response.put("notices", notices);
             response.put("pagination", new Pagination(postPage));
-            // 게시판 대표 음악 설정
-            // 게시판 테이블 thumbnail_url 컬럼 추가
-            response.put("trackId", communityService.setTrack(categoryId, trackId));
-            response.put("thumbnailUrl", boardPostService.setThumbnailUrl(categoryId, thumbnailUrl));
 
             return new ResponseEntity<>(response, HttpStatus.OK);
 

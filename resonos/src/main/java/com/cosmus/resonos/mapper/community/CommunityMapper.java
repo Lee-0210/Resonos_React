@@ -1,6 +1,7 @@
 package com.cosmus.resonos.mapper.community;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.community.Community;
 
@@ -10,5 +11,5 @@ public interface CommunityMapper extends BaseMapper<Community> {
     int completeAll() throws Exception;
     int deleteAll() throws Exception;
     // 게시판 대표 음악 설정
-    boolean setTrack(Long categoryId, Long trackId) throws Exception;
+    boolean setTrack(@Param("categoryId") Long categoryId, @Param("trackId") Long trackId) throws Exception;
 }
