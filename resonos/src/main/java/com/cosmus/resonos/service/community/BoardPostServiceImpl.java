@@ -58,6 +58,7 @@ public class BoardPostServiceImpl implements BoardPostService {
     public BoardPost selectWithLikesDislikes(Long communityId, Long postId) throws Exception {
         return boardPostMapper.selectWithLikesDislikes(communityId, postId);
     }
+
     // 커뮤 main
     @Override
     public List<BoardPost> getHotPosts(int limit) {
@@ -113,6 +114,23 @@ public class BoardPostServiceImpl implements BoardPostService {
     @Override
     public int getCommentCount(Long postId) throws Exception {
         return boardPostMapper.getCommentCount(postId);
+    }
+
+    @Override
+    public PageInfo<BoardPost> listByCommunityId(Long communityId, int page, int size) throws Exception {
+        PageHelper.startPage(page, size); // PageHelper 적용
+        List<BoardPost> posts = boardPostMapper.listByCommunityId(communityId);
+        return new PageInfo<>(posts);
+    }
+
+    @Override
+    public List<BoardPost> getNoticesByCommunityId(Long communityId, int limit) throws Exception {
+        return boardPostMapper.getNoticesByCommunityId(communityId, limit);
+    }
+
+    @Override
+    public List<BoardPost> getAllPosts() throws Exception {
+        return boardPostMapper.getAllPosts();
     }
 
 

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.community.Community;
 import com.cosmus.resonos.domain.community.CommunityCategory;
 import com.cosmus.resonos.mapper.community.CommunityCategoryMapper;
 import com.github.pagehelper.PageInfo;
@@ -100,5 +101,6 @@ public class CommunityCategoryServiceImpl implements CommunityCategoryService {
         List<CommunityCategory> list = communityCategoryMapper.getNewCategories(pageNum, pageSize).getList();
         return new PageInfo<>(list);
     }
+
 
 }

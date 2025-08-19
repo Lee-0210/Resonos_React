@@ -2,6 +2,9 @@ package com.cosmus.resonos.service.community;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.cosmus.resonos.domain.community.Community;
 import com.cosmus.resonos.domain.community.CommunityCategory;
 import com.github.pagehelper.PageInfo;
 

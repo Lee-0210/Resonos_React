@@ -54,7 +54,9 @@ const VoteForm = ({ styles, userVote, voteElement, albumId, userId }) => {
             <li><span>사운드 : </span><span id="sound-view">{userVote === null ? '평가전' : sound}</span></li>
             <li><span>독창성 : </span><span id="creativity-view">{userVote === null ? '평가전' : creativity}</span></li>
           </ul>
-          <button id="edit-btn" className={`btn ${styles.btnGold}`} onClick={handleEditClick}>{userVote === null ? '투표하기' : '수정하기'}</button>
+          {!isEditing && (
+            <button id="edit-btn" className={`btn ${styles.btnGold}`} onClick={handleEditClick}>{userVote === null ? '투표하기' : '수정하기'}</button>
+          )}
         </div>
         {isEditing && ( // Conditionally render the form when editing
           <form id="vote-form" className={`${styles.voteForm} ${styles.active}`}>

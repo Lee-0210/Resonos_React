@@ -81,4 +81,26 @@ public class CommunityServiceImpl implements CommunityService {
         return communityMapper.setIntro(communityId, intro) > 0;
     }
 
+    @Override
+    public List<Community> getTopCommunities(int limit) throws Exception {
+        return communityMapper.getTopCommunities(limit);
+    }
+
+    @Override
+    public List<Community> getNewCommunities(int limit) throws Exception {
+        return communityMapper.getNewCommunities(limit);
+    }
+
+    @Override
+    public List<Community> getAllCommunities() throws Exception {
+        return communityMapper.list();
+    }
+
+    @Override
+    public PageInfo<Community> searchCommunities(String query, int pageNum, int pageSize) throws Exception {
+        com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
+        List<Community> communities = communityMapper.searchCommunities(query);
+        return new PageInfo<>(communities);
+    }
+
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.Community;
 import com.cosmus.resonos.domain.community.CommunityCategory;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommunityCategoryService;
@@ -70,15 +71,23 @@ public class MainPageController {
             response.put("realTimePopularPosts", realTimePosts);
             response.put("realTimePopularPagination", new Pagination(realTimePage));
 
-
-            // 5. 게시판 순위 Top5
+            // 5. 카테고리 순위 Top5 
             List<CommunityCategory> topCategories = communityCategoryService.getTopCategories(5);
             response.put("topCategories", topCategories);
 
-            // 6. 신설 게시판
+            // 6. 카테고리 신설 
             List<CommunityCategory> newCategories = communityCategoryService.getNewCategories(5);
             response.put("newCategories", newCategories);
             log.info("데이터 문제 없음");
+
+            // 7. 게시판 순위 Top5 - communityService
+            List<Community> topCommunities = communityService.getTopCommunities(5);
+            response.put("topCommunities", topCommunities);
+
+            // 8. 신설 게시판 - communityService
+            List<Community> newCommunities = communityService.getNewCommunities(5);
+            response.put("newCommunities", newCommunities);
+            
 
 
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -92,22 +101,45 @@ public class MainPageController {
     // 검색
     @GetMapping("/search")
     public ResponseEntity<?> search(
-            @RequestParam("q") String query,
+            @RequestParam(value="q", required = false) String query,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam("type") String type) {
-        log.info("query : {}", query);
+
+        log.info("query: {}, type: {}", query, type);
 
         try {
             Map<String, Object> response = new HashMap<>();
 
-            PageInfo<CommunityCategory> catPage = communityCategoryService.searchCategories(query, page, size);
-            response.put("searchedCategories", catPage.getList());
-            response.put("categoryPagination", new Pagination(catPage));
+            if ("board".equalsIgnoreCase(type)) {
+                // 커뮤니티/카테고리 검색
+                PageInfo<CommunityCategory> catPage = communityCategoryService.searchCategories(query, page, size);
+                response.put("searchedCategories", catPage.getList());
+                response.put("categoryPagination", new Pagination(catPage));
 
-            PageInfo<BoardPost> postPage = boardPostService.searchPosts(query, page, size);
-            response.put("searchedPosts", postPage.getList());
-            response.put("postPagination", new Pagination(postPage));
+                // 모든 커뮤니티 + 키워드 포함 
+                PageInfo<Community> commPage = communityService.searchCommunities(query, page, size);                
+                
+                response.put("searchedCommunities", commPage.getList());
+                response.put("communityPagination", new Pagination(commPage));
+
+                // 모든 커뮤니티 
+                List<Community> allCommunities = communityService.getAllCommunities();
+                response.put("allCommunities", allCommunities);
+
+            } else if ("post".equalsIgnoreCase(type)) {
+                // 게시글 검색 + 키워드 포함 
+                PageInfo<BoardPost> postPage = boardPostService.searchPosts(query, page, size);
+                response.put("searchedPosts", postPage.getList());
+                response.put("postPagination", new Pagination(postPage));
+
+                // 모든 게시글
+                List<BoardPost> allPosts = boardPostService.getAllPosts();
+                response.put("allPosts", allPosts);
+            } else {
+                // type이 없거나 잘못된 경우
+                return new ResponseEntity<>("Invalid type parameter", HttpStatus.BAD_REQUEST);
+            }
 
             return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -117,30 +149,32 @@ public class MainPageController {
         }
     }
 
+
     // 게시판 상세
-    @GetMapping("/boards/{categoryId}")
+    @GetMapping("/boards/{communityId}")
     public ResponseEntity<?> getBoardDetail(
-            @PathVariable("categoryId") Long categoryId,
+            @PathVariable("communityId") Long communityId,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-            ) {
-
+            @RequestParam(value = "size", defaultValue = "10") int size) {
         try {
-            CommunityCategory category = communityCategoryService.select(categoryId);
-            if (category == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            Community community = communityService.select(communityId);
+            if (community == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-            PageInfo<BoardPost> postPage = boardPostService.listByCategoryId(categoryId, page, size);
-            List<BoardPost> notices = boardPostService.getNoticesByCategoryId(categoryId, 5);
+            PageInfo<BoardPost> postPage = boardPostService.listByCommunityId(communityId, page, size);
+            List<BoardPost> notices = boardPostService.getNoticesByCommunityId(communityId, 5);
 
             Map<String, Object> response = new HashMap<>();
-            response.put("categoryInfo", category);
             response.put("posts", postPage.getList());
             response.put("notices", notices);
             response.put("pagination", new Pagination(postPage));
+
             // 게시판 대표 음악 설정
             // 게시판 테이블 thumbnail_url 컬럼 추가
             // response.put("trackId", communityService.setTrack(categoryId, trackId));
             // response.put("thumbnailUrl", boardPostService.setThumbnailUrl(categoryId, thumbnailUrl));
+
+            // 커뮤니티 정보 전달 
+            response.put("community", community);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
 

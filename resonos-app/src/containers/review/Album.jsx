@@ -127,9 +127,24 @@ const Album = () => {
     } catch (error) {
       console.error(error);
       if (error.response.data === 'User is null') {
-        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
-      } else {
-        swal.fire('실패', '좋아요 실패', 'error')
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
+      else {
+        swal.fire({
+          title: '실패',
+          text: '서버오류.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
@@ -140,27 +155,43 @@ const Album = () => {
 
   // 리뷰 작성
   const handleSubmitReview = async (reviewForm) => {
-    if (!userId) {
-      swal.fire('로그인이 필요합니다', '리뷰 작성은 로그인 후 가능합니다.', 'warning');
-      return;
-    }
-    if (!album.id) {
-      swal.fire('오류', '앨범 정보를 찾을 수 없습니다.', 'error');
-      return;
-    }
-
     try {
       console.log(reviewForm)
       const response = await api.writeAlbumReview(album.id, reviewForm);
 
-      swal.fire('성공', '리뷰가 성공적으로 작성되었습니다.', 'success');
       const updatedResponse = response.data
       setScore(updatedResponse.score);
       setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
-
+      swal.fire({
+        title: '성공',
+        text: '리뷰가 성공적으로 작성되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     } catch (error) {
-      console.error('리뷰 작성 실패:', error);
-      swal.fire('오류', '리뷰 작성 중 오류가 발생했습니다.', 'error');
+      console.error(error);
+      if (error.response.data === 'User is null') {
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
+      else {
+        swal.fire({
+          title: '실패',
+          text: '서버오류.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
     }
   };
 
@@ -170,6 +201,9 @@ const Album = () => {
       title: '정말 삭제하시겠습니까?',
       text: '삭제된 리뷰는 복구할 수 없습니다.',
       icon: 'warning',
+      customClass: {
+        popup: 'album-wrapper'
+      },
       showCancelButton: true,
       confirmButtonText: '삭제',
       cancelButtonText: '취소'
@@ -179,7 +213,14 @@ const Album = () => {
         const response = await api.deleteAlbumReview(albumId, reviewId);
         console.log(response.data)
         const data = response.data
-        swal.fire('성공', '리뷰가 성공적으로 삭제되었습니다.', 'success')
+        swal.fire({
+          title: '성공',
+          text: '리뷰가 성공적으로 삭제되었습니다.',
+          icon: 'success',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
         // 1. 기존 reviews 배열에서 삭제된 리뷰(reviewId)를 제외한 새로운 배열 생성
         setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
         // 2. 서버에서 받은 최신 점수로 상태 업데이트
@@ -187,7 +228,14 @@ const Album = () => {
 
       } catch (error) {
         console.error(error)
-        swal.fire('실패', '리뷰 삭제 중 오류 발생.', 'error')
+        swal.fire({
+          title: '오류',
+          text: '리뷰 삭제 중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
@@ -204,10 +252,24 @@ const Album = () => {
           : review
       ));
       setScore(data.score)
-      swal.fire('성공', '리뷰가 성공적으로 수정되었습니다.', 'success')
+      swal.fire({
+        title: '성공',
+        text: '리뷰가 성공적으로 수정되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     } catch (error) {
       console.error(error)
-      swal.fire('실패', '리뷰 수정 중 오류 발생.', 'error')
+      swal.fire({
+        title: '오류',
+        text: '리뷰 수정 중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 
@@ -233,16 +295,34 @@ const Album = () => {
       console.log(response)
       setReviews(prevReviews => prevReviews.map(review => {
         if (review.id === reviewId) {
-          return { ...review, likes: data.likeCount,
-            isLikedByCurrentUser: data.liked }
-        } 
+          return {
+            ...review, likes: data.likeCount,
+            isLikedByCurrentUser: data.liked
+          }
+        }
         return review
       }))
     } catch (error) {
+      console.error(error);
       if (error.response.data === 'User is null') {
-        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
-      } else {
-        swal.fire('실패', '좋아요 실패', 'error')
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
+      else {
+        swal.fire({
+          title: '실패',
+          text: '서버오류.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
@@ -252,12 +332,35 @@ const Album = () => {
       const response = await api.reportAlbumReview(reviewId)
       const data = response.data
       console.log(response)
-      swal.fire('신고 완료', `해당 리뷰의 신고 건수는 ${data.reportCount}건 입니다`, 'success' )
+      swal.fire({
+        title: '신고 완료',
+        text: `해당 리뷰의 신고 건수는 ${data.reportCount}건 입니다`,
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     } catch (error) {
+      console.error(error);
       if (error.response.data === 'User is null') {
-        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
-      } else {
-        swal.fire('실패', '좋아요 실패', 'error')
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
+      else {
+        swal.fire({
+          title: '실패',
+          text: '서버오류.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
@@ -273,7 +376,14 @@ const Album = () => {
       if (data.userArg != null) {
         setIsArgEmpty(false)
       }
-      swal.fire('성공', '투표가 성공적으로 저장되었습니다.', 'success')
+      swal.fire({
+        title: '성공',
+        text: '투표가 성공적으로 저장되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     } catch (error) {
       console.error(error)
     }

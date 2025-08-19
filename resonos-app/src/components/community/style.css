@@ -480,12 +480,6 @@
   flex-direction: column;
 }
 
-.imsi-div {
-  color: cadetblue;
-  width: 100%;
-  height: 600px;
-}
-
 .post-wrapper .post-util .like,
 .post-wrapper .post-util .dislike,
 .post-wrapper .post-util .report {
@@ -515,6 +509,7 @@
   flex-direction: column;
   gap: 10px;
   width: 100%;
+  padding: 10px;
 }
 .post-wrapper .comments {
   display: flex;
@@ -526,9 +521,20 @@
   gap: 20px;
 }
 .post-wrapper .comments .comment {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
   padding-bottom: 10px;
   width: 100%;
   border-bottom: 1px solid var(--main-color);
+}
+.post-wrapper .comments .comment a {
+  display: inline-block;
+  
+}
+.post-wrapper .comments .comment .comment-content {
+  padding: 5px 0px;
+  cursor: pointer;
 }
 .post-wrapper .comments .comment-info {
   display: flex;
@@ -543,6 +549,7 @@
   display: flex;
   width: 100%;
   height: 100px;
+  padding: 10px;
 }
 .post-wrapper .post-form form {
   display: flex;
@@ -565,6 +572,58 @@
   display: flex;
   align-items: center;
 }
+.post-wrapper .post-form .for-unlogin {
+  max-width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.post-wrapper .post-form .for-unlogin input {
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid var(--main-color);
+  background-color: transparent;
+  color: white;
+}
+/* 대댓글 폼 */
+.post-wrapper .reply-form {
+  margin-top: 20px;
+  display: flex;
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+}
+.post-wrapper .reply-form form {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  justify-content: space-evenly;
+}
+.post-wrapper .reply-form form textarea {
+  display: flex;
+  padding: 5px;
+  resize: none;
+  max-width: 1300px;
+  flex:1;
+  border-radius: 10px;
+  border: 2px solid var(--main-color);
+  background-color: transparent;
+  color: white;
+}
+.post-wrapper .reply-form .for-unlogin {
+  max-width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.post-wrapper .reply-form .for-unlogin input {
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid var(--main-color);
+  background-color: transparent;
+  color: white;
+}
+/* 대댓 */
 .post-wrapper .headline,
 .wysiwyg-wrapper .headline {font-size: 2.4rem !important; font-weight: bold; color: var(--main-color);}
 .post-wrapper .subtitle,

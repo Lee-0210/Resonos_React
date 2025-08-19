@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.community.BoardPost;
+import com.github.pagehelper.PageInfo;
 
 @Mapper
 public interface BoardPostMapper {
@@ -27,7 +28,7 @@ public interface BoardPostMapper {
     public int countByUserId(Long userId);
     // 조회 + 좋아요 싫어요 수
     public BoardPost selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId) throws Exception;
-  
+
     // 커뮤 main
     // 주요뉴스 (가장 화제글 3개 + 썸네일) - 예시: 조회수 기준
     public List<BoardPost> selectHotPosts(int limit);
@@ -49,6 +50,11 @@ public interface BoardPostMapper {
     public boolean setThumbnailUrl(@Param("postId") Long postId, @Param("thumbnailUrl") String thumbnailUrl) throws Exception;
     // 댓글 수 가져오기
     public int getCommentCount(Long postId) throws Exception;
-
+    // listByCommunityId - 페이징네이션 처리
+    public List<BoardPost> listByCommunityId(@Param("communityId") Long communityId) throws Exception;
+    // getNoticesByCommunityId 
+    public List<BoardPost> getNoticesByCommunityId(@Param("communityId") Long communityId, @Param("limit") int limit) throws Exception;
+    // 모든 게시글 가져오기
+    public List<BoardPost> getAllPosts() throws Exception;
 
 }

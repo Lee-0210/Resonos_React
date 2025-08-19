@@ -1,6 +1,7 @@
 package com.cosmus.resonos.domain.community;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -30,5 +31,7 @@ public class Comment {
     private int commentLikes;
 
     private int commentDislikes;
+
+    private List<Comment> replies;
 
 }
