@@ -69,7 +69,7 @@ const BoardContainer = () => {
         console.log(response.data)
       }
     } catch (e) {
-      console.error('error :', e)
+      console.error('error :', e.response)
     }
   }
 
