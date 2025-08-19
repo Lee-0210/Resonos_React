@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.service.community.CommentService;
@@ -29,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/community/boards/{communityId}/posts")
 public class CommentController {
 
     @Autowired
@@ -73,16 +75,32 @@ public class CommentController {
         }
     }
 
-    @PostMapping()
-    public ResponseEntity<?> create(@RequestBody Comment entity) {
+    @PostMapping("/{postId}")
+    public ResponseEntity<?> create(
+        @PathVariable("communityId") Long communityId,
+        @PathVariable("postId") Long postId,
+        @RequestBody Comment request,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) {
         try {
-            boolean result = commentService.insert(entity);
-            if (result)
-                return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
-            else
-                return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+            Comment comment = new Comment();
+            comment.setContent(request.getContent());
+            comment.setType("posts");
+            comment.setTargetId(postId);
+
+            if (loginUser != null) {
+                // 로그인 상태
+                commentService.writeComment(comment, loginUser);
+            } else {
+                // 비로그인 상태
+                comment.setGuestNickname(request.getGuestNickname());
+                comment.setGuestPassword(request.getGuestPassword()); // 암호화는 service에서 처리
+                commentService.writeComment(comment, null);
+            }
+
+            return new ResponseEntity<>("SUCCESS", HttpStatus.CREATED);
         } catch (Exception e) {
-            log.error("Error in create", e);
+            log.error("댓글 작성 실패", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

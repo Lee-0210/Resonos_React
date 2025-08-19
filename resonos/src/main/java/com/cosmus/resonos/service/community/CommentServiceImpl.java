@@ -1,13 +1,16 @@
 package com.cosmus.resonos.service.community;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.mapper.community.CommentMapper;
 import com.github.pagehelper.PageInfo;
@@ -17,6 +20,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<Comment> list() throws Exception{
@@ -98,5 +104,22 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return rootComments;
+    }
+
+    @Override
+    public void writeComment(Comment comment, CustomUser loginUser) throws Exception {
+        if (loginUser != null) {
+            // 로그인 상태 → userId 설정
+            comment.setUserId(loginUser.getId());
+            comment.setGuestNickname(null);
+            comment.setGuestPassword(null);
+        } else {
+            // 비로그인 상태 → guest 정보 입력됨
+            comment.setUserId(null);
+            // guestPassword는 반드시 암호화해서 저장!
+            comment.setGuestPassword(passwordEncoder.encode(comment.getGuestPassword()));
+        }
+
+        commentMapper.insert(comment);
     }
 }
