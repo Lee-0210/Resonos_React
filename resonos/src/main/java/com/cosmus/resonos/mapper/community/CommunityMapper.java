@@ -11,10 +11,10 @@ import com.cosmus.resonos.domain.community.Community;
 public interface CommunityMapper extends BaseMapper<Community> {
 
     int completeAll() throws Exception;
-    int deleteAll() throws Exception;
+int deleteAll() throws Exception;
     // 게시판 대표 음악 설정
     // boolean -> int 수정함
-    int setTrack(@Param("categoryId") Long categoryId, @Param("trackId") Long trackId) throws Exception;
+    int setTrack(@Param("communityId") Long communityId, @Param("trackId") String trackId) throws Exception;
     // 한줄 소개 설정
     int setIntro(@Param("communityId") Long communityId, @Param("intro") String intro) throws Exception;
 

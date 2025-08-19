@@ -71,9 +71,9 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public boolean setTrack(Long categoryId, String trackId) throws Exception {
+    public boolean setTrack(Long communityId, String trackId) throws Exception {
         // update 결과를 boolean 값으로 반환하게 수정함
-        return communityMapper.setTrack(categoryId, categoryId) > 0;
+        return communityMapper.setTrack(communityId, trackId) > 0;
     }
 
     @Override
