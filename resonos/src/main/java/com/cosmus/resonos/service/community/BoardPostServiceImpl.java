@@ -167,7 +167,7 @@ public class BoardPostServiceImpl implements BoardPostService {
                 Map<String, Object> voteMap = new HashMap<>();
                 voteMap.put("id", vote.getId());
                 voteMap.put("title", vote.getTitle());
-                voteMap.put("isCompleted", vote.isCompleted());
+                // voteMap.put("isCompleted", vote.isCompleted());
 
                 // 2. 각 투표별 선택지 조회
                 List<ComVoteArgument> arguments = boardPostMapper.findArgumentsByVoteId(vote.getId());
