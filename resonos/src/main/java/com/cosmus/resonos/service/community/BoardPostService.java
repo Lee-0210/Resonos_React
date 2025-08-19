@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.ComVote;
+import com.cosmus.resonos.domain.community.ComVoteArgument;
 import com.github.pagehelper.PageInfo;
 
 public interface BoardPostService {
@@ -53,4 +55,14 @@ public interface BoardPostService {
     public List<BoardPost> getNoticesByCommunityId(@Param("communityId") Long communityId, @Param("limit") int limit) throws Exception;
     // 모든 게시판 가져오기
     public List<BoardPost> getAllPosts() throws Exception;
+
+    // vote 
+    // 게시글 투표 목록 가져오기
+    public List<ComVote> getVotesByPostId(Long postId) throws Exception;
+    // 투표 선택지 목록 가져오기
+    public List<ComVoteArgument> getArgumentsByVoteId(Long voteId) throws Exception;
+    // 선택지별 투표 수 가져오기
+    public int getVoteCountByArgumentId(Long argId) throws Exception;
+    // 게시글 ID로 투표 + 선택지 + 투표수 포함한 Map 조회
+    Map<String, Object> getVotesWithResultsByPostId(Long postId) throws Exception;
 }
