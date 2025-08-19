@@ -33,15 +33,15 @@
 
   <update id="update">
     UPDATE comment
-    SET content = #{content},
-        type = #{type},
-        target_id = #{targetId},
-        user_id = #{userId}
+    <set>
+      content = #{content}
+    </set>
     WHERE id = #{id}
   </update>
 
   <delete id="delete">
-    DELETE FROM comment WHERE id = #{id}
+    DELETE FROM comment
+    WHERE id = #{id}
   </delete>
 
   <select id="findByTarget" resultMap="CommentResultMap">
@@ -49,7 +49,9 @@
   </select>
 
   <select id="select" resultMap="CommentResultMap">
-    SELECT * FROM comment WHERE id = #{id}
+    SELECT *
+    FROM comment
+    WHERE id = #{id}
   </select>
 
   <select id="countByUserId" resultType="int">
