@@ -217,4 +217,38 @@
     WHERE board_post_id = #{postId}
   </select>
 
+  <!-- // listByCommunityId-->
+  <select id="listByCommunityId" resultMap="BoardPostResultMap">
+    SELECT bp.*     
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    WHERE bp.community_id = #{communityId}
+      ORDER BY bp.created_at DESC
+  </select>
+
+
+<!-- // getNoticesByCommunityId  -->
+  <select id="getNoticesByCommunityId" resultMap="BoardPostResultMap">
+    SELECT bp.*,
+          (SELECT COUNT(*) 
+            FROM comment cm
+            WHERE cm.board_post_id = bp.id) AS comment_count
+    FROM board_post bp
+    INNER JOIN user u ON bp.user_id = u.id
+    INNER JOIN user_auth ua ON ua.username = u.username
+    WHERE ua.auth = 'ROLE_ADMIN'
+      AND bp.community_id = #{communityId}
+    ORDER BY bp.created_at DESC
+    LIMIT #{limit}
+  </select>
+
+<!-- 모든 게시글 가져오기 -->
+<select id="getAllPosts" resultMap="BoardPostResultMap">
+  select *
+  from board_post
+  </select>
+
+
+
+
 </mapper>
