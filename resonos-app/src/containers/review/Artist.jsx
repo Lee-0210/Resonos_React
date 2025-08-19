@@ -7,6 +7,8 @@ import ArtistInfo from '../../components/review/artist/ArtistInfo';
 import ArtistTop7 from '../../components/review/artist/ArtistTop7';
 import ArtistRecent from '../../components/review/artist/ArtistRecent';
 import MoodStatus from '../../components/review/common/MoodStatus';
+import swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
 
 const Artist = () => {
 
@@ -94,26 +96,59 @@ const Artist = () => {
       setFollowCount(response.data.count)
     } catch (error) {
       if (error.response.data === 'User is null') {
-        swal.fire('로그인이 필요합니다', '로그인시 사용 가능한 기능입니다.', 'warning')
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
 
   // 아티스트 분위기 투표
   const voteMood = async (dto) => {
-    const artistDTO = {...dto, artistId: id}
+    const artistDTO = { ...dto, artistId: id }
     try {
       const response = await api.voteArtistMood(artistDTO)
       console.log(response.data)
       const data = response.data
-      if(data != null) {
+      if (data != null) {
         setUserVotedMoodId(data.votedMoodId)
         setMoodLabels(data.labels)
         setMoodValues(data.values)
       }
-      swal.fire('성공', '투표가 성공적으로 저장되었습니다.', 'success')
+      swal.fire({
+        title: '성공',
+        text: '투표가 성공적으로 저장되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     } catch (error) {
-      
+      if (error.response.data === 'User is null') {
+        swal.fire({
+          title: '로그인이 필요합니다',
+          text: '로그인시 사용 가능한 기능입니다.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
+      else {
+        swal.fire({
+          title: '실패',
+          text: '서버오류.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
     }
   }
 
@@ -138,15 +173,15 @@ const Artist = () => {
   return (
     <div className={styles.taWrapper}>
       <ArtistInfo styles={styles} artist={artist} albumCount={albumCount}
-                  trackCount={trackCount} userId={userId} isArtistFollowed={isArtistFollowed}
-                  followCount={followCount} albums={albums} likeArtist={likeArtist} />
-      <ArtistTop7 styles={styles} artist={artist} top7Tracks={top7Tracks} 
-                  track={track}/>
+        trackCount={trackCount} userId={userId} isArtistFollowed={isArtistFollowed}
+        followCount={followCount} albums={albums} likeArtist={likeArtist} />
+      <ArtistTop7 styles={styles} artist={artist} top7Tracks={top7Tracks}
+        track={track} />
       <ArtistRecent styles={styles} artist={artist} recentReviews={recentReviews} />
       <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
-                  artist={artist} track={track} userVotedMoodId={userVotedMoodId}
-                  moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats}
-                  voteMood={voteMood} />
+        artist={artist} track={track} userVotedMoodId={userVotedMoodId}
+        moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats}
+        voteMood={voteMood} />
     </div>
   )
 }

@@ -19,3 +19,10 @@ export const getBoardData = async id => {
 export const getPostData = async (ids) => {
   return api.get(`/community/boards/${ids.boardId}/posts/${ids.postId}`)
 }
+
+/* 게시판 트랙 변경 함수 */
+export const changeTrack = async (boardId, trackId) => {
+  return api.put(`/community/${boardId}/tracks`, {trackId}, {
+    headers: { "Content-Type": "application/json" },
+  })
+}

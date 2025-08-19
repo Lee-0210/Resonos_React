@@ -18,6 +18,8 @@
     <result property="userNickname" column="user_nickname"/>
     <result property="commentLikes" column="comment_likes"/>
     <result property="commentDislikes" column="comment_dislikes"/>
+    <result property="guestNickname" column="guest_nickname"/>
+    <result property="guestPassword" column="guest_password"/>
   </resultMap>
 
   <select id="list" resultType="com.cosmus.resonos.domain.community.Comment">
@@ -25,8 +27,8 @@
   </select>
 
   <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO comment (content, type, target_id, created_at, user_id)
-    VALUES (#{content}, #{type}, #{targetId}, #{createdAt}, #{userId})
+    INSERT INTO comment (content, type, target_id, created_at, user_id, community_id, board_post_id, guest_nickname, guest_password)
+    VALUES (#{content}, #{type}, #{targetId}, #{createdAt}, #{userId}, #{communityId}, #{boardPostId}, #{guestNickname}, #{guestPassword})
   </insert>
 
   <update id="update">

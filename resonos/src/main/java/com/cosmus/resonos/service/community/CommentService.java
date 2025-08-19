@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.Comment;
 
 public interface CommentService extends BaseService<Comment> {
@@ -17,4 +18,6 @@ public interface CommentService extends BaseService<Comment> {
 
     // 조회 + 좋아요 싫어요 수
     public List<Comment> selectWithLikesDislikes(@Param("postId") Long postId) throws Exception;
+
+    public void writeComment(Comment comment, CustomUser loginUser) throws Exception;
 }

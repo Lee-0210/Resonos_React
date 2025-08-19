@@ -171,6 +171,12 @@ public class MainPageController {
             response.put("posts", postPage.getList());
             response.put("notices", notices);
             response.put("pagination", new Pagination(postPage));
+
+            // 게시판 대표 음악 설정
+            // 게시판 테이블 thumbnail_url 컬럼 추가
+            // response.put("trackId", communityService.setTrack(categoryId, trackId));
+            // response.put("thumbnailUrl", boardPostService.setThumbnailUrl(categoryId, thumbnailUrl));
+
             // 커뮤니티 정보 전달 
             response.put("community", community);
 

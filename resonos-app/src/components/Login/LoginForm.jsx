@@ -89,6 +89,7 @@ const LoginForm = () => {
               className="form-check-input"
               type="checkbox"
               id="remember-me-check"
+              name="remember-me"
               checked={rememberMe ? true : false}
               onChange={() => setRememberMe(!rememberMe)}
             />

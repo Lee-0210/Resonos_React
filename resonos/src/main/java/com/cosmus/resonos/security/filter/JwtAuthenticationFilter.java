@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseCookie.ResponseCookieBuilder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,16 +50,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   throws AuthenticationException {
     log.info("username : " + request.getParameter("username") );
     log.info("password : " + request.getParameter("password") );
+    log.info("rememberMe : " + request.getParameter("rememberMe") );
 
     // 요청 메시지에서 아이디, 비밀번호 추출
     String username = request.getParameter("username");
     String password = request.getParameter("password");
+    String rememberMe = request.getParameter("remember-me");
 
     // 인증토큰 객체 생성
-    Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
+    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+    authToken.setDetails(rememberMe != null && rememberMe.equals("true"));
 
     // 인증 (로그인)
-    authentication = authenticationManager.authenticate(authentication);
+    Authentication authentication = authenticationManager.authenticate(authToken);
     log.info("attempt 실행");
 
     log.info("authenticationManager : " + authenticationManager );
@@ -97,6 +101,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     Users user = customUser.getUser();
     log.info("유저 정보 : {}", user);
 
+    // 자동로그인 설정 확인
+    boolean rememberMe = Boolean.TRUE.equals(authentication.getDetails());
+    log.info("로그인 인증 성공 후 자동 로그인 확인 : {}", rememberMe);
+
     Long id = user.getId();
     String username = user.getUsername();
     List<String> roles = customUser.getAuthorities()
@@ -108,13 +116,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     String jwt = jwtProvider.createToken(String.valueOf(id), username, roles);
 
     // JWT 쿠키에 저장
-    ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
+    ResponseCookieBuilder builder = ResponseCookie.from("jwt", jwt)
                                           .httpOnly(true)
                                           .secure(true)
                                           .path("/")
-                                          .maxAge(Duration.ofDays(5))
-                                          .sameSite("Strict")
-                                          .build();
+                                          .sameSite("Strict");
+
+    if(rememberMe) builder.maxAge(Duration.ofDays(7));
+
+    ResponseCookie cookie = builder.build();
     response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
     // Authorization 응답 헤더 세팅

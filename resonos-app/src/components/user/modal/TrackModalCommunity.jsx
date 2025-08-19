@@ -30,6 +30,7 @@ const TrackModalCommunity = ({onModal, setOnModal, setMusic, onSearchTrack, trac
   // 게시판 대표 음악 설정
   const handleSetMusic = () => {
     setMusic(selectedTrackIds.id)
+    setOnModal(false)
   }
 
   // 스크롤로 트랙 20개씩 추가 요청

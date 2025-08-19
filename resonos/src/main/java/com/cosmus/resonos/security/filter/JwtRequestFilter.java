@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.cosmus.resonos.security.contants.SecurityConstants;
 import com.cosmus.resonos.security.provider.JwtProvider;
 
 import jakarta.servlet.FilterChain;
