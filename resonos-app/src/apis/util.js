@@ -18,3 +18,10 @@ export function formatDateNotDay(datetime) {
   const pad = (n) => n.toString().padStart(2, '0');
   return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
+
+// 시:분:초 까지
+export function formatDateWithSeconds(datetime) {
+  const date = new Date(datetime);
+  const pad = (n) => n.toString().padStart(2, '0');
+  return `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}

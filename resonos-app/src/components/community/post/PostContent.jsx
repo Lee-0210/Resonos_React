@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const PostContent = ({ content, likes, dislikes }) => {
+const PostContent = ({ content, likes, dislikes, boardId, postId }) => {
   return (
     <div className="post-content">
       <div className="content">
@@ -39,7 +39,7 @@ const PostContent = ({ content, likes, dislikes }) => {
           </div>
         </div>
         <div className="onlywriter">
-          <Link className='btn btn-gold' to='/community/edit/boards/1/posts/1'>수정하기</Link>
+          <Link className='btn btn-gold' to={`/community/edit/boards/${boardId}/posts/${postId}`}>수정하기</Link>
           <a className='btn btn-gold' href="#">삭제하기</a>
         </div>
       </div>
