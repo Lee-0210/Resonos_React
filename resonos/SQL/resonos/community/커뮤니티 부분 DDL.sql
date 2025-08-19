@@ -61,7 +61,7 @@ CREATE TABLE `comment` (
     `id` BIGINT NOT NULL,
     `content` TEXT NULL,
     `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-    `user_id` BIGINT NOT NULL,
+    `user_id` BIGINT NULL,
     `type` ENUM(
         'posts',
         'playlist',
@@ -69,7 +69,9 @@ CREATE TABLE `comment` (
     ) NOT NULL,
     `target_id` BIGINT NOT NULL,
     `board_post_id` BIGINT NOT NULL,
-    `parent_comment_id` BIGINT NULL
+    `parent_comment_id` BIGINT NULL,
+    `guest_nickname` VARCHAR(100) NULL,
+    `guest_password` VARCHAR(100) NULL
 );
 
 DROP TABLE IF EXISTS `board_post`;
