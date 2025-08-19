@@ -105,7 +105,7 @@ public class MainPageController {
     // 검색
     @GetMapping("/search")
     public ResponseEntity<?> search(
-            @RequestParam(value="q", required = false) String query,
+            @RequestParam(value="query", required = false) String query,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "type", required = false) String type) {

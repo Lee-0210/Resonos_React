@@ -100,7 +100,9 @@ public class CommunityServiceImpl implements CommunityService {
     public PageInfo<Community> searchCommunities(String query, int pageNum, int pageSize) throws Exception {
         com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
         List<Community> communities = communityMapper.searchCommunities(query);
-        System.out.println("commm" + communities);
+        System.out.println("query param = " + query);
+        System.out.println("community list size = " + communities.size());
+
         return new PageInfo<>(communities);
     }
 
