@@ -63,7 +63,7 @@ public class CommunityServiceImpl implements CommunityService {
         return communityMapper.deleteById(id) > 0;
     }
 
-    
+
 
     @Override
     public boolean deleteAll() throws Exception {
@@ -71,12 +71,9 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public Long setTrack(Long categoryId, Long trackId) throws Exception {
-        if (communityMapper.setTrack(categoryId, trackId)) {
-            return trackId;
-        } else {
-            throw new Exception("Failed to set track for community category");
-        }
+    public boolean setTrack(Long categoryId, String trackId) throws Exception {
+        // update 결과를 boolean 값으로 반환하게 수정함
+        return communityMapper.setTrack(categoryId, categoryId) > 0;
     }
 
 }
