@@ -33,4 +33,7 @@ public class Community {
     // 한줄 소개
     private String intro;
 
+    // DB에 없는 필드 
+    // creatorId - 이름
+    private String creatorName;
 }

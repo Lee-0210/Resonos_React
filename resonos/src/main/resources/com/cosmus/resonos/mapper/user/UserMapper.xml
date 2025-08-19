@@ -331,6 +331,12 @@
     LIMIT #{index}, #{size}
   </select>
 
+  <!-- 커뮤 메인 - creatorId 으로 사용자 이름 조회 -->
+  <select id="getUserNameById" resultType="String">
+    SELECT nickname
+    FROM user
+    WHERE id = #{userId}
+  </select>
 
 
 </mapper>

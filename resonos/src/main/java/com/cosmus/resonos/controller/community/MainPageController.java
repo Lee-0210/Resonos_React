@@ -22,6 +22,7 @@ import com.cosmus.resonos.domain.community.CommunityCategory;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommunityCategoryService;
 import com.cosmus.resonos.service.community.CommunityService;
+import com.cosmus.resonos.service.user.UserService;
 import com.github.pagehelper.PageInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,9 @@ public class MainPageController {
 
     @Autowired
     private CommunityService communityService;
+
+    @Autowired
+    private UserService userService;
 
     // 메인 페이지 데이터
     @GetMapping("/")
