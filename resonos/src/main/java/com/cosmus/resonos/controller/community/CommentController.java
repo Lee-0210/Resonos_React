@@ -89,6 +89,10 @@ public class CommentController {
             comment.setTargetId(postId);
             comment.setBoardPostId(postId);
 
+            // 🔹 대댓글 처리
+            // parentCommentId가 있으면 대댓글, 없으면 최상단 댓글
+            comment.setParentCommentId(request.getParentCommentId());
+
             if (loginUser != null) {
                 // 로그인 상태
                 commentService.writeComment(comment, loginUser);
