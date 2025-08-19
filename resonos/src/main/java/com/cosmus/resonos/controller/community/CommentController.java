@@ -37,49 +37,48 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping()
-    public ResponseEntity<?> getAll(
-        @RequestParam(value ="page", defaultValue = "1", required = false) int page,
-        @RequestParam(value ="size", defaultValue = "10", required = false) int size,
-        @ModelAttribute Pagination pagination
-    ) {
-        try {
-            PageInfo<Comment> pageInfo = commentService.list(page, size);
-            pagination.setPage(page);
-            pagination.setSize(size);
-            pagination.setTotal(pageInfo.getTotal());
+    // @GetMapping()
+    // public ResponseEntity<?> getAll(
+    //     @RequestParam(value ="page", defaultValue = "1", required = false) int page,
+    //     @RequestParam(value ="size", defaultValue = "10", required = false) int size,
+    //     @ModelAttribute Pagination pagination
+    // ) {
+    //     try {
+    //         PageInfo<Comment> pageInfo = commentService.list(page, size);
+    //         pagination.setPage(page);
+    //         pagination.setSize(size);
+    //         pagination.setTotal(pageInfo.getTotal());
 
-            Map<String, Object> response = new HashMap<>();
-            List<Comment> list = pageInfo.getList();
-            response.put("list", list);
-            response.put("pagination", pagination);
+    //         Map<String, Object> response = new HashMap<>();
+    //         List<Comment> list = pageInfo.getList();
+    //         response.put("list", list);
+    //         response.put("pagination", pagination);
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error in getAll", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    //         return new ResponseEntity<>(response, HttpStatus.OK);
+    //     } catch (Exception e) {
+    //         log.error("Error in getAll", e);
+    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getOne(@PathVariable("id") Long  id) {
-        try {
-            Comment entity = commentService.selectById(String.valueOf(id));
-            if (entity == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(entity, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error in getOne", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    // @GetMapping("/{id}")
+    // public ResponseEntity<?> getOne(@PathVariable("id") Long  id) {
+    //     try {
+    //         Comment entity = commentService.selectById(String.valueOf(id));
+    //         if (entity == null) {
+    //             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //         }
+    //         return new ResponseEntity<>(entity, HttpStatus.OK);
+    //     } catch (Exception e) {
+    //         log.error("Error in getOne", e);
+    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
-    @PostMapping("/{commentId}")
+    @PostMapping()
     public ResponseEntity<?> create(
         @PathVariable("communityId") Long communityId,
         @PathVariable("postId") Long postId,
-        @PathVariable("commentId") Long commentId,
         @RequestBody Comment request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
@@ -95,7 +94,7 @@ public class CommentController {
             } else {
                 // 비로그인 상태
                 comment.setGuestNickname(request.getGuestNickname());
-                comment.setGuestPassword(request.getGuestPassword()); // 암호화는 service에서 처리
+                comment.setGuestPassword(request.getGuestPassword());
                 commentService.writeComment(comment, null);
             }
 
@@ -106,47 +105,47 @@ public class CommentController {
         }
     }
 
-    @PutMapping()
-    public ResponseEntity<?> update(@RequestBody Comment entity) {
-        try {
-            boolean result = commentService.updateById(entity);
-            if (result)
-                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-            else
-                return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            log.error("Error in update", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    // @PutMapping()
+    // public ResponseEntity<?> update(@RequestBody Comment entity) {
+    //     try {
+    //         boolean result = commentService.updateById(entity);
+    //         if (result)
+    //             return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    //         else
+    //             return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+    //     } catch (Exception e) {
+    //         log.error("Error in update", e);
+    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> destroy(@PathVariable("id")  Long id) {
-        try {
-            boolean result = commentService.deleteById(String.valueOf(id));
-            if (result)
-                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-            else
-                return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            log.error("Error in destroy", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    // @DeleteMapping("/{id}")
+    // public ResponseEntity<?> destroy(@PathVariable("id")  Long id) {
+    //     try {
+    //         boolean result = commentService.deleteById(String.valueOf(id));
+    //         if (result)
+    //             return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    //         else
+    //             return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+    //     } catch (Exception e) {
+    //         log.error("Error in destroy", e);
+    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
-    // 전체 삭제
-    @DeleteMapping("/all")
-    public ResponseEntity<?> deleteAll() {
-        try {
-            boolean result = commentService.deleteAll();
-            if (result)
-                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-            else
-                return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            log.error("Error in deleteAll", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    // // 전체 삭제
+    // @DeleteMapping("/all")
+    // public ResponseEntity<?> deleteAll() {
+    //     try {
+    //         boolean result = commentService.deleteAll();
+    //         if (result)
+    //             return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+    //         else
+    //             return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+    //     } catch (Exception e) {
+    //         log.error("Error in deleteAll", e);
+    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
 }
