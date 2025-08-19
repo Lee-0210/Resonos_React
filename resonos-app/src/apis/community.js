@@ -26,3 +26,8 @@ export const changeTrack = async (boardId, trackId) => {
     headers: { "Content-Type": "application/json" },
   })
 }
+
+// 게시판 댓글 달기
+export const postComment = async (data,ids) => {
+  return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
+}
