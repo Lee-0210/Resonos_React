@@ -78,6 +78,26 @@ public class CommunityController {
         }
     }
 
+    /**
+     * 게시판의 track 만 update 하는 메서드
+     * @param id
+     * @param entity
+     * @return
+     */
+    @PutMapping("/{id}/tracks")
+    public ResponseEntity<?> updateTrack(@PathVariable("id") Long id, @RequestBody Community entity) {
+        try {
+            boolean result = communityService.setTrack(id, entity.getTrackId());
+            if (result)
+                return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+            else
+                return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("Error in update", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> destroy(@PathVariable("id") Long id) {
         try {
