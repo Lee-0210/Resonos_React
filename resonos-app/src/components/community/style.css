@@ -10,6 +10,13 @@
   color: #b1b1b1;
 }
 
+.commu .update {
+  font-size: 1.4rem;
+  color: var(--main-color);
+  margin-left: auto;
+}
+.commu .update:hover {text-decoration: underline;}
+
 .commu .date {
   margin-left: 15px;
 }
@@ -210,7 +217,14 @@
   display: flex;
   gap: 20px;
   flex-direction: column;
-  padding: 0 100px;
+  padding: 0 80px;
+}
+.commu.board .des {
+  flex: 1;
+}
+.commu.board .des input {width: 100%;}
+.commu.board .des input:focus {
+  outline: none;
 }
 
 /* 게시판 정보 */
@@ -307,7 +321,7 @@
 
 /* ===== 검색 결과 페이지 ===== */
 .commu.search {
-  padding: 0 100px;
+  padding: 0 50px;
 }
 
 .commu.search h3 {
@@ -366,7 +380,7 @@
 
 /* ===== 검색결과 더보기 페이지 ===== */
 .commu.more {
-  padding: 0 100px;
+  padding: 0 50px;
 }
 .commu.more .more-board {
   display: grid;
@@ -421,7 +435,6 @@
 }
 
 .commu.index .right {margin-top: 30px; gap:30px;}
-.commu.board {padding: 0;}
 .commu.search {padding: 0;}
 
 

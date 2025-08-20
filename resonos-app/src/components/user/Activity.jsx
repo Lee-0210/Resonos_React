@@ -1,17 +1,13 @@
-import React, { useCallback } from 'react'
-import MypageTab from './MypageTab'
+import React, { useCallback, useState } from 'react'
 import AlbumReviewCard from './card/AlbumReviewCard'
 import LikedAlbumReviewCard from './card/LikedAlbumReviewCard'
 import TrackReviewCard from './card/TrackReviewCard'
 import LikedTrackReviewCard from './card/LikedTrackReviewCard'
 
-const Activity = ({utl, countAReview, aReviewList, countLaReview, laReviewList, countTReview, tReviewList, countLtReview, ltReviewList, lastPath, onSearchReview, setAReviewList, setLaReviewList, setLtReviewList, setTReviewList}) => {
+const Activity = ({utl, countAReview, aReviewList, countLaReview, laReviewList, countTReview, tReviewList, countLtReview, ltReviewList, lastPath, onSearchReview, setAReviewList, setLaReviewList, setLtReviewList, setTReviewList, active, setActive}) => {
 
   return (
-    <main className="con con-activity position-relative">
-      {/* 왼쪽 리모컨 */}
-      <MypageTab lastPath={lastPath}/>
-
+    <>
       {/* 통계 */}
       <section className="mypage-grid">
         <div className="grid-item">
@@ -59,7 +55,7 @@ const Activity = ({utl, countAReview, aReviewList, countLaReview, laReviewList, 
         onSearchReview={onSearchReview}
         setLtReviewList={setLtReviewList}
       />
-    </main>
+    </>
   )
 }
 

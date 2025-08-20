@@ -102,9 +102,9 @@ public class CommunityController {
     @PutMapping("/{id}/intro")
     public ResponseEntity<?> updateIntro(@PathVariable("id") Long id, @RequestBody Community entity) {
         try {
-            boolean result = communityService.setIntro(id, entity.getIntro());
+            boolean result = communityService.setIntro(id, entity.getDescription());
             if (result)
-                return new ResponseEntity<>(entity.getIntro(), HttpStatus.OK);
+                return new ResponseEntity<>(entity.getDescription(), HttpStatus.OK);
             else
                 return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {

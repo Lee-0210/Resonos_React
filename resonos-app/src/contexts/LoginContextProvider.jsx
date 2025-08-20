@@ -184,7 +184,6 @@ const LoginContextProvider = ({children}) => {
 
   useEffect(() => {
     const path = location.pathname.split('/')[3]
-    console.log(path)
     if (path !== "more") {
       localStorage.removeItem("keyword");
       localStorage.removeItem("type");

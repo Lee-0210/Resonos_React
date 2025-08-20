@@ -5,7 +5,6 @@ import PostResultCard from './card/PostResultCard'
 
 const SearchMore = ({keyword, type, searchedBoard, searchedPost, pagination, onPageChange}) => {
 
-  console.log(searchedBoard)
   return (
     <main className="commu more">
       {

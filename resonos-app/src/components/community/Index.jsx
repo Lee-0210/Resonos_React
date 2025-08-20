@@ -6,7 +6,7 @@ import BoardTitleCard from './card/BoardTitleCard'
 import { Link } from 'react-router-dom'
 import PostTitleCard from './card/PostTitleCard'
 
-const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCategories, newCategories}) => {
+const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCategories, newCategories, topCommunities, newCommunities}) => {
 
   return (
     <main className='commu index'>
@@ -31,7 +31,11 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
             <ul>
               {
                 latestPosts.map(post => (
-                  <PostListCard key={post.id} post={post}/>
+                  <PostListCard
+                    key={post.id}
+                    post={post}
+                    showName={true}
+                  />
                 ))
               }
             </ul>
@@ -42,7 +46,12 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
             <ul>
               {
                 popularPosts.map(post => (
-                  <PostListCard key={post.id} post={post} isBoard={true}/>
+                  <PostListCard
+                    key={post.id}
+                    post={post}
+                    isBoard={true}
+                    showName={true}
+                  />
                 ))
               }
             </ul>
@@ -76,7 +85,7 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
             <h3>게시판 순위 Top5</h3>
             <ul>
               {
-                topCategories.map((board, index) => (
+                topCommunities.map((board, index) => (
                   <BoardRankingCard
                     key={board.id}
                     board={board}
@@ -91,7 +100,7 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
             <h3>신설 게시판</h3>
             <ul>
               {
-                newCategories.map(board => (
+                newCommunities.map(board => (
                   <BoardTitleCard item={board} key={board.id} />
                 ))
               }

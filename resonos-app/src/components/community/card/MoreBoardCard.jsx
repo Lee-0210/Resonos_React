@@ -5,8 +5,8 @@ const MoreCard = ({board}) => {
 
     const navigate = useNavigate()
 
-    const handleNavigate = () => {
-      navigate('/community/boards/98/posts/98')
+    const handleNavigate = postId => {
+      navigate(`/community/boards/${board.id}/posts/${postId}`)
     }
 
   return (
@@ -20,21 +20,13 @@ const MoreCard = ({board}) => {
         </Link>
       </h3>
       <ul>
-        <li onClick={handleNavigate}>
-          <span>게시글 제목</span> <span className="board-name">작성자명</span>
-        </li>
-        <li>
-          <span>게시글 제목</span> <span className="board-name">작성자명</span>
-        </li>
-        <li>
-          <span>게시글 제목</span> <span className="board-name">작성자명</span>
-        </li>
-        <li>
-          <span>게시글 제목</span> <span className="board-name">작성자명</span>
-        </li>
-        <li>
-          <span>게시글 제목</span> <span className="board-name">작성자명</span>
-        </li>
+        {
+          board?.boardPosts?.map(post => (
+            <li onClick={() => handleNavigate(post.id)}>
+              <span>{post.title}</span> <span className="board-name">작성자</span>
+            </li>
+          ))
+        }
       </ul>
     </div>
   )
