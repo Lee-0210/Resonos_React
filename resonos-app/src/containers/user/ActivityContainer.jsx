@@ -35,7 +35,6 @@ const ActivityContainer = () => {
 
   // 리뷰 검색, 요청 함수
   const onSearchReview = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef, type) => {
-    console.log(keyword)
     if (loadingRef.current || allLoadedRef.current) return
 
     loadingRef.current = true
@@ -174,12 +173,12 @@ const ActivityContainer = () => {
             <button
               className={`${active ? 'active' : ''}`}
               type="button"
-              onClick={() => setActive(!active)}
+              onClick={() => setActive(true)}
               >리뷰</button>
             <button
               className={`${!active ? 'active' : ''}`}
               type="button"
-              onClick={() => setActive(!active)}
+              onClick={() => setActive(false)}
             >커뮤니티</button>
           </div>
           {

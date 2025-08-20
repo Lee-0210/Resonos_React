@@ -6,7 +6,7 @@ const Notification = ({lastPath, notiList, count, readAll, deleteAll, onToggleRe
 
   return (
     <main className='con con-noti position-relative'>
-      <MypageTab lastPaht={lastPath}/>
+      <MypageTab lastPath={lastPath}/>
       <section className="info-wrapper">
         <div className="info-section">
           <div className="title">

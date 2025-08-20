@@ -11,8 +11,8 @@ export const searchCommunity = async (keyword, type, page) => {
 }
 
 /* 게시판 상세 */
-export const getBoardData = async id => {
-  return api.get(`/community/boards/${id}`)
+export const getBoardData = async (id, pPage, nPage) => {
+  return api.get(`/community/boards/${id}?pPage=${pPage}&nPage=${nPage}`)
 }
 
 /* 게시글 상세 */

@@ -4,13 +4,14 @@ import Footer from '../../components/Footer/Footer'
 import BoardDetail from '../../components/community/Board'
 import * as cr from '../../apis/community'
 import * as ur from '../../apis/user'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import TrackModalCommunity from '../../components/user/modal/TrackModalCommunity'
 import { LoginContext } from '../../contexts/LoginContextProvider'
 
 const BoardContainer = () => {
 
   const {userInfo} = useContext(LoginContext)
+  const [searchParams, setSearchParams] = useSearchParams()
 
   // 트랙
   const [onModal, setOnModal] = useState(false)
@@ -19,13 +20,32 @@ const BoardContainer = () => {
   // 게시판
   const [board, setBoard] = useState()
   const [posts, setPosts] = useState([])
-  const [notices, setNotices] = useState([])
-  const [onButton, setOnButton] = useState(false)
   const [postPagination, setPostPagination] = useState({})
+  const [notices, setNotices] = useState([])
+  const [noticePagination, setNoticePagination] = useState({})
+  const [onButton, setOnButton] = useState(false)
+
+  // 페이지
+  const pPage = searchParams?.get('pPage') || 1
+  const nPage = searchParams?.get('nPage') || 1
 
   const isManager = useRef(false)
 
   const params = useParams()
+
+  const onChangePostPage = pageNum => {
+    setSearchParams(prev => ({
+      nPage,
+      pPage: pageNum
+    }))
+  }
+
+  const onChangeNoticePage = pageNum => {
+    setSearchParams(prev => ({
+      pPage,
+      nPage: pageNum
+    }))
+  }
 
 
   // 한줄소개 업데이트 요청
@@ -98,24 +118,27 @@ const BoardContainer = () => {
   // 게시판에 대한 요청
   const getBoardData = async () => {
     try {
-      const response = await cr.getBoardData(params.id)
+      const response = await cr.getBoardData(params.id, pPage, nPage)
       if(response.status === 200) {
         const data = response.data
         console.log(data)
         setBoard(data.community)
         setPosts(data.posts)
         setNotices(data.notices)
-        isManager.current = data.community.creatorId === userInfo.id
+        setPostPagination(data.postPagination)
+        setNoticePagination(data.noticePagination)
+        if(userInfo)
+          isManager.current = data.community.creatorId === userInfo.id
       }
     } catch (e) {
-      console.error('error :', e.response)
+      console.error('error :', e)
     }
   }
 
   // 마운트 시 데이터 요청
   useEffect(() => {
     getBoardData()
-  }, [])
+  }, [pPage, nPage])
 
   return (
     <>
@@ -127,9 +150,13 @@ const BoardContainer = () => {
           board={board}
           posts={posts}
           notices={notices}
+          postPagination={postPagination}
+          noticePagination={noticePagination}
           onButton={onButton}
           setOnButton={setOnButton}
           onUpdate={onUpdate}
+          onChangePostPage={onChangePostPage}
+          onChangeNoticePage={onChangeNoticePage}
         />
         <TrackModalCommunity
           onModal={onModal}
