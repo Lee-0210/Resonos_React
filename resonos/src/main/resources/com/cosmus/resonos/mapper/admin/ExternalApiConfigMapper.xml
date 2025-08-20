@@ -39,4 +39,11 @@
     DELETE FROM external_api_config WHERE id = #{id}
   </delete>
 
+  <!-- API 키 설정 업데이트 -->
+  <update id="configUpdate">
+    UPDATE external_api_config
+    SET apiKey = #{apiKey}
+    WHERE id = #{id}
+  </update>
+
 </mapper>

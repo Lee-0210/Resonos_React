@@ -92,19 +92,37 @@ public class AdminPnSController {
         return ResponseEntity.ok(Map.of("success", success, "message", success ? "등록 완료" : "등록 실패"));
     }
 
-    /** 환경설정 수정/저장 (name 기준 - 기존 saveOrUpdateSetting 로직 활용) */
+    /** 환경설정 수정/저장 */
     @PostMapping("/setting/update-batch")
     public ResponseEntity<?> updateSettings(@RequestBody Map<String, String> params) throws Exception {
-        log.info("updateSetting 호출 : {}", params);
+        log.info("updateSettings 호출 : {}", params);
 
-        saveOrUpdateSetting(params.get("allow_registration") != null ? "yes" : "no", "allow_registration", "신규 가입 허용 여부");
-        saveOrUpdateSetting(params.get("community_board_enabled") != null ? "yes" : "no", "community_board_enabled", "커뮤니티 게시판 활성화 여부");
-        saveOrUpdateSetting(params.get("external_music_data_sync") != null ? "yes" : "no", "external_music_data_sync", "음악 데이터 외부 연동 활성화 여부");
-        saveOrUpdateSetting(params.getOrDefault("default_theme", "dark"), "default_theme", "기본 테마 설정 (다크/라이트)");
-        saveOrUpdateSetting(params.getOrDefault("notice", ""), "notice", "공지사항");
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            String name = entry.getKey();
+            String value = entry.getValue();
+            String description = entry.getValue();
+            Setting setting = settingService.selectByName(name);
+            Date now = new Date();
+            if (setting == null) {
+                setting = new Setting();
+                setting.setName(name);
+                setting.setDescription(description);
+                setting.setValue(value);
+                setting.setCreatedAt(now);
+                setting.setUpdatedAt(now);
+                settingService.insert(setting);
+                log.info("새 설정 삽입: name={}, description={}, value={}", name, description, value);
+            } else {
+                setting.setValue(value);
+                setting.setUpdatedAt(now);
+                settingService.update(setting);
+                log.info("기존 설정 수정: id={}, name={}, description={}, 값={}", setting.getId(), name, description, value);
+            }
+        }
 
         return ResponseEntity.ok(Map.of("success", true, "message", "설정 업데이트 완료"));
     }
+
 
     /** 환경설정 삭제 */
     @DeleteMapping("/setting/{id}")

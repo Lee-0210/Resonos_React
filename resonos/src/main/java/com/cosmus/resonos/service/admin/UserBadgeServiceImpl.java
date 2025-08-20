@@ -211,4 +211,38 @@ public class UserBadgeServiceImpl implements UserBadgeService {
     public List<UserBadge> listByUser(Long userId) throws Exception {
         return userBadgeMapper.findBadgesByUserId(userId);
     }
+
+    @Override
+    public int grantBadgesAuto(String type) throws Exception {
+        int count = 0;
+
+    String badgeType = (type != null) ? type : "";
+    switch (badgeType) {
+        case "POST_COUNT":
+            count = userBadgeMapper.grantPostBadgesAll();
+            break;
+        case "COMMENT_COUNT":
+            count = userBadgeMapper.grantCommentBadgesAll();
+            break;
+        case "LIKE_COUNT":
+            count = userBadgeMapper.grantLikeBadgesAll();
+            break;
+        case "FOLLOW_COUNT":
+            count = userBadgeMapper.grantFollowBadgesAll();
+            break;
+        case "":
+            count += userBadgeMapper.grantPostBadgesAll();
+            count += userBadgeMapper.grantCommentBadgesAll();
+            count += userBadgeMapper.grantLikeBadgesAll();
+            count += userBadgeMapper.grantFollowBadgesAll();
+            break;
+        default:
+            throw new IllegalArgumentException("알 수 없는 지급 유형: " + badgeType);
+        }
+        return count;
+    }
+
+
+
+
 }

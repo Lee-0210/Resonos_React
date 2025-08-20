@@ -268,7 +268,7 @@ const AdminBadgeManageContainer = () => {
             required
             options={[
               { value: "POST_COUNT", label: "게시글 수" },
-              { value: "FOLLOWER_COUNT", label: "팔로워 수" },
+              { value: "FOLLOW_COUNT", label: "팔로워 수" },
               { value: "COMMENT_COUNT", label: "댓글 수" },
             ]}
           />
