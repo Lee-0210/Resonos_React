@@ -122,6 +122,7 @@ const Track = () => {
           popup: 'album-wrapper'
         }
       })
+      setPlayLists(response.data.playLists)
     } catch (error) {
       if (error.response.data === 'User is null') {
         swal.fire({
@@ -379,7 +380,7 @@ const Track = () => {
       <SlideIn delay={0.5} direction="up">
         <TrackInfo styles={styles} track={track} album={album} artist={artist} score={score}
           userId={userId} isTrackLikedByUser={isTrackLikedByUser} trackLikeCount={trackLikeCount}
-          toggleLike={toggleLike} userPlaylist={userPlaylist}
+          toggleLike={toggleLike} userPlaylist={userPlaylist} playLists={playLists} emptyPlayList={emptyPlayList}
           addTrackToPlaylist={addTrackToPlaylist} />
       </SlideIn>
       <SlideIn delay={1} direction="up">

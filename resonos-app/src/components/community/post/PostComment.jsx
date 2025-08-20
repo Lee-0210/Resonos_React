@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom'
 import { LoginContext } from '../../../contexts/LoginContextProvider'
 import CommentEdit from './CommentEdit'
 
-const PostComment = ({ comments, commentCount, editComment }) => {
+const PostComment = ({ comments, commentCount, editComment, postReply }) => {
 
   const [replyTo, setReplyTo] = useState(null)
   const [isEdit, setIsEdit] = useState(null)
 
-  const { userInfo } = useContext(LoginContext)
+  const { userInfo, isLogin  } = useContext(LoginContext)
+
 
   const handleReplyClick = (i) => {
     setReplyTo(replyTo === i ? null : i)
@@ -53,7 +54,13 @@ const PostComment = ({ comments, commentCount, editComment }) => {
                   <p>{com.createdAt}</p>
                   <p className="btn btn-gold">👍 {com.commentLikes}</p>
                   <p className="btn btn-gold">👎 {com.commentDislikes}</p>
-                  {userInfo.id === com.userId && (
+                  { !com.userId && (
+                    <>
+                      <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
+                      <div className="btn btn-gold">삭제</div>
+                    </>
+                  )}
+                  {isLogin && userInfo.id === com.userId && (
                     <>
                       <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
                       <div className="btn btn-gold">삭제</div>
@@ -87,7 +94,8 @@ const PostComment = ({ comments, commentCount, editComment }) => {
               </div>
             ))}
             {replyTo === idx && (
-              <ReplyForm userInfo={userInfo} cancel={handleCancelReplyClick} />
+              <ReplyForm userInfo={userInfo} cancel={handleCancelReplyClick}
+                      postReply={postReply} com={com} />
             )}
           </div>
         )))}
