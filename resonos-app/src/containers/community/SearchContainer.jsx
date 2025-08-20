@@ -9,6 +9,8 @@ const SearchContainer = () => {
 
   const [searchedBoard, setSearchedBoard] = useState([])
   const [searchedPost, setSearchedPost] = useState([])
+  const [postPagination, setPostPagination] = useState({})
+  const [boardPagination, setBoardPagination] = useState({})
 
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate()
@@ -16,12 +18,7 @@ const SearchContainer = () => {
   const q = searchParams.get('q');
 
   const onNavigate = type => {
-    navigate("/community/search/more?page=1", {
-      state: {
-        keyword: q,
-        type
-      }
-    })
+    navigate(`/community/search/more?type=${type}&q=${q}&page=1`)
   }
 
   const getSearchResult = async (keyword) => {
@@ -33,6 +30,8 @@ const SearchContainer = () => {
         const data = response.data
         setSearchedBoard(data.searchedCommunities)
         setSearchedPost(data.searchedPosts)
+        setPostPagination(data.postPagination)
+        setBoardPagination(data.communityPagination)
       }
     } catch(e) {
       console.error('error :', e)
@@ -52,6 +51,8 @@ const SearchContainer = () => {
           onNavigate={onNavigate}
           searchedBoard={searchedBoard}
           searchedPost={searchedPost}
+          postPagination={postPagination}
+          boardPagination={boardPagination}
         />
       </div>
       <Footer />

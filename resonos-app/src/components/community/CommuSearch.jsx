@@ -2,7 +2,7 @@ import React from 'react'
 import PostResultCard from './card/PostResultCard'
 import BoardResultCard from './card/BoardResultCard'
 
-const CommuSearch = ({keyword, onNavigate, searchedBoard, searchedPost}) => {
+const CommuSearch = ({keyword, onNavigate, searchedBoard, searchedPost, postPagination, boardPagination}) => {
 
   const handleNavigate = type => {
     onNavigate(type)
@@ -13,7 +13,7 @@ const CommuSearch = ({keyword, onNavigate, searchedBoard, searchedPost}) => {
       <h2>검색결과 : "{keyword}"</h2>
       {/* 게시판 결과 */}
       <div>
-        <h3>게시판 검색 결과</h3><span className='count'>192건</span>
+        <h3>게시판 검색 결과</h3><span className='count'>{boardPagination.total} 건</span>
         <div className="board-result">
           <ul>
             {
@@ -35,7 +35,7 @@ const CommuSearch = ({keyword, onNavigate, searchedBoard, searchedPost}) => {
       </div>
       {/* 게시글 결과 */}
       <div>
-        <h3>게시글 검색 결과</h3><span className='count'>192건</span>
+        <h3>게시글 검색 결과</h3><span className='count'>{postPagination.total} 건</span>
         <div className="post-result">
           <ul>
             {
