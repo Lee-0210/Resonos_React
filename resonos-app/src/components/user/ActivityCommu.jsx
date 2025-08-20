@@ -1,7 +1,8 @@
 import React from 'react'
 import CommunityCard from './card/CommunityCard'
+import CommentCard from './card/CommentCard'
 
-const ActivityCommu = ({commuList, postList, commentList}) => {
+const ActivityCommu = ({commuList, postList, commentList, utlCommu}) => {
   return (
     <>
       {/* 통계 */}
@@ -9,22 +10,22 @@ const ActivityCommu = ({commuList, postList, commentList}) => {
         <div className="grid-item">
           <div className="mypage-card">
             <h3>받은 좋아요 (게시글)</h3>
-            <span className="count">123</span>
+            <span className="count">{utlCommu.postLikes}</span>
           </div>
         </div>
         <div className="grid-item">
           <div className="mypage-card">
             <h3>받은 좋아요 (댓글)</h3>
-            <span className="count">123</span>
+            <span className="count">{utlCommu.commentLikes}</span>
           </div>
         </div>
       </section>
 
-      {/* 나의 게시판 */}
+      {/* 내 게시판 */}
       <div className="info-wrapper">
         <div className="info-section">
           <div className='title'>
-            <h2 className="text-start">나의 게시판</h2>
+            <h2 className="text-start">내 게시판</h2>
           </div>
           <ul className="ul-list my-board">
             {
@@ -42,11 +43,11 @@ const ActivityCommu = ({commuList, postList, commentList}) => {
         </div>
       </div>
 
-      {/* 나의 게시글 */}
+      {/* 내 게시글 */}
       <div className="info-wrapper">
         <div className="info-section">
           <div className='title'>
-            <h2 className="text-start">나의 게시글</h2>
+            <h2 className="text-start">내 게시글</h2>
           </div>
           <ul className="ul-list my-board">
             {
@@ -62,11 +63,11 @@ const ActivityCommu = ({commuList, postList, commentList}) => {
         </div>
       </div>
 
-      {/* 나의 댓글 */}
+      {/* 내 댓글 */}
       <div className="info-wrapper">
         <div className="info-section">
           <div className='title'>
-            <h2 className="text-start">나의 댓글</h2>
+            <h2 className="text-start">내 댓글</h2>
           </div>
           <ul className="ul-list my-board">
             {
@@ -74,8 +75,11 @@ const ActivityCommu = ({commuList, postList, commentList}) => {
               ?
               <p className="no-content">작성한 댓글이 없습니다.</p>
               :
-              commentList?.map(() => (
-                <li>응애</li>
+              commentList?.map(comment => (
+                <CommentCard
+                  key={comment.id}
+                  comment={comment}
+                />
               ))
             }
           </ul>

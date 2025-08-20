@@ -71,7 +71,7 @@ const AlbumReviewCard = ({countAReview, aReviewList, onSearchReview, setAReviewL
       <div className="info-section ar">
         <div className="title">
           <div>
-            <h2 className="text-start">나의 앨범 리뷰</h2>
+            <h2 className="text-start">내 앨범 리뷰</h2>
             <span className="count">{countAReview}</span>
           </div>
           <div className="text-center position-relative">

@@ -24,6 +24,7 @@ import com.cosmus.resonos.domain.admin.UsersTotalLikes;
 import com.cosmus.resonos.domain.user.GenreCount;
 import com.cosmus.resonos.domain.user.PublicUserDto;
 import com.cosmus.resonos.domain.user.UserAuth;
+import com.cosmus.resonos.domain.user.UserComment;
 import com.cosmus.resonos.domain.user.UserNoti;
 import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.mapper.admin.UserRoleMapper;
@@ -154,7 +155,7 @@ public class UserServiceImpl implements UserService {
     // }
 
 
-    // react에서 회원 정보 수정을 위해서 새롭게 작성 됨 
+    // react에서 회원 정보 수정을 위해서 새롭게 작성 됨
     @Transactional
     @Override
     public boolean update(Users user) throws Exception {
@@ -456,5 +457,15 @@ public class UserServiceImpl implements UserService {
         @Override
         public String getUserNameById(Long userId) throws Exception {
             return userMapper.getUserNameById(userId);
+        }
+
+        @Override
+        public UsersTotalLikes usersTotalCommuLikes(Long userId) throws Exception {
+            return userMapper.usersTotalCommuLikes(userId);
+        }
+
+        @Override
+        public List<UserComment> usersComments(Long userId) throws Exception {
+            return userMapper.usersComments(userId);
         }
 }

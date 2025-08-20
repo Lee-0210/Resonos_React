@@ -278,6 +278,35 @@
     LEFT JOIN album_review ar ON rl.review_type = 'ALBUM' AND rl.review_id = ar.id
     WHERE (tr.user_id = #{userId} OR ar.user_id = #{userId});
   </select>
+
+  <!-- 유저 커뮤니티 게시글, 댓글 좋아요 -->
+  <select id="usersTotalCommuLikes" resultType="UsersTotalLikes">
+    SELECT
+      SUM(CASE WHEN ld.type = 'comment' THEN 1 ELSE 0 END) AS commentLikes,
+      SUM(CASE WHEN ld.type = 'post' THEN 1 ELSE 0 END) AS postLikes,
+      COUNT(*) AS totalLikes
+    FROM likes_dislikes ld
+    WHERE ld.user_id = #{userId}
+  </select>
+
+  <!-- 유저의 커뮤니티 댓글 리스트 -->
+  <select id="usersComments" resultType="UserComment">
+    SELECT
+      c.id,
+	    bp.id AS post_id,
+      bp.title,
+      c.content,
+      bp.community_id AS board_id,
+      c.created_at,
+      COUNT(ld.id) AS likes
+    FROM comment c
+    JOIN board_post bp ON bp.id = c.board_post_id
+    LEFT JOIN likes_dislikes ld
+      ON ld.target_id = c.id
+    WHERE c.user_id = #{userId}
+    GROUP BY c.id, bp.title, c.content, c.created_at
+  </select>
+
   <!-- 유저 제재 사유 banUser -->
   <update id="banUser">
     UPDATE user

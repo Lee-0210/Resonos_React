@@ -71,7 +71,7 @@ const TrackReviewCard = ({countTReview, tReviewList, onSearchReview, setTReviewL
       <div className="info-section tr">
         <div className="title">
           <div>
-            <h2 className="text-start">나의 트랙 리뷰</h2>
+            <h2 className="text-start">내 트랙 리뷰</h2>
             <span className="count">{countTReview}</span>
           </div>
           <div className="text-center position-relative">

@@ -24,7 +24,7 @@ const Activity = ({utl, countAReview, aReviewList, countLaReview, laReviewList, 
         </div>
       </section>
 
-      {/* 나의 앨범 리뷰 */}
+      {/* 내 앨범 리뷰 */}
       <AlbumReviewCard
         countAReview={countAReview}
         aReviewList={aReviewList}
@@ -40,7 +40,7 @@ const Activity = ({utl, countAReview, aReviewList, countLaReview, laReviewList, 
         setLaReviewList={setLaReviewList}
       />
 
-      {/* 나의 트랙 리뷰 */}
+      {/* 내 트랙 리뷰 */}
       <TrackReviewCard
         countTReview={countTReview}
         tReviewList={tReviewList}

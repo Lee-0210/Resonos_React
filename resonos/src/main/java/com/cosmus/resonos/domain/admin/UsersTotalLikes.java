@@ -11,5 +11,9 @@ public class UsersTotalLikes {
 
   private int trackLikes;
   private int albumLikes;
+
+  private int commentLikes;
+  private int postLikes;
+
   private int totalLikes;
 }
