@@ -1,28 +1,47 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { LoginContext } from '../../../contexts/LoginContextProvider'
 
-const ReplyForm = ({ userInfo, cancel, postReply, com }) => {
+const ReplyForm = ({ cancel, postReply, com }) => {
 
+  const [nick, setNick] = useState('')
+  const [tempPw, setTempPw] = useState('')
   const [content, setContent] = useState('')
+
+  const { isLogin } = useContext(LoginContext)
+
   const handlePostReply = (e, com, content) => {
     e.preventDefault()
-    const data = {
-      content : content,
-      parentCommentId : com.id
+    if(isLogin) {
+      const data = {
+        content: content,
+        parentCommentId: com.id
+      }
+      postReply(data)
     }
-    postReply(data)
+    else {
+      const data = {
+        content: content,
+        parentCommentId: com.id,
+        guestNickname : nick,
+        guestPassword : tempPw
+      }
+      postReply(data)
+    }
     setContent('')
+    setNick('')
+    setTempPw('')
     cancel()
   }
 
   return (
     <div className='reply-form'>
       <form>
-        {!userInfo && (
+        {!isLogin && (
           <div className="for-unlogin">
-            <input id="nickname" type="text" 
-            placeholder='ㅇㅇ' required/>
-            <input id="tempPw" type="password"
-            placeholder='비밀번호' required />
+            <input id="nickname" type="text" value={nick}
+            placeholder='ㅇㅇ' onChange={(e) => setNick(e.target.value)} required/>
+            <input id="tempPw" type="password" value={tempPw}
+            placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
           </div>
         )}
         <textarea onChange={(e) => setContent(e.target.value)} required></textarea>
