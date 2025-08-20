@@ -1,11 +1,14 @@
 package com.cosmus.resonos.mapper.community;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.ComVote;
+import com.cosmus.resonos.domain.community.ComVoteArgument;
 import com.github.pagehelper.PageInfo;
 
 @Mapper
@@ -57,4 +60,16 @@ public interface BoardPostMapper {
     // 모든 게시글 가져오기
     public List<BoardPost> getAllPosts() throws Exception;
 
+    // vote 기능 
+
+    // 게시글의 투표 리스트 조회
+    List<ComVote> findVotesByPostId(@Param("postId") Long postId);
+    // 투표 선택지 리스트 조회
+    List<ComVoteArgument> findArgumentsByVoteId(@Param("voteId") Long voteId);
+    // 각 선택지별 투표수 조회 (optional: 한번에 몰아서 처리 가능)
+    int countVoteResults(@Param("argId") Long argId);
+    // 커뮤니티 ID 목록에 해당하는 게시글 조회
+    public List<BoardPost> getPostsByCommunityIds(List<Long> communityIds);
+
+    
 }

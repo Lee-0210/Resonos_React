@@ -255,4 +255,41 @@
 </select>
 
 
+<!-- vote  -->
+<!-- 게시글 투표 목록 -->
+<select id="findVotesByPostId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVote">
+  SELECT id, post_id, title, is_completed
+  FROM com_vote
+  WHERE post_id = #{postId}
+  ORDER BY created_at DESC
+</select>
+
+<!-- 투표 선택지 목록 -->
+<select id="findArgumentsByVoteId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVoteArgument">
+  SELECT id, vote_id, content
+  FROM com_vote_argument
+  WHERE vote_id = #{voteId}
+</select>
+
+<!-- 선택지별 투표 수 계산 -->
+<select id="countVoteResults" parameterType="long" resultType="int">
+  SELECT COALESCE(SUM(count), 0)
+  FROM vote_result
+  WHERE arg_id = #{argId}
+</select>
+
+<!-- 키워드 기본 검색을 위한 - 커뮤니티 ID 목록에 해당하는 게시글 조회 -->
+<select id="getPostsByCommunityIds" resultType="com.cosmus.resonos.domain.community.BoardPost">
+  SELECT bp.*
+  FROM board_post bp
+  WHERE bp.community_id IN
+  <foreach collection="list" item="communityId" open="(" separator="," close=")">
+    #{communityId}
+  </foreach>
+  ORDER BY bp.created_at DESC
+</select>
+
+
+
+
 </mapper>

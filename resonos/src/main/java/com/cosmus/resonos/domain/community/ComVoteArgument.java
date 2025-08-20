@@ -14,5 +14,8 @@ public class ComVoteArgument {
 
     private String content; 
 
+    // DB 상 없는 컬럼 
+    private int voteCount;  // 집계용
+
 
 }

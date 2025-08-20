@@ -1,11 +1,16 @@
 package com.cosmus.resonos.service.community;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.ComVote;
+import com.cosmus.resonos.domain.community.ComVoteArgument;
 import com.cosmus.resonos.mapper.community.BoardPostMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -132,6 +137,65 @@ public class BoardPostServiceImpl implements BoardPostService {
     public List<BoardPost> getAllPosts() throws Exception {
         return boardPostMapper.getAllPosts();
     }
+
+    // vote 
+    @Override
+    public List<ComVote> getVotesByPostId(Long postId) throws Exception {
+        return boardPostMapper.findVotesByPostId(postId);
+    }
+
+    @Override
+    public List<ComVoteArgument> getArgumentsByVoteId(Long voteId) throws Exception {
+        return boardPostMapper.findArgumentsByVoteId(voteId);
+    }
+
+    @Override
+    public int getVoteCountByArgumentId(Long argId) throws Exception {
+        return boardPostMapper.countVoteResults(argId);
+    }
+
+
+    @Override
+        public Map<String, Object> getVotesWithResultsByPostId(Long postId) throws Exception {
+            Map<String, Object> result = new HashMap<>();
+
+            // 1. 해당 게시글 투표 리스트 조회
+            List<ComVote> votes = boardPostMapper.findVotesByPostId(postId);
+            List<Map<String, Object>> voteList = new ArrayList<>();
+
+            for (ComVote vote : votes) {
+                Map<String, Object> voteMap = new HashMap<>();
+                voteMap.put("id", vote.getId());
+                voteMap.put("title", vote.getTitle());
+                // voteMap.put("isCompleted", vote.isCompleted());
+
+                // 2. 각 투표별 선택지 조회
+                List<ComVoteArgument> arguments = boardPostMapper.findArgumentsByVoteId(vote.getId());
+                List<Map<String, Object>> argList = new ArrayList<>();
+
+                for (ComVoteArgument arg : arguments) {
+                    Map<String, Object> argMap = new HashMap<>();
+                    argMap.put("id", arg.getId());
+                    argMap.put("content", arg.getContent());
+
+                    // 3. 선택지별 투표 수 조회
+                    int count = boardPostMapper.countVoteResults(arg.getId());
+                    argMap.put("voteCount", count);
+
+                    argList.add(argMap);
+                }
+
+                voteMap.put("arguments", argList);
+                voteList.add(voteMap);
+            }
+
+            result.put("postId", postId);
+            result.put("votes", voteList);
+
+            return result;
+        }
+
+
 
 
 

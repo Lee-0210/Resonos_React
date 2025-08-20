@@ -1,12 +1,17 @@
 package com.cosmus.resonos.service.community;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.Community;
+import com.cosmus.resonos.mapper.community.BoardPostMapper;
 import com.cosmus.resonos.mapper.community.CommunityMapper;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 @Service
@@ -14,6 +19,9 @@ public class CommunityServiceImpl implements CommunityService {
 
     @Autowired
     private CommunityMapper communityMapper;
+
+    @Autowired
+    private BoardPostMapper boardPostMapper;
 
     @Override
     public List<Community> list() throws Exception{
@@ -97,13 +105,39 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public PageInfo<Community> searchCommunities(String query, int pageNum, int pageSize) throws Exception {
-        com.github.pagehelper.PageHelper.startPage(pageNum, pageSize);
-        List<Community> communities = communityMapper.searchCommunities(query);
-        System.out.println("query param = " + query);
-        System.out.println("community list size = " + communities.size());
+    public PageInfo<Community> searchCommunities(String query, int page, int size) throws Exception {
+        // 1) community 단독으로 페이징 (중복 없음)
+        PageHelper.startPage(page, size);
+        List<Community> communities = communityMapper.searchCommunitiesBasic(query);
+        PageInfo<Community> pageInfo = new PageInfo<>(communities);
 
-        return new PageInfo<>(communities);
+        // 2) 커뮤니티 id 리스트 추출
+        List<Long> communityIds = communities.stream()
+                                            .map(Community::getId)
+                                            .collect(Collectors.toList());
+
+        // 3) 게시글 별도 조회 후 매핑 (필요에 따라 구현)
+        if (!communityIds.isEmpty()) {
+            List<BoardPost> posts = boardPostMapper.getPostsByCommunityIds(communityIds);
+            mapPostsToCommunities(posts, communities);
+        }
+
+        return pageInfo;
     }
+
+    private void mapPostsToCommunities(List<BoardPost> posts, List<Community> communities) {
+        Map<Long, Community> communityMap = communities.stream()
+                                                    .collect(Collectors.toMap(Community::getId, c -> c));
+        for (BoardPost post : posts) {
+            Community community = communityMap.get(post.getCommunityId());
+            if (community != null) {
+                community.getBoardPosts().add(post);
+            }
+        }
+    }
+
+
+
+
 
 }

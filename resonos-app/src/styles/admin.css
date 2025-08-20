@@ -317,7 +317,7 @@ div.admin.mb-3 button {
 
 
 /* 1440px 이하: 왼쪽에서 '전체 메뉴' 글씨만 보이게 + hover 시 전체 메뉴 */
-@media (max-width: 1440px) {
+@media (max-width: 1600px) {
   .admin .quick-menu {
     position: fixed;
     top: 50%;
@@ -376,7 +376,7 @@ div.admin.mb-3 button {
 
 
 /* 1280px 이하: 상단에서 '퀵메뉴' 글씨만 보이게 + hover 시 전체 메뉴 */
-@media (max-width: 1280px) {
+@media (max-width: 1440px) {
   .admin .quick-menu {
     position: fixed;
     top: -65px; /* 일부 숨김 */
@@ -408,7 +408,7 @@ div.admin.mb-3 button {
 
   /* hover 시 메뉴 전체 노출 */
   .admin .quick-menu:hover {
-    top: 80px;
+    top: 95px;
   }
 
   /* hover 시 라벨 제거 */

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cosmus.resonos.mapper.community.FilesMapper">
+
+  <select id="list" resultType="Files">
+    SELECT * FROM files
+  </select>
+
+  <insert id="insert">
+    INSERT INTO files(
+    )
+    VALUES (
+    )
+  </insert>
+
+  <update id="update">
+    UPDATE files
+    <set>
+      updated_at = now()
+    </set>
+    WHERE -- key 지정 필요
+  </update>
+
+  <delete id="delete">
+    DELETE FROM files WHERE -- key 지정 필요
+  </delete>
+
+  <update id="completeAll">
+    UPDATE files SET -- 수정필드 없음
+  </update>
+
+  <delete id="deleteAll">
+    DELETE FROM files
+  </delete>
+</mapper>
