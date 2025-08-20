@@ -88,8 +88,20 @@ const PostComment = ({ comments, commentCount, editComment, postReply }) => {
                 </div>
                 <div className="comment-info">
                   <p>{rep.createdAt}</p>
-                  <p>👍 {rep.commentLikes}</p>
-                  <p>👎 {rep.commentDislikes}</p>
+                  <p className="btn btn-gold">👍 {rep.commentLikes}</p>
+                  <p className="btn btn-gold">👎 {rep.commentDislikes}</p>
+                  { !rep.userId && (
+                    <>
+                      <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
+                      <div className="btn btn-gold">삭제</div>
+                    </>
+                  )}
+                  {isLogin && userInfo.id === rep.userId && (
+                    <>
+                      <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
+                      <div className="btn btn-gold">삭제</div>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
