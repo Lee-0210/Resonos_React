@@ -114,6 +114,8 @@ public class CommentServiceImpl implements CommentService {
             comment.setUserId(loginUser.getId());
             comment.setGuestNickname(null);
             comment.setGuestPassword(null);
+            commentMapper.insert(comment);
+            comment.setUserNickname(commentMapper.select(comment.getId()).getUserNickname());
         } else {
             // 비로그인 상태 → guest 정보 입력됨
             comment.setUserId(null);
@@ -122,9 +124,9 @@ public class CommentServiceImpl implements CommentService {
             }
             // password 암호화
             comment.setGuestPassword(passwordEncoder.encode(comment.getGuestPassword()));
-        }
 
-        commentMapper.insert(comment);
+            commentMapper.insert(comment);
+        }
     }
 
     @Override
