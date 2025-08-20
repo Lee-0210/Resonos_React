@@ -2,6 +2,7 @@ package com.cosmus.resonos.service.community;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +109,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void writeComment(Comment comment, CustomUser loginUser) throws Exception {
-        // System.out.println("loginUser : " + loginUser);
         if (loginUser != null) {
             // 로그인 상태 → userId 설정
             comment.setUserId(loginUser.getId());
@@ -127,6 +127,7 @@ public class CommentServiceImpl implements CommentService {
 
             commentMapper.insert(comment);
         }
+        comment.setCreatedAt(new Date());
     }
 
     @Override
