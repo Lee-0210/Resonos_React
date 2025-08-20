@@ -11,14 +11,12 @@ const PostForm = ({ postComment }) => {
 
   const isLogin = sessionStorage.getItem('isLogin')
   const {userInfo} = useContext(LoginContext)
-  console.log(userInfo)
 
   const handlePostComment = (e) => {
     e.preventDefault();
     if(isLogin) {
       const data = {
         content : content,
-        userNickname : userInfo?.nickname
       }
       console.log(data)
       postComment(data)

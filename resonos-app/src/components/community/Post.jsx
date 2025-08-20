@@ -104,10 +104,9 @@ const Post = () => {
       <div className="post-wrapper">
         <div className="container">
           <PostTitle title={post.title} date={post.createdAt} writer={post.userNickname} />
-          <PostContent content={post.content} likes={post.postLikes} dislikes={post.postDislikes}
-                      boardId={boardId} postId={postId} />
+          <PostContent post={post} boardId={boardId}/>
           <PostComment comments={comments} commentCount={post.commentCount} />
-          <PostForm postComment={postComment} userId={post.userId} />
+          <PostForm postComment={postComment} />
         </div>
       </div>
     </>
