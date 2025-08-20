@@ -22,6 +22,9 @@ const Post = () => {
 
   const { userInfo, isLogin } = useContext(LoginContext)
 
+  // const navigate = useNavigate()
+
+
   // 게시판 초기 로딩
   useEffect(() => {
     const fetchData = async () => {
@@ -173,7 +176,14 @@ const Post = () => {
         ))
       }
     } catch (error) {
-      console.log(error)
+      swal.fire({
+        title: '수정 실패',
+        text: '비밀번호가 틀렸거나, 댓글 수정 중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 
@@ -309,7 +319,8 @@ const Post = () => {
       <div className="post-wrapper">
         <div className="container">
           <PostTitle title={post.title} date={post.createdAt} writer={post.userNickname} />
-          <PostContent post={post} boardId={boardId} isLogin={isLogin} userInfo={userInfo} />
+          <PostContent post={post} boardId={boardId} isLogin={isLogin}
+                userInfo={userInfo} postId={postId} />
           <PostComment comments={comments} commentCount={post.commentCount}
             editComment={editComment} postReply={postReply} editReplyf={editReply}
             isLogin={isLogin} userInfo={userInfo} deleteComment={deleteComment}
