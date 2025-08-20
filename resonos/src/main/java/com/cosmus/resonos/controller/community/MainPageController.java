@@ -142,8 +142,8 @@ public class MainPageController {
 
                 // 모든 커뮤니티 + pageinfo사용 + 키워드 포함 + 커뮤니티별 작성된 boardPost count 
                 PageInfo<Community> commPage = communityService.searchCommunities2(query, page, size);
-                response.put("searchedCommunities2", commPage.getList());
-                response.put("communityPagination2", new Pagination(commPage));
+                response.put("searchedCommunities", commPage.getList());
+                response.put("communityPagination", new Pagination(commPage));
 
                 // 게시글 검색 + 키워드 포함
                 PageInfo<BoardPost> postPage = boardPostService.searchPosts(query, page, size);
@@ -176,7 +176,7 @@ public class MainPageController {
 
             Map<String, Object> response = new HashMap<>();
             response.put("posts", postPage.getList());
-            response.put("notices", noticePage);
+            response.put("notices", noticePage.getList());
             response.put("pagination", new Pagination(postPage));
 
             // 게시판 대표 음악 설정
