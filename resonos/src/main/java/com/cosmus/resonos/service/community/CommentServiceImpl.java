@@ -2,6 +2,7 @@ package com.cosmus.resonos.service.community;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +128,7 @@ public class CommentServiceImpl implements CommentService {
 
             commentMapper.insert(comment);
         }
+        comment.setCreatedAt(new Date());
     }
 
     @Override

@@ -94,7 +94,7 @@
         WHERE c.board_post_id = c.board_post_id
       ) AS comment_count
     FROM board_post bp
-    LEFT JOIN user AS u ON u.id = bp.user_id
+    LEFT JOIN user u ON u.id = bp.user_id
     WHERE bp.id = #{postId}
       AND bp.community_id = #{communityId}
   </select>
