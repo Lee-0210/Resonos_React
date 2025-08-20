@@ -129,8 +129,10 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public List<BoardPost> getNoticesByCommunityId(Long communityId, int limit) throws Exception {
-        return boardPostMapper.getNoticesByCommunityId(communityId, limit);
+    public PageInfo<BoardPost> getNoticesByCommunityId(Long communityId, int page, int size) throws Exception {
+        PageHelper.startPage(page, size); // PageHelper 적용
+        List<BoardPost> posts = boardPostMapper.getNoticesByCommunityId(communityId);
+        return new PageInfo<>(posts);
     }
 
     @Override

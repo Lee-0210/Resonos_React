@@ -49,7 +49,7 @@ const MemberLogContainer = ({ userId }) => {
         </h2>
 
         {/* ✅ 테이블 헤더 */}
-        <TableColumnHeader columns={columns} />
+        {/* <TableColumnHeader columns={columns} /> */}
 
         {/* ✅ 테이블 내용 */}
         {loading ? (

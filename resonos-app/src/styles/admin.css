@@ -210,12 +210,22 @@ section.resonos-card {
   align-items: center;
   min-height: 48px;
   border-bottom: 1px solid var(--border-color);
-  padding: 0 12px;
+  padding: 0 12px 5px 12px; /* 위, 좌우는 12px, 아래는 5px 패딩 */
   text-align: center;
   transition: background 0.2s ease;
   color: white;
-  padding-bottom: 5px;
+
+  /* 텍스트 줄바꿈 허용 */
+  white-space: normal;
+
+  /* 내용이 너무 길면 줄 내림과 단어 단위 줄바꿈 허용 */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  /* flex 항목들이 넘치면 줄바꿈 대신 줄임표는 숨기기 */
+  overflow: visible;
 }
+
 .admin .list-group-item:hover { background: var(--hover-bg); }
 .table-col, .list-group-item > div {
   overflow: hidden;

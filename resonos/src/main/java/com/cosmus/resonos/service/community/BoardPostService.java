@@ -52,7 +52,7 @@ public interface BoardPostService {
     // listByCommunityId - 페이징네이션 처리
     public PageInfo<BoardPost> listByCommunityId(@Param("communityId") Long communityId, @Param("page") int page, @Param("size") int size) throws Exception;
     // getNoticesByCommunityId 
-    public List<BoardPost> getNoticesByCommunityId(@Param("communityId") Long communityId, @Param("limit") int limit) throws Exception;
+    public PageInfo<BoardPost> getNoticesByCommunityId(@Param("communityId") Long communityId, @Param("page") int page, @Param("size") int size) throws Exception;
     // 모든 게시판 가져오기
     public List<BoardPost> getAllPosts() throws Exception;
 

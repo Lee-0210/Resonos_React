@@ -17,8 +17,8 @@ public interface UserSanctionService {
     public boolean delete(Long id) throws Exception;
     // 특정 유저의 제재 기록 조회
     public List<UserSanction> getSanctionsByUserId(Long userId) throws Exception;
-    // 유저 제재
-    public void banUser(Long userId, String reason, Long adminId) throws Exception;
     // 유저 제재 해제
     public void unbanUser(Long userId, Long adminId) throws Exception;
+    // 유저 제재
+    public void banUser(Long userId, String reason, Long adminId, String type, String startAt, String endAt);
 }

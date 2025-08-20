@@ -2,6 +2,8 @@ package com.cosmus.resonos.domain.admin;
 
 import java.util.Date;
 
+import lombok.Data;
+@Data
 public class UserBadgeLog {
     private Long id;
     private Long userId;
@@ -11,25 +13,4 @@ public class UserBadgeLog {
     private String reason;
     private Date createdAt;
 
-    // Getter, Setter
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-
-    public Long getBadgeId() { return badgeId; }
-    public void setBadgeId(Long badgeId) { this.badgeId = badgeId; }
-
-    public String getAction() { return action; }
-    public void setAction(String action) { this.action = action; }
-
-    public Long getActorId() { return actorId; }
-    public void setActorId(Long actorId) { this.actorId = actorId; }
-
-    public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
-
-    public Date getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 }

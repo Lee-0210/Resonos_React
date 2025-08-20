@@ -56,7 +56,7 @@ public interface BoardPostMapper {
     // listByCommunityId - 페이징네이션 처리
     public List<BoardPost> listByCommunityId(@Param("communityId") Long communityId) throws Exception;
     // getNoticesByCommunityId 
-    public List<BoardPost> getNoticesByCommunityId(@Param("communityId") Long communityId, @Param("limit") int limit) throws Exception;
+    public List<BoardPost> getNoticesByCommunityId(@Param("communityId") Long communityId) throws Exception;
     // 모든 게시글 가져오기
     public List<BoardPost> getAllPosts() throws Exception;
 
@@ -74,6 +74,9 @@ public interface BoardPostMapper {
     
     // 커뮤니티 ID 목록에 해당하는 게시글 조회
     public List<BoardPost> getPostsByCommunityIds(List<Long> communityIds);
+    // 커뮤니티 id 목록에 해당하는 게시글 수 조회
+    public List<Map<String, Object>> countPostsByCommunityIds(List<Long> communityIds);
+
 
     
 }

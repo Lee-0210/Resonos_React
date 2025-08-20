@@ -136,6 +136,39 @@ public class CommunityServiceImpl implements CommunityService {
         }
     }
 
+    @Override
+    public PageInfo<Community> searchCommunities2(String query, int page, int size) {
+        // 1) community 단독으로 페이징 (중복 없음)
+        PageHelper.startPage(page, size);
+        List<Community> communities = communityMapper.searchCommunitiesBasic(query);
+        PageInfo<Community> pageInfo = new PageInfo<>(communities);
+
+        // 2) 커뮤니티 id 리스트 추출
+        List<Long> communityIds = communities.stream()
+                                            .map(Community::getId)
+                                            .collect(Collectors.toList());
+
+        // 3) 게시글 수만 조회 (게시글 전체 리스트가 아님)
+        if (!communityIds.isEmpty()) {
+            // 커뮤니티별 게시글 수 조회 반환 Map<Long, Integer>
+            List<Map<String, Object>> resultList = boardPostMapper.countPostsByCommunityIds(communityIds);
+            Map<Long, Integer> postCountMap = resultList.stream()
+                .collect(Collectors.toMap(
+                    m -> ((Number)m.get("community_id")).longValue(),
+                    m -> ((Number)m.get("board_post_count")).intValue()
+                ));
+
+            // 4) 커뮤니티 객체에 게시글 수 매핑
+            communities.forEach(c -> {
+                Integer count = postCountMap.get(c.getId());
+                c.setBoardPostCount(count != null ? count : 0);
+            });
+        }
+
+        return pageInfo;
+    }
+
+
 
 
 

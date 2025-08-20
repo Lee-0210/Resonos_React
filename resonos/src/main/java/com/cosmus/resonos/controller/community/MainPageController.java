@@ -23,6 +23,7 @@ import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommunityCategoryService;
 import com.cosmus.resonos.service.community.CommunityService;
 import com.cosmus.resonos.service.user.UserService;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -139,10 +140,10 @@ public class MainPageController {
             } else {
                 // type 이 없는 경우는 더보기 전 페이지
 
-                // 모든 커뮤니티 + 키워드 포함
-                PageInfo<Community> commPage = communityService.searchCommunities(query, page, size);
-                response.put("searchedCommunities", commPage.getList());
-                response.put("communityPagination", new Pagination(commPage));
+                // 모든 커뮤니티 + pageinfo사용 + 키워드 포함 + 커뮤니티별 작성된 boardPost count 
+                PageInfo<Community> commPage = communityService.searchCommunities2(query, page, size);
+                response.put("searchedCommunities2", commPage.getList());
+                response.put("communityPagination2", new Pagination(commPage));
 
                 // 게시글 검색 + 키워드 포함
                 PageInfo<BoardPost> postPage = boardPostService.searchPosts(query, page, size);
@@ -170,11 +171,12 @@ public class MainPageController {
             if (community == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
             PageInfo<BoardPost> postPage = boardPostService.listByCommunityId(communityId, page, size);
-            List<BoardPost> notices = boardPostService.getNoticesByCommunityId(communityId, 5);
+            // List<BoardPost> notices = boardPostService.getNoticesByCommunityId(communityId, 5); // 페이지네이션 적용 
+            PageInfo<BoardPost> noticePage = boardPostService.getNoticesByCommunityId(communityId, page, size);
 
             Map<String, Object> response = new HashMap<>();
             response.put("posts", postPage.getList());
-            response.put("notices", notices);
+            response.put("notices", noticePage);
             response.put("pagination", new Pagination(postPage));
 
             // 게시판 대표 음악 설정

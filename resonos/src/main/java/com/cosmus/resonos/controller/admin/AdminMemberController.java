@@ -200,6 +200,9 @@ public class AdminMemberController {
             @RequestParam("id") Long userId,
             @RequestParam(value = "ban", defaultValue = "true") boolean ban,
             @RequestParam(value = "reason", required = false) String reason,
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "startAt", required = false) String startAt,
+            @RequestParam(value = "endAt", required = false) String endAt,
             Authentication auth) {
         try {
             if (auth == null || auth.getPrincipal() == null)
@@ -207,10 +210,12 @@ public class AdminMemberController {
 
             Long adminId = ((com.cosmus.resonos.domain.CustomUser) auth.getPrincipal()).getId();
             if (ban) {
-                userSanctionService.banUser(userId, reason, adminId);
+                userSanctionService.banUser(userId, reason, adminId, type, startAt, endAt);
             } else {
                 userSanctionService.unbanUser(userId, adminId);
             }
+            // ban 값 확인 
+            log.info("ban : " + ban);
             return ResponseEntity.ok(Map.of("success", true));
         } catch (Exception e) {
             log.error("회원 밴/해제 실패", e);

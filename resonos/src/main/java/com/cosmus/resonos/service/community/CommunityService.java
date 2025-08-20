@@ -32,5 +32,7 @@ public interface CommunityService extends BaseService<Community> {
 
     // 모든 커뮤니티 조회 + 키워드
     PageInfo<Community> searchCommunities(@Param("query") String query, @Param("page") int page, @Param("size") int size) throws Exception;
+    // 모든 커뮤니티 조회 + 키워드 + 커뮤니티별 작성된 boardPost count
+    PageInfo<Community> searchCommunities2(@Param("query") String query, @Param("page") int page, @Param("size") int size) throws Exception;
 
 }

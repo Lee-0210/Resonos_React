@@ -35,8 +35,8 @@ export const toggleEnable = (id, enabled) =>
   axios.post(`${membersPath}/enable`, null, { params: { id, enabled } });
 
 // 밴/해제 (POST /ban?id=...&ban=...&reason=...)
-export const banUser = (id, ban = true, reason = '') =>
-  axios.post(`${membersPath}/ban`, null, { params: { id, ban, reason } });
+export const banUser = (id, ban = true, reason = '', extraData = {}) =>
+  axios.post(`${membersPath}/ban`, null, { params: { id, ban, reason, ...extraData } });
 
 // 비밀번호 랜덤 초기화 (POST /reset-password?id=...)
 export const resetPassword = (id) =>

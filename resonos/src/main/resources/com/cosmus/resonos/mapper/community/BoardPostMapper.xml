@@ -234,18 +234,21 @@
 
 <!-- // getNoticesByCommunityId -->
 <select id="getNoticesByCommunityId" resultMap="BoardPostResultMap">
-  SELECT bp.*,
+  SELECT bp.*,     
+         c.name AS community_name,
+         u.nickname AS user_nickname,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
   FROM board_post bp
   INNER JOIN user u ON bp.user_id = u.id
   INNER JOIN user_auth ua ON ua.username = u.username
+  INNER JOIN community c ON bp.community_id = c.id
   WHERE ua.auth = 'ROLE_ADMIN'
     AND bp.community_id = #{communityId}
   ORDER BY bp.created_at DESC
-  LIMIT #{limit}
 </select>
+
 
 <!-- 모든 게시글 가져오기 -->
 <select id="getAllPosts" resultMap="BoardPostResultMap">
@@ -298,6 +301,19 @@
 </select>
 
 
+<!-- 모든 커뮤니티 + 키워드 + 커뮤니티별 작성된 boardPost count -->
+<select id="countPostsByCommunityIds" resultType="map">
+  SELECT 
+    c.id AS community_id,
+    COUNT(bp.id) AS board_post_count
+  FROM community c
+  LEFT JOIN board_post bp ON bp.community_id = c.id
+  WHERE c.id IN 
+  <foreach item="id" collection="list" open="(" separator="," close=")">
+    #{id}
+  </foreach>
+  GROUP BY c.id
+</select>
 
 
 </mapper>

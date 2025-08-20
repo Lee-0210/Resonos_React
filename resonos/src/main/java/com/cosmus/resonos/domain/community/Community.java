@@ -39,4 +39,7 @@ public class Community {
     private String creatorName;
 
     private List<BoardPost> boardPosts;
+
+    // 게시글 수
+    private int boardPostCount;
 }
