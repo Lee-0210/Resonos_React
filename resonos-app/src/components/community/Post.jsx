@@ -85,9 +85,8 @@ const Post = () => {
     }
   }
 
-  // 댓글 수정
+  // 비회원 댓글 수정
   const editComment = async (data, commentId) => {
-    console.log("editComment 실행", data, commentId)
     try {
       const response = await api.editComment(data, { boardId, postId, commentId })
       console.log(response)
@@ -107,7 +106,14 @@ const Post = () => {
         ))
       }
     } catch (error) {
-      console.err(error)
+      swal.fire({
+        title: '수정 실패',
+        text: '비밀번호가 틀렸거나, 댓글 수정 중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 
@@ -133,7 +139,7 @@ const Post = () => {
       }
     } catch (error) {
       swal.fire({
-        title: '오류',
+        title: '등록 실패',
         text: '댓글 작성 중 오류가 발생했습니다.',
         icon: 'error',
         customClass: {
@@ -157,36 +163,125 @@ const Post = () => {
             popup: 'album-wrapper'
           }
         })
-        setComments(prevComments => prevComments.map(prev => 
+        setComments(prevComments => prevComments.map(prev =>
           prev.id === response.data.parentCommentId ?
-          {...prev, replies : prev.replies.map(rep =>
-            rep.id === response.data.id ? {...rep, ...response.data } : rep
-          )} : prev
+            {
+              ...prev, replies: prev.replies.map(rep =>
+                rep.id === response.data.id ? { ...rep, ...response.data } : rep
+              )
+            } : prev
         ))
       }
     } catch (error) {
-      console.err(error)
+      console.log(error)
     }
   }
-  
+
   // 비회원 댓글 삭제
-  const deleteUnlogComment = async (pw, commentId) => {
+  const deleteUnlogComment = async (pw, commentId, isRoot) => {
+    const data = {
+      guestPassword: pw
+    }
     try {
-      const response = await api.deleteUnlogComment(pw, { boardId, postId, commentId })
-      console.log(response)
-      if (response.status === 200) {
+      const response = await api.deleteUnlogComment(data, { boardId, postId, commentId })
+      if (isRoot) {
+        console.log('댓글입니다.')
+        if (response.status === 200) {
+          swal.fire({
+            title: '삭제 완료',
+            text: '댓글이 삭제되었습니다.',
+            icon: 'success',
+            customClass: {
+              popup: 'album-wrapper'
+            }
+          })
+          setComments(prevComments => prevComments.filter(com => com.id !== commentId))
+        }
+      }
+      else {
+        console.log('대댓글입니다.')
+        if (response.status === 200) {
+          swal.fire({
+            title: '삭제 완료',
+            text: '대댓글이 삭제되었습니다.',
+            icon: 'success',
+            customClass: {
+              popup: 'album-wrapper'
+            }
+          })
+          setComments(prevComments => prevComments.map(prev =>
+            prev.id === response.data.parentCommentId ?
+              { ...prev, replies: prev.replies.filter(rep => rep.id !== commentId) }
+              : prev
+          ))
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // 회원 댓글 삭제
+  const deleteComment = async (commentId, isRoot) => {
+    const result = await swal.fire({
+      title: '삭제 확인',
+      text: '정말로 삭제하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      // confirmButtonColor: '#3085d6',
+      // cancelButtonColor: '#d33',
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소',
+      customClass: {
+        popup: 'album-wrapper'
+      }
+    })
+    if (result.isConfirmed) {
+      try {
+        const response = await api.deleteComment({ boardId, postId, commentId })
+        console.log(response)
+        if (isRoot) {
+          console.log('댓글입니다.')
+          if (response.status === 200) {
+            swal.fire({
+              title: '삭제 완료',
+              text: '댓글이 삭제되었습니다.',
+              icon: 'success',
+              customClass: {
+                popup: 'album-wrapper'
+              }
+            })
+            setComments(prevComments => prevComments.filter(com => com.id !== commentId))
+          }
+        }
+        else {
+          console.log('대댓글입니다.')
+          if (response.status === 200) {
+            swal.fire({
+              title: '삭제 완료',
+              text: '대댓글이 삭제되었습니다.',
+              icon: 'success',
+              customClass: {
+                popup: 'album-wrapper'
+              }
+            })
+            setComments(prevComments => prevComments.map(prev =>
+              prev.id === response.data.parentCommentId ?
+                { ...prev, replies: prev.replies.filter(rep => rep.id !== commentId) }
+                : prev
+            ))
+          }
+        }
+      } catch (error) {
         swal.fire({
-          title: '삭제 완료',
-          text: '댓글이 삭제되었습니다.',
-          icon: 'success',
+          title: '삭제 실패',
+          text: '댓글 삭제 중 오류가 발생했습니다.',
+          icon: 'error',
           customClass: {
             popup: 'album-wrapper'
           }
         })
-        setComments(prevComments => prevComments.filter(com => com.id !== commentId))
       }
-    } catch (error) {
-      console.err(error)
     }
   }
 
@@ -214,10 +309,11 @@ const Post = () => {
       <div className="post-wrapper">
         <div className="container">
           <PostTitle title={post.title} date={post.createdAt} writer={post.userNickname} />
-          <PostContent post={post} boardId={boardId} isLogin={isLogin} />
+          <PostContent post={post} boardId={boardId} isLogin={isLogin} userInfo={userInfo} />
           <PostComment comments={comments} commentCount={post.commentCount}
             editComment={editComment} postReply={postReply} editReplyf={editReply}
-            isLogin={isLogin} userInfo={userInfo} deleteUnlogComment={deleteUnlogComment} />
+            isLogin={isLogin} userInfo={userInfo} deleteComment={deleteComment}
+            deleteUnlogComment={deleteUnlogComment} />
           <PostForm postComment={postComment} isLogin={isLogin} />
         </div>
       </div>

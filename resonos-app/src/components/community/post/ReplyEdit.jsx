@@ -29,10 +29,10 @@ const ReplyEdit = ({ isLogin, cancel, rep, editReplyf }) => {
   return (
     <div className='reply-form'>
       <form>
-        {!isLogin && (
+        {!rep.userId && (
           <div className="for-unlogin">
             <input id="nickname" type="text"
-              value={'ㅇㅇ'} required readOnly />
+              value={rep.guestNickname} required readOnly />
             <input id="tempPw" type="password"
               placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
           </div>

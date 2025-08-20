@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import CommentEdit from './CommentEdit'
 import ReplyEdit from './ReplyEdit'
 
-const PostComment = ({ comments, commentCount, editComment,
+const PostComment = ({ comments, commentCount, editComment, deleteComment,
   postReply, editReplyf, userInfo, isLogin, deleteUnlogComment }) => {
 
   const [replyTo, setReplyTo] = useState(null)
@@ -37,8 +37,8 @@ const PostComment = ({ comments, commentCount, editComment,
   const handleOpenDelUnlogCom = (i) => {
     setOpenPw(openPw === i ? null : i)
   }
-  const handleDeleteUnlogComment = (pw, commentId) => {
-    deleteUnlogComment(pw, commentId)
+  const handleDeleteUnlogComment = (pw, commentId, isRoot) => {
+    deleteUnlogComment(pw, commentId, isRoot)
   }
 
 
@@ -73,12 +73,12 @@ const PostComment = ({ comments, commentCount, editComment,
                   {!com.userId && (
                     <>
                       <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
-                      <div className="btn btn-gold" onClick={() => handleOpenDelUnlogCom(idx)}>삭제</div>
+                      <div className="btn btn-gold" onClick={() => handleOpenDelUnlogCom(idx)}>{openPw === idx ? '취소' : '삭제'}</div>
                       {openPw === idx && (
                         <>
                           <input id="tempPw" type="password"
                             placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
-                          <button className="btn btn-gold" onClick={() => handleDeleteUnlogComment(tempPw, com.id)}>삭제</button>
+                          <button className="btn btn-gold" onClick={() => handleDeleteUnlogComment(tempPw, com.id, true)}>삭제</button>
                         </>
                       )}
                     </>
@@ -86,7 +86,7 @@ const PostComment = ({ comments, commentCount, editComment,
                   {isLogin && userInfo.id === com.userId && (
                     <>
                       <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
-                      <div className="btn btn-gold">삭제</div>
+                      <div className="btn btn-gold" onClick={() => deleteComment(com.id,true)}>삭제</div>
                     </>
                   )}
                 </div>
@@ -116,13 +116,20 @@ const PostComment = ({ comments, commentCount, editComment,
                   {!rep.userId && (
                     <>
                       <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>
-                      <div className="btn btn-gold">삭제</div>
+                      <div className="btn btn-gold" onClick={() => handleOpenDelUnlogCom(rep.id)}>{openPw === rep.id ? '취소' : '삭제'}</div>
+                      {openPw === rep.id && (
+                        <>
+                          <input id="tempPw" type="password"
+                            placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
+                          <button className="btn btn-gold" onClick={() => handleDeleteUnlogComment(tempPw, rep.id, false)}>삭제</button>
+                        </>
+                      )}
                     </>
                   )}
                   {isLogin && userInfo.id === rep.userId && (
                     <>
                       <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>
-                      <div className="btn btn-gold">삭제</div>
+                      <div className="btn btn-gold" onClick={() => deleteComment(rep.id,false)}>삭제</div>
                     </>
                   )}
                 </div>

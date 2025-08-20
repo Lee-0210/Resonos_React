@@ -57,3 +57,7 @@ export const editReply = async (data, ids) => {
 export const deleteUnlogComment = async (data, ids) => {
   return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
 }
+// 게시글 회원 댓글 삭제
+export const deleteComment = async (ids) => {
+  return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`)
+}
