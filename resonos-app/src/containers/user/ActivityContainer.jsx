@@ -5,6 +5,8 @@ import {MySwal} from '../../apis/alert'
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { useNavigate } from 'react-router-dom';
+import MypageTab from '../../components/user/MypageTab';
+import ActivityCommu from '../../components/user/ActivityCommu';
 
 const ActivityContainer = () => {
 
@@ -17,6 +19,7 @@ const ActivityContainer = () => {
   const [laReviewList, setLaReviewList] = useState([]);
   const [tReviewList, setTReviewList] = useState([]);
   const [ltReviewList, setLtReviewList] = useState([]);
+  const [active, setActive] = useState(true)
 
   const [user, setUser] = useState({});
   const [lastPath, setLastPath] = useState();
@@ -132,31 +135,54 @@ const ActivityContainer = () => {
     getUsersActivity()
   }, [])
 
-
-
-
   return (
     <>
       <Header />
       <div className="container">
-        <Activity
-          utl={utl}
-          countAReview={countAReview}
-          countLaReview={countLaReview}
-          countLtReview={countLtReview}
-          countTReview={countTReview}
-          aReviewList={aReviewList}
-          laReviewList={laReviewList}
-          ltReviewList={ltReviewList}
-          tReviewList={tReviewList}
-          setAReviewList={setAReviewList}
-          setLaReviewList={setLaReviewList}
-          setLtReviewList={setLtReviewList}
-          setTReviewList={setTReviewList}
-          user={user}
-          lastPath={lastPath}
-          onSearchReview={onSearchReview}
-        />
+        <main className="con con-activity position-relative">
+          {/* 왼쪽 리모컨 */}
+          <MypageTab lastPath={lastPath}/>
+
+          {/* 전환 탭 */}
+          <div className="tab-area">
+            <button
+              className={`${active ? 'active' : ''}`}
+              type="button"
+              onClick={() => setActive(!active)}
+              >리뷰</button>
+            <button
+              className={`${!active ? 'active' : ''}`}
+              type="button"
+              onClick={() => setActive(!active)}
+            >커뮤니티</button>
+          </div>
+          {
+            active
+            ?
+            <Activity
+              utl={utl}
+              countAReview={countAReview}
+              countLaReview={countLaReview}
+              countLtReview={countLtReview}
+              countTReview={countTReview}
+              aReviewList={aReviewList}
+              laReviewList={laReviewList}
+              ltReviewList={ltReviewList}
+              tReviewList={tReviewList}
+              setAReviewList={setAReviewList}
+              setLaReviewList={setLaReviewList}
+              setLtReviewList={setLtReviewList}
+              setTReviewList={setTReviewList}
+              user={user}
+              lastPath={lastPath}
+              onSearchReview={onSearchReview}
+              active={active}
+              setActive={setActive}
+            />
+            :
+            <ActivityCommu />
+          }
+        </main>
       </div>
       <Footer />
     </>

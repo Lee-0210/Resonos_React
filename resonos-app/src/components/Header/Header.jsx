@@ -125,7 +125,9 @@ const Header = ({ currentUser = {} }) => {
                                 :
                                 <>
                                     <li className="header-menu-wrapper position-relative">
-                                        <Link to="/community/search/more" state={{type: 'board'}}>
+                                        <Link
+                                        to="/community/search/more?type=board&q=&page=1"
+                                        >
                                             전체 게시판
                                         </Link>
                                     </li>

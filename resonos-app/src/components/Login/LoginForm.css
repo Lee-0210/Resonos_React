@@ -890,8 +890,31 @@ button.like {background-color: inherit; border: none;}
 .text-item .rv-name {font-size: 1.4rem; color: var(--main-color);}
 .text-item .rv-name + .date {margin-left: 5px;}
 .con-activity .mypage-grid {margin-left: 20%; margin-bottom: 25px; grid-template-columns: repeat(2, 1fr); max-width: 1000px;}
-.con-activity .mypage-grid .mypage-card {min-height: 100px; display: flex; align-items: center; justify-content: center; flex-direction: column; border-color: var(--silver-color);}
-
+.con-activity .mypage-grid .mypage-card {min-height: 100px; display: flex; align-items: center; justify-content: center; flex-direction: column; border-color: var(--main-color);}
+.con-activity .tab-area {
+  margin-left: 20%;
+  display: flex;
+  margin-bottom: 20px;
+  border: 1px solid var(--silver-color);
+  border-radius: 5px;
+}
+.con-activity .tab-area > button {
+  flex: 0.5;
+  text-align: center;
+  height: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: var(--main-color);
+}
+.con-activity .tab-area > button.active {
+  background-color: var(--main-color);
+  color: var(--silver-color);
+}
+.con-activity .tab-area > button:hover {
+  background-color: var(--main-color);
+  color: var(--silver-color);
+}
+.con-activity .tab-area > button:not(:first-child) {border-left: 1px solid var(--silver-color);}
 
 /* 배지 */
 .ul-list.bl {width: 100%; flex-wrap: wrap; gap: 10px; column-gap: 30px;}

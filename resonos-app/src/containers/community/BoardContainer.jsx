@@ -20,10 +20,28 @@ const BoardContainer = () => {
   const [board, setBoard] = useState()
   const [posts, setPosts] = useState([])
   const [notices, setNotices] = useState([])
+  const [onButton, setOnButton] = useState(false)
 
   const isManager = useRef(false)
 
   const params = useParams()
+
+
+  // 한줄소개 업데이트 요청
+  const onUpdate = async description => {
+    try {
+      const response = await cr.updateDescription(params.id, description)
+      if(response.status === 200) {
+        setBoard(prev => ({
+          ...prev,
+          description: response.data
+        }))
+        setOnButton(false)
+      }
+    } catch(e) {
+      console.error('error :', e)
+    }
+  }
 
   // 게시판 대표음악 설정
   const setMusic = async (trackId) => {
@@ -108,6 +126,9 @@ const BoardContainer = () => {
           board={board}
           posts={posts}
           notices={notices}
+          onButton={onButton}
+          setOnButton={setOnButton}
+          onUpdate={onUpdate}
         />
         <TrackModalCommunity
           onModal={onModal}
