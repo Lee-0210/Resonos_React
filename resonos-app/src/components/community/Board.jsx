@@ -100,6 +100,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices, onButton, se
           }
         </ul>
         <Pagination />
+        <Link to={`/community/create/boards/${board?.id}`} className='update'>게시글 작성</Link>
       </div>
       {/* 하단 */}
       <div className="notice-area">

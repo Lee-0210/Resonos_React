@@ -14,8 +14,15 @@
   font-size: 1.4rem;
   color: var(--main-color);
   margin-left: auto;
+  border: 1px solid var(--main-color);
+  padding: 0 10px;
+  border-radius: 10px;
+  transition: all 0.3s;
 }
-.commu .update:hover {text-decoration: underline;}
+.commu .update:hover {
+  background-color: var(--main-color);
+  color: var(--silver-color);
+}
 
 .commu .date {
   margin-left: 15px;
@@ -50,17 +57,17 @@
 
 .commu h3 + button {
   color: white;
-  background-color: var(--main-color);
   border-radius: 20px;
   padding: 0px 10px;
   margin-bottom: 10px;
   border: 0.1px solid var(--main-color);
-  transition: all 0.3s;
   font-size: 1.4rem;
+  color: var(--main-color);
+  transition: all 0.3s;
 }
 .commu h3 + button:hover {
-  color: var(--main-color);
-  background-color: inherit;
+  color: var(--silver-color);
+  background-color: var(--main-color);
 }
 
 .commu .post-title,
