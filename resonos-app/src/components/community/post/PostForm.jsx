@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+
 const PostForm = ({ postComment }) => {
 
   const [nick, setNick] = useState('')

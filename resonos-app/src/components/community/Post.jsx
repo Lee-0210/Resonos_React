@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 import * as api from '../../apis/community'
 import TextPressure from '../../assets/TextPressure'
 import * as fmtDate from '../../apis/util'
+import swal from 'sweetalert2';
 
 
 const Post = () => {
@@ -57,8 +58,25 @@ const Post = () => {
     try {
       const response = await api.postComment(data,{boardId, postId})
       console.log(response)
+      if(response.status === 201) {
+        swal.fire({
+          title : '작성 완료',
+          text : '댓글이 작성되었습니다.',
+          icon : 'success',
+          customClass : {
+            popup: 'album-wrapper'
+          }
+        })
+      }
     } catch (error) {
-      
+      swal.fire({
+        title : '오류',
+        text : '댓글 작성 중 오류가 발생했습니다.',
+        icon : 'error',
+        customClass : {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 

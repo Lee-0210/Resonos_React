@@ -3,7 +3,7 @@ import Pagination from '../../Pagination/Pagination'
 import ReplyForm from './ReplyForm'
 import { Link } from 'react-router-dom'
 
-const PostComment = ({ comments, commentCount}) => {
+const PostComment = ({ comments, commentCount }) => {
 
   const [replyTo, setReplyTo] = useState(null)
 
@@ -21,9 +21,13 @@ const PostComment = ({ comments, commentCount}) => {
         {comments && (comments.map((com, idx) => (
           <div className="comment" key={idx}>
             <div className="user">
-              <Link to={`/users/${com.userId ? com.userId : 0}`}>
-                <p>{com.userNickname ? com.userNickname : com.guestNickname}</p>
-              </Link>
+              {com.userId ? (
+                <Link to={`/users/${com.userId}`}>
+                  <p>{`${com.userNickname}🎧`}</p>
+                </Link>
+              ) : (
+                <p>{com.guestNickname}</p>
+              )}
             </div>
             <div className="comment-content" onClick={() => handleReplyClick(idx)}>
               <p>{com.content}</p>
@@ -33,13 +37,16 @@ const PostComment = ({ comments, commentCount}) => {
               <p>👍 {com.commentLikes}</p>
               <p>👎 {com.commentDislikes}</p>
             </div>
-            
             {com.replies && (com.replies.map((rep, rIdx) =>
               <div className="reply-comment" key={rIdx}>
                 <div className="user">
-                  <Link to={`/users/${rep.userId}`}>
-                    <p>{rep.userNickname ? rep.userNickname : rep.guestNickname}</p>
-                  </Link>
+                  {rep.userId ? (
+                    <Link to={`/users/${rep.userId}`}>
+                      <p>{`${rep.userNickname}🎧`}</p>
+                    </Link>
+                  ) : (
+                    <p>{rep.guestNickname}</p>
+                  )}
                 </div>
                 <div className="comment-contentr">
                   <p>{rep.content}</p>
