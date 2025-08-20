@@ -11,7 +11,9 @@ const IndexContainer = () => {
   const [popularPosts, setPopularPosts] = useState([])
   const [realTimePopularPosts, setRealTimePopularPosts] = useState([])
   const [topCategories, setTopCategories] = useState([])
+  const [topCommunities, setTopCommunities] = useState([])
   const [newCategories, setNewCategories] = useState([])
+  const [newCommunities, setNewCommunities] = useState([])
 
   const getCommunityData = async () => {
     try {
@@ -25,6 +27,8 @@ const IndexContainer = () => {
         setRealTimePopularPosts(data.realTimePopularPosts)
         setTopCategories(data.topCategories)
         setNewCategories(data.newCategories)
+        setNewCommunities(data.newCommunities)
+        setTopCommunities(data.topCommunities)
       }
     } catch(e) {
       console.error('error :', e)
@@ -46,6 +50,8 @@ const IndexContainer = () => {
         realTimePopularPosts={realTimePopularPosts}
         topCategories={topCategories}
         newCategories={newCategories}
+        topCommunities={topCommunities}
+        newCommunities={newCommunities}
       />
     </div>
     <Footer />

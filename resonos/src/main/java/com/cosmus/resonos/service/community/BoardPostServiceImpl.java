@@ -197,6 +197,21 @@ public class BoardPostServiceImpl implements BoardPostService {
             return result;
         }
 
+    @Override
+    public BoardPost selectById(String id) throws Exception {
+        return boardPostMapper.selectById(id);
+    }
+
+    @Override
+    public boolean updateById(BoardPost boardPost) throws Exception {
+        return boardPostMapper.updateById(boardPost) > 0;
+    }
+
+    @Override
+    public boolean deleteById(String id) throws Exception {
+        return boardPostMapper.deleteById(id) > 0;
+    }
+
 
 
 

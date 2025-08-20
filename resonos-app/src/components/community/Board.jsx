@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PostListCard from './card/PostListCard'
 import Pagination from '../Pagination/Pagination'
 import { Link } from 'react-router-dom'
 import {formatDateNotTime} from '../../apis/util'
 
-const BoardDetail = ({setOnModal, isManager, board, posts, notices}) => {
+const BoardDetail = ({setOnModal, isManager, board, posts, notices, onButton, setOnButton, onUpdate}) => {
+
+  const [description, setDescription] = useState('')
+
+  const handleUpdate = () => {
+    onUpdate(description.trim() == '' ? board.description : description)
+  }
+
   return (
     <main className="commu board">
       {/* 상단 */}
@@ -16,7 +23,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices}) => {
             {
               isManager.current
               ?
-              <button onClick={() => setOnModal(true)}>설정</button>
+              <button onClick={() => setOnModal(true)}>수정</button>
               :
               <></>
             }
@@ -51,7 +58,26 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices}) => {
           </div>
           <div>
             <span>한줄소개</span>
-            <p className='ellipsis'>{board?.description}</p>
+            {
+              onButton
+              ?
+              <p className='ellipsis des'>
+                <input type="text" defaultValue={board?.description} onChange={e => setDescription(e.target.value)}/>
+              </p>
+              :
+              <p className='ellipsis des'>{board?.description}</p>
+            }
+            {
+              isManager
+              ?
+              <button className='update' onClick={() => onButton ? handleUpdate() : setOnButton(!onButton)}>
+                {
+                  onButton ? '확인' : '수정'
+                }
+              </button>
+              :
+              <></>
+            }
           </div>
         </div>
       </div>
@@ -74,6 +100,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices}) => {
           }
         </ul>
         <Pagination />
+        <Link to={`/community/create/boards/${board?.id}`} className='update'>게시글 작성</Link>
       </div>
       {/* 하단 */}
       <div className="notice-area">
@@ -87,6 +114,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices}) => {
                 key={notice.id}
                 isBoard={true}
                 post={notice}
+                showName={false}
               />
             ))
             :

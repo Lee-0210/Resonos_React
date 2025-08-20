@@ -80,7 +80,7 @@
   <!-- 한줄 소개 설정 -->
   <update id="setIntro">
     UPDATE community SET
-      intro = #{intro}
+      description = #{intro}
     WHERE id = #{communityId}
   </update>
 
@@ -90,7 +90,7 @@
 
   <!-- 게시판 순위 Top5 - communityService -->
   <select id="getTopCommunities" resultMap="CommunityResultMap" parameterType="int">
-    SELECT 
+    SELECT
       c.*,
       bp.id AS board_post_id,
       bp.title AS board_post_title,
@@ -122,7 +122,7 @@
 
   <!-- 모든 커뮤니티 + 키워드 -->
   <select id="searchCommunities" resultMap="CommunityResultMap" parameterType="string">
-    SELECT 
+    SELECT
       c.id,
       c.category_id,
       c.creator_id,
@@ -158,7 +158,7 @@
         name LIKE CONCAT('%', #{query}, '%')
       </if>
     </where>
-    ORDER BY name ASC, created_at DESC  
+    ORDER BY name ASC, created_at DESC
   </select>
 
 

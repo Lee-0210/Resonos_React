@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 // ckeditor5
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { LoginContext } from '../../../contexts/LoginContextProvider';
 
-const PostContent = ({ content, likes, dislikes, boardId, postId }) => {
+const PostContent = ({ post }) => {
 
+  const { userInfo } = useContext(LoginContext)
 
   return (
     <div className="post-content">
@@ -19,7 +21,7 @@ const PostContent = ({ content, likes, dislikes, boardId, postId }) => {
           컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시
           컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용</p> */}
         <CKEditor editor={ClassicEditor}
-          data={content}           // 조회할 데이터 컨텐츠 
+          data={post.content}           // 조회할 데이터 컨텐츠 
           disabled={true}
           config={{
             toolbar: [],
@@ -30,20 +32,22 @@ const PostContent = ({ content, likes, dislikes, boardId, postId }) => {
         <div className="anybody">
           <div className="like btn btn-gold">
             <p>👍</p>
-            <p>{likes}</p>
+            <p>{post.postLikes}</p>
           </div>
           <div className="dislike btn btn-gold">
             <p>👎</p>
-            <p>{dislikes}</p>
+            <p>{post.postDislikes}</p>
           </div>
           <div className="report btn btn-gold">
             <p>🚨</p>
           </div>
         </div>
-        <div className="onlywriter">
-          <Link className='btn btn-gold' to={`/community/edit/boards/${boardId}/posts/${postId}`}>수정하기</Link>
-          <a className='btn btn-gold' href="#">삭제하기</a>
-        </div>
+        {userInfo.id === post.userId && (
+          <div className="onlywriter">
+            <Link className='btn btn-gold' to={`/community/edit/boards/${post.boardId}/posts/${post.postId}`}>수정하기</Link>
+            <a className='btn btn-gold' href="#">삭제하기</a>
+          </div>
+        )}
       </div>
     </div>
   )

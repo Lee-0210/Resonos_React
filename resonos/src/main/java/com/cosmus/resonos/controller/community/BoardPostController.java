@@ -78,30 +78,37 @@ public class BoardPostController {
         }
     }
 
-    // @PostMapping
-    // public ResponseEntity<?> createPost(@RequestBody BoardPost post,
-    //                                         @AuthenticationPrincipal CustomUser customUser) {
-    //     try {
-    //         // 1. 게시글 저장 서비스 호출
-    //         boolean success = boardPostService.insert(post);
+    // @PostMapping("/community/create/boards/{communityId}")
+    @PostMapping()
+    public String postMethodName(@RequestBody String entity) {
+        //TODO: process POST request
+        
+        return entity;
+    }
+    
+    public ResponseEntity<?> createPost(@RequestBody BoardPost post,
+                                            @AuthenticationPrincipal CustomUser customUser) {
+        try {
+            // 1. 게시글 저장 서비스 호출
+            boolean success = boardPostService.insert(post);
 
-    //         // 2. 게시글 저장 성공 시 배지 자동 지급 트리거
-    //         if (success && customUser != null) {
-    //             // customUser.getUser().getId()로 현재 로그인 유저의 id 추출
-    //             badgeGrantService.checkAndGrantBadges(customUser.getUser().getId());
-    //         }
+            // 2. 게시글 저장 성공 시 배지 자동 지급 트리거
+            if (success && customUser != null) {
+                // customUser.getUser().getId()로 현재 로그인 유저의 id 추출
+                badgeGrantService.checkAndGrantBadges(customUser.getUser().getId());
+            }
 
-    //         // 3. 성공 응답 반환
-    //         if (success) {
-    //             return ResponseEntity.ok("Board post created");
-    //         }
-    //         // 4. 실패 시 500 반환
-    //         return ResponseEntity.status(500).body("Failed to create board post");
-    //     } catch (Exception e) {
-    //         // 5. 예외 발생 시 에러 메시지와 함께 500 반환
-    //         return ResponseEntity.status(500).body("Failed to create board post: " + e.getMessage());
-    //     }
-    // }
+            // 3. 성공 응답 반환
+            if (success) {
+                return ResponseEntity.ok("Board post created");
+            }
+            // 4. 실패 시 500 반환
+            return ResponseEntity.status(500).body("Failed to create board post");
+        } catch (Exception e) {
+            // 5. 예외 발생 시 에러 메시지와 함께 500 반환
+            return ResponseEntity.status(500).body("Failed to create board post: " + e.getMessage());
+        }
+    }
 
 
 

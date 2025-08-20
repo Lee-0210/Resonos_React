@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 import * as api from '../../apis/community'
 import TextPressure from '../../assets/TextPressure'
 import * as fmtDate from '../../apis/util'
+import swal from 'sweetalert2';
 
 
 const Post = () => {
@@ -57,6 +58,49 @@ const Post = () => {
     try {
       const response = await api.postComment(data,{boardId, postId})
       console.log(response)
+      if(response.status === 201) {
+        swal.fire({
+          title : '작성 완료',
+          text : '댓글이 작성되었습니다.',
+          icon : 'success',
+          customClass : {
+            popup: 'album-wrapper'
+          }
+        })
+        setComments(prevComments => [...prevComments, response.data])
+      }
+    } catch (error) {
+      swal.fire({
+        title : '오류',
+        text : '댓글 작성 중 오류가 발생했습니다.',
+        icon : 'error',
+        customClass : {
+          popup: 'album-wrapper'
+        }
+      })
+    }
+  }
+
+  const editComment = async (data, commentId) => {
+    console.log("editComment 실행", data, commentId)
+    try {
+      const response = await api.editComment(data,{boardId, postId, commentId})
+      console.log(response)
+      if(response.status === 200) {
+        swal.fire({
+          title : '수정 완료',
+          text : '댓글이 수정되었습니다.',
+          icon : 'success',
+          customClass : {
+            popup: 'album-wrapper'
+          }
+        })
+        setComments(prevComments => prevComments.map(com => 
+          response.data.id === com.id ? 
+          com = {...com, content : data.content} 
+          : com
+        ))
+      }
     } catch (error) {
       
     }
@@ -85,10 +129,9 @@ const Post = () => {
       <div className="post-wrapper">
         <div className="container">
           <PostTitle title={post.title} date={post.createdAt} writer={post.userNickname} />
-          <PostContent content={post.content} likes={post.postLikes} dislikes={post.postDislikes}
-                      boardId={boardId} postId={postId} />
-          <PostComment comments={comments} commentCount={post.commentCount} />
-          <PostForm postComment={postComment} userId={post.userId} />
+          <PostContent post={post} boardId={boardId}/>
+          <PostComment comments={comments} commentCount={post.commentCount} editComment={editComment} />
+          <PostForm postComment={postComment} />
         </div>
       </div>
     </>

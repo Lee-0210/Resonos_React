@@ -27,7 +27,22 @@ export const changeTrack = async (boardId, trackId) => {
   })
 }
 
-// 게시판 댓글 달기
+/* 게시판 한줄소개 업데이트 함수 */
+export const updateDescription = async (boardId, description) => {
+  return api.put(`/community/${boardId}/intro`, {
+    description
+  })
+}
+
+
+// 게시글 ==================================
+
+
+// 게시글 댓글 달기
 export const postComment = async (data,ids) => {
   return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
+}
+// 게시글 댓글 수정
+export const editComment = async (data, ids) => {
+  return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
 }

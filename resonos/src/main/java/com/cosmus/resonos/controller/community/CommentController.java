@@ -85,13 +85,18 @@ public class CommentController {
         try {
             Comment comment = new Comment();
             comment.setContent(request.getContent());
-            comment.setType("posts");
-            comment.setTargetId(postId);
-            comment.setBoardPostId(postId);
+            if (request.getParentCommentId() == null) {
+                comment.setType("posts");
+                comment.setTargetId(postId);
 
-            // 🔹 대댓글 처리
-            // parentCommentId가 있으면 대댓글, 없으면 최상단 댓글
-            comment.setParentCommentId(request.getParentCommentId());
+            } else {
+                // 🔹 대댓글 처리
+                // parentCommentId가 있으면 대댓글, 없으면 최상단 댓글
+                comment.setParentCommentId(request.getParentCommentId());
+                comment.setType("comment");
+                comment.setTargetId(request.getParentCommentId());
+            }
+            comment.setBoardPostId(postId);
 
             if (loginUser != null) {
                 // 로그인 상태
@@ -121,11 +126,27 @@ public class CommentController {
             Comment comment = commentService.select(commentId);
             if (comment == null) return new ResponseEntity<>("댓글이 없습니다.", HttpStatus.NOT_FOUND);
 
+            // if (request.getGuestPassword() == null ||
+            //     !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+            //     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+            // }
+
+            // if (loginUser != null && !loginUser.getId().equals(comment.getUserId())) {
+            //     return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+            // }
+
             if (loginUser != null) {
-                if (!loginUser.getId().equals(comment.getUserId())) {
+                if (comment.getUserId() != null && !loginUser.getId().equals(comment.getUserId())) {
                     return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
+                else if (comment.getUserId() == null && (request.getGuestPassword() == null ||
+                    !commentService.checkGuestPassword(comment, request.getGuestPassword()))) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+                }
             } else {
+                if (comment.getUserId() != null) {
+                    return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
                 if (request.getGuestPassword() == null ||
                     !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
@@ -133,28 +154,61 @@ public class CommentController {
             }
 
             comment.setContent(request.getContent());
-            boolean result = commentService.updateById(comment);
-            return result ? new ResponseEntity<>("SUCCESS", HttpStatus.OK)
+            boolean result = commentService.update(comment);
+            return result ? new ResponseEntity<>(comment, HttpStatus.OK)
                           : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            log.error("Error in update", e);
+            log.error("댓글 수정 실패", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<?> destroy(@PathVariable("id")  Long id) {
-    //     try {
-    //         boolean result = commentService.deleteById(String.valueOf(id));
-    //         if (result)
-    //             return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
-    //         else
-    //             return new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
-    //     } catch (Exception e) {
-    //         log.error("Error in destroy", e);
-    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<?> destroy(
+        @PathVariable("postId") Long postId,
+        @PathVariable("commentId") Long commentId,
+        @RequestBody(required = false) Comment request,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) {
+        try {
+            Comment comment = commentService.select(commentId);
+            if (comment == null) return new ResponseEntity<>("댓글이 없습니다.", HttpStatus.NOT_FOUND);
+
+            // if (request == null || request.getGuestPassword() == null ||
+            //     !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+            //     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+            // }
+
+            // if (loginUser != null && !loginUser.getId().equals(comment.getUserId())) {
+            //     return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+            // }
+
+            if (loginUser != null) {
+                if (comment.getUserId() != null && !loginUser.getId().equals(comment.getUserId())) {
+                    return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
+                else if (comment.getUserId() == null && (request == null || request.getGuestPassword() == null ||
+                    !commentService.checkGuestPassword(comment, request.getGuestPassword()))) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                if (comment.getUserId() != null) {
+                    return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
+                if (request == null || request.getGuestPassword() == null ||
+                    !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+                }
+            }
+
+            boolean result = commentService.delete(commentId);
+            return result ? new ResponseEntity<>(comment, HttpStatus.OK)
+                          : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("댓글 삭제 실패", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     // // 전체 삭제
     // @DeleteMapping("/all")

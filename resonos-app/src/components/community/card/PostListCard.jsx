@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import {formatDateNotDay, formatDateNotTime} from '../../../apis/util'
 import * as cr from '../../../apis/community'
 
-const PostListCard = ({post, isBoard}) => {
+const PostListCard = ({post, isBoard, showName}) => {
 
   const navigate = useNavigate()
   const params = useParams()
@@ -20,7 +20,13 @@ const PostListCard = ({post, isBoard}) => {
         &nbsp;👍({post?.postLikes})
       </p>
       <div>
-        <span className='board-name'>{post?.community?.name}</span>
+        {
+          showName
+          ?
+          <span className='board-name'>{post?.community?.name}</span>
+          :
+          <></>
+        }
         <span className='date'>
           {
             isBoard ? formatDateNotTime(post?.createdAt) : formatDateNotDay(post?.createdAt)
