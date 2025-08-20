@@ -70,6 +70,7 @@ public class ReportController {
         @AuthenticationPrincipal CustomUser loginUser
     ) {
         try {
+            if (loginUser == null) return new ResponseEntity<>("로그인 후 게시글 신고가 가능합니다.", HttpStatus.UNAUTHORIZED);
             Report report = new Report();
             report.setReason(request.getReason());
             report.setReporterId(loginUser.getId());
