@@ -803,9 +803,9 @@ button.like {background-color: inherit; border: none;}
 .is-read:not(:checked) + span {
   display: block;
   color: red;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   position: absolute;
-  top: -20px;
+  top: -8px;
   left: 0;
 }
 .con-noti label {display: block;}

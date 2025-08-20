@@ -127,7 +127,7 @@ public class MainPageController {
                 response.put("searchedCommunities", commPage.getList());
                 response.put("communityPagination", new Pagination(commPage));
 
-                // 키워드 포함된 커뮤니티 개수 
+                // 키워드 포함된 커뮤니티 개수
                 response.put("communityCount", commPage.getTotal());
 
 
@@ -140,7 +140,7 @@ public class MainPageController {
             } else {
                 // type 이 없는 경우는 더보기 전 페이지
 
-                // 모든 커뮤니티 + pageinfo사용 + 키워드 포함 + 커뮤니티별 작성된 boardPost count 
+                // 모든 커뮤니티 + pageinfo사용 + 키워드 포함 + 커뮤니티별 작성된 boardPost count
                 PageInfo<Community> commPage = communityService.searchCommunities2(query, page, size);
                 response.put("searchedCommunities", commPage.getList());
                 response.put("communityPagination", new Pagination(commPage));
@@ -164,15 +164,16 @@ public class MainPageController {
     @GetMapping("/boards/{communityId}")
     public ResponseEntity<?> getBoardDetail(
             @PathVariable("communityId") Long communityId,
-            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "pPage", defaultValue = "1") int pPage,
+            @RequestParam(value = "nPage", defaultValue = "1") int nPage,
             @RequestParam(value = "size", defaultValue = "10") int size) {
         try {
             Community community = communityService.select(communityId);
             if (community == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-            PageInfo<BoardPost> postPage = boardPostService.listByCommunityId(communityId, page, size);
-            // List<BoardPost> notices = boardPostService.getNoticesByCommunityId(communityId, 5); // 페이지네이션 적용 
-            PageInfo<BoardPost> noticePage = boardPostService.getNoticesByCommunityId(communityId, page, 5);
+            PageInfo<BoardPost> postPage = boardPostService.listByCommunityId(communityId, pPage, size);
+            // List<BoardPost> notices = boardPostService.getNoticesByCommunityId(communityId, 5); // 페이지네이션 적용
+            PageInfo<BoardPost> noticePage = boardPostService.getNoticesByCommunityId(communityId, nPage, 5);
 
             Map<String, Object> response = new HashMap<>();
             response.put("posts", postPage.getList());

@@ -118,6 +118,7 @@ const NotiContainer = () => {
       const data = response.data
 
       if(response.status === 200){
+        console.log(response)
         setLastPath(data.lastPath)
         setNotiList(data.notiList)
         setCount(data.count)
