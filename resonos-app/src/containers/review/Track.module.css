@@ -168,6 +168,7 @@ body {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: flex-start;
+    margin-right: 50px;
 }
 
 /* 정보 */
@@ -188,6 +189,8 @@ body {
     border-radius: 10px;
     border: 2px solid var(--main-color);
     padding: 5px 10px 10px 10px;
+    height: 100%;
+    max-height: 250px;
 }
 
 .top5track {

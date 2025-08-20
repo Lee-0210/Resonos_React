@@ -1,6 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const ReplyForm = ({ userInfo, cancel }) => {
+const ReplyForm = ({ userInfo, cancel, postReply, com }) => {
+
+  const [content, setContent] = useState('')
+  const handlePostReply = (e, com, content) => {
+    e.preventDefault()
+    const data = {
+      content : content,
+      parentCommentId : com.id
+    }
+    postReply(data)
+    setContent('')
+    cancel()
+  }
+
   return (
     <div className='reply-form'>
       <form>
@@ -12,9 +25,9 @@ const ReplyForm = ({ userInfo, cancel }) => {
             placeholder='비밀번호' required />
           </div>
         )}
-        <textarea name="" id="" required></textarea>
+        <textarea onChange={(e) => setContent(e.target.value)} required></textarea>
         <div className="comment-submit">
-          <button className='btn btn-gold'>대댓작성</button>
+          <button className='btn btn-gold' onClick={(e) => handlePostReply(e, com, content)}>대댓작성</button>
           <button className='btn btn-gold' onClick={cancel}>취소</button>
         </div>
       </form>
