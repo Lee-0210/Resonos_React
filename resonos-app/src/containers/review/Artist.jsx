@@ -9,6 +9,7 @@ import ArtistRecent from '../../components/review/artist/ArtistRecent';
 import MoodStatus from '../../components/review/common/MoodStatus';
 import swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
+import SlideIn from '../../components/review/SlideIn';
 
 const Artist = () => {
 
@@ -172,16 +173,24 @@ const Artist = () => {
   }
   return (
     <div className={styles.taWrapper}>
-      <ArtistInfo styles={styles} artist={artist} albumCount={albumCount}
-        trackCount={trackCount} userId={userId} isArtistFollowed={isArtistFollowed}
-        followCount={followCount} albums={albums} likeArtist={likeArtist} />
-      <ArtistTop7 styles={styles} artist={artist} top7Tracks={top7Tracks}
-        track={track} />
-      <ArtistRecent styles={styles} artist={artist} recentReviews={recentReviews} />
-      <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
-        artist={artist} track={track} userVotedMoodId={userVotedMoodId}
-        moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats}
-        voteMood={voteMood} />
+      <SlideIn delay={0.2} direction="up">
+        <ArtistInfo styles={styles} artist={artist} albumCount={albumCount}
+          trackCount={trackCount} userId={userId} isArtistFollowed={isArtistFollowed}
+          followCount={followCount} albums={albums} likeArtist={likeArtist} />
+      </SlideIn>
+      <SlideIn delay={0.4} direction="up">
+        <ArtistTop7 styles={styles} artist={artist} top7Tracks={top7Tracks}
+          track={track} />
+      </SlideIn>
+      <SlideIn delay={0.6} direction="up">
+        <ArtistRecent styles={styles} artist={artist} recentReviews={recentReviews} />
+      </SlideIn>
+      <SlideIn delay={0.8} direction="up">
+        <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={allTags} userId={userId}
+          artist={artist} track={track} userVotedMoodId={userVotedMoodId}
+          moodLabels={moodLabels} moodValues={moodValues} moodStats={moodStats}
+          voteMood={voteMood} />
+      </SlideIn>
     </div>
   )
 }

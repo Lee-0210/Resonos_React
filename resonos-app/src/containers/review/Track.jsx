@@ -10,6 +10,7 @@ import TextPressure from '../../assets/TextPressure';
 import TrackStatus from '../../components/review/track/TrackStatus';
 import swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
+import SlideIn from '../../components/review/SlideIn';
 
 const Track = () => {
 
@@ -375,21 +376,31 @@ const Track = () => {
 
   return (
     <div className={styles.taWrapper}>
-      <TrackInfo styles={styles} track={track} album={album} artist={artist} score={score}
-        userId={userId} isTrackLikedByUser={isTrackLikedByUser} trackLikeCount={trackLikeCount}
-        toggleLike={toggleLike} userPlaylist={userPlaylist}
-        addTrackToPlaylist={addTrackToPlaylist} />
-      <MvAndStreaming styles={styles} tracks={null} track={track} />
-      <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
-        score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType}
-        loadMoreReviews={loadMoreReviews} page={page} toggleReviewLike={toggleReviewLike}
-        reportReview={reportReview} deleteReview={deleteReview} handleSubmitReview={handleSubmitReview} />
-      <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
-        userId={userId} artist={artist} track={track} moodValues={moodValues}
-        moodStats={moodStats} userVotedMoodId={userVotedMoodId} moodLabels={moodLabels}
-        voteMood={voteMood} />
-      <TrackStatus styles={styles} top5List={top5List} album={album}
-        emptyPlayList={emptyPlayList} playLists={playLists} />
+      <SlideIn delay={0.5} direction="up">
+        <TrackInfo styles={styles} track={track} album={album} artist={artist} score={score}
+          userId={userId} isTrackLikedByUser={isTrackLikedByUser} trackLikeCount={trackLikeCount}
+          toggleLike={toggleLike} userPlaylist={userPlaylist}
+          addTrackToPlaylist={addTrackToPlaylist} />
+      </SlideIn>
+      <SlideIn delay={1} direction="up">
+        <MvAndStreaming styles={styles} tracks={null} track={track} />
+      </SlideIn>
+      <SlideIn delay={1.5} direction="up">
+        <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
+          score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType}
+          loadMoreReviews={loadMoreReviews} page={page} toggleReviewLike={toggleReviewLike}
+          reportReview={reportReview} deleteReview={deleteReview} handleSubmitReview={handleSubmitReview} />
+      </SlideIn>
+      <SlideIn delay={2} direction="up">
+        <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
+          userId={userId} artist={artist} track={track} moodValues={moodValues}
+          moodStats={moodStats} userVotedMoodId={userVotedMoodId} moodLabels={moodLabels}
+          voteMood={voteMood} />
+      </SlideIn>
+      <SlideIn delay={2.5} direction="up">
+        <TrackStatus styles={styles} top5List={top5List} album={album}
+          emptyPlayList={emptyPlayList} playLists={playLists} />
+      </SlideIn>
     </div>
   )
 }

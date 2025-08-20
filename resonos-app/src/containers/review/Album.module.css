@@ -19,7 +19,6 @@ li {
     transform: rotate(360deg);
   }
 }
-
 /* 컨테이너 */
 .song-img {
   position: relative;
@@ -107,6 +106,7 @@ li {
   gap: 30px;
   align-items: center;
   margin-bottom: 30px;
+  padding: 10px;
 }
 
 body {
@@ -184,11 +184,17 @@ body {
 .album-wrapper a {
   display: inline-block;
 }
+.album-wrapper>div {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 
 .song-card {
   margin-top: 50px;
   display: flex;
   justify-content: start;
+  min-width: 900px;
   max-width: 1350px;
   width: 100%;
   border-radius: 20px;
@@ -267,6 +273,7 @@ body {
   display: flex;
   flex-direction: column;
   max-width: 1350px;
+  min-width: 900px;
   width: 100%;
   display: flex;
   border-radius: 20px;
@@ -438,24 +445,22 @@ body {
 
 .iframe-card {
   display: flex;
-  padding: 10px;
   max-width: 1350px;
+  min-width: 900px;
+  padding: 10px;
   width: 100%;
-  display: flex;
   border-radius: 20px;
   border: 2px solid var(--main-color);
   justify-content: space-evenly;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 }
 
 .spotify {
   flex: 1 1 auto;
   /* 👉 grow 1 / shrink 1 / basis 500px  */
   min-width: 260px;
-  /* 더 작아질 때의 하한선(선택사항)      */
   height: 152px;
-  /* 고정 높이 유지                       */
   max-width: 510px;
 }
 
@@ -474,6 +479,7 @@ body {
   padding-right: 10px;
   max-width: 1350px;
   width: 100%;
+  min-width: 900px;
   justify-content: space-between;
   gap: 15px;
   border-radius: 20px;
@@ -601,6 +607,7 @@ body {
 
 .arg-card {
   max-width: 1350px;
+  min-width: 900px;
   width: 100%;
   padding: 10px;
   display: flex;
