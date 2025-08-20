@@ -1,13 +1,10 @@
-import React, { useContext, useState } from 'react'
-import { LoginContext } from '../../../contexts/LoginContextProvider'
+import React, { useState } from 'react'
 
-const ReplyForm = ({ cancel, postReply, com }) => {
+const ReplyForm = ({ cancel, postReply, com, isLogin }) => {
 
   const [nick, setNick] = useState('')
   const [tempPw, setTempPw] = useState('')
   const [content, setContent] = useState('')
-
-  const { isLogin } = useContext(LoginContext)
 
   const handlePostReply = (e, com, content) => {
     e.preventDefault()
