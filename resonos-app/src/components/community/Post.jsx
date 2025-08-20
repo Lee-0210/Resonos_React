@@ -81,6 +81,29 @@ const Post = () => {
     }
   }
 
+  const editComment = async (data, commentId) => {
+    try {
+      const response = await api.editComment(data,{boardId, postId, commentId})
+      const data = response.data
+      console.log(response)
+      if(response.status === 200) {
+        swal.fire({
+          title : '수정 완료',
+          text : '댓글이 수정되었습니다.',
+          icon : 'success',
+          customClass : {
+            popup: 'album-wrapper'
+          }
+        })
+        setComments(prevComments => prevComments.map(com => {
+          data.id === com.id ? com = data : com
+        }))
+      }
+    } catch (error) {
+      
+    }
+  }
+
   if (isLoading) {
     return (
       <div style={{ position: 'relative', height: '300px' }}>
@@ -105,7 +128,7 @@ const Post = () => {
         <div className="container">
           <PostTitle title={post.title} date={post.createdAt} writer={post.userNickname} />
           <PostContent post={post} boardId={boardId}/>
-          <PostComment comments={comments} commentCount={post.commentCount} />
+          <PostComment comments={comments} commentCount={post.commentCount} editComment={editComment} />
           <PostForm postComment={postComment} />
         </div>
       </div>

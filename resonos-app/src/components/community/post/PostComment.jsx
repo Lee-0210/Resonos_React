@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { LoginContext } from '../../../contexts/LoginContextProvider'
 import CommentEdit from './CommentEdit'
 
-const PostComment = ({ comments, commentCount }) => {
+const PostComment = ({ comments, commentCount, editComment }) => {
 
   const [replyTo, setReplyTo] = useState(null)
   const [isEdit, setIsEdit] = useState(null)
@@ -63,7 +63,7 @@ const PostComment = ({ comments, commentCount }) => {
               </>
             )}
             {isEdit === idx && (
-              <CommentEdit userInfo={userInfo} cancel={handleCancelCommentEdit} />
+              <CommentEdit userInfo={userInfo} cancel={handleCancelCommentEdit} com={com} editComment={editComment} />
             )}
             {com.replies && (com.replies.map((rep, rIdx) =>
               <div className="reply-comment" key={rIdx}>

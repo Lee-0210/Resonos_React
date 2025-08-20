@@ -8,7 +8,6 @@ import { LoginContext } from '../../../contexts/LoginContextProvider';
 const PostContent = ({ post }) => {
 
   const { userInfo } = useContext(LoginContext)
-  console.log(userInfo)
 
   return (
     <div className="post-content">
