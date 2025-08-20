@@ -9,8 +9,7 @@ const PostForm = ({ postComment }) => {
   const [content, setContent] = useState('')
 
 
-  const isLogin = sessionStorage.getItem('isLogin')
-  const {userInfo} = useContext(LoginContext)
+  const {userInfo, isLogin} = useContext(LoginContext)
 
   const handlePostComment = (e) => {
     e.preventDefault();
@@ -40,15 +39,15 @@ const PostForm = ({ postComment }) => {
       <form onSubmit={handlePostComment}>
         {!isLogin && (
           <div className="for-unlogin">
-            <input id="nickname" type="text" 
+            <input id="nickname" type="text" value={nick}
             placeholder='ㅇㅇ' onChange={(e) => setNick(e.target.value)} required/>
-            <input id="tempPw" type="password"
+            <input id="tempPw" type="password" value={tempPw}
             placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
           </div>
         )}
         <textarea id="content" value={content} required onChange={(e) => setContent(e.target.value)}></textarea>
         <div className="comment-submit">
-          <button type='submit'  className='btn btn-gold'>댓글 작성</button>
+          <button type='submit' className='btn btn-gold' onClick={(e) => handlePostComment(e)}>댓글 작성</button>
         </div>
       </form>
     </div>

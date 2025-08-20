@@ -76,7 +76,7 @@ public class CommentController {
     // }
 
     @PostMapping()
-    public ResponseEntity<?> create(
+    public ResponseEntity<?> createComment(
         @PathVariable("postId") Long postId,
         @RequestBody Comment request,
         @AuthenticationPrincipal CustomUser loginUser
@@ -116,7 +116,7 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<?> update(
+    public ResponseEntity<?> updateComment(
         @PathVariable("postId") Long postId,
         @PathVariable("commentId") Long commentId,
         @RequestBody Comment request,
@@ -164,7 +164,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<?> destroy(
+    public ResponseEntity<?> deleteComment(
         @PathVariable("postId") Long postId,
         @PathVariable("commentId") Long commentId,
         @RequestBody(required = false) Comment request,

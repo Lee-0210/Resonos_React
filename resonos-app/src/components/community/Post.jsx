@@ -80,6 +80,36 @@ const Post = () => {
       })
     }
   }
+  const postReply = async (data) => {
+    try {
+      const response = await api.postReply(data,{boardId, postId})
+      console.log(response)
+      if(response.status === 201) {
+        swal.fire({
+          title : '작성 완료',
+          text : '대댓글이 작성되었습니다.',
+          icon : 'success',
+          customClass : {
+            popup: 'album-wrapper'
+          }
+        })
+        setComments(prevComments => prevComments.map(prev=>
+          prev.id === response.data.parentCommentId ?
+          {...prev, replies : [...prev.replies, response.data]}
+          : prev
+        ))
+      }
+    } catch (error) {
+      swal.fire({
+        title : '오류',
+        text : '댓글 작성 중 오류가 발생했습니다.',
+        icon : 'error',
+        customClass : {
+          popup: 'album-wrapper'
+        }
+      })
+    }
+  }
 
   const editComment = async (data, commentId) => {
     console.log("editComment 실행", data, commentId)
@@ -130,7 +160,8 @@ const Post = () => {
         <div className="container">
           <PostTitle title={post.title} date={post.createdAt} writer={post.userNickname} />
           <PostContent post={post} boardId={boardId}/>
-          <PostComment comments={comments} commentCount={post.commentCount} editComment={editComment} />
+          <PostComment comments={comments} commentCount={post.commentCount}
+                editComment={editComment} postReply={postReply} />
           <PostForm postComment={postComment} />
         </div>
       </div>

@@ -13,20 +13,7 @@ const TrackStatus = ({ styles, album, top5List, playLists, emptyPlayList }) => {
           ))}
         </div>
       )}
-      <div className={`${styles.info} ${styles.plList}`}>
-        <p id="subtitle">이 트랙을 포함한 플리🎶</p>
-        {(emptyPlayList || !playLists || playLists.length === 0) && (
-          <>
-            <p>해당 음원을 포함한</p>
-            <p>플레이리스트를 만들어보세요! 🤩</p>
-          </>
-        )}
-        {playLists && playLists.map(playList => (
-          <a key={playList.id} href={`/playlists/${playList.id}`}>
-            <p>{`${playList.title} ❤️${playList.likeCount}`}</p>
-          </a>
-        ))}
-      </div>
+      
     </div>
   );
 };

@@ -11,8 +11,8 @@ export const searchCommunity = async (keyword, type, page) => {
 }
 
 /* 게시판 상세 */
-export const getBoardData = async id => {
-  return api.get(`/community/boards/${id}`)
+export const getBoardData = async (id, pPage, nPage) => {
+  return api.get(`/community/boards/${id}?pPage=${pPage}&nPage=${nPage}`)
 }
 
 /* 게시글 상세 */
@@ -41,8 +41,11 @@ export const updateDescription = async (boardId, description) => {
 export const postComment = async (data,ids) => {
   return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
 }
+// 게시글 대댓 댓글아이디, 댓글내용만
+export const postReply = async (data, ids) => {
+  return api.post (`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
+}
 // 게시글 댓글 수정
 export const editComment = async (data, ids) => {
   return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
 }
-// 게시글 대댓 댓글아이디, 댓글내용만

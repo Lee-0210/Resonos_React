@@ -1,7 +1,7 @@
 import React from 'react'
 import CommunityCard from './card/CommunityCard'
 
-const ActivityCommu = ({commuList}) => {
+const ActivityCommu = ({commuList, postList, commentList}) => {
   return (
     <>
       {/* 통계 */}
@@ -49,6 +49,15 @@ const ActivityCommu = ({commuList}) => {
             <h2 className="text-start">나의 게시글</h2>
           </div>
           <ul className="ul-list my-board">
+            {
+              !postList
+              ?
+              <p className="no-content">작성한 게시글이 없습니다.</p>
+              :
+              postList?.map(() => (
+                <li>응애</li>
+              ))
+            }
           </ul>
         </div>
       </div>
@@ -60,6 +69,15 @@ const ActivityCommu = ({commuList}) => {
             <h2 className="text-start">나의 댓글</h2>
           </div>
           <ul className="ul-list my-board">
+            {
+              !commentList
+              ?
+              <p className="no-content">작성한 댓글이 없습니다.</p>
+              :
+              commentList?.map(() => (
+                <li>응애</li>
+              ))
+            }
           </ul>
         </div>
       </div>

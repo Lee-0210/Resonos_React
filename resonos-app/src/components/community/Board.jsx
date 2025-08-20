@@ -4,7 +4,7 @@ import Pagination from '../Pagination/Pagination'
 import { Link } from 'react-router-dom'
 import {formatDateNotTime} from '../../apis/util'
 
-const BoardDetail = ({setOnModal, isManager, board, posts, notices, onButton, setOnButton, onUpdate}) => {
+const BoardDetail = ({setOnModal, isManager, board, posts, notices, postPagination, noticePagination, onButton, setOnButton, onUpdate, onChangePostPage, onChangeNoticePage}) => {
 
   const [description, setDescription] = useState('')
 
@@ -99,7 +99,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices, onButton, se
             ))
           }
         </ul>
-        <Pagination />
+        <Pagination pagination={postPagination} onPageChange={onChangePostPage}/>
         <Link to={`/community/create/boards/${board?.id}`} className='update'>게시글 작성</Link>
       </div>
       {/* 하단 */}
@@ -121,7 +121,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices, onButton, se
             <p className="no-content">작성된 글이 없습니다.</p>
           }
         </ul>
-        <Pagination />
+        <Pagination pagination={noticePagination} onPageChange={onChangeNoticePage}/>
       </div>
     </main>
   )

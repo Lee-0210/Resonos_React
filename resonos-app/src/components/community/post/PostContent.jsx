@@ -7,7 +7,8 @@ import { LoginContext } from '../../../contexts/LoginContextProvider';
 
 const PostContent = ({ post }) => {
 
-  const { userInfo } = useContext(LoginContext)
+  const { userInfo, isLogin  } = useContext(LoginContext)
+
 
   return (
     <div className="post-content">
@@ -42,7 +43,7 @@ const PostContent = ({ post }) => {
             <p>🚨</p>
           </div>
         </div>
-        {userInfo.id === post.userId && (
+        {isLogin && userInfo.id === post.userId && (
           <div className="onlywriter">
             <Link className='btn btn-gold' to={`/community/edit/boards/${post.boardId}/posts/${post.postId}`}>수정하기</Link>
             <a className='btn btn-gold' href="#">삭제하기</a>
