@@ -6,27 +6,20 @@
 
     <resultMap id="ReportResultMap" type="com.cosmus.resonos.domain.community.Report">
         <id property="id" column="id"/>
-        <result property="targetType" column="target_type"/>
         <result property="reason" column="reason"/>
         <result property="status" column="status"/>
         <result property="createdAt" column="created_at"/>
         <result property="reporterId" column="reporter_id"/>
-        <result property="targetId" column="target_id"/>
-        <result property="processedBy" column="processed_by"/>
-        <result property="processedAt" column="processed_at"/>
-        <result property="processMemo" column="process_memo"/>
+        <result property="boardPostId" column="board_post_id"/>
+        <result property="adminId" column="admin_id"/>
     </resultMap>
 
     <select id="findByReporterId" resultMap="ReportResultMap">
         SELECT * FROM report WHERE reporter_id = #{reporterId} ORDER BY created_at DESC
     </select>
 
-    <select id="findByTargetId" resultMap="ReportResultMap">
-        SELECT * FROM report WHERE target_id = #{targetId} ORDER BY created_at DESC
-    </select>
-
-    <select id="findByTargetTypeAndTargetId" resultMap="ReportResultMap">
-        SELECT * FROM report WHERE target_type = #{targetType} AND target_id = #{targetId} ORDER BY created_at DESC
+    <select id="findByBoardPostId" resultMap="ReportResultMap">
+        SELECT * FROM report WHERE board_post_id = #{boardPostId} ORDER BY created_at DESC
     </select>
 
     <select id="findAll" resultMap="ReportResultMap">
@@ -34,15 +27,17 @@
     </select>
 
     <update id="updateStatus">
-        UPDATE report SET status = #{status}, processed_by = #{processedBy}, processed_at = NOW(), process_memo = #{processMemo}
+        UPDATE report
+        SET status = #{status},
+            admin_id = #{adminId}
         WHERE id = #{id}
     </update>
 
-    <insert id="insert" >
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO report
-        (target_type, target_id, reason, status, created_at, reporter_id)
+        (reason, reporter_id, board_post_id)
         VALUES
-        (#{targetType}, #{targetId}, #{reason}, #{status}, NOW(), #{reporterId})
+        (#{reason}, #{reporterId}, #{boardPostId})
     </insert>
 
     <select id="list" resultMap="ReportResultMap">
@@ -53,17 +48,14 @@
         SELECT * FROM report WHERE id = #{id}
     </select>
 
-    <update id="update" >
+    <update id="update">
         UPDATE report
-        SET target_type = #{targetType},
-            reason = #{reason},
+        SET reason = #{reason},
             status = #{status},
             created_at = #{createdAt},
             reporter_id = #{reporterId},
-            target_id = #{targetId},
-            processed_by = #{processedBy},
-            processed_at = #{processedAt},
-            process_memo = #{processMemo}
+            board_post_id = #{boardPostId},
+            admin_id = #{adminId}
         WHERE id = #{id}
     </update>
 
@@ -75,11 +67,6 @@
         SELECT COUNT(*) FROM report
     </select>
 
-    <select id="countByBlind" resultType="int">
-        SELECT COUNT(DISTINCT target_id)
-        FROM report
-        WHERE status = 'BLIND'
-    </select>
     <!--  // report 페이징 countByStatus, findByStatusPaging, findAllPaging -->
     <select id="countByStatus" resultType="long">
         SELECT COUNT(*)
