@@ -6,7 +6,11 @@ const CommentEdit = ({ userInfo, cancel, com, editComment }) => {
 
   const handleEditComment = (e, content, commentId) => {
     e.preventDefault();
+    console.log(content, commentId)
     editComment({content}, commentId)
+    console.log("함수실행함")
+    setEditContent('')
+    cancel()
   }
 
   return (
