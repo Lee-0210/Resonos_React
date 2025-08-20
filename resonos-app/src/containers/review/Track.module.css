@@ -20,6 +20,12 @@
     gap: 30px;
     align-items: center;
     margin-bottom: 30px;
+    padding: 10px;
+}
+.ta-wrapper>div {
+    display: flex;
+    width: 100%;
+    justify-content: center;
 }
 
 body {

@@ -37,7 +37,6 @@ export const updateDescription = async (boardId, description) => {
 
 // 게시글 ==================================
 
-
 // 게시글 댓글 달기
 export const postComment = async (data,ids) => {
   return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
@@ -46,3 +45,4 @@ export const postComment = async (data,ids) => {
 export const editComment = async (data, ids) => {
   return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
 }
+// 게시글 대댓 댓글아이디, 댓글내용만
