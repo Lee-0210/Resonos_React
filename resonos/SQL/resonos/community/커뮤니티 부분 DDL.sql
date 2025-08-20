@@ -1,4 +1,3 @@
--- Active: 1751337677491@@127.0.0.1@3306@resonos
 DROP TABLE IF EXISTS `community_category`;
 
 CREATE TABLE `community_category` (
@@ -85,10 +84,12 @@ CREATE TABLE `board_post` (
     `type` VARCHAR(50) NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `community_id` BIGINT NOT NULL,
-    `user_id` BIGINT NOT NULL,
+    `user_id` BIGINT NULL,
     `views` BIGINT NOT NULL DEFAULT 0,
     `track_id` VARCHAR(200) NULL,
-    `thumbnail_url` VARCHAR(200) NULL DEFAULT '/img/profileImg.png'
+    `thumbnail_url` VARCHAR(200) NULL DEFAULT '/img/profileImg.png',
+    `guest_nickname` VARCHAR(100) NULL,
+    `guest_password` VARCHAR(100) NULL
 );
 
 select * from board_post;
@@ -117,6 +118,18 @@ CREATE TABLE `community` (
     `intro` VARCHAR(200) NULL
 );
 
+DROP TABLE IF EXISTS `report`;
+
+CREATE TABLE `report` (
+	`id`	BIGINT	NOT NULL,
+	`reason`	TEXT	NOT NULL,
+	`status`	ENUM('PENDING', 'DONE', 'REJECTED')	NOT NULL	DEFAULT 'PENDING',
+	`created_at`	DATETIME	NOT NULL	DEFAULT CURRENT_TIMESTAMP,
+	`reporter_id`	BIGINT	NOT NULL,
+	`board_post_id`	BIGINT	NOT NULL,
+	`admin_id`	BIGINT	NOT NULL
+);
+
 
 ALTER TABLE `community_category` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
 
@@ -137,6 +150,8 @@ ALTER TABLE `comment` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRI
 ALTER TABLE `board_post` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `likes_dislikes` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `report` MODIFY COLUMN `id` BIGINT NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `community`
 ADD CONSTRAINT `FK_community_category_TO_community_1` FOREIGN KEY (`category_id`) REFERENCES `community_category` (`id`);
@@ -190,6 +205,12 @@ ALTER TABLE `board_post`
 ADD CONSTRAINT `FK_track_TO_board_post_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
 
 ALTER TABLE `community` ADD CONSTRAINT `FK_track_TO_community_1` FOREIGN KEY (`track_id`) REFERENCES `track` (`id`);
+
+ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_1` FOREIGN KEY (`reporter_id`) REFERENCES `user` (`id`);
+
+ALTER TABLE `report` ADD CONSTRAINT `FK_user_TO_report_2` FOREIGN KEY (`admin_id`) REFERENCES `user` (`id`);
+
+ALTER TABLE `report` ADD CONSTRAINT `FK_board_post_TO_report_1` FOREIGN KEY (`board_post_id`) REFERENCES `board_post` (`id`);
 
 
 
