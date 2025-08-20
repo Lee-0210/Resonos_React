@@ -82,9 +82,9 @@ const Post = () => {
   }
 
   const editComment = async (data, commentId) => {
+    console.log("editComment 실행", data, commentId)
     try {
       const response = await api.editComment(data,{boardId, postId, commentId})
-      const data = response.data
       console.log(response)
       if(response.status === 200) {
         swal.fire({
@@ -95,9 +95,11 @@ const Post = () => {
             popup: 'album-wrapper'
           }
         })
-        setComments(prevComments => prevComments.map(com => {
-          data.id === com.id ? com = data : com
-        }))
+        setComments(prevComments => prevComments.map(com => 
+          response.data.id === com.id ? 
+          com = {...com, content : data.content} 
+          : com
+        ))
       }
     } catch (error) {
       
