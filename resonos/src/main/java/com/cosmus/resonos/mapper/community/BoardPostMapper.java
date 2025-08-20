@@ -68,6 +68,8 @@ public interface BoardPostMapper {
     List<ComVoteArgument> findArgumentsByVoteId(@Param("voteId") Long voteId);
     // 각 선택지별 투표수 조회 (optional: 한번에 몰아서 처리 가능)
     int countVoteResults(@Param("argId") Long argId);
+    // 커뮤니티 ID 목록에 해당하는 게시글 조회
+    public List<BoardPost> getPostsByCommunityIds(List<Long> communityIds);
 
     
 }

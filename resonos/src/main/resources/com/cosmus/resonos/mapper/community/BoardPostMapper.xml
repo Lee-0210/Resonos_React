@@ -278,5 +278,18 @@
   WHERE arg_id = #{argId}
 </select>
 
+<!-- 키워드 기본 검색을 위한 - 커뮤니티 ID 목록에 해당하는 게시글 조회 -->
+<select id="getPostsByCommunityIds" resultType="com.cosmus.resonos.domain.community.BoardPost">
+  SELECT bp.*
+  FROM board_post bp
+  WHERE bp.community_id IN
+  <foreach collection="list" item="communityId" open="(" separator="," close=")">
+    #{communityId}
+  </foreach>
+  ORDER BY bp.created_at DESC
+</select>
+
+
+
 
 </mapper>

@@ -127,9 +127,6 @@ public class MainPageController {
                 response.put("searchedCommunities", commPage.getList());
                 response.put("communityPagination", new Pagination(commPage));
 
-                // 모든 커뮤니티
-                // List<Community> allCommunities = communityService.getAllCommunities();
-                // response.put("allCommunities", allCommunities);
 
             } else if ("post".equalsIgnoreCase(type)) {
                 // 게시글 검색 + 키워드 포함
@@ -137,9 +134,6 @@ public class MainPageController {
                 response.put("searchedPosts", postPage.getList());
                 response.put("postPagination", new Pagination(postPage));
 
-                // 모든 게시글
-                // List<BoardPost> allPosts = boardPostService.getAllPosts();
-                // response.put("allPosts", allPosts);
             } else {
                 // type 이 없는 경우는 더보기 전 페이지
 

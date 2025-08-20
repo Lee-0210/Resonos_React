@@ -89,13 +89,22 @@
   </select>
 
   <!-- 게시판 순위 Top5 - communityService -->
-  <select id="getTopCommunities" resultType="Community">
-    SELECT bp.*
-    FROM board_post bp
-    LEFT JOIN community c ON bp.community_id = c.id
-    WHERE bp.community_id = #{communityId}
+  <select id="getTopCommunities" resultMap="CommunityResultMap" parameterType="int">
+    SELECT 
+      c.*,
+      bp.id AS board_post_id,
+      bp.title AS board_post_title,
+      bp.content AS board_post_content,
+      bp.created_at AS board_post_created_at,
+      u2.nickname AS user_nickname
+    FROM community c
+    LEFT JOIN user u ON u.id = c.creator_id
+    LEFT JOIN board_post bp ON bp.community_id = c.id
+    LEFT JOIN user u2 ON u2.id = bp.user_id
     ORDER BY bp.created_at DESC
+    LIMIT #{limit}
   </select>
+
 
   <!-- 신설 게시판 - communityService -->
   <select id="getNewCommunities" resultType="Community">
@@ -137,8 +146,23 @@
         c.name LIKE CONCAT('%', #{query}, '%')
       </if>
     </where>
-    ORDER BY c.created_at DESC
+    ORDER BY c.name ASC, c.created_at DESC
   </select>
+
+  <!-- 키워드 기본 검색 -->
+  <select id="searchCommunitiesBasic" resultMap="CommunityResultMap" parameterType="string">
+    SELECT id, category_id, creator_id, name, description, created_at, track_id, intro
+    FROM community
+    <where>
+      <if test="query != null and query.trim() != ''">
+        name LIKE CONCAT('%', #{query}, '%')
+      </if>
+    </where>
+    ORDER BY name ASC, created_at DESC  
+  </select>
+
+
+
 
 
 

@@ -28,6 +28,9 @@ int deleteAll() throws Exception;
     List<Community> getAllCommunities() throws Exception;
 
     // 모든 커뮤니티 조회 + 키워드
-    List<Community> searchCommunities(@Param("query") String query) throws Exception;
+    List<Community> searchCommunities(@Param("query") String query, @Param("offset") int offset, @Param("size") int size) throws Exception;
+    // 키워드 기본 검색 
+    List<Community> searchCommunitiesBasic(String query);
+
 
 }
