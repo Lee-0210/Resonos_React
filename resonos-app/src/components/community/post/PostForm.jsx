@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { LoginContext } from '../../../contexts/LoginContextProvider'
 
 
 const PostForm = ({ postComment }) => {
@@ -7,14 +8,19 @@ const PostForm = ({ postComment }) => {
   const [tempPw, setTempPw] = useState('')
   const [content, setContent] = useState('')
 
+
   const isLogin = sessionStorage.getItem('isLogin')
+  const {userInfo} = useContext(LoginContext)
+  console.log(userInfo)
 
   const handlePostComment = (e) => {
     e.preventDefault();
     if(isLogin) {
       const data = {
-        content : content
+        content : content,
+        userNickname : userInfo?.nickname
       }
+      console.log(data)
       postComment(data)
     }
     else {

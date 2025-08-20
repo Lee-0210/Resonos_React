@@ -67,6 +67,7 @@ const Post = () => {
             popup: 'album-wrapper'
           }
         })
+        setComments(prevComments => [...prevComments, response.data])
       }
     } catch (error) {
       swal.fire({
