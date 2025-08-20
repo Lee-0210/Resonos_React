@@ -235,7 +235,8 @@
 }
 .commu.board a.update {
   position: absolute;
-  bottom: 20px; right: 30px;
+  top: 20px; right: 30px;
+  padding: 5px 10px;
 }
 
 /* 게시판 정보 */
@@ -281,7 +282,7 @@
 .commu.board .post-list h3,
 .commu.board .notice-area h3 {
   color: var(--main-color);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .commu.board .post-list {
@@ -428,7 +429,7 @@
   }
 
   .commu.index .right {
-    flex-direction: row;
+    flex-direction: column;
     margin-top: 30px;
   }
 
