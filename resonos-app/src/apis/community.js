@@ -41,11 +41,19 @@ export const updateDescription = async (boardId, description) => {
 export const postComment = async (data,ids) => {
   return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
 }
-// 게시글 대댓 댓글아이디, 댓글내용만
-export const postReply = async (data, ids) => {
-  return api.post (`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
-}
 // 게시글 댓글 수정
 export const editComment = async (data, ids) => {
   return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
+}
+// 게시글 대댓 달기
+export const postReply = async (data, ids) => {
+  return api.post (`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
+}
+// 게시글 대댓 수정
+export const editReply = async (data, ids) => {
+  return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
+}
+// 게시글 비회원 댓글 삭제
+export const deleteUnlogComment = async (data, ids) => {
+  return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
 }

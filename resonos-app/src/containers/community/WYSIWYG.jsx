@@ -1,23 +1,29 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import { useParams } from 'react-router-dom'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import WsHeader from '../../components/community/post/WsHeader';
+import { LoginContext } from '../../contexts/LoginContextProvider';
 
-const WYSIWYG = () => {
+const WYSIWYG = ({ post }) => {
   // state 
   const [title, setTitle] = useState('')
   const [writer, setWriter] = useState('')
+  const [tempPw, setTempPw] = useState('')
   const [content, setContent] = useState('')
   const [fileIdList, setFileIdList] = useState([]) // 선택 삭제 id 목록
   const [mainFile, setMainFile] = useState(null)   // 
   const [files, setFiles] = useState(null)
 
+  const { userInfo, isLogin  } = useContext(LoginContext)
+
   //FeState(second)
   // 변경 이벤트 함수 
   const changeTitle = (e) => { setTitle(e.target.value) }
   const changeWriter = (e) => { setWriter(e.target.value) }
+  const changeTempPw = (e) => { setTempPw(e.target.value) }
   const changeContent = (e) => { setContent(e.target.value) }
 
   // id 가져오기 
@@ -137,20 +143,7 @@ const WYSIWYG = () => {
       <Header />
       <div className="wysiwyg-wrapper">
         <div className="ws-wrapper">
-          <div className="title-and-writer">
-            <div className="title-box">
-              <p className='subtitle'>제목</p>
-              <input className='styled-form' type="text" id='title' />
-            </div>
-            <div className="title-box">
-              <p className='subtitle'>작성자</p>
-              <input className='styled-form' type="text" id='writer' />
-            </div>
-            <div className="title-box">
-              <p className='subtitle'>비밀번호</p>
-              <input className='styled-form' type="password" id='password' />
-            </div>
-          </div>
+          <WsHeader isLogin={isLogin} />
           <div className="cke">
             <CKEditor
               editor={ClassicEditor}
@@ -177,7 +170,7 @@ const WYSIWYG = () => {
 
                 extraPlugins: [uploadPlugin]            // 업로드 플러그인
               }}
-              // data={board.content}         // ⭐ 기존 컨텐츠 내용 입력 (HTML)
+              data={post ? post.content : ''}
               onReady={editor => {
                 // You can store the "editor" and use when it is needed.
                 console.log('Editor is ready to use!', editor);
