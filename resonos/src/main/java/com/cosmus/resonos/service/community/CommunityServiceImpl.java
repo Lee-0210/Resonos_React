@@ -116,7 +116,7 @@ public class CommunityServiceImpl implements CommunityService {
                                             .map(Community::getId)
                                             .collect(Collectors.toList());
 
-        // 3) 게시글 별도 조회 후 매핑 
+        // 3) 게시글 별도 조회 후 매핑
         if (!communityIds.isEmpty()) {
             List<BoardPost> posts = boardPostMapper.getPostsByCommunityIds(communityIds);
             mapPostsToCommunities(posts, communities);
@@ -168,9 +168,7 @@ public class CommunityServiceImpl implements CommunityService {
         return pageInfo;
     }
 
-
-
-
-
-
+    public List<Community> getUsersCommunities(Long userId) throws Exception {
+        return communityMapper.getUsersCommunities(userId);
+    }
 }

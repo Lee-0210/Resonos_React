@@ -71,7 +71,7 @@ const TrackReviewCard = ({countTReview, tReviewList, onSearchReview, setTReviewL
       <div className="info-section tr">
         <div className="title">
           <div>
-            <h2 className="text-start">내가 쓴 트랙 리뷰</h2>
+            <h2 className="text-start">나의 트랙 리뷰</h2>
             <span className="count">{countTReview}</span>
           </div>
           <div className="text-center position-relative">
@@ -87,18 +87,24 @@ const TrackReviewCard = ({countTReview, tReviewList, onSearchReview, setTReviewL
           </div>
         </div>
         <ul className="ul-list tr">
-          {tReviewList.map((review) => (
-            <li className="text-item" key={review.id}>
-              <Link to={`/tracks?id=${review.trackId}&reviewId=${review.id}`}>
-                <p className="sm-title">{review.title}</p>
-                <p className="sm-content">{review.content}</p>
-                <span className="date">
-                  {new Date(review.createdAt).toLocaleString()}
-                </span>
-                <span className="like">❤️ {review.likes}</span>
-              </Link>
-            </li>
-          ))}
+          {
+            tReviewList.length === 0
+            ?
+            <p className="no-content">작성한 트랙 리뷰가 없습니다.</p>
+            :
+            tReviewList.map((review) => (
+              <li className="text-item" key={review.id}>
+                <Link to={`/tracks?id=${review.trackId}&reviewId=${review.id}`}>
+                  <p className="sm-title">{review.title}</p>
+                  <p className="sm-content">{review.content}</p>
+                  <span className="date">
+                    {new Date(review.createdAt).toLocaleString()}
+                  </span>
+                  <span className="like">❤️ {review.likes}</span>
+                </Link>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </section>

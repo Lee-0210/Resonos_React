@@ -23,7 +23,7 @@ const MoreCard = ({board}) => {
         {
           board?.boardPosts?.map(post => (
             <li onClick={() => handleNavigate(post.id)}>
-              <span>{post.title}</span> <span className="board-name">작성자</span>
+              <span>{post.title}</span> <span className="board-name">{post.userNickname}</span>
             </li>
           ))
         }

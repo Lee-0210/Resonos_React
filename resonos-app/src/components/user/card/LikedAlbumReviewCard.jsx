@@ -87,21 +87,27 @@ const LikedAlbumReviewCard = ({countLaReview, laReviewList, onSearchReview, setL
           </div>
         </div>
         <ul className="ul-list lar">
-          {laReviewList.map((laReview) => (
-            <li className="text-item" key={laReview.id}>
-              <a
-                href={`/albums?id=${laReview.albumId}&reviewId=${laReview.id}`}
-              >
-                <p className="sm-title">{laReview.title}</p>
-                <p className="sm-content">{laReview.content}</p>
-                <span className="rv-name">{laReview.reviewer.nickname}</span>
-                <span className="date">
-                  {new Date(laReview.createdAt).toLocaleString()}
-                </span>
-                <span className="like">❤️ {laReview.likes}</span>
-              </a>
-            </li>
-          ))}
+          {
+            laReviewList.length === 0
+            ?
+            <p className="no-content">좋아요 한 앨범 리뷰가 없습니다.</p>
+            :
+            laReviewList.map((laReview) => (
+              <li className="text-item" key={laReview.id}>
+                <a
+                  href={`/albums?id=${laReview.albumId}&reviewId=${laReview.id}`}
+                >
+                  <p className="sm-title">{laReview.title}</p>
+                  <p className="sm-content">{laReview.content}</p>
+                  <span className="rv-name">{laReview.reviewer.nickname}</span>
+                  <span className="date">
+                    {new Date(laReview.createdAt).toLocaleString()}
+                  </span>
+                  <span className="like">❤️ {laReview.likes}</span>
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </section>

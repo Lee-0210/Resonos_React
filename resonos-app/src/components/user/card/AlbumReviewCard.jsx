@@ -71,7 +71,7 @@ const AlbumReviewCard = ({countAReview, aReviewList, onSearchReview, setAReviewL
       <div className="info-section ar">
         <div className="title">
           <div>
-            <h2 className="text-start">내가 쓴 앨범 리뷰</h2>
+            <h2 className="text-start">나의 앨범 리뷰</h2>
             <span className="count">{countAReview}</span>
           </div>
           <div className="text-center position-relative">
@@ -87,18 +87,24 @@ const AlbumReviewCard = ({countAReview, aReviewList, onSearchReview, setAReviewL
           </div>
         </div>
         <ul className="ul-list ar">
-          {aReviewList.map((aReview) => (
-            <li className="text-item" key={aReview.id}>
-              <Link to={`/albums?id=${aReview.albumId}&reviewId=${aReview.id}`}>
-                <p className="sm-title">{aReview.title}</p>
-                <p className="sm-content">{aReview.content}</p>
-                <span className="date">
-                  {new Date(aReview.createdAt).toLocaleString()}
-                </span>
-                <span className="like">❤️ {aReview.likes}</span>
-              </Link>
-            </li>
-          ))}
+          {
+            aReviewList.length === 0
+            ?
+            <p className="no-content">작성한 앨범 리뷰가 없습니다.</p>
+            :
+            aReviewList.map((aReview) => (
+              <li className="text-item" key={aReview.id}>
+                <Link to={`/albums?id=${aReview.albumId}&reviewId=${aReview.id}`}>
+                  <p className="sm-title">{aReview.title}</p>
+                  <p className="sm-content">{aReview.content}</p>
+                  <span className="date">
+                    {new Date(aReview.createdAt).toLocaleString()}
+                  </span>
+                  <span className="like">❤️ {aReview.likes}</span>
+                </Link>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </section>
