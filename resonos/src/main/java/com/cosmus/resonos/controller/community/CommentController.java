@@ -136,8 +136,12 @@ public class CommentController {
             // }
 
             if (loginUser != null) {
-                if (!loginUser.getId().equals(comment.getUserId())) {
+                if (comment.getUserId() != null && !loginUser.getId().equals(comment.getUserId())) {
                     return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
+                else if (request.getGuestPassword() == null ||
+                    !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             } else {
                 if (request.getGuestPassword() == null ||
@@ -147,7 +151,7 @@ public class CommentController {
             }
 
             comment.setContent(request.getContent());
-            boolean result = commentService.updateById(comment);
+            boolean result = commentService.update(comment);
             return result ? new ResponseEntity<>(comment, HttpStatus.OK)
                           : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
@@ -177,8 +181,12 @@ public class CommentController {
             // }
 
             if (loginUser != null) {
-                if (!loginUser.getId().equals(comment.getUserId())) {
+                if (comment.getUserId() != null && !loginUser.getId().equals(comment.getUserId())) {
                     return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
+                else if (request == null || request.getGuestPassword() == null ||
+                    !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             } else {
                 if (request == null || request.getGuestPassword() == null ||
