@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.community.Report;
 import com.cosmus.resonos.mapper.admin.ReportMapper;
+import com.github.pagehelper.PageInfo;
 
 
 @Service
@@ -88,6 +89,30 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<Report> findAllPaging(Pagination pagination) throws Exception {
         return reportMapper.findAllPaging(pagination);
+    }
+
+    @Override
+    public PageInfo<Report> list(int page, int size) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'list'");
+    }
+
+    @Override
+    public Report selectById(String id) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'selectById'");
+    }
+
+    @Override
+    public boolean updateById(Report entity) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateById'");
+    }
+
+    @Override
+    public boolean deleteById(String id) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
     }
 
 }

@@ -127,7 +127,7 @@ CREATE TABLE `report` (
 	`created_at`	DATETIME	NOT NULL	DEFAULT CURRENT_TIMESTAMP,
 	`reporter_id`	BIGINT	NOT NULL,
 	`board_post_id`	BIGINT	NOT NULL,
-	`admin_id`	BIGINT	NOT NULL
+	`admin_id`	BIGINT NULL
 );
 
 
