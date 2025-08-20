@@ -82,7 +82,7 @@ public class BoardPostController {
     }
         
     @PostMapping("/create/boards/{communityId}")
-    public ResponseEntity<?> create(
+    public ResponseEntity<?> createPost(
         @PathVariable("communityId") Long communityId,
         @RequestBody BoardPost request,
         @AuthenticationPrincipal CustomUser loginUser
@@ -110,32 +110,85 @@ public class BoardPostController {
 
 
 
-    // @PutMapping("/{id}")
-    // public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody BoardPost post) {
-    //     try {
-    //         post.setId(id);
-    //         boolean success = boardPostService.update(post);
-    //         if (success) {
-    //             return ResponseEntity.ok("Board post updated");
-    //         }
-    //         return ResponseEntity.status(500).body("Failed to update board post");
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(500).body("Failed to update board post: " + e.getMessage());
-    //     }
-    // }
+    @PutMapping("/edit/boards/{communityId}/posts/{postId}")
+    public ResponseEntity<?> updatePost(
+        @PathVariable("communityId") Long communityId,
+        @PathVariable("postId") Long postId,
+        @RequestBody BoardPost request,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) {
+        try {
+            BoardPost boardPost = boardPostService.select(postId);
 
-    // @DeleteMapping("/{id}")
-    // public ResponseEntity<?> deletePost(@PathVariable Long id) {
-    //     try {
-    //         boolean success = boardPostService.delete(id);
-    //         if (success) {
-    //             return ResponseEntity.ok("Board post deleted");
-    //         }
-    //         return ResponseEntity.status(500).body("Failed to delete board post");
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(500).body("Failed to delete board post: " + e.getMessage());
-    //     }
-    // }
+            if (boardPost == null) return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
+
+            if (loginUser != null) {
+                if (boardPost.getUserId() != null && !loginUser.getId().equals(boardPost.getUserId())) {
+                    return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
+                else if (boardPost.getUserId() == null && (request.getGuestPassword() == null ||
+                    !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword()))) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                if (boardPost.getUserId() != null) {
+                    return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
+                if (request.getGuestPassword() == null ||
+                    !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword())) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+                }
+            }
+
+            boardPost.setTitle(request.getTitle());
+            boardPost.setContent(request.getContent());
+            boolean result = boardPostService.update(boardPost);
+            return result ? new ResponseEntity<>(boardPost, HttpStatus.OK)
+                          : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("게시글 수정 실패", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/edit/boards/{communityId}/posts/{postId}")
+    public ResponseEntity<?> deletePost(
+        @PathVariable("communityId") Long communityId,
+        @PathVariable("postId") Long postId,
+        @RequestBody(required = false) BoardPost request,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) {
+        try {
+            BoardPost boardPost = boardPostService.select(postId);
+            
+            if (boardPost == null) return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
+
+            if (loginUser != null) {
+                if (boardPost.getUserId() != null && !loginUser.getId().equals(boardPost.getUserId())) {
+                    return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
+                else if (boardPost.getUserId() == null && (request.getGuestPassword() == null ||
+                    !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword()))) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+                }
+            } else {
+                if (boardPost.getUserId() != null) {
+                    return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
+                if (request.getGuestPassword() == null ||
+                    !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword())) {
+                    return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
+                }
+            }
+
+            boolean result = boardPostService.delete(postId);
+            return result ? new ResponseEntity<>(boardPost, HttpStatus.OK)
+                          : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("게시글 삭제 실패", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     // 커뮤니티별 게시글 목록 조회
     // @GetMapping("/community/{communityId}")
