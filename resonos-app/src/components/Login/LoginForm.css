@@ -897,11 +897,12 @@ button.like {background-color: inherit; border: none;}
   margin-bottom: 20px;
   border: 1px solid var(--silver-color);
   border-radius: 5px;
+  max-width: 1000px;
 }
 .con-activity .tab-area > button {
   flex: 0.5;
   text-align: center;
-  height: 50px;
+  height: 40px;
   cursor: pointer;
   transition: 0.3s;
   color: var(--main-color);

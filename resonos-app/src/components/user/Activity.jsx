@@ -4,7 +4,7 @@ import LikedAlbumReviewCard from './card/LikedAlbumReviewCard'
 import TrackReviewCard from './card/TrackReviewCard'
 import LikedTrackReviewCard from './card/LikedTrackReviewCard'
 
-const Activity = ({utl, countAReview, aReviewList, countLaReview, laReviewList, countTReview, tReviewList, countLtReview, ltReviewList, lastPath, onSearchReview, setAReviewList, setLaReviewList, setLtReviewList, setTReviewList, active, setActive}) => {
+const Activity = ({utl, countAReview, aReviewList, countLaReview, laReviewList, countTReview, tReviewList, countLtReview, ltReviewList, onSearchReview, setAReviewList, setLaReviewList, setLtReviewList, setTReviewList}) => {
 
   return (
     <>
@@ -24,7 +24,7 @@ const Activity = ({utl, countAReview, aReviewList, countLaReview, laReviewList, 
         </div>
       </section>
 
-      {/* 내가 쓴 앨범 리뷰 */}
+      {/* 나의 앨범 리뷰 */}
       <AlbumReviewCard
         countAReview={countAReview}
         aReviewList={aReviewList}
@@ -40,7 +40,7 @@ const Activity = ({utl, countAReview, aReviewList, countLaReview, laReviewList, 
         setLaReviewList={setLaReviewList}
       />
 
-      {/* 내가 쓴 트랙 리뷰 */}
+      {/* 나의 트랙 리뷰 */}
       <TrackReviewCard
         countTReview={countTReview}
         tReviewList={tReviewList}

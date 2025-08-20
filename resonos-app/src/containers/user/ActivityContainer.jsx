@@ -10,6 +10,7 @@ import ActivityCommu from '../../components/user/ActivityCommu';
 
 const ActivityContainer = () => {
 
+  /* 리뷰 데이터 */
   const [utl, setUtl] = useState({});
   const [countAReview, setCountAReview] = useState();
   const [countLaReview, setCountLaReview] = useState();
@@ -19,10 +20,15 @@ const ActivityContainer = () => {
   const [laReviewList, setLaReviewList] = useState([]);
   const [tReviewList, setTReviewList] = useState([]);
   const [ltReviewList, setLtReviewList] = useState([]);
-  const [active, setActive] = useState(true)
+
+  /* 커뮤니티 데이터 */
+  const [commuList, setCommuList] = useState([])
+  const [postList, setPostList] = useState([])
+  const [commentList, setCommentList] = useState([])
 
   const [user, setUser] = useState({});
   const [lastPath, setLastPath] = useState();
+  const [active, setActive] = useState(true)
 
   const navigate = useNavigate()
 
@@ -89,13 +95,30 @@ const ActivityContainer = () => {
     }
   }
 
-  // 마운트 시 초기 데이터 요청
-  const getUsersActivity = async () => {
+
+  // 유저의 커뮤니티 데이터 요청
+  const getUsersCommunity = async () => {
     try {
-      const response = await ur.getUserActivity()
-      const data = response.data
-      console.log('data :', data)
+      const response = await ur.getUserCommunity()
       if(response.status === 200) {
+        const data = response.data
+        console.log('data :', data)
+        setCommuList(data.commuList)
+        setPostList()
+        setCommentList()
+      }
+    } catch(e) {
+      console.error('error :', e)
+    }
+  }
+
+  // 유저의 리뷰 데이터 요청
+  const getUsersReviews = async () => {
+    try {
+      const response = await ur.getUserReviews()
+      if(response.status === 200) {
+        const data = response.data
+        console.log('data :', data)
         setUtl(data.utl);
         setCountAReview(data.countAReview);
         setCountLaReview(data.countLaReview);
@@ -132,8 +155,11 @@ const ActivityContainer = () => {
 
   // 마운트 시 초기 데이터 요청
   useEffect(() => {
-    getUsersActivity()
-  }, [])
+    if(active == true)
+      getUsersReviews()
+    else
+      getUsersCommunity()
+  }, [active])
 
   return (
     <>
@@ -174,13 +200,14 @@ const ActivityContainer = () => {
               setLtReviewList={setLtReviewList}
               setTReviewList={setTReviewList}
               user={user}
-              lastPath={lastPath}
               onSearchReview={onSearchReview}
-              active={active}
-              setActive={setActive}
             />
             :
-            <ActivityCommu />
+            <ActivityCommu
+              commuList={commuList}
+              postList={postList}
+              commentList={commentList}
+            />
           }
         </main>
       </div>

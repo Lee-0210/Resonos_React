@@ -56,9 +56,14 @@ export const updateUserInfo = async (formData) => {
 }
 
 /* 내 활동 페이지 */
-// 내 활동 페이지 데이터
-export const getUserActivity = async () => {
-  return await api.get("/users/activities")
+// 내 활동 페이지 데이터(review)
+export const getUserReviews = async () => {
+  return await api.get("/users/review/activities")
+}
+
+// 내 활동 페이지 데이터(community)
+export const getUserCommunity = async () => {
+  return await api.get("/users/community/activities")
 }
 
 // 활동 내역 추가 요청 (리뷰)

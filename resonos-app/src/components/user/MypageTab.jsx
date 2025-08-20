@@ -24,7 +24,7 @@ const MypageTab = ({ lastPath }) => {
       // 애니메이션 시작
       animate();
     }
-  }, [])
+  })
 
   return (
     <section className="mypage-tabs">

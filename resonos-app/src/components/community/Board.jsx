@@ -68,7 +68,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices, onButton, se
               <p className='ellipsis des'>{board?.description}</p>
             }
             {
-              isManager
+              isManager.current
               ?
               <button className='update' onClick={() => onButton ? handleUpdate() : setOnButton(!onButton)}>
                 {
