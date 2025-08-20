@@ -5,27 +5,26 @@ const SpotifySearchWithResults = ({ searchFn, type, onSync }) => {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
 
-  const handleSearch = async (kw) => {
-    if (!kw.trim()) return;
-    setLoading(true);
-    try {
-      const res = await searchFn(kw);
-      const data = res.data || {};
+const handleSearch = async (kw) => {
+  if (!kw.trim()) return;
+  setLoading(true);
+  try {
+    const res = await searchFn(kw);
+    const data = res.data || {};
+    console.log('Spotify artist search response:', data);
 
-      // Spotify 응답: items 있으면 배열, 없으면 바로 배열
-      let items = [];
-      if (type === "track") items = data.tracks?.items ?? data.tracks ?? [];
-      if (type === "album") items = data.albums?.items ?? data.albums ?? [];
-      if (type === "artist") items = data.artists?.items ?? data.artists ?? [];
+    // API 구조에 맞게 artists 배열 추출
+    const items = data.artists || [];
 
-      setResults(Array.isArray(items) ? items : []);
-    } catch (err) {
-      console.error(`${type} 검색 오류:`, err);
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+    setResults(Array.isArray(items) ? items : []);
+  } catch (err) {
+    console.error(`${type} 검색 오류:`, err);
+    setResults([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // 동기화 확인창 추가
   const handleConfirmSync = (id) => {

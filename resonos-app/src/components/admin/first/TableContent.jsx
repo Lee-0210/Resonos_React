@@ -70,11 +70,13 @@ const columns = (
     render: (member) => {
       if (!member.authList || member.authList.length === 0) {
         return (
-          <span className="badge" style={{ background: '#d9534f', color: '#fff' }}>없음</span>
+          <span className="badge" style={{ background: '#d9534f', color: '#fff' }}>
+            없음
+          </span>
         );
       }
       return member.authList.map((auth, idx) => {
-        const isAdmin = auth.auth === 'ROLE_ADMIN';
+        const isAdmin = auth === 'ROLE_ADMIN';
         return (
           <span
             key={idx}

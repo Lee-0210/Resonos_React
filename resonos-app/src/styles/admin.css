@@ -228,9 +228,10 @@ section.resonos-card {
 
 .admin .list-group-item:hover { background: var(--hover-bg); }
 .table-col, .list-group-item > div {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;      /* 숨기지 않고 보이도록 */
+  text-overflow: clip;    /* 줄임표 대신 클립 */
+  white-space: normal !important; /* 줄바꿈 허용 */
+  flex-basis: auto;       /* 기본 너비에 맞춤 */
 }
 
 /* spotify 검색 결과물  */

@@ -169,7 +169,7 @@ public class AdminMemberController {
 
     // 회원 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMember(@PathVariable Long id) {
+    public ResponseEntity<?> deleteMember(@PathVariable("id") Long id) {
         try {
             userService.delete(id);
             return ResponseEntity.ok("SUCCESS");

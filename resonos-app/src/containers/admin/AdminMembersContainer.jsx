@@ -197,18 +197,21 @@ const handleDetailSubmit = async (e) => {
 };
 
 
-  const handleDelete = async () => {
-    if (!window.confirm('정말 삭제하시겠습니까?')) return;
-    try {
-      await remove(detailMemberId);
-      alert('삭제되었습니다.');
-      setDetailMemberId(null);
-      setDetailMemberData(null);
-      fetchMembers(pagination.index + 1, 10, keyword);
-    } catch (e) {
-      alert('삭제 실패: ' + (e.response?.data || e.message));
-    }
-  };
+const handleDelete = async () => {
+  if (!window.confirm('정말 삭제하시겠습니까?')) return;
+
+  try {
+    await remove(detailMemberId);
+    alert('삭제되었습니다.');
+    setDetailMemberId(null);
+    setDetailMemberData(null);
+    // page 혹은 pagination.page 중에서 올바른 페이지 번호 사용
+    fetchMembers(page, 10, keyword);
+  } catch (e) {
+    alert('삭제 실패: ' + (e.response?.data || e.message));
+  }
+};
+
 
   const handleToggleEnable = async (memberId, newEnabled) => {
     try {
