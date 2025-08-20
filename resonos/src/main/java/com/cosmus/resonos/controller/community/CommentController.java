@@ -139,11 +139,14 @@ public class CommentController {
                 if (comment.getUserId() != null && !loginUser.getId().equals(comment.getUserId())) {
                     return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
-                else if (request.getGuestPassword() == null ||
-                    !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+                else if (comment.getUserId() == null && (request.getGuestPassword() == null ||
+                    !commentService.checkGuestPassword(comment, request.getGuestPassword()))) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             } else {
+                if (comment.getUserId() != null) {
+                    return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
                 if (request.getGuestPassword() == null ||
                     !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
@@ -184,11 +187,14 @@ public class CommentController {
                 if (comment.getUserId() != null && !loginUser.getId().equals(comment.getUserId())) {
                     return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
-                else if (request == null || request.getGuestPassword() == null ||
-                    !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+                else if (comment.getUserId() == null && (request == null || request.getGuestPassword() == null ||
+                    !commentService.checkGuestPassword(comment, request.getGuestPassword()))) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             } else {
+                if (comment.getUserId() != null) {
+                    return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
+                }
                 if (request == null || request.getGuestPassword() == null ||
                     !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);

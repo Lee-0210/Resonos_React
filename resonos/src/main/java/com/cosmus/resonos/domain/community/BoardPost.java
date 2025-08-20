@@ -16,6 +16,8 @@ public class BoardPost {
     private Long userId;
     private Long views;
     private String userNickname;
+    private String guestNickname;
+    private String guestPassword;
     
     // 조인해서 가져올 데이터 
     private int postLikes;

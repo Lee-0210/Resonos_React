@@ -20,6 +20,8 @@
     <result property="postLikes" column="post_likes"/>
     <result property="postDislikes" column="post_dislikes"/>
     <result property="commentCount" column="comment_count"/>
+    <result property="guestNickname" column="guest_nickname"/>
+    <result property="guestPassword" column="guest_password"/>
 
     <association property="community" javaType="com.cosmus.resonos.domain.community.Community">
         <id property="id" column="community_id"/>
@@ -34,29 +36,29 @@
   </select>
 
   <select id="select" resultMap="BoardPostResultMap">
-    SELECT *
-    FROM board_post
-    WHERE id = #{id}
+    SELECT bp.*, u.nickname AS user_nickname
+    FROM board_post bp
+    LEFT JOIN user u ON bp.user_id = u.user_id
+    WHERE bp.id = #{id}
   </select>
 
   <insert id="insert">
-    INSERT INTO board_post (title, content, type, created_at, community_id, user_id, views)
-    VALUES (#{title}, #{content}, #{type}, #{createdAt}, #{communityId}, #{userId}, #{views})
+    INSERT INTO board_post (title, content, type, community_id, user_id guest_nickname, guest_password)
+    VALUES (#{title}, #{content}, #{type}, #{communityId}, #{userId} #{guestNickname}, #{guestPassword})
   </insert>
 
   <update id="update">
     UPDATE board_post
-    SET title = #{title},
-        content = #{content},
-        type = #{type},
-        community_id = #{communityId},
-        user_id = #{userId},
-        views = #{views}
+    <set>
+      <if test="title != null">title = #{title},</if>
+      <if test="content != null">content = #{content},</if>
+    </set>
     WHERE id = #{id}
   </update>
 
   <delete id="delete">
-    DELETE FROM board_post WHERE id = #{id}
+    DELETE FROM board_post
+    WHERE id = #{id}
   </delete>
 
   <select id="findByCommunity" resultMap="BoardPostResultMap">
