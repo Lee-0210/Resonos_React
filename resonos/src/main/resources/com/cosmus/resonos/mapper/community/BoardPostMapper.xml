@@ -149,14 +149,16 @@
 </select>
 
 <!-- 검색 게시글 -->
-<select id="searchPosts" resultMap="BoardPostResultMap" parameterType="string">
+<select id="searchPosts" resultMap="BoardPostResultMap">
   SELECT bp.*,
          c.name AS community_name,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
+         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count,
+         u.nickname AS user_nickname
   FROM board_post bp
   LEFT JOIN community c ON bp.community_id = c.id
+  LEFT JOIN user AS u ON u.id = bp.user_id
   <where>
     <if test="query != null and query.trim() != ''">
       (bp.title LIKE CONCAT('%', #{query}, '%')
@@ -278,10 +280,16 @@
   WHERE arg_id = #{argId}
 </select>
 
+
+
+
+
+
 <!-- 키워드 기본 검색을 위한 - 커뮤니티 ID 목록에 해당하는 게시글 조회 -->
-<select id="getPostsByCommunityIds" resultType="com.cosmus.resonos.domain.community.BoardPost">
-  SELECT bp.*
+<select id="getPostsByCommunityIds" resultMap="BoardPostResultMap">
+  SELECT bp.*, u.nickname AS user_nickname
   FROM board_post bp
+  LEFT JOIN user u ON u.id = bp.user_id
   WHERE bp.community_id IN
   <foreach collection="list" item="communityId" open="(" separator="," close=")">
     #{communityId}

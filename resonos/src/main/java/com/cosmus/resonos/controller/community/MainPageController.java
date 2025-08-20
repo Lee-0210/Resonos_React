@@ -123,9 +123,11 @@ public class MainPageController {
 
                 // 모든 커뮤니티 + 키워드 포함
                 PageInfo<Community> commPage = communityService.searchCommunities(query, page, 9);
-
                 response.put("searchedCommunities", commPage.getList());
                 response.put("communityPagination", new Pagination(commPage));
+
+                // 키워드 포함된 커뮤니티 개수 
+                response.put("communityCount", commPage.getTotal());
 
 
             } else if ("post".equalsIgnoreCase(type)) {
