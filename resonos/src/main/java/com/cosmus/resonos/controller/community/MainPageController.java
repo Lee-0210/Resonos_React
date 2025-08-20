@@ -172,12 +172,14 @@ public class MainPageController {
 
             PageInfo<BoardPost> postPage = boardPostService.listByCommunityId(communityId, page, size);
             // List<BoardPost> notices = boardPostService.getNoticesByCommunityId(communityId, 5); // 페이지네이션 적용 
-            PageInfo<BoardPost> noticePage = boardPostService.getNoticesByCommunityId(communityId, page, size);
+            PageInfo<BoardPost> noticePage = boardPostService.getNoticesByCommunityId(communityId, page, 5);
 
             Map<String, Object> response = new HashMap<>();
             response.put("posts", postPage.getList());
             response.put("notices", noticePage.getList());
-            response.put("pagination", new Pagination(postPage));
+
+            response.put("postPagination", new Pagination(postPage));
+            response.put("noticePagination", new Pagination(noticePage));
 
             // 게시판 대표 음악 설정
             // 게시판 테이블 thumbnail_url 컬럼 추가
