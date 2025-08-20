@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.ComVoteArgument;
@@ -27,6 +28,10 @@ public interface BoardPostService extends BaseService<BoardPost> {
     public int countAll() throws Exception;
     // 조회 + 좋아요 싫어요 수
     public BoardPost selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId) throws Exception;
+    // 로그인/비로그인 게시글 작성
+    public void createPost(BoardPost boardPost, CustomUser loginUser) throws Exception;
+    // 비로그인 게시글 비밀번호 체크
+    public boolean checkGuestPassword(BoardPost boardPost, String rawPassword) throws Exception;
     
     // 커뮤 main
     // 주요뉴스 (가장 화제글 3개 + 썸네일) - 예시: 조회수 기준

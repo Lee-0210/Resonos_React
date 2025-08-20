@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.ComVoteArgument;
+import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.mapper.community.BoardPostMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -20,6 +23,9 @@ public class BoardPostServiceImpl implements BoardPostService {
 
     @Autowired
     private BoardPostMapper boardPostMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public BoardPostServiceImpl(BoardPostMapper boardPostMapper) {
         this.boardPostMapper = boardPostMapper;
@@ -156,44 +162,44 @@ public class BoardPostServiceImpl implements BoardPostService {
 
 
     @Override
-        public Map<String, Object> getVotesWithResultsByPostId(Long postId) throws Exception {
-            Map<String, Object> result = new HashMap<>();
+    public Map<String, Object> getVotesWithResultsByPostId(Long postId) throws Exception {
+        Map<String, Object> result = new HashMap<>();
 
-            // 1. 해당 게시글 투표 리스트 조회
-            List<ComVote> votes = boardPostMapper.findVotesByPostId(postId);
-            List<Map<String, Object>> voteList = new ArrayList<>();
+        // 1. 해당 게시글 투표 리스트 조회
+        List<ComVote> votes = boardPostMapper.findVotesByPostId(postId);
+        List<Map<String, Object>> voteList = new ArrayList<>();
 
-            for (ComVote vote : votes) {
-                Map<String, Object> voteMap = new HashMap<>();
-                voteMap.put("id", vote.getId());
-                voteMap.put("title", vote.getTitle());
-                // voteMap.put("isCompleted", vote.isCompleted());
+        for (ComVote vote : votes) {
+            Map<String, Object> voteMap = new HashMap<>();
+            voteMap.put("id", vote.getId());
+            voteMap.put("title", vote.getTitle());
+            // voteMap.put("isCompleted", vote.isCompleted());
 
-                // 2. 각 투표별 선택지 조회
-                List<ComVoteArgument> arguments = boardPostMapper.findArgumentsByVoteId(vote.getId());
-                List<Map<String, Object>> argList = new ArrayList<>();
+            // 2. 각 투표별 선택지 조회
+            List<ComVoteArgument> arguments = boardPostMapper.findArgumentsByVoteId(vote.getId());
+            List<Map<String, Object>> argList = new ArrayList<>();
 
-                for (ComVoteArgument arg : arguments) {
-                    Map<String, Object> argMap = new HashMap<>();
-                    argMap.put("id", arg.getId());
-                    argMap.put("content", arg.getContent());
+            for (ComVoteArgument arg : arguments) {
+                Map<String, Object> argMap = new HashMap<>();
+                argMap.put("id", arg.getId());
+                argMap.put("content", arg.getContent());
 
-                    // 3. 선택지별 투표 수 조회
-                    int count = boardPostMapper.countVoteResults(arg.getId());
-                    argMap.put("voteCount", count);
+                // 3. 선택지별 투표 수 조회
+                int count = boardPostMapper.countVoteResults(arg.getId());
+                argMap.put("voteCount", count);
 
-                    argList.add(argMap);
-                }
-
-                voteMap.put("arguments", argList);
-                voteList.add(voteMap);
+                argList.add(argMap);
             }
 
-            result.put("postId", postId);
-            result.put("votes", voteList);
-
-            return result;
+            voteMap.put("arguments", argList);
+            voteList.add(voteMap);
         }
+
+        result.put("postId", postId);
+        result.put("votes", voteList);
+
+        return result;
+    }
 
     @Override
     public BoardPost selectById(String id) throws Exception {
@@ -210,7 +216,30 @@ public class BoardPostServiceImpl implements BoardPostService {
         return boardPostMapper.deleteById(id) > 0;
     }
 
+    @Override
+    public void createPost(BoardPost boardPost, CustomUser loginUser) throws Exception {
+        if (loginUser != null) {
+            boardPost.setUserId(loginUser.getId());
+            boardPost.setGuestNickname(null);
+            boardPost.setGuestPassword(null);
+            boardPostMapper.insert(boardPost);
+            boardPost.setUserNickname(boardPostMapper.select(boardPost.getId()).getUserNickname());
+        } else {
+            boardPost.setUserId(null);
+            if (boardPost.getGuestPassword() == null || boardPost.getGuestPassword().isBlank()) {
+                throw new IllegalArgumentException("비밀번호를 입력하세요.");
+            }
+            boardPost.setGuestPassword(passwordEncoder.encode(boardPost.getGuestPassword()));
 
+            boardPostMapper.insert(boardPost);
+        }
+    }
+
+    @Override
+    public boolean checkGuestPassword(BoardPost boardPost, String rawPassword) throws Exception {
+        if (boardPost.getGuestPassword() == null) return false;
+        return passwordEncoder.matches(rawPassword, boardPost.getGuestPassword());
+    }
 
 
 

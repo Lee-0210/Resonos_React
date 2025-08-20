@@ -24,8 +24,11 @@ import com.cosmus.resonos.service.badge.BadgeGrantService;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommentService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
-@RequestMapping("/community/boards/{communityId}/posts")
+@RequestMapping("/community")
 public class BoardPostController {
 
     @Autowired
@@ -52,7 +55,7 @@ public class BoardPostController {
     //     }
     // }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/boards/{communityId}/posts/{postId}")
     public ResponseEntity<?> getPost(
         @PathVariable("communityId") Long communityId,
         @PathVariable("postId") Long postId
@@ -77,36 +80,31 @@ public class BoardPostController {
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    // @PostMapping("/community/create/boards/{communityId}")
-    @PostMapping()
-    public String postMethodName(@RequestBody String entity) {
-        //TODO: process POST request
         
-        return entity;
-    }
-    
-    public ResponseEntity<?> createPost(@RequestBody BoardPost post,
-                                            @AuthenticationPrincipal CustomUser customUser) {
+    @PostMapping("/create/boards/{communityId}")
+    public ResponseEntity<?> create(
+        @PathVariable("communityId") Long communityId,
+        @RequestBody BoardPost request,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) {
         try {
-            // 1. 게시글 저장 서비스 호출
-            boolean success = boardPostService.insert(post);
+            BoardPost boardPost = new BoardPost();
+            boardPost.setTitle(request.getTitle());
+            boardPost.setContent(request.getContent());
+            boardPost.setCommunityId(communityId);
 
-            // 2. 게시글 저장 성공 시 배지 자동 지급 트리거
-            if (success && customUser != null) {
-                // customUser.getUser().getId()로 현재 로그인 유저의 id 추출
-                badgeGrantService.checkAndGrantBadges(customUser.getUser().getId());
+            if (loginUser != null) {
+                boardPostService.createPost(boardPost, loginUser);
+            } else {
+                boardPost.setGuestNickname(request.getGuestNickname());
+                boardPost.setGuestPassword(request.getGuestPassword());
+                boardPostService.createPost(boardPost, null);
             }
 
-            // 3. 성공 응답 반환
-            if (success) {
-                return ResponseEntity.ok("Board post created");
-            }
-            // 4. 실패 시 500 반환
-            return ResponseEntity.status(500).body("Failed to create board post");
+            return new ResponseEntity<>(boardPost, HttpStatus.CREATED);
         } catch (Exception e) {
-            // 5. 예외 발생 시 에러 메시지와 함께 500 반환
-            return ResponseEntity.status(500).body("Failed to create board post: " + e.getMessage());
+            log.error("게시글 작성 실패", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

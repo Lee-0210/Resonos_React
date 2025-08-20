@@ -38,13 +38,13 @@
   <select id="select" resultMap="BoardPostResultMap">
     SELECT bp.*, u.nickname AS user_nickname
     FROM board_post bp
-    LEFT JOIN user u ON bp.user_id = u.user_id
+    LEFT JOIN user u ON bp.user_id = u.id
     WHERE bp.id = #{id}
   </select>
 
-  <insert id="insert">
-    INSERT INTO board_post (title, content, type, community_id, user_id guest_nickname, guest_password)
-    VALUES (#{title}, #{content}, #{type}, #{communityId}, #{userId} #{guestNickname}, #{guestPassword})
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO board_post (title, content, type, community_id, user_id, guest_nickname, guest_password)
+    VALUES (#{title}, #{content}, #{type}, #{communityId}, #{userId}, #{guestNickname}, #{guestPassword})
   </insert>
 
   <update id="update">
