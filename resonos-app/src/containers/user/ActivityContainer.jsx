@@ -25,6 +25,7 @@ const ActivityContainer = () => {
   const [commuList, setCommuList] = useState([])
   const [postList, setPostList] = useState([])
   const [commentList, setCommentList] = useState([])
+  const [utlCommu, setUtlCommu] = useState({})
 
   const [user, setUser] = useState({});
   const [lastPath, setLastPath] = useState();
@@ -104,7 +105,8 @@ const ActivityContainer = () => {
         console.log('data :', data)
         setCommuList(data.commuList)
         setPostList()
-        setCommentList()
+        setCommentList(data.commentList)
+        setUtlCommu(data.utl)
       }
     } catch(e) {
       console.error('error :', e)
@@ -206,6 +208,7 @@ const ActivityContainer = () => {
               commuList={commuList}
               postList={postList}
               commentList={commentList}
+              utlCommu={utlCommu}
             />
           }
         </main>

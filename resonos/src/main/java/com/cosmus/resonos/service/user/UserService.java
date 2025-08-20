@@ -10,6 +10,7 @@ import com.cosmus.resonos.domain.admin.UsersTotalLikes;
 import com.cosmus.resonos.domain.user.GenreCount;
 import com.cosmus.resonos.domain.user.PublicUserDto;
 import com.cosmus.resonos.domain.user.UserAuth;
+import com.cosmus.resonos.domain.user.UserComment;
 import com.cosmus.resonos.domain.user.UserNoti;
 import com.cosmus.resonos.domain.user.Users;
 
@@ -91,7 +92,9 @@ public interface UserService {
     // 소셜 유저 회원가입
     public boolean insertSnsUser(Users user) throws Exception;
     // 유저의 리뷰 전체 좋아요 수
-    public UsersTotalLikes usersTotalLikes(@Param("userId") Long userId) throws Exception;
+    public UsersTotalLikes usersTotalLikes(Long userId) throws Exception;
+    // 유저의 커뮤니티 활동 좋아요 수
+    public UsersTotalLikes usersTotalCommuLikes(Long userId) throws Exception;
 
     // countByKeword - 키워드 검색
     public long countByKeyword(String keyword) throws Exception;
@@ -117,7 +120,10 @@ public interface UserService {
     // listPaging
     public List<Users> listPagingA(@Param("index") long index,@Param("size") long size) throws Exception;
 
-    // 커뮤 메인 
+    // 커뮤 메인
     // 커뮤니티 생성자 이름 조회
     public String getUserNameById(Long userId) throws Exception;
+
+    // 유저의 커뮤니티 댓글
+    public List<UserComment> usersComments(Long userId) throws Exception;
 }
