@@ -3,7 +3,7 @@ import Pagination from '../../Pagination/Pagination'
 import ReplyForm from './ReplyForm'
 import { Link } from 'react-router-dom'
 
-const PostComment = ({ comments, commentCount }) => {
+const PostComment = ({ comments, commentCount}) => {
 
   const [replyTo, setReplyTo] = useState(null)
 
@@ -21,8 +21,8 @@ const PostComment = ({ comments, commentCount }) => {
         {comments && (comments.map((com, idx) => (
           <div className="comment" key={idx}>
             <div className="user">
-              <Link to={`/users/${com.userId}`}>
-                <p>{com.userNickname}</p>
+              <Link to={`/users/${com.userId ? com.userId : 0}`}>
+                <p>{com.userNickname ? com.userNickname : com.guestNickname}</p>
               </Link>
             </div>
             <div className="comment-content" onClick={() => handleReplyClick(idx)}>
@@ -38,7 +38,7 @@ const PostComment = ({ comments, commentCount }) => {
               <div className="reply-comment" key={rIdx}>
                 <div className="user">
                   <Link to={`/users/${rep.userId}`}>
-                    <p>{rep.userNickname}</p>
+                    <p>{rep.userNickname ? rep.userNickname : rep.guestNickname}</p>
                   </Link>
                 </div>
                 <div className="comment-contentr">

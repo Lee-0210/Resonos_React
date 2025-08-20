@@ -10,6 +10,7 @@ public class Comment {
 
     private Long id;
 
+    // 채울거
     private String content;
 
     private Date createdAt;
@@ -34,8 +35,10 @@ public class Comment {
 
     private List<Comment> replies;
 
+    //비로그인시
     private String guestNickname;
 
+    //비로그인시
     private String guestPassword;
 
 }

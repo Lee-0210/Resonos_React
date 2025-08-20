@@ -126,4 +126,10 @@ public class CommentServiceImpl implements CommentService {
 
         commentMapper.insert(comment);
     }
+
+    @Override
+    public boolean checkGuestPassword(Comment comment, String rawPassword) throws Exception {
+        if (comment.getGuestPassword() == null) return false;
+        return passwordEncoder.matches(rawPassword, comment.getGuestPassword());
+    }
 }
