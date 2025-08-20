@@ -1,20 +1,21 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import {formatDate} from '../../../apis/util'
 
-const PostResultCard = () => {
+const PostResultCard = ({post}) => {
 
   const navigate = useNavigate()
 
   const handleNavigate = () => {
-    navigate('/community/posts/98')
+    navigate(`/community/boards/${post.community.id}/posts/${post.id}`)
   }
 
   return (
     <li onClick={handleNavigate}>
-      <p className='post-title focus ellipsis'>게시글 제목</p>
-      <p>내용</p>
-      <span className='board-name'>게시판 이름</span>
-      <span className='date'>2025-08-15 10:20:30</span>
+      <p className='post-title focus ellipsis'>{post.title}</p>
+      <p>{post.content}</p>
+      <span className='board-name'>{post.community.name}</span>
+      <span className='date'>{formatDate(post.createdAt)}</span>
     </li>
   )
 }

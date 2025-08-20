@@ -117,19 +117,19 @@ public class MainPageController {
 
             if ("board".equalsIgnoreCase(type)) {
                 // 커뮤니티/카테고리 검색
-                PageInfo<CommunityCategory> catPage = communityCategoryService.searchCategories(query, page, size);
-                response.put("searchedCategories", catPage.getList());
-                response.put("categoryPagination", new Pagination(catPage));
+                // PageInfo<CommunityCategory> catPage = communityCategoryService.searchCategories(query, page, size);
+                // response.put("searchedCategories", catPage.getList());
+                // response.put("categoryPagination", new Pagination(catPage));
 
                 // 모든 커뮤니티 + 키워드 포함
-                PageInfo<Community> commPage = communityService.searchCommunities(query, page, size);
+                PageInfo<Community> commPage = communityService.searchCommunities(query, page, 9);
 
                 response.put("searchedCommunities", commPage.getList());
                 response.put("communityPagination", new Pagination(commPage));
 
                 // 모든 커뮤니티
-                List<Community> allCommunities = communityService.getAllCommunities();
-                response.put("allCommunities", allCommunities);
+                // List<Community> allCommunities = communityService.getAllCommunities();
+                // response.put("allCommunities", allCommunities);
 
             } else if ("post".equalsIgnoreCase(type)) {
                 // 게시글 검색 + 키워드 포함
@@ -138,8 +138,8 @@ public class MainPageController {
                 response.put("postPagination", new Pagination(postPage));
 
                 // 모든 게시글
-                List<BoardPost> allPosts = boardPostService.getAllPosts();
-                response.put("allPosts", allPosts);
+                // List<BoardPost> allPosts = boardPostService.getAllPosts();
+                // response.put("allPosts", allPosts);
             } else {
                 // type 이 없는 경우는 더보기 전 페이지
 
@@ -152,7 +152,6 @@ public class MainPageController {
                 PageInfo<BoardPost> postPage = boardPostService.searchPosts(query, page, size);
                 response.put("searchedPosts", postPage.getList());
                 response.put("postPagination", new Pagination(postPage));
-                return new ResponseEntity<>(response, HttpStatus.OK);
             }
 
             return new ResponseEntity<>(response, HttpStatus.OK);

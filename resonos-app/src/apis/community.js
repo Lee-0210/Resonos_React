@@ -6,8 +6,8 @@ export const getIndex = async () => {
 }
 
 /* 검색 결과 */
-export const searchCommunity = async (keyword, type) => {
-  return api.get(`/community/search?q=${keyword, type}`)
+export const searchCommunity = async (keyword, type, page) => {
+  return api.get(`/community/search?query=${keyword}&type=${type}&page=${page}`)
 }
 
 /* 게시판 상세 */
