@@ -161,9 +161,10 @@
     ORDER BY name ASC, created_at DESC
   </select>
 
-
-
-
-
+  <!-- 마이페이지 : 유저의 게시판 조회 -->
+  <select id="getUsersCommunities">
+    SELECT * FROM community
+    WHERE creator_id = #{userId}
+  </select>
 
 </mapper>

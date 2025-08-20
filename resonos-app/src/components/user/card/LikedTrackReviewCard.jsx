@@ -87,21 +87,27 @@ const LikedTrackReviewCard = ({countLtReview, ltReviewList, onSearchReview, setL
           </div>
         </div>
         <ul className="ul-list ltr">
-          {ltReviewList.map((ltReview) => (
-            <li className="text-item" key={ltReview.id}>
-              <Link
-                to={`/tracks?id=${ltReview.trackId}&reviewId=${ltReview.id}`}
-              >
-                <p className="sm-title">{ltReview.title}</p>
-                <p className="sm-content">{ltReview.content}</p>
-                <span className="rv-name">{ltReview.reviewer.nickname}</span>
-                <span className="date">
-                  {new Date(ltReview.createdAt).toLocaleString()}
-                </span>
-                <span className="like">❤️ {ltReview.likes}</span>
-              </Link>
-            </li>
-          ))}
+          {
+            ltReviewList.length === 0
+            ?
+            <p className="no-content">좋아요 한 트랙 리뷰가 없습니다.</p>
+            :
+            ltReviewList.map((ltReview) => (
+              <li className="text-item" key={ltReview.id}>
+                <Link
+                  to={`/tracks?id=${ltReview.trackId}&reviewId=${ltReview.id}`}
+                >
+                  <p className="sm-title">{ltReview.title}</p>
+                  <p className="sm-content">{ltReview.content}</p>
+                  <span className="rv-name">{ltReview.reviewer.nickname}</span>
+                  <span className="date">
+                    {new Date(ltReview.createdAt).toLocaleString()}
+                  </span>
+                  <span className="like">❤️ {ltReview.likes}</span>
+                </Link>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </section>

@@ -21,6 +21,7 @@ const BoardContainer = () => {
   const [posts, setPosts] = useState([])
   const [notices, setNotices] = useState([])
   const [onButton, setOnButton] = useState(false)
+  const [postPagination, setPostPagination] = useState({})
 
   const isManager = useRef(false)
 

@@ -26,6 +26,7 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.admin.Notification;
 import com.cosmus.resonos.domain.admin.UsersTotalLikes;
 import com.cosmus.resonos.domain.badge.Badge;
+import com.cosmus.resonos.domain.community.Community;
 import com.cosmus.resonos.domain.review.Album;
 import com.cosmus.resonos.domain.review.AlbumReview;
 import com.cosmus.resonos.domain.review.Artist;
@@ -37,6 +38,7 @@ import com.cosmus.resonos.domain.user.UserNoti;
 import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.service.admin.NotificationService;
 import com.cosmus.resonos.service.badge.BadgeService;
+import com.cosmus.resonos.service.community.CommunityService;
 import com.cosmus.resonos.service.review.AlbumReviewService;
 import com.cosmus.resonos.service.review.AlbumService;
 import com.cosmus.resonos.service.review.ArtistService;
@@ -84,6 +86,8 @@ public class UserController {
   @Autowired BadgeService badgeService;
 
   @Autowired NotificationService notificationService;
+
+  @Autowired CommunityService communityService;
 
   /**
    * 사용자 정보 조회
@@ -380,7 +384,7 @@ public class UserController {
    * @return
    * @throws Exception
    */
-  @GetMapping("/activities")
+  @GetMapping("/review/activities")
   public ResponseEntity<?> activity(
     @AuthenticationPrincipal CustomUser loginUser
     ) throws Exception {
@@ -417,6 +421,36 @@ public class UserController {
       response.put("countLtReview", countLtReview);
       response.put("user", user);
       response.put("lastPath", "activity");
+
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+
+    return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
+  /**
+   * 내 활동 페이지 요청
+   * @return
+   * @throws Exception
+   */
+  @GetMapping("/community/activities")
+  public ResponseEntity<?> commuActivity(
+    @AuthenticationPrincipal CustomUser loginUser
+    ) throws Exception {
+    if(loginUser == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+    try {
+      // 로그인 유저 정보
+      Users user = userService.select(loginUser.getUsername());
+      List<Community> commuList = communityService.getUsersCommunities(loginUser.getId());
+
+      Map<String, Object> response = new HashMap<>();
+
+      response.put("user", user);
+      response.put("lastPath", "activity");
+      response.put("commuList", commuList);
 
       return new ResponseEntity<>(response, HttpStatus.OK);
     } catch(Exception e) {
@@ -866,9 +900,9 @@ public class UserController {
   public ResponseEntity<?> logout(HttpServletResponse response) {
       Cookie jwtCookie = new Cookie("jwt", null);
       jwtCookie.setHttpOnly(true);
-      jwtCookie.setSecure(true); // HTTPS 환경이면 true로 설정
+      jwtCookie.setSecure(true);
       jwtCookie.setPath("/");
-      jwtCookie.setMaxAge(0); // 즉시 만료
+      jwtCookie.setMaxAge(0); // 즉시 만료시키기
       response.addCookie(jwtCookie);
 
       return ResponseEntity.ok("로그아웃 성공");

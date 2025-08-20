@@ -10,6 +10,7 @@ import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
 import TextPressure from '../../assets/TextPressure';
 import Element from '../../components/review/album/Element';
+import SlideIn from '../../components/review/SlideIn';
 
 
 
@@ -410,23 +411,33 @@ const Album = () => {
   return (
     <>
       <div className={styles.albumWrapper}>
-        <AlbumInfo handleLikeClick={handleLikeClick} styles={styles}
-          album={album} artist={artist} score={score}
-          isAlbumLikedByUser={isAlbumLikedByUser} albumLikeCount={albumLikeCount}
-          tracks={tracks} userId={userId} />
-        <MvAndStreaming styles={styles} tracks={tracks} track={topTrack} />
-        <AlbumStatus styles={styles} album={album}
-          top5List={top5List} isArgEmpty={isArgEmpty}
-          argValues={argValues} emptyPlayList={emptyPlayList}
-          playLists={playLists} />
-        <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
-          score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null}
-          handleSubmitReview={handleSubmitReview} deleteReview={deleteReview}
-          loadMoreReviews={loadMoreReviews} page={page} updateReview={updateReview}
-          toggleReviewLike={toggleReviewLike} reportReview={reportReview} />
-        <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
-          argValues={argValues} userVote={userVote} userId={userId}
-          isAdmin={isAdmin} voteElement={voteElement} />
+        <SlideIn delay={0.2} direction="up">
+          <AlbumInfo handleLikeClick={handleLikeClick} styles={styles}
+            album={album} artist={artist} score={score}
+            isAlbumLikedByUser={isAlbumLikedByUser} albumLikeCount={albumLikeCount}
+            tracks={tracks} userId={userId} />
+        </SlideIn>
+        <SlideIn delay={0.4} direction="up">
+          <MvAndStreaming styles={styles} tracks={tracks} track={topTrack} />
+        </SlideIn>
+        <SlideIn delay={0.6} direction="up">
+          <AlbumStatus styles={styles} album={album}
+            top5List={top5List} isArgEmpty={isArgEmpty}
+            argValues={argValues} emptyPlayList={emptyPlayList}
+            playLists={playLists} />
+        </SlideIn>
+        <SlideIn delay={0.8} direction="up">
+          <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
+            score={score} isAdmin={isAdmin} album={album} reviewType={reviewType} track={null}
+            handleSubmitReview={handleSubmitReview} deleteReview={deleteReview}
+            loadMoreReviews={loadMoreReviews} page={page} updateReview={updateReview}
+            toggleReviewLike={toggleReviewLike} reportReview={reportReview} />
+        </SlideIn>
+        <SlideIn delay={1} direction="up">
+          <Element styles={styles} album={album} isArgEmpty={isArgEmpty}
+            argValues={argValues} userVote={userVote} userId={userId}
+            isAdmin={isAdmin} voteElement={voteElement} />
+        </SlideIn>
       </div>
     </>
   )

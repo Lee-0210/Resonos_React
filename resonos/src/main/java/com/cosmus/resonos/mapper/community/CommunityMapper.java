@@ -29,8 +29,11 @@ int deleteAll() throws Exception;
 
     // 모든 커뮤니티 조회 + 키워드
     List<Community> searchCommunities(@Param("query") String query, @Param("offset") int offset, @Param("size") int size) throws Exception;
-    // 키워드 기본 검색 
+    // 키워드 기본 검색
     List<Community> searchCommunitiesBasic(String query);
 
+    /* 마이페이지 */
+    // 유저의 커뮤니티 조회
+    public List<Community> getUsersCommunities(@Param("userId") Long userId) throws Exception;
 
 }
