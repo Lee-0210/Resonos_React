@@ -153,7 +153,7 @@ const App = () => {
           <Route path="/community/search" element={<CommuSearch />} />
           <Route path='/community/boards/:boardId/posts/:postId' element={<Post />} />
           <Route path='/community/edit/boards/:boardId/posts/:postId' element={<CreateUpdate />} />
-          <Route path='/community/create/boards/:boardId' element={<CreateUpdate />} />
+          <Route path='/community/create/boards/:cboardId' element={<CreateUpdate />} />
           <Route path="/community/search/more" element={<SearchMore />} />
 
         </Routes>

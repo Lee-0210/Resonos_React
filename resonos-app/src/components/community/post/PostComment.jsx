@@ -86,7 +86,7 @@ const PostComment = ({ comments, commentCount, editComment, deleteComment,
                   {isLogin && userInfo.id === com.userId && (
                     <>
                       <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
-                      <div className="btn btn-gold" onClick={() => deleteComment(com.id,true)}>삭제</div>
+                      <div className="btn btn-gold" onClick={() => deleteComment(com.id, true)}>삭제</div>
                     </>
                   )}
                 </div>
@@ -106,33 +106,37 @@ const PostComment = ({ comments, commentCount, editComment, deleteComment,
                     <p>{rep.guestNickname}</p>
                   )}
                 </div>
-                <div className="comment-contentr">
-                  <p>{rep.content}</p>
-                </div>
-                <div className="comment-info">
-                  <p>{rep.createdAt}</p>
-                  <p className="btn btn-gold">👍 {rep.commentLikes}</p>
-                  <p className="btn btn-gold">👎 {rep.commentDislikes}</p>
-                  {!rep.userId && (
-                    <>
-                      <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>
-                      <div className="btn btn-gold" onClick={() => handleOpenDelUnlogCom(rep.id)}>{openPw === rep.id ? '취소' : '삭제'}</div>
-                      {openPw === rep.id && (
+                {editReply != rep.id && (
+                  <>
+                    <div className="comment-contentr">
+                      <p>{rep.content}</p>
+                    </div>
+                    <div className="comment-info">
+                      <p>{rep.createdAt}</p>
+                      <p className="btn btn-gold">👍 {rep.commentLikes}</p>
+                      <p className="btn btn-gold">👎 {rep.commentDislikes}</p>
+                      {!rep.userId && (
                         <>
-                          <input id="tempPw" type="password"
-                            placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
-                          <button className="btn btn-gold" onClick={() => handleDeleteUnlogComment(tempPw, rep.id, false)}>삭제</button>
+                          <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>
+                          <div className="btn btn-gold" onClick={() => handleOpenDelUnlogCom(rep.id)}>{openPw === rep.id ? '취소' : '삭제'}</div>
+                          {openPw === rep.id && (
+                            <>
+                              <input id="tempPw" type="password"
+                                placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
+                              <button className="btn btn-gold" onClick={() => handleDeleteUnlogComment(tempPw, rep.id, false)}>삭제</button>
+                            </>
+                          )}
                         </>
                       )}
-                    </>
-                  )}
-                  {isLogin && userInfo.id === rep.userId && (
-                    <>
-                      <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>
-                      <div className="btn btn-gold" onClick={() => deleteComment(rep.id,false)}>삭제</div>
-                    </>
-                  )}
-                </div>
+                      {isLogin && userInfo.id === rep.userId && (
+                        <>
+                          <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>
+                          <div className="btn btn-gold" onClick={() => deleteComment(rep.id, false)}>삭제</div>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
                 {editReply === rep.id && (
                   <ReplyEdit editReplyf={editReplyf} isLogin={isLogin} cancel={handleCancelEditReply} rep={rep} />
                 )}

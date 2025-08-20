@@ -4,21 +4,13 @@ import { Link } from 'react-router-dom'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const PostContent = ({ post, isLogin, userInfo }) => {
+const PostContent = ({ post, isLogin, userInfo, boardId, postId }) => {
 
 
 
   return (
     <div className="post-content">
       <div className="content">
-        {/* <div className="imsi-div"></div>
-        <p>임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시
-          컨텐츠내용임시 컨텐츠내용임시
-          컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시
-          컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시
-          컨텐츠내용임시
-          컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용임시
-          컨텐츠내용임시 컨텐츠내용임시 컨텐츠내용</p> */}
         <CKEditor editor={ClassicEditor}
           data={post.content}           // 조회할 데이터 컨텐츠 
           disabled={true}
@@ -59,6 +51,12 @@ const PostContent = ({ post, isLogin, userInfo }) => {
         {isLogin && userInfo.id === post.userId && (
           <div className="onlywriter">
             <Link className='btn btn-gold' to={`/community/edit/boards/${post.boardId}/posts/${post.postId}`}>수정하기</Link>
+            <a className='btn btn-gold' href="#">삭제하기</a>
+          </div>
+        )}
+        {!post.userId && (
+          <div className="onlywriter">
+            <Link className='btn btn-gold' to={`/community/edit/boards/${boardId}/posts/${postId}`}>수정하기</Link>
             <a className='btn btn-gold' href="#">삭제하기</a>
           </div>
         )}
