@@ -1,6 +1,5 @@
 package com.cosmus.resonos.service.community;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.mapper.community.CommentMapper;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 @Service
@@ -106,6 +106,12 @@ public class CommentServiceImpl implements CommentService {
 
         return rootComments;
     }
+    
+    @Override
+    public PageInfo<Comment> commentsWithPagination(Long postId, int pageNum, int pageSize) throws Exception {
+        PageHelper.startPage(pageNum, pageSize);
+        return new PageInfo<>(selectWithLikesDislikes(postId));
+    }
 
     @Override
     public void writeComment(Comment comment, CustomUser loginUser) throws Exception {
@@ -135,4 +141,5 @@ public class CommentServiceImpl implements CommentService {
         if (comment.getGuestPassword() == null) return false;
         return passwordEncoder.matches(rawPassword, comment.getGuestPassword());
     }
+
 }

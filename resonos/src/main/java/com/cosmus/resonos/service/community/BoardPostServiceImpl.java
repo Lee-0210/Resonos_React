@@ -14,7 +14,6 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.ComVoteArgument;
-import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.mapper.community.BoardPostMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
