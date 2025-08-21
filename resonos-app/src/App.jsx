@@ -61,6 +61,7 @@ import CommuSearch from './pages/community/CommuSearch';
 import SearchMore from './pages/community/SearchMore';
 import Post from './pages/community/Post';
 import CreateUpdate from './pages/community/CreateUpdate';
+import App3 from './components/websocket/App3';
 
 
 
@@ -145,6 +146,8 @@ const App = () => {
           <Route path="/admin/notifications" element={<AdminLayout><AdminNotificationPage /></AdminLayout>} />
           <Route path="/admin/notices" element={<AdminLayout><AdminNoticePage /></AdminLayout>} />
           <Route path="/admin/qna" element={<AdminLayout><AdminQnAPage /></AdminLayout>} />
+          <Route path="/admin/app3" element={<AdminLayout><App3 /></AdminLayout>} />
+
 
           {/* 자유 커뮤니티 */}
           {/* 커뮤니티 url 은 /community 로 시작 */}

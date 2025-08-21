@@ -356,7 +356,7 @@ export const getVoteStats = (tab = 'track') =>
   axios.get('/admin/vote', { params: { tab } });
 
 // 예: 아티스트 통계 조회
-axios.get("/admin/vote", { params: { tab: "artist" } });
+// axios.get("/admin/vote", { params: { tab: "artist" } });
 
 
 
@@ -450,3 +450,4 @@ export const deleteQna = (id) =>
 
 
 
+// websocket 관련 api 

@@ -50,6 +50,8 @@ CREATE TABLE message_mentions (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+drop table notification
+
 -- notifitcation 
 CREATE TABLE notification (
   id BIGINT NOT NULL AUTO_INCREMENT,
@@ -65,6 +67,7 @@ CREATE TABLE notification (
   CONSTRAINT FK_user_TO_notification FOREIGN KEY (user_id) REFERENCES user(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+drop table notice;
 
 -- notice 
 CREATE TABLE notice (

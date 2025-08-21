@@ -33,7 +33,7 @@ public class NotificationServiceImpl implements NotificationService {
         boolean result = notificationMapper.insert(notification) > 0;
         // 실시간 푸시
         if (result) {
-            alarmSocketController.sendToUser(notification.getUserId(), notification);
+            // alarmSocketController.sendToUser(notification.getUserId(), notification);
         }
         return result;
     }

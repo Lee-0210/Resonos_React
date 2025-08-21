@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosmus.resonos.mapper.websocket.WebsocketNoticeMapper">
+    <insert id="insert" parameterType="com.cosmus.resonos.domain.websocket.WebsocketNotice">
+        INSERT INTO notice(title, content, author_id, is_active, start_at, end_at, created_at, updated_at)
+        VALUES(#{title}, #{content}, #{authorId}, #{isActive}, #{startAt}, #{endAt}, NOW(), NOW())
+    </insert>
+
+    <select id="findActiveNotices" resultType="com.cosmus.resonos.domain.websocket.WebsocketNotice">
+        SELECT * FROM notice WHERE is_active = 1 AND (start_at IS NULL OR start_at <= NOW()) 
+        AND (end_at IS NULL OR end_at >= NOW()) ORDER BY created_at DESC
+    </select>
+</mapper>
