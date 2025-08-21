@@ -66,7 +66,7 @@
   </select>
 
   <select id="countAll" resultType="int">
-    SELECT COUNT(*) FROM report
+    SELECT COUNT(*) FROM board_post
   </select>
 
   <select id="countByUserId" resultType="int">

@@ -60,14 +60,13 @@ body {
   font-family: var(--font-family);
   background-color: var(--background-color);
   color: var(--text-color);
-  margin-top: 50px;
   padding: 0;
 }
 
 .admin .container {
   width: 100% !important;
   max-width: var(--container-width) !important;
-  margin: auto !important;
+  margin-top: 50px;
   padding: 0 20px !important;
   box-sizing: border-box;
 }
