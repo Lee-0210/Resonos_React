@@ -137,18 +137,22 @@ public class CommentController {
 
             if (loginUser != null) {
                 if (comment.getUserId() != null && !loginUser.getId().equals(comment.getUserId())) {
+                    log.info("로그인 유저, 다른 회원 댓글 수정 시도");
                     return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
                 else if (comment.getUserId() == null && (request.getGuestPassword() == null ||
                     !commentService.checkGuestPassword(comment, request.getGuestPassword()))) {
+                    log.info("로그인 유저, 비회원 댓글 수정 비밀번호 불일치");
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             } else {
                 if (comment.getUserId() != null) {
+                    log.info("비로그인 유저, 회원 댓글 수정 시도");
                     return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
                 if (request.getGuestPassword() == null ||
                     !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+                    log.info("비로그인 유저, 비회원 댓글 수정 비밀번호 불일치");
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             }
@@ -184,20 +188,25 @@ public class CommentController {
             //     return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
             // }
 
+            log.info("request: {}", request);
             if (loginUser != null) {
                 if (comment.getUserId() != null && !loginUser.getId().equals(comment.getUserId())) {
+                    log.info("로그인 유저, 다른 회원 댓글 삭제 시도");
                     return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
                 else if (comment.getUserId() == null && (request == null || request.getGuestPassword() == null ||
                     !commentService.checkGuestPassword(comment, request.getGuestPassword()))) {
+                    log.info("로그인 유저, 비회원 댓글 삭제 비밀번호 불일치");
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             } else {
                 if (comment.getUserId() != null) {
+                    log.info("비로그인 유저, 회원 댓글 삭제 시도");
                     return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
                 if (request == null || request.getGuestPassword() == null ||
                     !commentService.checkGuestPassword(comment, request.getGuestPassword())) {
+                    log.info("비로그인 유저, 비회원 댓글 삭제 비밀번호 불일치");
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             }

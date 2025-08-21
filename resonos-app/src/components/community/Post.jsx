@@ -3,7 +3,7 @@ import PostTitle from './post/PostTitle'
 import PostContent from './post/PostContent'
 import PostComment from './post/PostComment'
 import PostForm from './post/PostForm'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import * as api from '../../apis/community'
 import TextPressure from '../../assets/TextPressure'
 import * as fmtDate from '../../apis/util'
@@ -22,7 +22,7 @@ const Post = () => {
 
   const { userInfo, isLogin } = useContext(LoginContext)
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
 
   // 게시판 초기 로딩
@@ -285,6 +285,16 @@ const Post = () => {
 
   // 비회원 댓글 삭제
   const deleteUnlogComment = async (pw, commentId, isRoot) => {
+    if (!pw) {
+      swal.fire({
+        title: '취소 되었습니다.',
+        text: '비밀번호를 입력해주세요.',
+        icon: 'warning',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+    }
     const data = {
       guestPassword: pw
     }
@@ -335,8 +345,6 @@ const Post = () => {
       text: '정말로 삭제하시겠습니까?',
       icon: 'warning',
       showCancelButton: true,
-      // confirmButtonColor: '#3085d6',
-      // cancelButtonColor: '#d33',
       confirmButtonText: '삭제',
       cancelButtonText: '취소',
       customClass: {
@@ -392,6 +400,51 @@ const Post = () => {
     }
   }
 
+  // 회원, 비회원 게시글 삭제
+  const deletePost = async (pw, id, isLogged) => {
+    if (!pw) {
+      swal.fire({
+        title: '취소 되었습니다.',
+        text: '비밀번호를 입력해주세요.',
+        icon: 'warning',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+      return
+    }
+    const data = {
+      ...(!isLogged && {guestPassword : pw })
+    }
+    const result = await swal.fire({
+      title: '삭제 확인',
+      text: '정말로 삭제하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '삭제',
+      cancelButtonText: '취소',
+      customClass: {
+        popup: 'album-wrapper'
+      }
+    })
+    if (result.isConfirmed) {
+      try {
+        const response = await api.deletePost(data,id)
+        console.log(response)
+        navigate(`/community/${boardId}`)
+      } catch (error) {
+        console.log(error)
+        swal.fire({
+          title: '삭제 실패',
+          text: '게시글 삭제 중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
+    }
+  }
 
   if (isLoading) {
     return (
@@ -416,8 +469,9 @@ const Post = () => {
       <div className="post-wrapper">
         <div className="container">
           <PostTitle post={post} />
-          <PostContent post={post} boardId={boardId} isLogin={isLogin}
-            userInfo={userInfo} postId={postId} />
+          <PostContent post={post} boardId={boardId}
+            isLogin={isLogin} userInfo={userInfo} postId={postId}
+            deletePost={deletePost}/>
           <PostComment comments={comments} commentCount={post.commentCount}
             editComment={editComment} postReply={postReply} editReplyf={editReply}
             isLogin={isLogin} userInfo={userInfo} deleteComment={deleteComment}

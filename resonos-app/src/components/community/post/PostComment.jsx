@@ -39,6 +39,8 @@ const PostComment = ({ comments, commentCount, editComment, deleteComment,
   }
   const handleDeleteUnlogComment = (pw, commentId, isRoot) => {
     deleteUnlogComment(pw, commentId, isRoot)
+    setTempPw(null)
+    setOpenPw(null)
   }
 
 
