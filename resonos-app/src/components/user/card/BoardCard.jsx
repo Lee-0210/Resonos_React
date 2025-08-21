@@ -1,12 +1,12 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const CommunityCard = ({community}) => {
+const BoardCard = ({board}) => {
 
   const navigate = useNavigate()
 
   const handleNavigate = () => {
-    navigate(`/community/boards/${community?.id}`)
+    navigate(`/community/boards/${board?.id}`)
   }
 
   return (
@@ -14,10 +14,10 @@ const CommunityCard = ({community}) => {
       onClick={handleNavigate}
       className='text-item'
     >
-      <p className="sm-title">{community.name}</p>
-      <p className="sm-content">{community.description}</p>
+      <p className="sm-title">{board.name}</p>
+      <p className="sm-content">{board.description}</p>
     </li>
   )
 }
 
-export default CommunityCard
+export default BoardCard

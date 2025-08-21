@@ -1,8 +1,14 @@
 package com.cosmus.resonos.controller.community;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +30,10 @@ import com.cosmus.resonos.service.badge.BadgeGrantService;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommentService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -58,29 +68,77 @@ public class BoardPostController {
     @GetMapping("/boards/{communityId}/posts/{postId}")
     public ResponseEntity<?> getPost(
         @PathVariable("communityId") Long communityId,
-        @PathVariable("postId") Long postId
+        @PathVariable("postId") Long postId,
+        @AuthenticationPrincipal CustomUser loginUser,
+        HttpServletRequest request,
+        HttpServletResponse response,
+        HttpSession session
     ) {
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> postWithComments = new HashMap<>();
         try {
             // 게시글 + 좋아요/싫어요 수
             BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId);
             if (post == null) {
                 return ResponseEntity.notFound().build();
             }
-            response.put("post", post);
+
+            // 조회수 증가
+            if (loginUser != null) {
+                // 로그인 유저 → 세션 활용
+                Set<Long> viewedPost = (Set<Long>) session.getAttribute("viewedPost");
+                if (viewedPost == null) {
+                    viewedPost = new HashSet<>();
+                    session.setAttribute("viewedPost", viewedPost);
+                }
+
+                if (!viewedPost.contains(postId)) {
+                    boardPostService.incrementViewCount(postId);
+                    viewedPost.add(postId);
+                }
+            } else {
+                // 비로그인 유저 → 쿠키 활용
+                Cookie[] cookies = request.getCookies();
+                String viewed = null;
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                        if ("viewedPost".equals(cookie.getName())) {
+                            try {
+                                viewed = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                            } catch (Exception e) {
+                                viewed = "";
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                // 이미 조회했는지 확인
+                boolean alreadyViewed = viewed != null && Arrays.asList(viewed.split("\\|")).contains(postId.toString());
+
+                if (!alreadyViewed) {
+                    boardPostService.incrementViewCount(postId);
+                    String newValue = (viewed == null || viewed.isEmpty() ? "" : viewed + "|") + postId;
+                    Cookie newCookie = new Cookie("viewedPost", URLEncoder.encode(newValue, StandardCharsets.UTF_8));
+                    newCookie.setPath("/");
+                    newCookie.setMaxAge(60 * 60); // 1시간동안 조회수 중복 카운팅 방지
+                    response.addCookie(newCookie);
+                }
+
+            }
+            postWithComments.put("post", post);
 
             // 댓글 + 좋아요/싫어요 수
             // 댓글 리스트 반환 (각 댓글에 작성자, 내용, 작성일, 좋아요/싫어요 수 포함)
             List<Comment> comments = commentService.selectWithLikesDislikes(postId);
-            response.put("comments", comments);
+            postWithComments.put("comments", comments);
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(postWithComments, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-        
+
     @PostMapping("/create/boards/{communityId}")
     public ResponseEntity<?> createPost(
         @PathVariable("communityId") Long communityId,

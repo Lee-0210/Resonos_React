@@ -22,9 +22,12 @@ const ActivityContainer = () => {
   const [ltReviewList, setLtReviewList] = useState([]);
 
   /* 커뮤니티 데이터 */
-  const [commuList, setCommuList] = useState([])
+  const [boardList, setBoardList] = useState([])
+  const [boardCount, setBoardCount] = useState()
   const [postList, setPostList] = useState([])
+  const [postCount, setPostCount] = useState()
   const [commentList, setCommentList] = useState([])
+  const [commentCount, setCommentCount] = useState()
   const [utlCommu, setUtlCommu] = useState({})
 
   const [user, setUser] = useState({});
@@ -33,6 +36,61 @@ const ActivityContainer = () => {
 
   const navigate = useNavigate()
 
+
+  // 커뮤니티 활동 검색, 요청 함수
+  const onSearchCommunityData = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef, type) => {
+
+    loadingRef.current = true
+
+    try {
+      const { data } = await ur.loadMoreUserCommunityData({
+        keyword,
+        offset: offsetRef.current,
+        limit: limitRef.current,
+        type
+      })
+
+      console.log('data :', data)
+
+      switch(type) {
+        case 'board':
+          setBoardList(prev => {
+            const existingIds = new Set(prev.map(board => board.id))
+            const filteredData = data.filter(board => !existingIds.has(board.id))
+            return [...prev, ...filteredData]
+          })
+          break;
+        case 'post':
+          setPostList(prev => {
+            const existingIds = new Set(prev.map(post => post.id))
+            const filteredData = data.filter(post => !existingIds.has(post.id))
+            return [...prev, ...filteredData]
+          })
+          break;
+        case 'comment':
+          setCommentList(prev => {
+            const existingIds = new Set(prev.map(comment => comment.id))
+            const filteredData = data.filter(comment => !existingIds.has(comment.id))
+            return [...prev, ...filteredData]
+          })
+          break;
+        default:
+          break;
+      }
+
+      offsetRef.current += limitRef.current
+
+      console.log(offsetRef.current)
+
+      if (data.length < limitRef.current) {
+        allLoadedRef.current = true
+      }
+    } catch (err) {
+      console.error(err)
+    } finally {
+      loadingRef.current = false
+    }
+  }
 
   // 리뷰 검색, 요청 함수
   const onSearchReview = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef, type) => {
@@ -95,7 +153,6 @@ const ActivityContainer = () => {
     }
   }
 
-
   // 유저의 커뮤니티 데이터 요청
   const getUsersCommunity = async () => {
     try {
@@ -103,9 +160,12 @@ const ActivityContainer = () => {
       if(response.status === 200) {
         const data = response.data
         console.log('data :', data)
-        setCommuList(data.commuList)
-        setPostList()
+        setBoardList(data.boardList)
+        setBoardCount(data.boardCount)
+        setPostList(data.postList)
+        setPostCount(data.postCount)
         setCommentList(data.commentList)
+        setCommentCount(data.commentCount)
         setUtlCommu(data.utl)
       }
     } catch(e) {
@@ -205,10 +265,17 @@ const ActivityContainer = () => {
             />
             :
             <ActivityCommu
-              commuList={commuList}
+              boardList={boardList}
+              setBoardList={setBoardList}
+              boardCount={boardCount}
               postList={postList}
+              setPostList={setPostList}
+              postCount={postCount}
               commentList={commentList}
+              setCommentList={setCommentList}
+              commentCount={commentCount}
               utlCommu={utlCommu}
+              onSearchCommunityData={onSearchCommunityData}
             />
           }
         </main>

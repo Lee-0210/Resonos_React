@@ -1,14 +1,14 @@
 import React from 'react'
 
-const PostTitle = ({ title, date, writer }) => {
+const PostTitle = ({ post }) => {
   return (
     <div className="post-info">
       <div className="title">
-        <p className='headline'>{title}</p>
+        <p className='headline'>{post.title}</p>
       </div>
       <div className="writer-and-date">
-        <p>{writer}</p>
-        <p>{date}</p>
+        <p>{(post.userNickname ? post.userNickname : post.guestNickname)}</p>
+        <p>{post.createdAt}</p>
       </div>
     </div>
   )

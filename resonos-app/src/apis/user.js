@@ -71,6 +71,11 @@ export const loadMoreUserReviews = async (data) => {
   return await api.post("/users/activities", data)
 }
 
+// 활동 내역 추가 요청 (커뮤니티)
+export const loadMoreUserCommunityData = async data => {
+  return await api.post('/users/community/activities', data)
+}
+
 /* 알림 설정 페이지 */
 // 알림 설정 페이지
 export const getNotificationSettings = async () => {

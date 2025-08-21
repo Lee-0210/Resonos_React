@@ -1,8 +1,11 @@
 import React from 'react'
-import CommunityCard from './card/CommunityCard'
+import CommunityCard from './card/BoardCard'
 import CommentCard from './card/CommentCard'
+import CommentSection from './section/CommentSection'
+import PostSection from './section/PostSection'
+import BoardSection from './section/BoardSection'
 
-const ActivityCommu = ({commuList, postList, commentList, utlCommu}) => {
+const ActivityCommu = ({boardList, setBoardList, boardCount, postList, setPostList, commentList, utlCommu, onSearchCommunityData, setCommentList, postCount, commentCount}) => {
   return (
     <>
       {/* 통계 */}
@@ -22,69 +25,28 @@ const ActivityCommu = ({commuList, postList, commentList, utlCommu}) => {
       </section>
 
       {/* 내 게시판 */}
-      <div className="info-wrapper">
-        <div className="info-section">
-          <div className='title'>
-            <h2 className="text-start">내 게시판</h2>
-          </div>
-          <ul className="ul-list my-board">
-            {
-              commuList?.length === 0
-              ?
-              <p className="no-content">개설한 게시판이 없습니다.</p>
-              :
-              commuList?.map(list => (
-                <CommunityCard
-                  community={list}
-                />
-              ))
-            }
-          </ul>
-        </div>
-      </div>
+      <BoardSection
+        boardList={boardList}
+        setBoardList={setBoardList}
+        boardCount={boardCount}
+        onSearchCommunityData={onSearchCommunityData }
+      />
 
       {/* 내 게시글 */}
-      <div className="info-wrapper">
-        <div className="info-section">
-          <div className='title'>
-            <h2 className="text-start">내 게시글</h2>
-          </div>
-          <ul className="ul-list my-board">
-            {
-              !postList
-              ?
-              <p className="no-content">작성한 게시글이 없습니다.</p>
-              :
-              postList?.map(() => (
-                <li>응애</li>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
+      <PostSection
+        postList={postList}
+        setPostList={setPostList}
+        postCount={postCount}
+        onSearchCommunityData={onSearchCommunityData}
+      />
 
       {/* 내 댓글 */}
-      <div className="info-wrapper">
-        <div className="info-section">
-          <div className='title'>
-            <h2 className="text-start">내 댓글</h2>
-          </div>
-          <ul className="ul-list my-board">
-            {
-              !commentList
-              ?
-              <p className="no-content">작성한 댓글이 없습니다.</p>
-              :
-              commentList?.map(comment => (
-                <CommentCard
-                  key={comment.id}
-                  comment={comment}
-                />
-              ))
-            }
-          </ul>
-        </div>
-      </div>
+      <CommentSection
+        commentList={commentList}
+        setCommentList={setCommentList}
+        commentCount={commentCount}
+        onSearchCommunityData={onSearchCommunityData}
+      />
     </>
   )
 }

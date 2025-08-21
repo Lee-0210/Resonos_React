@@ -50,14 +50,21 @@ const PostContent = ({ post, isLogin, userInfo, boardId, postId }) => {
         </div>
         {isLogin && userInfo.id === post.userId && (
           <div className="onlywriter">
-            <Link className='btn btn-gold' to={`/community/edit/boards/${post.boardId}/posts/${post.postId}`}>수정하기</Link>
+            <Link className='btn btn-gold' to={`/community/boards/${boardId}`}>목록으로</Link>
+            <Link className='btn btn-gold' to={`/community/edit/boards/${boardId}/posts/${postId}`}>수정하기</Link>
             <a className='btn btn-gold' href="#">삭제하기</a>
           </div>
         )}
         {!post.userId && (
           <div className="onlywriter">
+            <Link className='btn btn-gold' to={`/community/boards/${boardId}`}>목록으로</Link>
             <Link className='btn btn-gold' to={`/community/edit/boards/${boardId}/posts/${postId}`}>수정하기</Link>
             <a className='btn btn-gold' href="#">삭제하기</a>
+          </div>
+        )}
+        {!isLogin && post.userId && (
+          <div className="onlywriter">
+            <Link className='btn btn-gold' to={`/community/boards/${boardId}`}>목록으로</Link>
           </div>
         )}
       </div>
