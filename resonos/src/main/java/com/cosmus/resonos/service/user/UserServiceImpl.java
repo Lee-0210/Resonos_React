@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,8 @@ import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.admin.UserActivityLog;
 import com.cosmus.resonos.domain.admin.UserSanction;
 import com.cosmus.resonos.domain.admin.UsersTotalLikes;
+import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.Community;
 import com.cosmus.resonos.domain.user.GenreCount;
 import com.cosmus.resonos.domain.user.PublicUserDto;
 import com.cosmus.resonos.domain.user.UserAuth;
@@ -465,7 +468,32 @@ public class UserServiceImpl implements UserService {
         }
 
         @Override
-        public List<UserComment> usersComments(Long userId) throws Exception {
-            return userMapper.usersComments(userId);
+        public List<UserComment> usersComments(Long userId, String keyword, int offset, int limit) throws Exception {
+            return userMapper.usersComments(userId, keyword, offset, limit);
+        }
+
+        @Override
+        public int usersCommentsCount(Long userId) throws Exception {
+            return userMapper.usersCommentsCount(userId);
+        }
+
+        @Override
+        public int usersPostsCount(Long userId) throws Exception {
+            return userMapper.usersPostsCount(userId);
+        }
+
+        @Override
+        public List<BoardPost> usersPosts(Long userId, String keyword, int offset, int limit) throws Exception {
+            return userMapper.usersPosts(userId, keyword, offset, limit);
+        }
+
+        @Override
+        public List<Community> getUsersCommunities(Long userId, String keyword, int offset, int limit) throws Exception {
+            return userMapper.getUsersCommunities(userId, keyword, offset, limit);
+        }
+
+        @Override
+        public int usersBoardsCount(Long userId) throws Exception {
+            return userMapper.usersBoardsCount(userId);
         }
 }

@@ -284,9 +284,55 @@
     SELECT
       SUM(CASE WHEN ld.type = 'comment' THEN 1 ELSE 0 END) AS commentLikes,
       SUM(CASE WHEN ld.type = 'post' THEN 1 ELSE 0 END) AS postLikes,
-      COUNT(*) AS totalLikes
+      COUNT(ld.id) AS totalLikes
     FROM likes_dislikes ld
-    WHERE ld.user_id = #{userId}
+    LEFT JOIN board_post bp
+          ON ld.type = 'post' AND bp.id = ld.target_id AND bp.user_id = #{userId}
+    LEFT JOIN comment c
+          ON ld.type = 'comment' AND c.id = ld.target_id AND c.user_id = #{userId}
+    WHERE (bp.id IS NOT NULL OR c.id IS NOT NULL)
+    AND is_likes = 1
+  </select>
+
+  <!-- 유저의 게시판 카운트 -->
+  <select id="usersBoardsCount" resultType="int">
+    SELECT COUNT(*) FROM community WHERE creator_id = #{userId}
+  </select>
+
+  <!-- 유저의 게시판 조회 -->
+  <select id="getUsersCommunities" resultType="Community">
+    SELECT * FROM community
+    WHERE creator_id = #{userId}
+    <if test="keyword != null and keyword != ''">
+      AND (
+        name LIKE CONCAT('%', #{keyword}, '%')
+        OR description LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+        <when test="keyword != null and keyword != ''">
+          CASE
+            WHEN name LIKE CONCAT(#{keyword}, '%') THEN 0
+            WHEN name LIKE CONCAT('%', #{keyword}, '%') THEN 1
+            WHEN description LIKE CONCAT(#{keyword}, '%') THEN 2
+            WHEN description LIKE CONCAT('%', #{keyword}, '%') THEN 3
+            ELSE 4
+          END,
+          created_at DESC
+        </when>
+        <otherwise>
+          created_at DESC
+        </otherwise>
+    </choose>
+    LIMIT #{offset}, #{limit}
+  </select>
+
+  <!-- 유저의 커뮤니티 댓글 카운트 -->
+  <select id="usersCommentsCount" resultType="int">
+    SELECT COUNT(*)
+    FROM comment c
+    WHERE c.user_id = #{userId}
   </select>
 
   <!-- 유저의 커뮤니티 댓글 리스트 -->
@@ -304,8 +350,83 @@
     LEFT JOIN likes_dislikes ld
       ON ld.target_id = c.id
     WHERE c.user_id = #{userId}
+    <if test="keyword != null and keyword != ''">
+      AND (
+        bp.title LIKE CONCAT('%', #{keyword}, '%')
+        OR c.content LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
     GROUP BY c.id, bp.title, c.content, c.created_at
+    ORDER BY
+    <choose>
+        <when test="keyword != null and keyword != ''">
+          CASE
+            WHEN bp.title LIKE CONCAT(#{keyword}, '%') THEN 0
+            WHEN bp.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+            WHEN c.content LIKE CONCAT(#{keyword}, '%') THEN 2
+            WHEN c.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
+            ELSE 4
+          END,
+          c.created_at DESC
+        </when>
+        <otherwise>
+          c.created_at DESC
+        </otherwise>
+    </choose>
+    LIMIT #{offset}, #{limit}
   </select>
+
+  <!-- 유저의 커뮤니티 게시글 카운트 -->
+  <select id="usersPostsCount" resultType="int">
+    SELECT COUNT(*) FROM board_post
+    WHERE user_id = #{userId}
+  </select>
+
+  <!-- 유저의 커뮤니티 게시글 리스트 -->
+  <select id="usersPosts" resultType="BoardPost">
+    SELECT
+        bp.*,
+        COALESCE(ld.like_count, 0) AS postLikes,
+        COALESCE(c.comment_count, 0) AS commentCount
+    FROM board_post bp
+    LEFT JOIN (
+        SELECT target_id, COUNT(*) AS like_count
+        FROM likes_dislikes
+        WHERE type = 'post'
+        AND is_likes = 1
+        GROUP BY target_id
+    ) ld ON ld.target_id = bp.id
+    LEFT JOIN (
+        SELECT board_post_id, COUNT(*) AS comment_count
+        FROM comment
+        GROUP BY board_post_id
+    ) c ON c.board_post_id = bp.id
+    WHERE bp.user_id = #{userId}
+    <if test="keyword != null and keyword != ''">
+      AND (
+        bp.title LIKE CONCAT('%', #{keyword}, '%')
+        OR bp.content LIKE CONCAT('%', #{keyword}, '%')
+      )
+    </if>
+    ORDER BY
+    <choose>
+        <when test="keyword != null and keyword != ''">
+          CASE
+            WHEN bp.title LIKE CONCAT(#{keyword}, '%') THEN 0
+            WHEN bp.title LIKE CONCAT('%', #{keyword}, '%') THEN 1
+            WHEN bp.content LIKE CONCAT(#{keyword}, '%') THEN 2
+            WHEN bp.content LIKE CONCAT('%', #{keyword}, '%') THEN 3
+          ELSE 4
+          END,
+          bp.created_at DESC
+        </when>
+        <otherwise>
+          bp.created_at DESC
+        </otherwise>
+    </choose>
+    LIMIT #{offset}, #{limit}
+  </select>
+
 
   <!-- 유저 제재 사유 banUser -->
   <update id="banUser">

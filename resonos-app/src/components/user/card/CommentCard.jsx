@@ -17,7 +17,7 @@ const CommentCard = ({comment}) => {
       <p className="sm-title">{comment.title}</p>
       <p className="sm-content">{comment.content}</p>
       <span className="date">{new Date(comment.createdAt).toLocaleString()}</span>
-      <span className="like">❤️ {comment.likes}</span>
+      <span className="like">👍 {comment.likes}</span>
     </li>
   )
 }
