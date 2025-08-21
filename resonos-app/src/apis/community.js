@@ -38,6 +38,15 @@ export const updateDescription = async (boardId, description) => {
 export const getPostData = async (ids) => {
   return api.get(`/community/boards/${ids.boardId}/posts/${ids.postId}`)
 }
+// 게시글 댓 페이지네이션 조회
+export const getPostDataWithPage = async (ids,page) => {
+  return api.get(`/community/boards/${ids.boardId}/posts/${ids.postId}`, {
+    params : {
+      page : page.page,
+      size : page.size
+    }
+  })
+}
 // 회원, 비회원 게시글 댓글 달기 O
 export const postComment = async (data, ids) => {
   return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`, data)

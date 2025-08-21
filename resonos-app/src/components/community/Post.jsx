@@ -17,6 +17,7 @@ const Post = () => {
 
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState(null);
+  const [pagination, setPagination] = useState(null)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -35,6 +36,7 @@ const Post = () => {
         console.log(response.data)
         setPost(data.post)
         setComments(data.comments)
+        setPagination(data.commentsPagination)
 
         if (data.post.createdAt) {
           const date = new Date(data.post.createdAt)
@@ -472,10 +474,11 @@ const Post = () => {
           <PostContent post={post} boardId={boardId}
             isLogin={isLogin} userInfo={userInfo} postId={postId}
             deletePost={deletePost}/>
-          <PostComment comments={comments} commentCount={post.commentCount}
+          <PostComment ids={{boardId, postId}}
+            initComments={comments} commentCount={post.commentCount}
             editComment={editComment} postReply={postReply} editReplyf={editReply}
             isLogin={isLogin} userInfo={userInfo} deleteComment={deleteComment}
-            deleteUnlogComment={deleteUnlogComment} />
+            deleteUnlogComment={deleteUnlogComment} pagination={pagination} />
           <PostForm postComment={postComment} isLogin={isLogin} />
         </div>
       </div>

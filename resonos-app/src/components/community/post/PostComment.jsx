@@ -1,20 +1,37 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Pagination from '../../Pagination/Pagination'
 import ReplyForm from './ReplyForm'
 import { Link } from 'react-router-dom'
 import CommentEdit from './CommentEdit'
 import ReplyEdit from './ReplyEdit'
+import * as api from '../../../apis/community'
 
-const PostComment = ({ comments, commentCount, editComment, deleteComment,
-  postReply, editReplyf, userInfo, isLogin, deleteUnlogComment }) => {
+const PostComment = ({ initComments, commentCount, editComment, deleteComment, ids,
+  postReply, editReplyf, userInfo, isLogin, deleteUnlogComment, initPagination }) => {
 
   const [replyTo, setReplyTo] = useState(null)
   const [isEdit, setIsEdit] = useState(null)
   const [editReply, setEditReply] = useState(null)
   const [openPw, setOpenPw] = useState(null)
   const [tempPw, setTempPw] = useState(null)
+  const [page, setPage] = useState(1)
+  const [comments, setComments] = useState(initComments || [])
+  const [pagination, setPagination] = useState(initPagination || null)
 
+  const fetchComment = async (page) => {
+    try {
+      const response = await api.getPostDataWithPage(ids, page)
+      console.log(response.data)
+      setComments(response.data.comments)
+      setPagination(response.data.commentsPagination)
+      // setCommentCount(response.data.totalElements)
+    } catch (error) {
 
+    }
+  }
+  useEffect(() => {
+    fetchComment(page); // 첫 페이지 로딩
+  }, [ids.boardId, ids.postId, page]);
 
   const handleReplyClick = (i) => {
     setReplyTo(replyTo === i ? null : i)
@@ -152,7 +169,12 @@ const PostComment = ({ comments, commentCount, editComment, deleteComment,
         )))}
       </div>
       {/* 페이지네이션 */}
-      <Pagination />
+      {pagination && (
+        <Pagination
+          pagination={pagination}
+          onPageChange={(p) => setPage(p)}
+        />
+      )}
     </div>
   )
 }

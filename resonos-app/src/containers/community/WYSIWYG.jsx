@@ -207,8 +207,9 @@ const WYSIWYG = ({ post, ids }) => {
               <input className='styled-form' type="text" id='title'
                 value={title} onChange={changeTitle} />
             </div>
-            {!post?.userId && (
-              <>
+            {post ? (
+              !post.userId && (
+                <>
                 <div className="title-box">
                   <p className='subtitle'>작성자</p>
                   <input className='styled-form' type="text" id='writer'
@@ -221,6 +222,23 @@ const WYSIWYG = ({ post, ids }) => {
                     onChange={changeTempPw} />
                 </div>
               </>
+              )
+            ) : (
+              !isLogin && (
+                <>
+                <div className="title-box">
+                  <p className='subtitle'>작성자</p>
+                  <input className='styled-form' type="text" id='writer'
+                    value={guestNick}
+                    onChange={changeWriter} />
+                </div>
+                <div className="title-box">
+                  <p className='subtitle'>비밀번호</p>
+                  <input className='styled-form' type="password" id='password'
+                    onChange={changeTempPw} />
+                </div>
+              </>
+              )
             )}
           </div>
           <div className="cke">
