@@ -12,16 +12,6 @@ import com.cosmus.resonos.domain.community.ComVoteArgument;
 import com.github.pagehelper.PageInfo;
 
 public interface BoardPostService extends BaseService<BoardPost> {
-    // // 전체 조회
-    // public List<BoardPost> list() throws Exception;
-    // // 조회
-    // public BoardPost select(Long id) throws Exception;
-    // // 삽입
-    // public boolean insert(BoardPost post) throws Exception;
-    // // 수정
-    // public boolean update(BoardPost post) throws Exception;
-    // // 삭제
-    // public boolean delete(Long id) throws Exception;
     // 커뮤니티
     public List<BoardPost> findByCommunity(Long communityId) throws Exception;
     // 어드민 통계용
@@ -32,6 +22,8 @@ public interface BoardPostService extends BaseService<BoardPost> {
     public void createPost(BoardPost boardPost, CustomUser loginUser) throws Exception;
     // 비로그인 게시글 비밀번호 체크
     public boolean checkGuestPassword(BoardPost boardPost, String rawPassword) throws Exception;
+    // 게시글 조회수 증가
+    public boolean incrementViewCount(Long id) throws Exception;
     
     // 커뮤 main
     // 주요뉴스 (가장 화제글 3개 + 썸네일) - 예시: 조회수 기준
