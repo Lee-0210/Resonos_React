@@ -1,110 +1,113 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import WsHeader from '../../components/community/post/WsHeader';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 import * as api from '../../apis/community'
 import swal from 'sweetalert2';
 
-const WYSIWYG = ({ post }) => {
+const WYSIWYG = ({ post, ids }) => {
   // state 
-  const [title, setTitle] = useState('')
-  const [guestNick, setGuestNick] = useState('')
-  // const [writer, setWriter] = useState('')
-  const [tempPw, setTempPw] = useState('')
-  const [content, setContent] = useState('')
+  const [title, setTitle] = useState('');
+  const [guestNick, setGuestNick] = useState('');
+  const [tempPw, setTempPw] = useState('');
+  const [content, setContent] = useState('');
   const [fileIdList, setFileIdList] = useState([]) // 선택 삭제 id 목록
   const [mainFile, setMainFile] = useState(null)   // 
   const [files, setFiles] = useState(null)
 
+  const editorRef = useRef(null);
   const { userInfo, isLogin } = useContext(LoginContext)
-
   const navigate = useNavigate()
+  // id 가져오기 
 
-  //FeState(second)
+  // post 값이 바뀌면 state 갱신
+  useEffect(() => {
+    if (post) {
+      setTitle(post.title || '');
+      setGuestNick(post.guestNickname || '');
+      setContent(post.content || '');
+      
+      // CKEditor가 준비된 상태라면 editor에 내용 설정
+      if (editorRef.current) {
+        editorRef.current.setData(post.content || '');
+      }
+    }
+  }, [post]);
+
   // 변경 이벤트 함수 
   const changeTitle = (e) => { setTitle(e.target.value) }
   const changeWriter = (e) => { setGuestNick(e.target.value) }
   const changeTempPw = (e) => { setTempPw(e.target.value) }
   const changeContent = (e) => { setContent(e.target.value) }
 
-  // id 가져오기 
-  const { cboardId } = useParams()
-
   // 게시글 등록 함수 
-  const postInsert = async (cboardId) => {
-    console.log(cboardId)
-    if (!isLogin) {
-      const data = {
-        guestNickname: guestNick,
-        guestPassword: tempPw,
-        content: content,
-        title : title
-      }
-      console.log("비로그인 작성입",data)
-      try {
-        const response = await api.postInsert(data, cboardId)
-        console.log(response);
-        swal.fire({
-          title : '작성완료',
-          text : '게시글 작성완료',
-          icon : 'success',
-          customClass : {
-            confirmButton : 'album-wrapper'
-          }
-        })
-        navigate(`community/create/boards/${cboardId}`)
-      } catch (error) {
-        console.log(error)
-      }
+  const postInsert = async (ids) => {
+    const boardId = ids
+    const data = {
+      content: content,
+      title: title,
+      ...(isLogin ? {} : { guestNickname: guestNick, guestPassword: tempPw }),
     }
-    else {
-      console.log("로그인 작성입")
-      const data = {
-        content: content,
-        title : title
-      }
-      try {
-        const response = await api.postInsert(data, cboardId)
-        console.log(response);
-        swal.fire({
-          title : '작성완료',
-          text : '게시글 작성완료',
-          icon : 'success',
-          customClass : {
-            confirmButton : 'album-wrapper'
-          }
-        })
-        navigate(`community/create/boards/${cboardId}`)
-      } catch (error) {
-        console.log(error)
-      }
+    console.log(data)
+    try {
+      const response = await api.postInsert(data, boardId)
+      console.log(response);
+      swal.fire({
+        title: '작성완료',
+        text: '게시글 작성완료',
+        icon: 'success',
+        customClass: {
+          confirmButton: 'album-wrapper'
+        }
+      })
+      navigate(`/community/boards/${boardId}/posts/${response.data.id}`)
+    } catch (error) {
+      console.log(error)
+      swal.fire({
+        title: '작성실패',
+        text: '게시글 작성실패',
+        icon: 'error',
+        customClass: {
+          confirmButton: 'album-wrapper'
+        }
+      })
     }
   }
-  // 게시글 수정 함수 
-  // const onSumbit = () => {
-  //   const data = {
-  //     'id': id,
-  //     'title': title,
-  //     'writer': writer,
-  //     'content': content
-  //   }
-  //   const headers = { 'Content-Type': 'application/json' }
 
-  //   // TODO : onInsert() 전달 받아서 호출 
-  //   onUpdate(data, headers)
-  // }
-
-  // useEffect(() => {
-  //   if (board) {
-  //     setTitle(board.title)
-  //     setWriter(board.writer)
-  //     setContent(board.content)
-  //   }
-  // }, [board])
+  // 게시글 수정 함수
+  const postUpdate = async (ids) => {
+    const data = {
+      content: content,
+      title: title,
+      ...(isLogin ? {} : { guestPassword : tempPw } )
+    }
+    try {
+      const response = await api.postUpdate(data, ids)
+      console.log(response);
+      swal.fire({
+        title: '수정완료',
+        text: '게시글 수정완료',
+        icon: 'success',
+        customClass: {
+          confirmButton: 'album-wrapper'
+        }
+      })
+      navigate(`/community/boards/${ids.boardId}/posts/${response.data.id}`)
+    } catch (error) {
+      console.log(error)
+      swal.fire({
+        title: '수정실패',
+        text: '게시글 수정실패',
+        icon: 'error',
+        customClass: {
+          confirmButton: 'album-wrapper'
+        }
+      })
+    }
+  }
 
   // 삭제 확인 
   // const handleDelete = () => {
@@ -198,8 +201,28 @@ const WYSIWYG = ({ post }) => {
       <Header />
       <div className="wysiwyg-wrapper">
         <div className="ws-wrapper">
-          <WsHeader isLogin={isLogin} post={post} 
-              changeTitle={changeTitle} changeWriter={changeWriter} changeTempPw={changeTempPw} />
+          <div className="title-and-writer">
+            <div className="title-box">
+              <p className='subtitle'>제목</p>
+              <input className='styled-form' type="text" id='title'
+                value={title} onChange={changeTitle} />
+            </div>
+            {!post.userId && (
+              <>
+                <div className="title-box">
+                  <p className='subtitle'>작성자</p>
+                  <input className='styled-form' type="text" id='writer'
+                    value={guestNick}
+                    onChange={changeWriter} />
+                </div>
+                <div className="title-box">
+                  <p className='subtitle'>비밀번호</p>
+                  <input className='styled-form' type="password" id='password'
+                    onChange={changeTempPw} />
+                </div>
+              </>
+            )}
+          </div>
           <div className="cke">
             <CKEditor
               editor={ClassicEditor}
@@ -226,29 +249,37 @@ const WYSIWYG = ({ post }) => {
 
                 extraPlugins: [uploadPlugin]            // 업로드 플러그인
               }}
-              data={post ? post.content : ''}
-              onReady={editor => {
-                // You can store the "editor" and use when it is needed.
-                console.log('Editor is ready to use!', editor);
+              data={content}
+              onReady={(editor) => {
+                editorRef.current = editor
+                if (post?.content) editor.setData(post.content);
               }}
               onChange={(event, editor) => {
-                const data = editor.getData();
-                console.log({ event, editor, data });
-                setContent(data);
+                // console.log({ event, editor, data });
+                setContent(editor.getData());
               }}
               onBlur={(event, editor) => {
-                console.log('Blur.', editor);
+                // console.log('Blur.', editor);
               }}
               onFocus={(event, editor) => {
-                console.log('Focus.', editor);
+                // console.log('Focus.', editor);
               }}
             />
           </div>
-          <div className="actions">
-            <button className="btn btn-gold" onClick={() => postInsert(cboardId)}>등록</button>
-            <button className="btn btn-gold">수정</button>
-            <button className="btn btn-gold">삭제</button>
-          </div>
+          {/* 등록시 */}
+          {!post && (
+            <div className="actions">
+              <button className="btn btn-gold" onClick={() => postInsert(ids.boardId)}>등록</button>
+              <Link className="btn btn-gold" to={`/community/boards/${ids.boardId}`}>취소</Link>
+            </div>
+          )}
+          {/* 수정시 */}
+          {post && (
+            <div className="actions">
+              <button className="btn btn-gold" onClick={() => postUpdate(ids)}>수정</button>
+              <Link className="btn btn-gold" to={`/community/boards/${ids.boardId}/posts/${ids.postId}`}>취소</Link>
+            </div>
+          )}
         </div>
       </div>
       <Footer />

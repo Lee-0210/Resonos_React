@@ -62,6 +62,30 @@ const Post = () => {
 
   // 댓글 작성
   const postComment = async (data) => {
+    if (!isLogin) {
+      if (!data.guestNickname || !data.guestPassword) {
+        swal.fire({
+          title: '취소 되었습니다.',
+          text: '아이디 또는 비밀번호를 입력해주세요.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+        return
+      }
+    }
+    if (!data.content) {
+      swal.fire({
+        title: '취소 되었습니다.',
+        text: '내용을 입력해주세요.',
+        icon: 'warning',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+      return
+    }
     try {
       const response = await api.postComment(data, { boardId, postId })
       console.log(response)
@@ -90,6 +114,30 @@ const Post = () => {
 
   // 비회원 댓글 수정
   const editComment = async (data, commentId) => {
+    if (!isLogin) {
+      if (!data.guestNickname || !data.guestPassword) {
+        swal.fire({
+          title: '취소 되었습니다.',
+          text: '아이디 또는 비밀번호를 입력해주세요.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+        return
+      }
+    }
+    if (!data.content) {
+      swal.fire({
+        title: '취소 되었습니다.',
+        text: '내용을 입력해주세요.',
+        icon: 'warning',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+      return
+    }
     try {
       const response = await api.editComment(data, { boardId, postId, commentId })
       console.log(response)
@@ -122,6 +170,30 @@ const Post = () => {
 
   // 대댓글 작성
   const postReply = async (data) => {
+    if (!isLogin) {
+      if (!data.guestNickname || !data.guestPassword) {
+        swal.fire({
+          title: '취소 되었습니다.',
+          text: '아이디 또는 비밀번호를 입력해주세요.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+        return
+      }
+    }
+    if (!data.content) {
+      swal.fire({
+        title: '취소 되었습니다.',
+        text: '내용을 입력해주세요.',
+        icon: 'warning',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+      return
+    }
     try {
       const response = await api.postReply(data, { boardId, postId })
       console.log(response)
@@ -136,14 +208,14 @@ const Post = () => {
         })
         setComments(prevComments => prevComments.map(prev =>
           prev.id === response.data.parentCommentId ?
-            { ...prev, replies: [...prev.replies, response.data] }
+            { ...prev, replies: [...(prev.replies ?? []), response.data] }
             : prev
         ))
       }
     } catch (error) {
       swal.fire({
         title: '등록 실패',
-        text: '댓글 작성 중 오류가 발생했습니다.',
+        text: '대댓글 작성 중 오류가 발생했습니다.',
         icon: 'error',
         customClass: {
           popup: 'album-wrapper'
@@ -154,6 +226,30 @@ const Post = () => {
 
   // 대댓글 수정
   const editReply = async (data, commentId) => {
+    if (!isLogin) {
+      if (!data.guestPassword) {
+        swal.fire({
+          title: '취소 되었습니다.',
+          text: '아이디 또는 비밀번호를 입력해주세요.',
+          icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+        return
+      }
+    }
+    if (!data.content) {
+      swal.fire({
+        title: '취소 되었습니다.',
+        text: '내용을 입력해주세요.',
+        icon: 'warning',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+      return
+    }
     try {
       const response = await api.editReply(data, { boardId, postId, commentId })
       console.log(response)
@@ -318,9 +414,9 @@ const Post = () => {
     <>
       <div className="post-wrapper">
         <div className="container">
-          <PostTitle title={post.title} date={post.createdAt} writer={post.userNickname} />
+          <PostTitle post={post} />
           <PostContent post={post} boardId={boardId} isLogin={isLogin}
-                userInfo={userInfo} postId={postId} />
+            userInfo={userInfo} postId={postId} />
           <PostComment comments={comments} commentCount={post.commentCount}
             editComment={editComment} postReply={postReply} editReplyf={editReply}
             isLogin={isLogin} userInfo={userInfo} deleteComment={deleteComment}

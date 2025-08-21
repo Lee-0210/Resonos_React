@@ -685,7 +685,7 @@
     color: var(--background-color);
 }
 
-.ck-editor__editable.ck-read-only {
+.post-wrapper .ck-editor__editable.ck-read-only {
   background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -693,6 +693,11 @@
 .ck.ck-sticky-panel__content {
   border: none !important;
   box-shadow: none !important; /* 그림자까지 제거 */
+}
+.ck-content.ck-editor__editable {
+  background-color: var(--background-color) !important;
+  border: 1px solid var(--main-color) !important;
+  border-top: none !important;
 }
 
 .wysiwyg-wrapper {
@@ -706,7 +711,7 @@
   padding-top: 100px;
   max-width: 1440px;
   width: 100%;
-  padding: 80px 0 10px 10px;
+  padding: 80px 10px 10px 10px;
 }
 .ws-wrapper .title-and-writer {
   display: flex;
