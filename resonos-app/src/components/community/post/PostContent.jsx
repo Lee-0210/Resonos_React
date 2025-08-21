@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const PostContent = ({ post, isLogin, userInfo, boardId, postId, deletePost }) => {
+const PostContent = ({ post, isLogin, userInfo, boardId, postId, deletePost, reportPost }) => {
 
   const [openPw, setOpenPw] = useState(false)
   const [tempPw, setTempPw] = useState(null)
@@ -41,9 +41,7 @@ const PostContent = ({ post, isLogin, userInfo, boardId, postId, deletePost }) =
                 <p>👎</p>
                 <p>{post.postDislikes}</p>
               </div>
-              <div className="report btn btn-gold">
-                <p>🚨</p>
-              </div>
+              <button className="report btn btn-gold" onClick={() => reportPost({boardId,postId})}>🚨</button>
             </>
           ) : (
             <>

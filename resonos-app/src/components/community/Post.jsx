@@ -448,6 +448,44 @@ const Post = () => {
     }
   }
 
+  // 게시글 신고
+  const reportPost = async (ids) => {
+    const result = await swal.fire({
+      title: '신고 확인',
+      text: '정말로 신고하시겠습니까?',
+      confirmButtonText: '신고',
+      cancelButtonText: '취소',
+      showCancelButton: true,
+      customClass: {
+        popup: 'album-wrapper'
+      }
+    })
+    if (result.isConfirmed) {
+      try {
+        const response = await api.reportPost(ids)
+        console.log(response)
+        swal.fire({
+          title: '신고 완료',
+          text: '게시글이 신고되었습니다.',
+          icon: 'success',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        swal.fire({
+          title: '신고 실패',
+          text: '게시글 신고 중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
+    }
+  }
+
   if (isLoading) {
     return (
       <div style={{ position: 'relative', height: '300px' }}>
@@ -473,7 +511,7 @@ const Post = () => {
           <PostTitle post={post} />
           <PostContent post={post} boardId={boardId}
             isLogin={isLogin} userInfo={userInfo} postId={postId}
-            deletePost={deletePost}/>
+            deletePost={deletePost} reportPost={reportPost} />
           <PostComment ids={{boardId, postId}}
             initComments={comments} commentCount={post.commentCount}
             editComment={editComment} postReply={postReply} editReplyf={editReply}
