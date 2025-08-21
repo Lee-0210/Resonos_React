@@ -63,42 +63,6 @@ public class JoinController {
       return "/login";
     }
 
-    @GetMapping("")
-    // public String home(Principal principal, Model model) throws Exception {
-    // public String home(Authentication authentication, Model model) throws Exception {
-    public String home(@AuthenticationPrincipal CustomUser authUser, Model model) throws Exception {
-        log.info(":::::::::: 메인 화면 ::::::::::");
-
-        // if( principal != null ) {
-        //     String username = principal.getName();              // 인증된 사용자 아이디
-        //     log.info("username : {}", username);
-        //     Users user = userService.select(username);          // 사용자 정보 조회
-        //     log.info("user : {}", user);
-        //     model.addAttribute("user", user);     // 사용자 정보 모델에 등록
-        // }
-
-        // if( authentication != null ) {
-        //     User user = (User) authentication.getPrincipal();
-        //     String username = user.getUsername();              // 인증된 사용자 아이디
-        //     String password = user.getPassword();              // 인증된 사용자 비밀번호
-        //     Collection<GrantedAuthority> authList = user.getAuthorities();  // 사용자 권한
-        //     log.info("username : {}", username);
-        //     log.info("password : {}", password);
-        //     log.info("authList : {}", authList);
-        //     Users joinedUser = userService.select(username);          // 사용자 정보 조회
-        //     log.info("joinedUser : {}", joinedUser);
-        //     model.addAttribute("joinedUser", joinedUser);     // 사용자 정보 모델에 등록
-        // }
-
-        // if( authUser != null ) {
-        //     log.info("authUser : {}", authUser);
-        //     User user = authUser.getUser();
-        //     model.addAttribute("user", user);
-        // }
-
-        return "index";
-    }
-
   /**
    * 회원가입 페이지 요청
    * @return
