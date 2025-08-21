@@ -34,6 +34,7 @@ import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.domain.review.TrackReview;
 import com.cosmus.resonos.domain.user.Playlist;
 import com.cosmus.resonos.domain.user.PublicUserDto;
+import com.cosmus.resonos.domain.user.UserComment;
 import com.cosmus.resonos.domain.user.UserNoti;
 import com.cosmus.resonos.domain.user.Users;
 import com.cosmus.resonos.service.admin.NotificationService;
@@ -431,7 +432,7 @@ public class UserController {
   }
 
   /**
-   * 내 활동 페이지 요청
+   * 내 커뮤니티 활동 페이지 요청
    * @return
    * @throws Exception
    */
@@ -445,12 +446,15 @@ public class UserController {
       // 로그인 유저 정보
       Users user = userService.select(loginUser.getUsername());
       List<Community> commuList = communityService.getUsersCommunities(loginUser.getId());
+      UsersTotalLikes utl = userService.usersTotalCommuLikes(loginUser.getId());
+      List<UserComment> commentList = userService.usersComments(loginUser.getId());
 
       Map<String, Object> response = new HashMap<>();
-
       response.put("user", user);
       response.put("lastPath", "activity");
       response.put("commuList", commuList);
+      response.put("utl", utl);
+      response.put("commentList", commentList);
 
       return new ResponseEntity<>(response, HttpStatus.OK);
     } catch(Exception e) {

@@ -235,7 +235,8 @@
 }
 .commu.board a.update {
   position: absolute;
-  bottom: 20px; right: 30px;
+  top: 20px; right: 30px;
+  padding: 5px 10px;
 }
 
 /* 게시판 정보 */
@@ -281,7 +282,7 @@
 .commu.board .post-list h3,
 .commu.board .notice-area h3 {
   color: var(--main-color);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .commu.board .post-list {
@@ -428,7 +429,7 @@
   }
 
   .commu.index .right {
-    flex-direction: row;
+    flex-direction: column;
     margin-top: 30px;
   }
 
@@ -601,6 +602,7 @@
 .post-wrapper .comment-submit {
   display: flex;
   align-items: center;
+  gap: 5px;
 }
 .post-wrapper .post-form .for-unlogin {
   max-width: 120px;
@@ -698,6 +700,7 @@
   padding-top: 100px;
   max-width: 1440px;
   width: 100%;
+  padding: 80px 0 10px 10px;
 }
 .ws-wrapper .title-and-writer {
   display: flex;

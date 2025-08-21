@@ -1,37 +1,39 @@
 import React, { useState } from 'react'
 
-const CommentEdit = ({ isLogin, cancel, com, editComment }) => {
+const ReplyEdit = ({ isLogin, cancel, rep, editReplyf }) => {
 
-  const [editContent, setEditContent] = useState(com.content)
+  const [editContent, setEditContent] = useState(rep.content)
   const [tempPw, setTempPw] = useState('')
 
-  const handleEditComment = (e, content, commentId) => {
+
+  const handleSubmit = (e, content, replyId) => {
     e.preventDefault();
     const data = {
       content: content,
       guestPassword: tempPw
     }
     if (isLogin) {
-      editComment({ content }, commentId)
+      editReplyf({ content }, replyId)
       setEditContent('')
       cancel()
     }
     else {
-      editComment(data, commentId)
+      editReplyf(data, replyId)
       setEditContent('')
       setTempPw('')
       cancel()
     }
+    editReplyf(data, replyId)
   }
 
   return (
     <div className='reply-form'>
       <form>
-        {!com.userId && (
+        {!rep.userId && (
           <div className="for-unlogin">
             <input id="nickname" type="text"
-              value={com.guestNickname} required readOnly />
-              <input id="tempPw" type="password"
+              value={rep.guestNickname} required readOnly />
+            <input id="tempPw" type="password"
               placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
           </div>
         )}
@@ -40,7 +42,7 @@ const CommentEdit = ({ isLogin, cancel, com, editComment }) => {
           required></textarea>
         <div className="comment-submit">
           <button type='submit' className='btn btn-gold'
-            onClick={(e) => handleEditComment(e, editContent, com.id)}>수정</button>
+            onClick={(e) => handleSubmit(e, editContent, rep.id)}>수정</button>
           <button className='btn btn-gold' onClick={cancel}>취소</button>
         </div>
       </form>
@@ -48,4 +50,4 @@ const CommentEdit = ({ isLogin, cancel, com, editComment }) => {
   )
 }
 
-export default CommentEdit
+export default ReplyEdit

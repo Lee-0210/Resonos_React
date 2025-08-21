@@ -64,7 +64,9 @@ function JoinForm() {
           break
       }
     } catch(e) {
-      errorMsg = e.response.data[0].defaultMessage
+      errorMsg = e.response.data[0].defaultMessage || e.response.data[0].value
+      console.log(e.response)
+      console.log(errorMsg)
     }
     if(response) {
       errorMsg = response.data

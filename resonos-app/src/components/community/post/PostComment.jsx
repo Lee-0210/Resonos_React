@@ -1,16 +1,19 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import Pagination from '../../Pagination/Pagination'
 import ReplyForm from './ReplyForm'
 import { Link } from 'react-router-dom'
-import { LoginContext } from '../../../contexts/LoginContextProvider'
 import CommentEdit from './CommentEdit'
+import ReplyEdit from './ReplyEdit'
 
-const PostComment = ({ comments, commentCount, editComment, postReply }) => {
+const PostComment = ({ comments, commentCount, editComment, deleteComment,
+  postReply, editReplyf, userInfo, isLogin, deleteUnlogComment }) => {
 
   const [replyTo, setReplyTo] = useState(null)
   const [isEdit, setIsEdit] = useState(null)
+  const [editReply, setEditReply] = useState(null)
+  const [openPw, setOpenPw] = useState(null)
+  const [tempPw, setTempPw] = useState(null)
 
-  const { userInfo, isLogin  } = useContext(LoginContext)
 
 
   const handleReplyClick = (i) => {
@@ -25,6 +28,19 @@ const PostComment = ({ comments, commentCount, editComment, postReply }) => {
   const handleCancelCommentEdit = () => {
     setIsEdit(null)
   }
+  const handleEditReply = (i) => {
+    setEditReply(editReply === i ? null : i)
+  }
+  const handleCancelEditReply = () => {
+    setEditReply(null)
+  }
+  const handleOpenDelUnlogCom = (i) => {
+    setOpenPw(openPw === i ? null : i)
+  }
+  const handleDeleteUnlogComment = (pw, commentId, isRoot) => {
+    deleteUnlogComment(pw, commentId, isRoot)
+  }
+
 
 
 
@@ -54,26 +70,33 @@ const PostComment = ({ comments, commentCount, editComment, postReply }) => {
                   <p>{com.createdAt}</p>
                   <p className="btn btn-gold">👍 {com.commentLikes}</p>
                   <p className="btn btn-gold">👎 {com.commentDislikes}</p>
-                  { !com.userId && (
+                  {!com.userId && (
                     <>
                       <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
-                      <div className="btn btn-gold">삭제</div>
+                      <div className="btn btn-gold" onClick={() => handleOpenDelUnlogCom(idx)}>{openPw === idx ? '취소' : '삭제'}</div>
+                      {openPw === idx && (
+                        <>
+                          <input id="tempPw" type="password"
+                            placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
+                          <button className="btn btn-gold" onClick={() => handleDeleteUnlogComment(tempPw, com.id, true)}>삭제</button>
+                        </>
+                      )}
                     </>
                   )}
                   {isLogin && userInfo.id === com.userId && (
                     <>
                       <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
-                      <div className="btn btn-gold">삭제</div>
+                      <div className="btn btn-gold" onClick={() => deleteComment(com.id, true)}>삭제</div>
                     </>
                   )}
                 </div>
               </>
             )}
             {isEdit === idx && (
-              <CommentEdit userInfo={userInfo} cancel={handleCancelCommentEdit} com={com} editComment={editComment} />
+              <CommentEdit isLogin={isLogin} cancel={handleCancelCommentEdit} com={com} editComment={editComment} />
             )}
             {com.replies && (com.replies.map((rep, rIdx) =>
-              <div className="reply-comment" key={rIdx}>
+              <div className="reply-comment" key={rep.id}>
                 <div className="user">
                   {rep.userId ? (
                     <Link to={`/users/${rep.userId}`}>
@@ -83,31 +106,45 @@ const PostComment = ({ comments, commentCount, editComment, postReply }) => {
                     <p>{rep.guestNickname}</p>
                   )}
                 </div>
-                <div className="comment-contentr">
-                  <p>{rep.content}</p>
-                </div>
-                <div className="comment-info">
-                  <p>{rep.createdAt}</p>
-                  <p className="btn btn-gold">👍 {rep.commentLikes}</p>
-                  <p className="btn btn-gold">👎 {rep.commentDislikes}</p>
-                  { !rep.userId && (
-                    <>
-                      <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
-                      <div className="btn btn-gold">삭제</div>
-                    </>
-                  )}
-                  {isLogin && userInfo.id === rep.userId && (
-                    <>
-                      <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>
-                      <div className="btn btn-gold">삭제</div>
-                    </>
-                  )}
-                </div>
+                {editReply != rep.id && (
+                  <>
+                    <div className="comment-contentr">
+                      <p>{rep.content}</p>
+                    </div>
+                    <div className="comment-info">
+                      <p>{rep.createdAt}</p>
+                      <p className="btn btn-gold">👍 {rep.commentLikes}</p>
+                      <p className="btn btn-gold">👎 {rep.commentDislikes}</p>
+                      {!rep.userId && (
+                        <>
+                          <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>
+                          <div className="btn btn-gold" onClick={() => handleOpenDelUnlogCom(rep.id)}>{openPw === rep.id ? '취소' : '삭제'}</div>
+                          {openPw === rep.id && (
+                            <>
+                              <input id="tempPw" type="password"
+                                placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
+                              <button className="btn btn-gold" onClick={() => handleDeleteUnlogComment(tempPw, rep.id, false)}>삭제</button>
+                            </>
+                          )}
+                        </>
+                      )}
+                      {isLogin && userInfo.id === rep.userId && (
+                        <>
+                          <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>
+                          <div className="btn btn-gold" onClick={() => deleteComment(rep.id, false)}>삭제</div>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
+                {editReply === rep.id && (
+                  <ReplyEdit editReplyf={editReplyf} isLogin={isLogin} cancel={handleCancelEditReply} rep={rep} />
+                )}
               </div>
             ))}
             {replyTo === idx && (
-              <ReplyForm userInfo={userInfo} cancel={handleCancelReplyClick}
-                      postReply={postReply} com={com} />
+              <ReplyForm isLogin={isLogin} cancel={handleCancelReplyClick}
+                postReply={postReply} com={com} />
             )}
           </div>
         )))}
