@@ -167,8 +167,4 @@ public class CommunityServiceImpl implements CommunityService {
 
         return pageInfo;
     }
-
-    public List<Community> getUsersCommunities(Long userId) throws Exception {
-        return communityMapper.getUsersCommunities(userId);
-    }
 }

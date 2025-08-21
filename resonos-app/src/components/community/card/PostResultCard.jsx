@@ -13,7 +13,7 @@ const PostResultCard = ({post}) => {
   return (
     <li onClick={handleNavigate}>
       <p className='post-title focus ellipsis'>{post.title}</p>
-      <p>{post.content}</p>
+      <p>{new DOMParser().parseFromString(post.content, 'text/html').body.textContent}</p>
       <span className='board-name'>{post.community.name}</span>
       <span className='date'>{formatDate(post.createdAt)}</span>
     </li>

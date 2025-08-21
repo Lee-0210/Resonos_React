@@ -15,7 +15,7 @@ const BoardResultCard = ({rank, board}) => {
       {/* <span>{rank}위</span> */}
       <div>
         <span>게시글</span>
-        <span className='date'>85,300</span>
+        <span className='date'>{board.boardPostCount}</span>
       </div>
     </li>
   )

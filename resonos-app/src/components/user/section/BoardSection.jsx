@@ -88,7 +88,7 @@ const BoardSection = ({boardList, setBoardList, boardCount, onSearchCommunityDat
               type="text"
               className="basic-input"
               name="keyword"
-              placeholder="제목, 내용"
+              placeholder="게시판 이름, 소개..."
               onChange={e => setKeyword(e.target.value)}
             />
           </div>
