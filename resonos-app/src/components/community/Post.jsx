@@ -288,6 +288,7 @@ const Post = () => {
     const data = {
       guestPassword: pw
     }
+    console.log(data)
     try {
       const response = await api.deleteUnlogComment(data, { boardId, postId, commentId })
       if (isRoot) {

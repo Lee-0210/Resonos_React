@@ -38,7 +38,7 @@ function CreateUpdate() {
 
   return (
     <>
-    {postId ? (<WYSIWYG post={post} ids={{boardId, postId}}  />) : (<WYSIWYG ids={{boardId, postId}} />)}
+    {postId ? (<WYSIWYG post={post} ids={{boardId, postId}}  />) : (<WYSIWYG post={null} ids={{boardId, postId}} />)}
     </>
   )
 }

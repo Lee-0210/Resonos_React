@@ -91,7 +91,7 @@
       ) AS post_dislikes,
       (SELECT COUNT(*)
         FROM comment c
-        WHERE c.board_post_id = c.board_post_id
+        WHERE c.board_post_id = bp.id
       ) AS comment_count
     FROM board_post bp
     LEFT JOIN user u ON u.id = bp.user_id
