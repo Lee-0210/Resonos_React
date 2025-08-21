@@ -76,3 +76,12 @@ export const postInsert = async (data, boardId) => {
 export const postUpdate = async (data, ids) => {
   return api.put(`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`, data)
 }
+// 게시글 삭제
+export const deletePost = async (data, ids) => {
+  return api.delete(`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data
+  })
+}
