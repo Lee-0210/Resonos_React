@@ -24,7 +24,7 @@ const PostComment = ({ initComments, commentCount, editComment, deleteComment, i
       console.log(response.data)
       setComments(response.data.comments)
       setPagination(response.data.commentsPagination)
-      // setCommentCount(response.data.totalElements)
+      setPage(response.data.commentsPagination.page)
     } catch (error) {
 
     }
