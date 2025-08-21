@@ -16,6 +16,31 @@ const AdminPnSManageContainer = () => {
   const [policies, setPolicies] = useState([]);
   const [settings, setSettings] = useState({});
   const [loading, setLoading] = useState(false);
+  // 수정 기능 추가 
+  const [editSettingId, setEditSettingId] = useState(null);
+  const [editSettingForm, setEditSettingForm] = useState({ description: "", value: "" });
+
+  // 수정 기능 
+  const handleEditSetting = (setting) => {
+    setEditSettingId(setting.id);
+    setEditSettingForm({
+      description: setting.description,
+      value: setting.value,
+    });
+  };
+
+  //  수정 저장 기능 
+  const handleSaveSetting = async (id) => {
+    await updatePnsSettingBatch({
+      [id]: {
+        description: editSettingForm.description,
+        value: editSettingForm.value,
+      },
+    });
+    setEditSettingId(null);
+    setEditSettingForm({});
+    fetchData();
+  };
 
   // 신규 정책 입력
   const [newPolicy, setNewPolicy] = useState({ type: "", version: "", content: "" });
@@ -325,21 +350,69 @@ return (
                 {Object.values(settings).map((s) => (
                   <tr key={s.id}>
                     <td>{s.id}</td>
-                    <td>{s.description}</td>
-                    <td>{s.value}</td>
+                    <td>
+                      {editSettingId === s.id ? (
+                        <input
+                          type="text"
+                          value={editSettingForm.description}
+                          onChange={(e) =>
+                            setEditSettingForm({ ...editSettingForm, description: e.target.value })
+                          }
+                        />
+                      ) : (
+                        s.description
+                      )}
+                    </td>
+                    <td>
+                      {editSettingId === s.id ? (
+                        <input
+                          type="text"
+                          value={editSettingForm.value}
+                          onChange={(e) => setEditSettingForm({ ...editSettingForm, value: e.target.value })}
+                        />
+                      ) : (
+                        s.value
+                      )}
+                    </td>
                     <td>{new Date(s.updatedAt).toLocaleString()}</td>
                     <td>{new Date(s.createdAt).toLocaleString()}</td>
                     <td>
-                      <button
-                        className="btn btn-outline-danger btn-sm"
-                        onClick={() => handleDeleteSetting(s.id)}
-                      >
-                        삭제
-                      </button>
+                      {editSettingId === s.id ? (
+                        <>
+                          <button
+                            className="btn btn-gold btn-sm me-2"
+                            onClick={() => handleSaveSetting(s.id)}
+                          >
+                            저장
+                          </button>
+                          <button
+                            className="btn btn-outline-secondary btn-sm"
+                            onClick={() => setEditSettingId(null)}
+                          >
+                            취소
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            className="btn btn-outline-primary btn-sm me-2"
+                            onClick={() => handleEditSetting(s)}
+                          >
+                            수정
+                          </button>
+                          <button
+                            className="btn btn-outline-danger btn-sm"
+                            onClick={() => handleDeleteSetting(s.id)}
+                          >
+                            삭제
+                          </button>
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))}
               </tbody>
+
             </table>
           </div>
         </div>
