@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import WYSIWYG from '../../containers/community/WYSIWYG'
 import { useParams } from 'react-router-dom'
+import * as api from '../../apis/community' 
 
 function CreateUpdate() {
 
@@ -8,34 +9,36 @@ function CreateUpdate() {
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true)
 
-  // 게시판 초기 로딩
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true)
-        const response = await api.getPostForUpdate({ boardId, postId })
-        const data = response.data
-        console.log(response.data)
-        setPost(data.post)
-
-        if (data.post.createdAt) {
-          const date = new Date(data.post.createdAt)
-          const formattedDate = fmtDate.formatDateWithSeconds(date)
-          setPost(p => ({ ...p, createdAt: formattedDate }))
+  // 수정 경로 일시에 post 요청
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          if(postId) {
+            setIsLoading(true)
+            const response = await api.getPostData({ boardId, postId })
+            const data = response.data.post
+            console.log(response.data)
+            setPost(data)
+          }
+          else {
+            setPost(null)
+          }
+        } catch (error) {
+          console.error(error)
+        } finally {
+          setIsLoading(false)
         }
-
-        setIsLoading(false)
-      } catch (error) {
-        console.error(error)
       }
-    }
-    fetchData();
-
-  }, [boardId, postId])
+      fetchData();
+  
+    }, [boardId, postId])
+  if(isLoading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <>
-    {postId ? (<WYSIWYG post={post} />) : (<WYSIWYG />)}
+    {postId ? (<WYSIWYG post={post} ids={{boardId, postId}}  />) : (<WYSIWYG ids={{boardId, postId}} />)}
     </>
   )
 }

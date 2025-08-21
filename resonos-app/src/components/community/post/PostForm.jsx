@@ -11,22 +11,11 @@ const PostForm = ({ postComment, isLogin }) => {
 
   const handlePostComment = (e) => {
     e.preventDefault();
-    if(isLogin) {
-      const data = {
-        content : content,
-      }
-      console.log(data)
-      postComment(data)
+    const data = {
+      content: content,
+      ...(!isLogin ? { guestNickname: nick, guestPassword: tempPw } : {})
     }
-    else {
-      const data = {
-        content : content,
-        guestNickname : nick,
-        guestPassword : tempPw
-      }
-      postComment(data)
-    }
-
+    postComment(data)
     setContent('')
     setNick('')
     setTempPw('')
@@ -38,9 +27,9 @@ const PostForm = ({ postComment, isLogin }) => {
         {!isLogin && (
           <div className="for-unlogin">
             <input id="nickname" type="text" value={nick}
-            placeholder='ㅇㅇ' onChange={(e) => setNick(e.target.value)} required/>
+              placeholder='ㅇㅇ' onChange={(e) => setNick(e.target.value)} required />
             <input id="tempPw" type="password" value={tempPw}
-            placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
+              placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
           </div>
         )}
         <textarea id="content" value={content} required onChange={(e) => setContent(e.target.value)}></textarea>
