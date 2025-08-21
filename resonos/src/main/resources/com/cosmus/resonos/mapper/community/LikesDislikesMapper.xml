@@ -9,23 +9,38 @@
     SELECT * FROM likes_dislikes
   </select>
 
-  <insert id="insert">
-    INSERT INTO likes_dislikes(
-    )
-    VALUES (
-    )
+  <select id="countLikesDislikes" resultType="map">
+    SELECT is_likes, COUNT(*) AS count
+    FROM likes_dislikes
+    WHERE type = #{type}
+      AND target_id = #{targetId}
+    GROUP BY is_likes
+  </select>
+
+  <select id="selectByUser" resultType="LikesDislikes">
+    SELECT *
+    FROM likes_dislikes
+    WHERE user_id = #{userId}
+      AND type = #{type}
+      AND target_id = #{targetId}
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO likes_dislikes(type, user_id, is_likes, target_id)
+    VALUES (#{type}, #{userId}, #{isLikes}, #{targetId})
   </insert>
 
   <update id="update">
     UPDATE likes_dislikes
     <set>
-      updated_at = now()
+      is_likes = #{isLikes}
     </set>
-    WHERE -- key 지정 필요
+    WHERE id = #{id}
   </update>
 
   <delete id="delete">
-    DELETE FROM likes_dislikes WHERE -- key 지정 필요
+    DELETE FROM likes_dislikes
+    WHERE id = #{id}
   </delete>
 
   <update id="completeAll">

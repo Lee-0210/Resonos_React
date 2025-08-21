@@ -31,6 +31,7 @@ import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.service.badge.BadgeGrantService;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommentService;
+import com.cosmus.resonos.service.community.LikesDislikesService;
 import com.github.pagehelper.PageInfo;
 
 import jakarta.servlet.http.Cookie;
