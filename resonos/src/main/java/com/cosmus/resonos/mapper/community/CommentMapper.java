@@ -19,5 +19,7 @@ public interface CommentMapper extends BaseMapper<Comment> {
     public int countByUserId(@Param("userId") Long userId);
     // 조회 + 좋아요 싫어요 수
     public List<Comment> selectWithLikesDislikes(@Param("postId") Long postId) throws Exception;
+    // 댓글, 대댓글 일괄 select
+    public List<Comment> selectAllWithOrder(@Param("postId") Long postId) throws Exception;
 
 }
