@@ -66,6 +66,12 @@
     <select id="countAll" resultType="int">
         SELECT COUNT(*) FROM report
     </select>
+    <!-- 관리자용  -->
+        <select id="countByBlind" resultType="int">
+        SELECT COUNT(id)
+        FROM report
+        WHERE status = 'BLIND'
+    </select>
 
     <!--  // report 페이징 countByStatus, findByStatusPaging, findAllPaging -->
     <select id="countByStatus" resultType="long">

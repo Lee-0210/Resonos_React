@@ -17,4 +17,6 @@ public interface ExternalApiConfigService {
     public boolean delete(Long id) throws Exception;
     // 토글로 상태 전환
     public void toggleEnabled(Long id) throws Exception;
+    // API 키 설정 업데이트
+    public boolean configUpdate(Long id, ExternalApiConfig config) throws Exception;
 }

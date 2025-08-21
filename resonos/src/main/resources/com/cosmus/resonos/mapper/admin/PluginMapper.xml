@@ -37,4 +37,13 @@
     DELETE FROM plugin WHERE id = #{id}
   </delete>
 
+  <!-- 플러그인 설정 업데이트 -->
+  <update id="pluginUpdate">
+    UPDATE plugin
+    SET name = #{name},
+        enabled = NOT enabled,
+        config_json = #{configJson}
+    WHERE id = #{id}
+  </update>
+
 </mapper>

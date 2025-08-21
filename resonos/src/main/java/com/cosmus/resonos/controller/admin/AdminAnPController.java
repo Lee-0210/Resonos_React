@@ -97,4 +97,20 @@ public class AdminAnPController {
         pluginService.toggleEnabled(id);
         return ResponseEntity.ok(Map.of("success", true, "message", "플러그인 상태 변경 완료"));
     }
+
+    /** 플러그인 설정 업데이트 */
+    @PutMapping("/plugin/{id}")
+    public ResponseEntity<Map<String, Object>> updatePlugin(@PathVariable(name = "id") Long id, @RequestBody Plugin plugin) throws Exception {
+        log.info("[AdminAnPRestController] 플러그인 설정 업데이트 요청 - id: {}", id);
+        boolean success = pluginService.pluginUpdate(id, plugin);
+        return ResponseEntity.ok(Map.of("success", success, "message", success ? "플러그인 설정 업데이트 완료" : "플러그인 설정 업데이트 실패"));
+    }
+    // api 설정 업데이트
+    @PutMapping("/api/{id}")
+    public ResponseEntity<Map<String, Object>> updateApi(@PathVariable(name = "id") Long id, @RequestBody ExternalApiConfig apiKey) throws Exception {
+        log.info("[AdminAnPRestController] API 설정 업데이트 요청 - id: {}", id);
+        boolean success = apiService.configUpdate(id, apiKey);
+        return ResponseEntity.ok(Map.of("success", success, "message", success ? "API 설정 업데이트 완료" : "API 설정 업데이트 실패"));
+    }
+
 }

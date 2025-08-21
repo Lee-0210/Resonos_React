@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import FormInput from './FormInput';
 
 const SearchForm = ({
   initialKeyword = '',
@@ -8,31 +9,31 @@ const SearchForm = ({
 }) => {
   const [keyword, setKeyword] = useState(initialKeyword);
 
-  // 부모에서 initialKeyword 변경 시 내부 상태 동기화
   useEffect(() => {
     setKeyword(initialKeyword);
   }, [initialKeyword]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(keyword.trim());
+    if (onSearch) onSearch(keyword.trim());
   };
 
-return (
-  <form className="admin mb-3 d-flex gap-2" onSubmit={handleSubmit}>
-    <input
-      type="text"
-      className="form-control search-bar"
-      placeholder={placeholder}
-      value={keyword}
-      onChange={(e) => setKeyword(e.target.value)}
-    />
-    <button className="btn btn-gold btn-sm" type="submit">
-      {buttonLabel}
-    </button>
-  </form>
-);
-
+  return (
+    <form onSubmit={handleSubmit} className="form-inline-consistent">
+      <FormInput
+        name="keyword"
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        placeholder={placeholder}
+        required
+        containerClassName=""
+        className="form-control"
+      />
+      <button className="btn btn-gold" type="submit">
+        {buttonLabel}
+      </button>
+    </form>
+  );
 };
 
 export default SearchForm;

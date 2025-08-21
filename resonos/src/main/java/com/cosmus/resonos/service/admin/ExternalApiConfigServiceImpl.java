@@ -46,4 +46,10 @@ public class ExternalApiConfigServiceImpl implements ExternalApiConfigService {
             mapper.update(config);
         }
     }
+
+    @Override
+    public boolean configUpdate(Long id, ExternalApiConfig config) throws Exception {
+        config.setId(id);
+        return mapper.update(config) > 0;
+    }
 }

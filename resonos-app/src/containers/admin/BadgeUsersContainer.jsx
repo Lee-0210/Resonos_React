@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { getBadgeUsers } from "../../apis/admin"; 
 import { useParams, Link } from "react-router-dom";
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
+import TableContentGeneric from "../../components/admin/first/TableContentGeneric";
 import QuickMenu from "../../components/admin/first/QuickMenu";
-
+import { formatDate } from "../../utils/format";
 
 const BadgeUsersContainer = () => {
   const { badgeId } = useParams();
@@ -17,6 +18,7 @@ const BadgeUsersContainer = () => {
       const res = await getBadgeUsers(badgeId);
       setUsers(res.data.users || []);
       setLogs(res.data.logs || []);
+      console.log("배지 지급자 목록 조회 성공", res.data);
     } catch (err) {
       console.error("배지 지급자 목록 조회 실패", err);
     } finally {
@@ -28,30 +30,34 @@ const BadgeUsersContainer = () => {
     fetchData();
   }, [badgeId]);
 
-  // 지급자 목록 컬럼
+  // 컬럼 정의 (기존과 동일)
   const userColumns = [
-    { label: "#", style: { flexBasis: "5%", minWidth: "30px" } },
-    { label: "유저ID", style: { flexBasis: "15%", minWidth: "60px" } },
-    { label: "유저명", style: { flexBasis: "30%", minWidth: "100px" } },
-    { label: "지급일시", style: { flexBasis: "30%", minWidth: "140px" } },
-    { label: "액션", style: { flexBasis: "20%", minWidth: "100px" } },
+    { label: "#", style: { flexBasis: "5%", minWidth: "30px" }, render: (item, idx) => idx + 1 },
+    { label: "유저ID", style: { flexBasis: "15%", minWidth: "60px" }, render: item => item.userId },
+    { label: "유저명", style: { flexBasis: "30%", minWidth: "100px" }, render: item => item.userName },
+    { label: "지급일시", style: { flexBasis: "30%", minWidth: "140px" },  render: item => item.createdAt ? formatDate(item.createdAt) : "-" },
+    { label: "액션", style: { flexBasis: "20%", minWidth: "100px" }, render: item => (
+      <Link to={`/admin/badge/user/${item.userId}`} className="btn btn-info btn-xs">유저 배지 이력</Link>
+    )},
   ];
 
-  // 로그 컬럼
   const logColumns = [
-    { label: "#", style: { flexBasis: "5%", minWidth: "30px" } },
-    { label: "유저ID", style: { flexBasis: "15%", minWidth: "60px" } },
-    { label: "액션", style: { flexBasis: "15%", minWidth: "60px" } },
-    { label: "담당자", style: { flexBasis: "15%", minWidth: "60px" } },
-    { label: "사유", style: { flexBasis: "30%", minWidth: "100px" } },
-    { label: "일시", style: { flexBasis: "20%", minWidth: "140px" } },
+    { label: "#", style: { flexBasis: "5%", minWidth: "30px" }, render: (item, idx) => idx + 1 },
+    { label: "유저ID", style: { flexBasis: "15%", minWidth: "60px" }, render: item => item.userId },
+    { label: "액션", style: { flexBasis: "15%", minWidth: "60px" }, render: item => {
+      if (item.action === "GRANT") return <span className="badge bg-success">지급</span>;
+      if (item.action === "REVOKE") return <span className="badge bg-danger">회수</span>;
+      return <span className="badge bg-secondary">기타</span>;
+    }},
+    { label: "담당자", style: { flexBasis: "15%", minWidth: "60px" }, render: item => item.actorId || "-자동-" },
+    { label: "사유", style: { flexBasis: "30%", minWidth: "100px" }, render: item => item.reason || "-" },
+    { label: "일시", style: { flexBasis: "20%", minWidth: "140px" }, render: item => item.createdAt ? formatDate(item.createdAt) : "-" },
   ];
 
   return (
     <div className="container py-4">
       <h2 className="mb-4">
-        배지 지급자 목록{" "}
-        <span className="text-info">(Badge ID: {badgeId})</span>
+        배지 지급자 목록 <span className="text-info">(Badge ID: {badgeId})</span>
       </h2>
 
       <div className="mb-3">
@@ -70,27 +76,7 @@ const BadgeUsersContainer = () => {
         ) : users.length > 0 ? (
           <>
             <TableColumnHeader columns={userColumns} />
-            {users.map((u, idx) => (
-              <div
-                key={u.userId}
-                className="d-flex border-bottom text-center align-items-center"
-              >
-                <div className="flex-fill">{idx + 1}</div>
-                <div className="flex-fill">{u.userId}</div>
-                <div className="flex-fill">{u.userName}</div>
-                <div className="flex-fill">
-                  {u.grantedAt ? new Date(u.grantedAt).toLocaleString() : "-"}
-                </div>
-                <div className="flex-fill">
-                  <Link
-                    to={`/admin/badge/user/${u.userId}`}
-                    className="btn btn-info btn-xs"
-                  >
-                    유저 배지 이력
-                  </Link>
-                </div>
-              </div>
-            ))}
+            <TableContentGeneric items={users} columns={userColumns} />
           </>
         ) : (
           <div className="text-secondary text-center py-3">
@@ -109,31 +95,7 @@ const BadgeUsersContainer = () => {
         ) : logs.length > 0 ? (
           <>
             <TableColumnHeader columns={logColumns} />
-            {logs.map((log, idx) => (
-              <div
-                key={idx}
-                className="d-flex border-bottom text-center align-items-center"
-              >
-                <div className="flex-fill">{idx + 1}</div>
-                <div className="flex-fill">{log.userId}</div>
-                <div className="flex-fill">
-                  {log.action === "GRANT" ? (
-                    <span className="badge bg-success">지급</span>
-                  ) : log.action === "REVOKE" ? (
-                    <span className="badge bg-danger">회수</span>
-                  ) : (
-                    <span className="badge bg-secondary">기타</span>
-                  )}
-                </div>
-                <div className="flex-fill">{log.actorId || "-자동-"}</div>
-                <div className="flex-fill">{log.reason || "-"}</div>
-                <div className="flex-fill">
-                  {log.createdAt
-                    ? new Date(log.createdAt).toLocaleString()
-                    : "-"}
-                </div>
-              </div>
-            ))}
+            <TableContentGeneric items={logs} columns={logColumns} />
           </>
         ) : (
           <div className="text-secondary text-center py-3">
@@ -145,7 +107,6 @@ const BadgeUsersContainer = () => {
       <QuickMenu />
     </div>
   );
-
 };
 
 export default BadgeUsersContainer;

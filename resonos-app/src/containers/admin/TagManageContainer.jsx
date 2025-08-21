@@ -114,32 +114,30 @@ const TagManageContainer = () => {
 
       <div className="resonos-card p-4">
         {/* 등록 및 검색 */}
-<div className="d-flex justify-content-between mb-3 gap-2 form-inline-consistent">
-  {/* 등록 폼 */}
-  <form onSubmit={handleAdd} className="d-flex gap-2">
-    <FormInput
-      name="name"
-      value={newTag}
-      onChange={(e) => setNewTag(e.target.value)}
-      placeholder="새 태그/분위기명"
-      required
-      maxLength={50}
-      containerClassName=""
-      className="form-control"
-    />
-    <button className="btn btn-gold btn-sm">등록</button>
-  </form>
+        <div className="d-flex justify-content-between mb-3 gap-2 form-inline-consistent">
+          {/* 등록 폼 */}
+          <form onSubmit={handleAdd} className="d-flex gap-2 form-inline-consistent">
+            <FormInput
+              name="name"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              placeholder="새 태그/분위기명"
+              required
+              maxLength={50}
+              containerClassName=""
+              className="form-control"
+            />
+            <button className="btn btn-gold">등록</button>
+          </form>
 
-  {/* 검색폼 */}
-  <SearchForm
-    initialKeyword={keyword}
-    placeholder="태그/분위기명 검색"
-    buttonLabel="검색"
-    onSearch={handleSearch}
-  />
-</div>
-
-
+          {/* 검색폼 */}
+          <SearchForm
+            initialKeyword={keyword}
+            placeholder="태그/분위기명 검색"
+            buttonLabel="검색"
+            onSearch={handleSearch}
+          />
+        </div>
 
         {/* 테이블 헤더 */}
         <div className="resonos-card p-3">
@@ -163,7 +161,7 @@ const TagManageContainer = () => {
                       required
                       maxLength={50}
                       containerClassName=""
-                      className="form-control form-control-sm"
+                      className="form-control form-control"
                     />
                   ) : (
                     tag.name

@@ -25,6 +25,8 @@ const AdminRoleManageContainer = () => {
     try {
       const res = await getRoleMemberList(pageNum, size, kw);
       const data = res.data;
+      console.log(data);
+
       setMembers(data.members || []);
       if (data.pagination) {
         setPagination({
@@ -142,14 +144,17 @@ const handleDeleteAuth = async (username, auth) => {
                       <td>{m.nickname}</td>
                       <td>{m.email}</td>
                       <td>
-                        {m.authList?.map((auth, ai) => (
-                          <span
-                            key={ai}
-                            className={`badge me-1 ${auth.auth === 'ROLE_ADMIN' ? 'bg-gold' : 'bg-secondary'}`}
-                          >
-                            {auth.auth === 'ROLE_ADMIN' ? '운영자' : '일반'}
-                          </span>
-                        ))}
+                        {m.authList?.map((auth, ai) => {
+                          const isAdmin = auth === 'ROLE_ADMIN';
+                          return (
+                            <span
+                              key={ai}
+                              className={`badge me-1 ${isAdmin ? 'bg-gold' : 'bg-secondary'}`}
+                            >
+                              {isAdmin ? '운영자' : '일반'}
+                            </span>
+                          );
+                        })}
                       </td>
                       <td>
                         <div className="d-flex gap-2">
@@ -170,8 +175,8 @@ const handleDeleteAuth = async (username, auth) => {
                         <div className="d-flex gap-2">
                           <select className="form-select form-select-sm" id={`delAuth_${m.username}`}>
                             {m.authList?.map((auth, ai) => (
-                              <option key={ai} value={auth.auth}>
-                                {auth.auth === 'ROLE_ADMIN' ? '운영자' : '일반'}
+                              <option key={ai} value={auth}>
+                                {auth === 'ROLE_ADMIN' ? '운영자' : '일반'}
                               </option>
                             ))}
                           </select>
@@ -181,8 +186,11 @@ const handleDeleteAuth = async (username, auth) => {
                               const selectEl = document.getElementById(`delAuth_${m.username}`);
                               handleDeleteAuth(m.username, selectEl.value);
                             }}
-                          >삭제</button>
+                          >
+                            삭제
+                          </button>
                         </div>
+
                       </td>
                     </tr>
                   )) : (
@@ -211,11 +219,12 @@ const handleDeleteAuth = async (username, auth) => {
                       <td>{m.username}</td>
                       <td>{m.nickname}</td>
                       <td>
-                        <input
-                          type="checkbox"
-                          checked={m.authList?.some(a => a.auth === 'ROLE_ADMIN')}
-                          onChange={e => handleToggleAdmin(m.username, e.target.checked)}
-                        /> 운영자
+                      <input
+                        type="checkbox"
+                        checked={m.authList?.some(a => a === 'ROLE_ADMIN')}
+                        onChange={e => handleToggleAdmin(m.username, e.target.checked)}
+                      /> 운영자
+
                       </td>
                     </tr>
                   )) : (
@@ -254,12 +263,20 @@ const handleDeleteAuth = async (username, auth) => {
                         <td>{m.username}</td>
                         <td>{m.nickname}</td>
                         <td>
-                          <input type="checkbox" name={`auths_${m.username}`} value="ROLE_USER"
-                            defaultChecked={m.authList?.some(a => a.auth === 'ROLE_USER')} />
+                          <input
+                            type="checkbox"
+                            name={`auths_${m.username}`}
+                            value="ROLE_USER"
+                            defaultChecked={m.authList?.some(a => a === 'ROLE_USER')}
+                          />
                         </td>
                         <td>
-                          <input type="checkbox" name={`auths_${m.username}`} value="ROLE_ADMIN"
-                            defaultChecked={m.authList?.some(a => a.auth === 'ROLE_ADMIN')} />
+                          <input
+                            type="checkbox"
+                            name={`auths_${m.username}`}
+                            value="ROLE_ADMIN"
+                            defaultChecked={m.authList?.some(a => a === 'ROLE_ADMIN')}
+                          />
                         </td>
                       </tr>
                     )) : (

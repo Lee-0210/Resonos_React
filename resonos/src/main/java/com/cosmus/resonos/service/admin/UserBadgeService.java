@@ -39,4 +39,7 @@ public interface UserBadgeService {
     public List<UserBadge> listByBadge(Long badgeId) throws Exception;
     public List<UserBadge> listByUser(Long userId) throws Exception;
 
+    // 일괄(소급) 지급 - count
+    public int grantBadgesAuto(String type) throws Exception;
+
 }

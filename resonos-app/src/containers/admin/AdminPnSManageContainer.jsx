@@ -227,8 +227,8 @@ return (
             <h3 className="mb-3 text-light-gold">서비스 환경설정</h3>
 
             </div>
-            <form className="mb-4" onSubmit={handleSaveSettings}>
-              <div className="mb-2">
+            <form className="mb-4 width-100" onSubmit={handleSaveSettings}>
+              <div className="mb-2 left">
                 <label className="me-3">신규 가입 허용</label>
                 <input
                   type="checkbox"
@@ -238,7 +238,7 @@ return (
                   }
                 />
               </div>
-              <div className="mb-2">
+              <div className="mb-2 left">
                 <label className="me-3">커뮤니티 게시판 활성화</label>
                 <input
                   type="checkbox"
@@ -248,7 +248,7 @@ return (
                   }
                 />
               </div>
-              <div className="mb-2">
+              <div className="mb-2 left">
                 <label className="me-3">음악 데이터 외부 연동</label>
                 <input
                   type="checkbox"
@@ -271,11 +271,11 @@ return (
                   <option value="light">라이트</option>
                 </select>
               </div>
-              <button className="btn btn-gold mt-3">저장</button>
+              <button className="btn btn-gold mt-3 left">저장</button>
             </form>
 
             {/* 신규 설정 추가 */}
-            <form className="mb-4" onSubmit={handleCreateSetting}>
+            <form className="mb-4 width-100" onSubmit={handleCreateSetting}>
               <div className="row g-2 align-items-center mb-2">
                 <div className="col">
                   <input

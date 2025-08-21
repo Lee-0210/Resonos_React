@@ -7,16 +7,27 @@ import Pagination from "../../components/admin/Pagination";
 import FormInput from "../../components/admin/first/FormInput";
 import FormSelect from "../../components/admin/first/FormSelect";
 import QuickMenu from "../../components/admin/first/QuickMenu";
+import { formatDate } from "../../utils/format"
 
+
+  // 현재 시간을 datetime-local input 형식(YYYY-MM-DDTHH:mm)으로 반환
+  const getNowDateString = () => {
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
 
 const initialForm = {
   id: null,
   title: "",
   content: "",
   isActive: true,
-  startAt: "",
-  endAt: ""
+  startAt: getNowDateString(),
+  endAt: getNowDateString(),
 };
+
 
 const AdminNoticeContainer = () => {
   const [notices, setNotices] = useState([]);
@@ -30,6 +41,7 @@ const fetchNotices = async (page = 1, size = 10, kw = keyword) => {
   try {
     const res = await listNotices(page, size, kw);
     const data = res.data;
+    console.log("Fetched notices:", data);
     setNotices(data.notices || []);
     if (data.pagination) {
       setPagination({
@@ -49,13 +61,14 @@ const fetchNotices = async (page = 1, size = 10, kw = keyword) => {
     fetchNotices(1, pagination.size, keyword);
   }, [keyword]);
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === "isActive" ? value === "true" : value
-    }));
-  };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData(prev => ({
+    ...prev,
+    [name]: name === "isActive" ? value === "true" : value
+  }));
+};
+
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -76,35 +89,43 @@ const fetchNotices = async (page = 1, size = 10, kw = keyword) => {
     }
   };
 
-  const handleEdit = n => {
+  const handleEdit = (n) => {
     setFormData({
       ...n,
-      startAt: n.startAt?.slice(0, 10) || "",
-      endAt: n.endAt?.slice(0, 10) || ""
+      startAt: n.startAt ? n.startAt.slice(0, 10) : "",
+      endAt: n.endAt ? n.endAt.slice(0, 10) : "",
     });
+    console.log("Editing notice:", n);
   };
+
 
   const onPageChange = newPage => {
     fetchNotices(newPage, pagination.size, keyword);
   };
 
   // 📌 columns 재사용: TableContentGeneric 용
-  const columns = [
-    { label: "#", style: { flexBasis: "5%" }, render: (_, idx) => (pagination.page - 1) * pagination.size + idx + 1 },
-    { label: "제목", style: { flexBasis: "20%" }, render: n => n.title },
-    { label: "작성일", style: { flexBasis: "20%" }, render: n => n.createdAt?.slice(0, 16) },
-    { label: "상태", style: { flexBasis: "10%" }, render: n => <span className={n.isActive ? "text-success" : "text-secondary"}>{n.isActive ? "활성" : "비활성"}</span> },
-    { label: "시작일", style: { flexBasis: "15%" }, render: n => n.startAt?.slice(0, 10) || "-" },
-    { label: "종료일", style: { flexBasis: "15%" }, render: n => n.endAt?.slice(0, 10) || "-" },
-    {
-      label: "관리", style: { flexBasis: "15%" }, render: n => (
-        <>
-          <button className="btn btn-outline-gold btn-sm me-1" onClick={() => handleEdit(n)}>수정</button>
-          <button className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(n.id)}>삭제</button>
-        </>
-      )
-    }
-  ];
+    const columns = [
+      { label: "#", style: { flexBasis: "5%" }, render: (_, idx) => (pagination.page - 1) * pagination.size + idx + 1 },
+      { label: "제목", style: { flexBasis: "20%" }, render: n => n.title },
+      { 
+        label: "작성일", style: { flexBasis: "20%" }, render: n => n.createdAt ? formatDate(n.createdAt).slice(0, 10) : "-" },
+      { 
+        label: "상태", style: { flexBasis: "10%" }, render: n => <span className={n.isActive ? "text-success" : "text-secondary"}>{n.isActive ? "활성" : "비활성"}</span> },
+      { 
+        label: "시작일", style: { flexBasis: "15%" }, render: n => n.startAt ? formatDate(n.startAt).slice(0, 10) : "-" },
+      { 
+        label: "종료일", style: { flexBasis: "15%" }, render: n => n.endAt ? formatDate(n.endAt).slice(0, 10) : "-" },
+      {
+        label: "관리", style: { flexBasis: "15%" }, render: n => (
+          <>
+            <button className="btn btn-outline-gold btn-sm me-1" onClick={() => handleEdit(n)}>수정</button>
+            <button className="btn btn-outline-danger btn-sm" onClick={() => handleDelete(n.id)}>삭제</button>
+          </>
+        )
+      }
+    ];
+
+
 
   return (
     <main className="py-5 bg-resonos-dark" style={{ minHeight: "80vh" }}>

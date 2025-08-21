@@ -124,7 +124,7 @@ const AdminAnPManageContainer = () => {
           {/* API 키 등록 */}
           <div className="resonos-card p-4 mb-4">
             <h3 className="mb-3">API 관리</h3>
-            <form className="row g-2 mb-3" onSubmit={handleCreateApi}>
+            <form className="row g-2 mb-3 width-100" onSubmit={handleCreateApi}>
               <FormInput label="API Key" name="apiKey" value={newApi.apiKey} onChange={e=>setNewApi({...newApi,[e.target.name]:e.target.value})} containerClassName="col-md-3" />
               <FormInput label="설명" name="provider" value={newApi.provider} onChange={e=>setNewApi({...newApi,[e.target.name]:e.target.value})} containerClassName="col-md-3" />
               <FormInput label="Secret" name="secret" value={newApi.secret} onChange={e=>setNewApi({...newApi,[e.target.name]:e.target.value})} containerClassName="col-md-3" />
@@ -133,7 +133,7 @@ const AdminAnPManageContainer = () => {
 
             <TableColumnHeader columns={apiColumns} />
             {pagedApis.length > 0 ? pagedApis.map((api, idx) => (
-              <div key={api.id} className="list-group-item bg-dark text-light d-flex flex-nowrap align-items-center text-center justify-content-center">
+              <div key={api.id} className="list-group-item bg-dark text-light d-flex flex-nowrap align-items-center text-center justify-content-center width-100">
                 {apiColumns.map((col, colIdx) => {
                   let cellValue = "";
                   switch (colIdx) {
@@ -176,7 +176,7 @@ const AdminAnPManageContainer = () => {
           {/* 플러그인 */}
           <div className="resonos-card p-4">
             <h3 className="mb-3">플러그인 관리</h3>
-            <form className="row g-2 mb-3" onSubmit={handleCreatePlugin}>
+            <form className="row g-2 mb-3 width-100" onSubmit={handleCreatePlugin}>
               <FormInput label="이름" name="name" value={newPlugin.name} onChange={e=>setNewPlugin({...newPlugin,[e.target.name]:e.target.value})} containerClassName="col-md-4" />
               <FormInput label="설정(JSON)" name="configJson" value={newPlugin.configJson} onChange={e=>setNewPlugin({...newPlugin,[e.target.name]:e.target.value})} containerClassName="col-md-6" />
               <div className="col-md-2 text-end"><button className="btn btn-gold btn-sm">등록</button></div>
@@ -184,7 +184,7 @@ const AdminAnPManageContainer = () => {
 
             <TableColumnHeader columns={pluginColumns} />
             {pagedPlugins.length > 0 ? pagedPlugins.map((plugin, idx) => (
-              <div key={plugin.id} className="list-group-item bg-dark text-light d-flex flex-nowrap align-items-center text-center justify-content-center">
+              <div key={plugin.id} className="list-group-item bg-dark text-light d-flex flex-nowrap align-items-center text-center justify-content-center width-100">
                 {pluginColumns.map((col, colIdx) => {
                   let cellValue = "";
                   switch (colIdx) {

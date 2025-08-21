@@ -27,15 +27,15 @@ public interface UserBadgeMapper {
 
     public int grantPostBadgesAll();       // 전체 유저 자동 지급(게시글)
     public int grantCommentBadgesAll();    // 전체 유저 자동 지급(댓글)
-    public void grantLikeBadgesAll();       // 전체 유저 자동 지급(좋아요)
-    public void grantFollowBadgesAll();     // 전체 유저 자동 지급(팔로우)
+    public int grantFollowBadgesAll();     // 전체 유저 자동 지급(팔로우)
+    public int grantLikeBadgesAll();       // 전체 유저 자동 지급(좋아요)
 
     // 유저 배지 확인
     public boolean hasBadge(@Param("userId") Long userId, @Param("badgeId") Long badgeId) throws Exception;
     // 유저 배지 조회
     public UserBadge selectByUserAndBadge(@Param("userId") Long userId, @Param("badgeId") Long badgeId) throws Exception;
     // 유저 배지 목록 조회
-    public List<UserBadge> findBadgesByUserId(@Param("userId") Long userId) throws Exception;
+    public List<UserBadge> findBadgesByUserId(@Param("badgeId") Long badgeId) throws Exception;
     // 유저 배지 삭제
     public int deleteByUserAndBadge(@Param("userId") Long userId, @Param("badgeId") Long badgeId) throws Exception;
     // insertBadgeLog

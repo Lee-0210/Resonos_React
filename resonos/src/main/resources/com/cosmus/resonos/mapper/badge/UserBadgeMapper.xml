@@ -84,12 +84,14 @@
     JOIN badge_condition bc ON bc.condition_type = 'COMMENT_COUNT'
     LEFT JOIN user_badge ub ON ub.user_id = u.id AND ub.badge_id = bc.badge_id
     JOIN (
-        SELECT user_id, COUNT(*) as comment_count
-        FROM board_comment GROUP BY user_id
+      SELECT user_id, COUNT(*) as comment_count
+      FROM comment  
+      GROUP BY user_id
     ) c ON c.user_id = u.id
     WHERE c.comment_count >= bc.condition_value
       AND ub.id IS NULL
   </insert>
+
   <!-- (C) 좋아요 자동 지급: LIKE_COUNT -->
   <insert id="grantLikeBadgesAll">
     INSERT INTO user_badge (user_id, badge_id, created_at)
@@ -126,10 +128,16 @@
   </select>
   <!-- findBadgesByUserId -->
   <select id="findBadgesByUserId" resultType="map">
-    SELECT ub.badge_id, COUNT(*) AS value
+    SELECT
+      ub.id,
+      ub.created_at as createdAt,
+      ub.user_id as userId,
+      u.nickname as userName,
+      ub.badge_id as badgeId
     FROM user_badge ub
-    WHERE ub.user_id = #{userId}
-    GROUP BY ub.badge_id
+    JOIN user u ON ub.user_id = u.id
+    WHERE ub.badge_id = #{badgeId}
+    ORDER BY ub.created_at DESC
   </select>
 
 

@@ -60,14 +60,13 @@ body {
   font-family: var(--font-family);
   background-color: var(--background-color);
   color: var(--text-color);
-  margin-top: 50px;
   padding: 0;
 }
 
 .admin .container {
   width: 100% !important;
   max-width: var(--container-width) !important;
-  margin: auto !important;
+  margin-top: 50px;
   padding: 0 20px !important;
   box-sizing: border-box;
 }
@@ -228,10 +227,24 @@ section.resonos-card {
 
 .admin .list-group-item:hover { background: var(--hover-bg); }
 .table-col, .list-group-item > div {
+  overflow: visible;      /* 숨기지 않고 보이도록 */
+  text-overflow: clip;    /* 줄임표 대신 클립 */
+  white-space: normal !important; /* 줄바꿈 허용 */
+  flex-basis: auto;       /* 기본 너비에 맞춤 */
+}
+
+.ellipsis {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;   /* 최대 3줄까지 보여주고 줄임표 */
+  line-clamp: 3;           /* 표준 속성도 함께 정의 */
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
+
+
+
 
 /* spotify 검색 결과물  */
 div.admin .list-group-item {
@@ -603,6 +616,7 @@ div.admin.mb-3 button {
 
 /* 내부 인풋 */
 .admin .form-inline-consistent .form-control,
+.admin .form-inline-consistent .btn,
 .admin .form-inline-consistent .search-bar {
   height: 34px;         /* 높이 통일 */
   font-size: 0.9rem;
@@ -622,7 +636,6 @@ div.admin.mb-3 button {
   display: flex;
   align-items: center;
 }
-
 
 
 

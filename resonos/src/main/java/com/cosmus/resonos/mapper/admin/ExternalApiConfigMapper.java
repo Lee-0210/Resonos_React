@@ -18,5 +18,7 @@ public interface ExternalApiConfigMapper {
     public int update(ExternalApiConfig config) throws Exception;
     // 삭제
     public int delete(Long id) throws Exception;
+    // API 키 설정 업데이트
+    public int updateApiKey(Long id, String apiKey) throws Exception;
 
 }

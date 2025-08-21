@@ -46,4 +46,10 @@ public class PluginServiceImpl implements PluginService {
         }
     }
 
+    @Override
+    public boolean pluginUpdate(Long id, Plugin plugin) throws Exception {
+        plugin.setId(id);
+        return pluginMapper.update(plugin) > 0;
+    }
+
 }

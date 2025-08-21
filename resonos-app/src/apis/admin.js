@@ -225,11 +225,8 @@ export const deletePlugin = (id) => axios.delete(`${basePath}/plugin/${id}`);
 export const togglePlugin = (id) => axios.post(`${basePath}/plugin/toggle/${id}`);
 
 // TODO : 수정 API 추가(updateApiKey, updatePlugin)
-export const updateApiKey = (id, data) => axios.put(`/api/admin/AnP/api/${id}`, data);
-export const updatePlugin = (id, data) => axios.put(`/api/admin/AnP/plugin/${id}`, data);
-
-
-
+export const updateApiKey = (id, data) => axios.put(`${basePath}/api/${id}`, data);
+export const updatePlugin = (id, data) => axios.put(`${basePath}/plugin/${id}`, data);
 
 // admin - 오픈 api 관리 페이지  하단 ##########################################################################################
 // admin - 정책 및 세팅 관리 페이지  상단 ##########################################################################################

@@ -197,13 +197,13 @@ public class AdminBadgeController {
     public ResponseEntity<?> grantBadgesAuto(
             @RequestParam(name = "type", required = false) String type
     ) throws Exception {
-        int count = 0;
-        // 지급 로직 구현 필요
+        int count = userBadgeService.grantBadgesAuto(type);
         Map<String, Object> res = new HashMap<>();
         res.put("success", true);
         res.put("message", count + "건 지급");
         return ResponseEntity.ok(res);
     }
+
 
     /** 뱃지별 지급자(보유자) 리스트 */
     @GetMapping("/badge/{badgeId}/users")
