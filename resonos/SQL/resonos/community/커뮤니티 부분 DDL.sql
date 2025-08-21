@@ -187,10 +187,10 @@ ALTER TABLE `comment`
 ADD CONSTRAINT `FK_user_TO_comment_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `comment`
-ADD CONSTRAINT `FK_board_post_TO_comment_1` FOREIGN KEY (`board_post_id`) REFERENCES `board_post` (`id`);
+ADD CONSTRAINT `FK_board_post_TO_comment_1` FOREIGN KEY (`board_post_id`) REFERENCES `board_post` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `comment`
-ADD CONSTRAINT `FK_comment_TO_comment_1` FOREIGN KEY (`parent_comment_id`) REFERENCES `comment` (`id`);
+ADD CONSTRAINT `FK_comment_TO_comment_1` FOREIGN KEY (`parent_comment_id`) REFERENCES `comment` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `board_post`
 ADD CONSTRAINT `FK_community_TO_board_post_1` FOREIGN KEY (`community_id`) REFERENCES `community` (`id`);
