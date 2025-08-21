@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.Comment;
+import com.cosmus.resonos.mapper.community.BoardPostMapper;
 import com.cosmus.resonos.mapper.community.CommentMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,6 +22,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private BoardPostMapper boardPostMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -100,7 +104,7 @@ public class CommentServiceImpl implements CommentService {
 
         for (Comment root : rootComments) {
             List<Comment> replies = repliesMap.getOrDefault(root.getId(), new ArrayList<>());
-            replies.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())); // 최신순 정렬
+            replies.sort((a, b) -> a.getCreatedAt().compareTo(b.getCreatedAt())); // 최신순 정렬
             root.setReplies(replies);
         }
 
@@ -110,7 +114,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public PageInfo<Comment> commentsWithPagination(Long postId, int pageNum, int pageSize) throws Exception {
         PageHelper.startPage(pageNum, pageSize);
-        return new PageInfo<>(selectWithLikesDislikes(postId));
+        List<Comment> comments = commentMapper.selectAllWithOrder(postId);
+        return new PageInfo<>(comments);
     }
 
     @Override

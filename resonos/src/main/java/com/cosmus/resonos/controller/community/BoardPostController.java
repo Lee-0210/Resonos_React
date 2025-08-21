@@ -77,7 +77,7 @@ public class BoardPostController {
         HttpServletResponse response,
         HttpSession session,
         @RequestParam(value = "page", defaultValue = "1") int page,
-        @RequestParam(value = "size", defaultValue = "10") int size
+        @RequestParam(value = "size", defaultValue = "30") int size
     ) {
         Map<String, Object> postWithComments = new HashMap<>();
         try {
@@ -134,12 +134,12 @@ public class BoardPostController {
 
             // 댓글 + 좋아요/싫어요 수
             // 댓글 리스트 반환 (각 댓글에 작성자, 내용, 작성일, 좋아요/싫어요 수 포함)
-            // List<Comment> comments = commentService.selectWithLikesDislikes(postId);
-            PageInfo<Comment> comments = commentService.commentsWithPagination(postId, page, size);
-            // Pagination commentsPagination = new Pagination(comments);
-            // commentsPagination.setTotal(post.getCommentCount());
-            postWithComments.put("comments", comments.getList());
-            postWithComments.put("commentsPagination", new Pagination(comments));
+            List<Comment> comments = commentService.selectWithLikesDislikes(postId);
+            PageInfo<Comment> commentsWithPageInfo = commentService.commentsWithPagination(postId, page, size);
+            Pagination commentsPagination = new Pagination(commentsWithPageInfo);
+            commentsPagination.setTotal(boardPostService.getCommentCount(postId));
+            postWithComments.put("comments", comments);
+            postWithComments.put("commentsPagination", commentsPagination);
 
             return new ResponseEntity<>(postWithComments, HttpStatus.OK);
         } catch (Exception e) {
