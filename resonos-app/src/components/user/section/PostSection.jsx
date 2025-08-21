@@ -86,7 +86,7 @@ const PostSection = ({postList, setPostList, postCount, onSearchCommunityData}) 
               type="text"
               className="basic-input"
               name="keyword"
-              placeholder="제목, 내용"
+              placeholder="게시글 제목, 내용..."
               onChange={e => setKeyword(e.target.value)}
             />
           </div>

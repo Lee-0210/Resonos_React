@@ -170,6 +170,7 @@ public class CommentController {
         @RequestBody(required = false) Comment request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
+            log.info("request : {}", request);
         try {
             Comment comment = commentService.select(commentId);
             if (comment == null) return new ResponseEntity<>("댓글이 없습니다.", HttpStatus.NOT_FOUND);

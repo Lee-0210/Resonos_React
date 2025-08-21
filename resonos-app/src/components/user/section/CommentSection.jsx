@@ -86,7 +86,7 @@ const CommentSection = ({commentList, setCommentList, commentCount, onSearchComm
               type="text"
               className="basic-input"
               name="keyword"
-              placeholder="제목, 내용"
+              placeholder="게시글 제목, 댓글 내용..."
               onChange={e => setKeyword(e.target.value)}
             />
           </div>
