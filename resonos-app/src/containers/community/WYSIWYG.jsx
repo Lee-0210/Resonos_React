@@ -207,7 +207,7 @@ const WYSIWYG = ({ post, ids }) => {
               <input className='styled-form' type="text" id='title'
                 value={title} onChange={changeTitle} />
             </div>
-            {!post.userId && (
+            {!post?.userId && (
               <>
                 <div className="title-box">
                   <p className='subtitle'>작성자</p>
