@@ -26,6 +26,8 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.admin.Notification;
 import com.cosmus.resonos.domain.admin.UsersTotalLikes;
 import com.cosmus.resonos.domain.badge.Badge;
+import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.domain.community.Community;
 import com.cosmus.resonos.domain.review.Album;
 import com.cosmus.resonos.domain.review.AlbumReview;
@@ -445,16 +447,31 @@ public class UserController {
     try {
       // 로그인 유저 정보
       Users user = userService.select(loginUser.getUsername());
-      List<Community> commuList = communityService.getUsersCommunities(loginUser.getId());
+      // 유저가 개설한 게시판 리스트
+      List<Community> boardList = userService.getUsersCommunities(loginUser.getId(), "", 0, 20);
+      // 유저가 개설한 게시판 카운트
+      int boardCount = userService.usersBoardsCount(loginUser.getId());
+      // 유저가 작성한 게시글 리스트
+      List<BoardPost> postList = userService.usersPosts(loginUser.getId(), "", 0, 20);
+      // 유저가 작성한 게시글 카운트
+      int postCount = userService.usersPostsCount(loginUser.getId());
+      // 유저가 작성한 댓글 리스트
+      List<UserComment> commentList = userService.usersComments(loginUser.getId(), "", 0, 20);
+      // 유저가 작성한 댓글 카운트
+      int commentCount = userService.usersCommentsCount(loginUser.getId());
+      // 게시글 + 댓글 좋아요 수
       UsersTotalLikes utl = userService.usersTotalCommuLikes(loginUser.getId());
-      List<UserComment> commentList = userService.usersComments(loginUser.getId());
 
       Map<String, Object> response = new HashMap<>();
       response.put("user", user);
       response.put("lastPath", "activity");
-      response.put("commuList", commuList);
-      response.put("utl", utl);
+      response.put("boardList", boardList);
+      response.put("boardCount", boardCount);
+      response.put("postList", postList);
+      response.put("postCount", postCount);
       response.put("commentList", commentList);
+      response.put("commentCount", commentCount);
+      response.put("utl", utl);
 
       return new ResponseEntity<>(response, HttpStatus.OK);
     } catch(Exception e) {
@@ -487,22 +504,59 @@ public class UserController {
       if(type.equals("tr")) {
         List<TrackReview> trackReviewList = trackReviewService.reviewWithReviewerByUserId(userId, keyword, offset, limit);
         if(trackReviewList != null)
-              return new ResponseEntity<>(trackReviewList, HttpStatus.OK);
+          return new ResponseEntity<>(trackReviewList, HttpStatus.OK);
       }
       else if(type.equals("ltr")) {
         List<TrackReview> likedTrackReviewList = trackReviewService.likedReviewByUserId(userId, keyword, offset, limit);
         if(likedTrackReviewList != null)
-              return new ResponseEntity<>(likedTrackReviewList, HttpStatus.OK);
+          return new ResponseEntity<>(likedTrackReviewList, HttpStatus.OK);
       }
       else if(type.equals("ar")) {
         List<AlbumReview> albumReviewList = albumReviewServcie.reviewWithReviewerByUserId(userId, keyword, offset, limit);
         if(albumReviewList != null)
-              return new ResponseEntity<>(albumReviewList, HttpStatus.OK);
+          return new ResponseEntity<>(albumReviewList, HttpStatus.OK);
       }
       else if(type.equals("lar")) {
         List<AlbumReview> likedAlbumReviewList = albumReviewServcie.likedReviewByUserId(userId, keyword, offset, limit);
         if(likedAlbumReviewList != null)
-              return new ResponseEntity<>(likedAlbumReviewList, HttpStatus.OK);
+          return new ResponseEntity<>(likedAlbumReviewList, HttpStatus.OK);
+      }
+
+      return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * 커뮤니티 활동 추가 요청
+     * @param loingUser
+     * @param data
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/community/activities")
+    public ResponseEntity<?> putMethodName(
+      @AuthenticationPrincipal CustomUser loingUser,
+      @RequestBody Map<String, Object> data
+    ) throws Exception {
+      Long userId = loingUser.getId();
+      String keyword = data.get("keyword").toString();
+      int offset = Integer.parseInt(data.get("offset").toString());
+      int limit = Integer.parseInt(data.get("limit").toString());
+      String type = data.get("type").toString();
+
+      if(type.equals("board")) {
+        List<Community> postList = userService.getUsersCommunities(userId, keyword, offset, limit);
+        if(postList != null)
+          return new ResponseEntity<>(postList, HttpStatus.OK);
+      }
+      else if(type.equals("post")) {
+        List<BoardPost> postList = userService.usersPosts(userId, keyword, offset, limit);
+        if(postList != null)
+          return new ResponseEntity<>(postList, HttpStatus.OK);
+      }
+      else if(type.equals("comment")) {
+        List<UserComment> commentList = userService.usersComments(userId, keyword, offset, limit);
+        if(commentList != null)
+          return new ResponseEntity<>(commentList, HttpStatus.OK);
       }
 
       return new ResponseEntity<>("서버 오류.", HttpStatus.INTERNAL_SERVER_ERROR);

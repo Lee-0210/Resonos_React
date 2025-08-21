@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.admin.UsersTotalLikes;
+import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.Community;
 import com.cosmus.resonos.domain.user.GenreCount;
 import com.cosmus.resonos.domain.user.PublicUserDto;
 import com.cosmus.resonos.domain.user.UserAuth;
@@ -130,6 +132,18 @@ public interface UserMapper {
     // 커뮤 메인
     public String getUserNameById(Long userId) throws Exception;
 
-    // 유저의 커뮤니티 댓글
-    public List<UserComment> usersComments(@Param("userId") Long userId) throws Exception;
+
+    /* 마이페이지 */
+    // 유저의 게시판 카운트
+    public int usersBoardsCount(@Param("userId") Long userId) throws Exception;
+    // 유저의 게시판 리스트
+    public List<Community> getUsersCommunities(@Param("userId") Long userId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
+    // 유저의 커뮤니티 댓글 카운트
+    public int usersCommentsCount(@Param("userId") Long userId) throws Exception;
+    // 유저의 커뮤니티 댓글 리스트
+    public List<UserComment> usersComments(@Param("userId") Long userId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
+    // 유저의 게시글 카운트
+    public int usersPostsCount(@Param("userId") Long userId) throws Exception;
+    // 유저의 게시글 리스트
+    public List<BoardPost> usersPosts(@Param("userId") Long userId, @Param("keyword") String keyword, @Param("offset") int offset, @Param("limit") int limit) throws Exception;
 }

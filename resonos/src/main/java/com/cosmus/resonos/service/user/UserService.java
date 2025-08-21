@@ -7,6 +7,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.cosmus.resonos.domain.admin.UsersTotalLikes;
+import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.Community;
 import com.cosmus.resonos.domain.user.GenreCount;
 import com.cosmus.resonos.domain.user.PublicUserDto;
 import com.cosmus.resonos.domain.user.UserAuth;
@@ -124,6 +126,17 @@ public interface UserService {
     // 커뮤니티 생성자 이름 조회
     public String getUserNameById(Long userId) throws Exception;
 
-    // 유저의 커뮤니티 댓글
-    public List<UserComment> usersComments(Long userId) throws Exception;
+    /* 마이페이지 */
+    // 유저의 게시판 카운트
+    public int usersBoardsCount(Long userId) throws Exception;
+    // 유저의 커뮤니티 게시판 조회
+    public List<Community> getUsersCommunities(Long userId, String keyword, int offset, int limit) throws Exception;
+    // 유저의 커뮤니티 댓글 카운트
+    public int usersCommentsCount(Long userId) throws Exception;
+    // 유저의 커뮤니티 댓글 리스트
+    public List<UserComment> usersComments(Long userId, String keyword, int offset, int limit) throws Exception;
+    // 유저의 커뮤니티 게시글 카운트
+    public int usersPostsCount(Long userId) throws Exception;
+    // 유저의 커뮤니티 게시글 리스트
+    public List<BoardPost> usersPosts(Long userId, String keyword, int offset, int limit) throws Exception;
 }
