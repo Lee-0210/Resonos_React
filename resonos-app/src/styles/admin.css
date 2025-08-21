@@ -234,6 +234,19 @@ section.resonos-card {
   flex-basis: auto;       /* 기본 너비에 맞춤 */
 }
 
+.ellipsis {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;   /* 최대 3줄까지 보여주고 줄임표 */
+  line-clamp: 3;           /* 표준 속성도 함께 정의 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+
+
+
 /* spotify 검색 결과물  */
 div.admin .list-group-item {
   background-color: var(--background-color);
@@ -604,6 +617,7 @@ div.admin.mb-3 button {
 
 /* 내부 인풋 */
 .admin .form-inline-consistent .form-control,
+.admin .form-inline-consistent .btn,
 .admin .form-inline-consistent .search-bar {
   height: 34px;         /* 높이 통일 */
   font-size: 0.9rem;
@@ -623,7 +637,6 @@ div.admin.mb-3 button {
   display: flex;
   align-items: center;
 }
-
 
 
 

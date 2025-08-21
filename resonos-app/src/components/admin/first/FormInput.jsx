@@ -12,8 +12,8 @@ const FormInput = ({
   ...rest
 }) => {
 return (
-  <div className={`admin ${containerClassName}`}>
-    <label className="form-label" htmlFor={name}>
+  <>
+    <label className="form-label d-flex" htmlFor={name}>
       {label}
     </label>
     <input
@@ -26,7 +26,7 @@ return (
       required={required}
       {...rest}
     />
-  </div>
+      </>
 );
 
 };

@@ -41,8 +41,7 @@
         updated_at = #{updatedAt},
         is_active = #{isActive},
         start_at = #{startAt},
-        end_at = #{endAt},
-        author_id = #{authorId}
+        end_at = #{endAt}
     WHERE id = #{id}
   </update>
 

@@ -7,6 +7,7 @@ import {
 import TableColumnHeader from "../../components/admin/first/TableColumnHeader";
 import Pagination from "../../components/admin/Pagination";
 import QuickMenu from "../../components/admin/first/QuickMenu";
+import ExpandableText  from "../../components/admin/first/ExpandableText";
 
 const ReviewReportManageContainer = () => {
   const [type, setType] = useState("album");
@@ -146,7 +147,15 @@ const ReviewReportManageContainer = () => {
                   <div className="list-group-item bg-dark text-light border-secondary d-flex text-center width-100">
                     {columns.map((col, ci) => (
                       <div key={ci} style={col.style}>
-                        {typeof col.render === "function" ? col.render(review, idx) : review[col.render] ?? ""}
+                        {typeof col.render === "function" ? (
+                          <ExpandableText maxLines={3}>
+                            {col.render(review, idx)}
+                          </ExpandableText>
+                        ) : (
+                          <ExpandableText maxLines={3}>
+                            {review[col.render] ?? ""}
+                          </ExpandableText>
+                        )}
                       </div>
                     ))}
                   </div>
