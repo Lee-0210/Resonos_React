@@ -43,7 +43,6 @@ export const getPostDataWithPage = async (ids,page) => {
   return api.get(`/community/boards/${ids.boardId}/posts/${ids.postId}`, {
     params : {
       page : page.page,
-      size : page.size
     }
   })
 }
@@ -63,7 +62,7 @@ export const postReply = async (data, ids) => {
 export const editReply = async (data, ids) => {
   return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, data)
 }
-// 게시글 비회원 댓,대댓글 삭제 // 비회원댓,대댓 오류?, // 대댓있을때 삭제안됨
+// 게시글 비회원 댓,대댓글 삭제
 export const deleteUnlogComment = async (data, ids) => {
   return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, {
     headers: {
@@ -93,4 +92,8 @@ export const deletePost = async (data, ids) => {
     },
     data
   })
+}
+// 게시글 신고
+export const reportPost = async (ids) => {
+  return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}`)
 }
