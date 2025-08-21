@@ -18,7 +18,7 @@ export const getBoardData = async (id, pPage, nPage) => {
 
 /* 게시판 트랙 변경 함수 */
 export const changeTrack = async (boardId, trackId) => {
-  return api.put(`/community/${boardId}/tracks`, {trackId}, {
+  return api.put(`/community/${boardId}/tracks`, { trackId }, {
     headers: { "Content-Type": "application/json" },
   })
 }
@@ -39,24 +39,29 @@ export const getPostData = async (ids) => {
   return api.get(`/community/boards/${ids.boardId}/posts/${ids.postId}`)
 }
 // 회원, 비회원 게시글 댓글 달기 O
-export const postComment = async (data,ids) => {
-  return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
+export const postComment = async (data, ids) => {
+  return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`, data)
 }
 // 회원, 비회원 게시글 댓글 수정 // 로그인시 비회원 댓글 수정안됨 (비정상) 비로그인시에는 수정됨
 export const editComment = async (data, ids) => {
-  return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
+  return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, data)
 }
 // 회원, 비회원 게시글 대댓 달기 O // 이름 null로도 등록됨
 export const postReply = async (data, ids) => {
-  return api.post (`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`,data)
+  return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`, data)
 }
 // 회원, 비회원 게시글 대댓 수정 // 로그인시 비회원 대댓 수정 가능(정상)
 export const editReply = async (data, ids) => {
-  return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
+  return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, data)
 }
 // 게시글 비회원 댓,대댓글 삭제 // 비회원댓,대댓 오류?, // 대댓있을때 삭제안됨
 export const deleteUnlogComment = async (data, ids) => {
-  return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`,data)
+  return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data
+  })
 }
 // 게시글 회원 댓,대댓글 삭제 O
 export const deleteComment = async (ids) => {
@@ -64,10 +69,19 @@ export const deleteComment = async (ids) => {
 }
 
 // 회원, 비회원 게시글 등록 O
-export const postInsert = async (data,boardId) => {
-  return api.post(`/community/create/boards/${boardId}`,data)
+export const postInsert = async (data, boardId) => {
+  return api.post(`/community/create/boards/${boardId}`, data)
 }
 // 회원, 비회원 게시글 수정 // 회원이 비회원 글 수정안됨
-export const postUpdate = async (data,ids) => {
-  return api.put(`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`,data)
+export const postUpdate = async (data, ids) => {
+  return api.put(`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`, data)
+}
+// 게시글 삭제
+export const deletePost = async (data, ids) => {
+  return api.delete(`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data
+  })
 }
