@@ -21,14 +21,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.service.badge.BadgeGrantService;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommentService;
+import com.github.pagehelper.PageInfo;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -72,7 +75,9 @@ public class BoardPostController {
         @AuthenticationPrincipal CustomUser loginUser,
         HttpServletRequest request,
         HttpServletResponse response,
-        HttpSession session
+        HttpSession session,
+        @RequestParam(value = "page", defaultValue = "1") int page,
+        @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Map<String, Object> postWithComments = new HashMap<>();
         try {
@@ -129,8 +134,12 @@ public class BoardPostController {
 
             // 댓글 + 좋아요/싫어요 수
             // 댓글 리스트 반환 (각 댓글에 작성자, 내용, 작성일, 좋아요/싫어요 수 포함)
-            List<Comment> comments = commentService.selectWithLikesDislikes(postId);
-            postWithComments.put("comments", comments);
+            // List<Comment> comments = commentService.selectWithLikesDislikes(postId);
+            PageInfo<Comment> comments = commentService.commentsWithPagination(postId, page, size);
+            // Pagination commentsPagination = new Pagination(comments);
+            // commentsPagination.setTotal(post.getCommentCount());
+            postWithComments.put("comments", comments.getList());
+            postWithComments.put("commentsPagination", new Pagination(comments));
 
             return new ResponseEntity<>(postWithComments, HttpStatus.OK);
         } catch (Exception e) {
