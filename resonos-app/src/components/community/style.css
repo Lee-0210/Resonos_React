@@ -81,6 +81,10 @@
   display: inline-block;
 }
 
+.focus:hover {
+  text-decoration: underline;
+}
+
 .relative {position: relative;}
 
 .no-content {
@@ -195,6 +199,7 @@
 .commu.index .right-card {
   max-width: 100%;
   width: 100%;
+  min-height: 260px;
   background-color: #1C202A;
   padding: 20px;
   border-radius: 20px;
@@ -207,6 +212,7 @@
 .commu.index .right-card li {
   padding: 7.5px 0;
   font-size: 1.4rem;
+  display: flex;
 }
 
 .commu.index .right-card.ranking li {

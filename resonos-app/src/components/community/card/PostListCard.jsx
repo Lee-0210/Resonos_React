@@ -8,12 +8,16 @@ const PostListCard = ({post, isBoard, showName}) => {
   const navigate = useNavigate()
   const params = useParams()
 
-  const handleNavigate = () => {
+  const handleNavigate = e => {
+    if(e.target.className === 'board-name focus') {
+      navigate(`/community/boards/${post.community.id}`)
+      return
+    }
     navigate(`/community/boards/${post.community.id}/posts/${post.id}`)
   }
 
   return (
-    <li onClick={handleNavigate}>
+    <li onClick={e => handleNavigate(e)}>
       <p>
         <span className='focus ellipsis'>{post?.title}</span>
         <span className='main'>[{post?.commentCount}]</span>
@@ -23,7 +27,7 @@ const PostListCard = ({post, isBoard, showName}) => {
         {
           showName
           ?
-          <span className='board-name'>{post?.community?.name}</span>
+          <span className='board-name focus'>{post?.community?.name}</span>
           :
           <></>
         }

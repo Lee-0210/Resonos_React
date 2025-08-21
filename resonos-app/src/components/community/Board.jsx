@@ -48,7 +48,7 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices, postPaginati
           <h3>[ {board?.name} ] 게시판</h3>
           <div>
             <span>매니저</span>
-            <p className='ellipsis'>
+            <p className='ellipsis focus main'>
               <Link className="main" to={`/users/${board?.creatorId}`}>{board?.creatorName}</Link>
             </p>
           </div>
@@ -100,7 +100,10 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices, postPaginati
           }
         </ul>
         <Pagination pagination={postPagination} onPageChange={onChangePostPage}/>
-        <Link to={`/community/create/boards/${board?.id}`} className='update'>게시글 작성</Link>
+        {
+          !isManager.current &&
+          <Link to={`/community/create/boards/${board?.id}`} className='update'>게시글 작성</Link>
+        }
       </div>
       {/* 하단 */}
       <div className="notice-area">
@@ -122,6 +125,10 @@ const BoardDetail = ({setOnModal, isManager, board, posts, notices, postPaginati
           }
         </ul>
         <Pagination pagination={noticePagination} onPageChange={onChangeNoticePage}/>
+        {
+          isManager.current &&
+          <Link to={`/community/create/boards/${board?.id}`} className='update'>게시글 작성</Link>
+        }
       </div>
     </main>
   )
