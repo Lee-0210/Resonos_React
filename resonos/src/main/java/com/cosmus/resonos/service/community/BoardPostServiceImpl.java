@@ -245,6 +245,11 @@ public class BoardPostServiceImpl implements BoardPostService {
         return passwordEncoder.matches(rawPassword, boardPost.getGuestPassword());
     }
 
+    @Override
+    public boolean incrementViewCount(Long id) throws Exception {
+        return boardPostMapper.incrementViewCount(id) > 0;
+    }
+
 
 
 }

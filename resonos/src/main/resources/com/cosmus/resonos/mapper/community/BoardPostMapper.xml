@@ -99,6 +99,12 @@
       AND bp.community_id = #{communityId}
   </select>
 
+  <update id="incrementViewCount">
+    UPDATE board_post
+    SET views = views + 1
+    WHERE id = #{id}
+  </update>
+
   <!-- 커뮤 메인 -->
 <!-- Hot Posts (조회수 기준) -->
 <select id="selectHotPosts" resultMap="BoardPostResultMap">
