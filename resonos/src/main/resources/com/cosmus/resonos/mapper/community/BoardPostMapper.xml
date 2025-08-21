@@ -237,7 +237,8 @@
     FROM board_post bp
       LEFT JOIN community c ON bp.community_id = c.id
     WHERE bp.community_id = #{communityId}
-      AND bp.user_id != c.creator_id
+    AND (bp.user_id IS NULL OR bp.user_id != c.creator_id)
+
     ORDER BY bp.created_at DESC
   </select>
 
