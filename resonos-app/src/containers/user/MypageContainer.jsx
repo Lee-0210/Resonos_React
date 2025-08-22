@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import UserInfo from '../../components/user/UserInfo'
 import UserResource from '../../components/user/UserResource'
 import * as ur from '../../apis/user'
@@ -6,12 +6,15 @@ import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import {MySwal} from '../../apis/alert'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { LoginContext } from '../../contexts/LoginContextProvider'
 
 const MypageContainer = () => {
 
   const location = useLocation()
   const params = useParams()
   const navigate = useNavigate()
+
+  const {setIsLogin, setUserInfo, setRoles} = useContext(LoginContext)
 
   const [albumList, setAlbumList] = useState([]);
   const [artistList, setArtistList] = useState([]);
@@ -38,6 +41,9 @@ const MypageContainer = () => {
     localStorage.removeItem('rememberId')
     localStorage.removeItem('rememberMe')
     localStorage.removeItem('username')
+    setIsLogin(false)
+    setUserInfo({})
+    setRoles({})
     navigate('/login')
   }
 
