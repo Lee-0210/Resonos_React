@@ -10,6 +10,8 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
   const [tempPw, setTempPw] = useState(null)
   const [likeCount, setLikeCount] = useState(post.postLikes || 0)
   const [dislikeCount, setDislikeCount] = useState(post.postDislikes || 0)
+  const [liked, setLiked] = useState(post.userLiked || false)
+  const [disliked, setDisliked] = useState(post.userDisliked || false)
 
   const isDelete = () => {
     setOpenPw(!openPw)
@@ -34,20 +36,24 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
       const data = {
         isLikes: isLike
       }
-      postLike(ids, data)
+      postLike(ids, data, isLike)
     }
   }
-  const postLike = async (ids, data) => {
+  const postLike = async (ids, data, isLike) => {
     try {
       const response = await api.postLike(ids, data)
       console.log(response)
       if (response.status === 200) {
-        if (data.isLikes) {
-          setLikeCount(response.data.likes)
-          setDislikeCount(response.data.dislikes)
+        setLikeCount(response.data.likes)
+        setDislikeCount(response.data.dislikes)
+        if (isLike) {
+          // 좋아요 버튼을 누른 경우
+          setLiked(prev => !prev);
+          setDisliked(false);
         } else {
-          setDislikeCount(response.data.dislikes)
-          setLikeCount(response.data.likes)
+          // 싫어요 버튼을 누른 경우
+          setDisliked(prev => !prev);
+          setLiked(false);
         }
       }
     } catch (error) {
@@ -70,11 +76,11 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
         <div className="anybody">
           {isLogin ? (
             <>
-              <div className="like btn btn-gold" onClick={() => handlePostLike(ids, true)}>
+              <div className={`like btn btn-gold ${liked ? 'active' : ''}`} onClick={() => handlePostLike(ids, true)}>
                 <p>👍</p>
                 <p>{likeCount}</p>
               </div>
-              <div className="dislike btn btn-gold" onClick={() => handlePostLike(ids, false)}>
+              <div className={`dislike btn btn-gold ${disliked ? 'active' : ''}`} onClick={() => handlePostLike(ids, false)}>
                 <p>👎</p>
                 <p>{dislikeCount}</p>
               </div>
@@ -111,6 +117,11 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
                 <button className='btn btn-gold' onClick={() => postDelete(false)}>삭제</button>
               </>
             )}
+          </div>
+        )}
+        {isLogin && post.userId && (
+          <div className="onlywriter">
+            <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
           </div>
         )}
         {!isLogin && post.userId && (
