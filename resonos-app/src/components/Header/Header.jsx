@@ -5,8 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Header.css';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 import $ from 'jquery';
+import {MySwal} from '../../apis/alert'
+import { logout } from '../../apis/user';
 
-const Header = ({ currentUser = {} }) => {
+const Header = () => {
     const location = useLocation();
     const { isLogin, userInfo, path } = useContext(LoginContext)
     const [searchValue, setSearchValue] = useState("");
@@ -54,11 +56,43 @@ const Header = ({ currentUser = {} }) => {
             return;
         }
 
-        if(path === 'community')
+        if (path === 'community')
             navigate(`/community/search?q=${encodeURIComponent(trimmed)}`);
         else
             navigate(`/search?q=${encodeURIComponent(trimmed)}`);
     };
+
+    const handleLogout = async () => {
+        const result = await MySwal.fire({
+            title: "로그아웃 하시겠습니까?",
+            html: '<p class="alert-text">자동 로그인이 해제됩니다.</p>',
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            reverseButtons: false,
+            customClass: {
+                popup: 'follow-popup',
+                icon: 'warning-icon',
+                title: 'alert-title',
+                text: 'alert-text',
+                confirmButton: 'alert-button',
+                cancelButton: 'alert-cancle-button'
+            }
+        })
+        
+        if (result.isConfirmed) {
+            await fetch('/logout', { method: 'POST', credentials: 'include' });
+            logout()
+            sessionStorage.removeItem('isLogin');
+            sessionStorage.removeItem('roles');
+            sessionStorage.removeItem('userInfo');
+            localStorage.removeItem('rememberId');
+            localStorage.removeItem('rememberMe');
+            localStorage.removeItem('username');
+            window.location.href = '/login';
+        }
+    }
 
     return (
         <header className="site-header">
@@ -70,68 +104,68 @@ const Header = ({ currentUser = {} }) => {
                         */}
                         {
                             path !== 'community'
-                            ?
-                            <>
-                                <Link className="navbar-brand d-flex align-items-center" to="/list/main">
-                                    <img src="/img/resonosPlusLogo.png" alt="Main Page Logo" className="header-logo-img" />
-                                </Link>
-                                <Link className="navbar-brand d-flex align-items-center" to="/community">
-                                    <img src="/img/resonosLogo.png" alt="Sub Page Logo" className="header-logo-img-sub" />
-                                </Link>
-                            </>
-                            :
-                            <>
-                                <Link className="navbar-brand d-flex align-items-center" to="/community">
-                                    <img src="/img/resonosLogo.png" alt="Main Page" className="header-logo-img" />
-                                </Link>
-                                <Link className="navbar-brand d-flex align-items-center" to="/list/main">
-                                    <img src="/img/resonosPlusLogo.png" alt="LogoSub Page Logo" className="header-logo-img-sub" />
-                                </Link>
-                            </>
+                                ?
+                                <>
+                                    <Link className="navbar-brand d-flex align-items-center" to="/list/main">
+                                        <img src="/img/resonosPlusLogo.png" alt="Main Page Logo" className="header-logo-img" />
+                                    </Link>
+                                    <Link className="navbar-brand d-flex align-items-center" to="/community">
+                                        <img src="/img/resonosLogo.png" alt="Sub Page Logo" className="header-logo-img-sub" />
+                                    </Link>
+                                </>
+                                :
+                                <>
+                                    <Link className="navbar-brand d-flex align-items-center" to="/community">
+                                        <img src="/img/resonosLogo.png" alt="Main Page" className="header-logo-img" />
+                                    </Link>
+                                    <Link className="navbar-brand d-flex align-items-center" to="/list/main">
+                                        <img src="/img/resonosPlusLogo.png" alt="LogoSub Page Logo" className="header-logo-img-sub" />
+                                    </Link>
+                                </>
                         }
                         <div className="menu-group d-flex position-relative ms-5">
 
                             {
                                 path !== 'community'
-                                ?
-                                <>
-                                    {/* 앨범 메뉴 + 하단 메뉴 */}
-                                    <li className="header-menu-wrapper">
-                                        <Link to="/list/new-albums" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>앨범</Link>
-                                        <ul className="header-submenu d-flex flex-column justify-content-center">
-                                            <li className="header-menu-wrapper sub"><Link to="/list/new-albums">최신 앨범</Link></li>
-                                            <li className="header-menu-wrapper sub"><Link to="/list/hot-albums">인기 앨범</Link></li>
-                                        </ul>
-                                    </li>
+                                    ?
+                                    <>
+                                        {/* 앨범 메뉴 + 하단 메뉴 */}
+                                        <li className="header-menu-wrapper">
+                                            <Link to="/list/new-albums" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>앨범</Link>
+                                            <ul className="header-submenu d-flex flex-column justify-content-center">
+                                                <li className="header-menu-wrapper sub"><Link to="/list/new-albums">최신 앨범</Link></li>
+                                                <li className="header-menu-wrapper sub"><Link to="/list/hot-albums">인기 앨범</Link></li>
+                                            </ul>
+                                        </li>
 
-                                    {/* 트랙 메뉴 + 하단 메뉴 */}
-                                    <li className="header-menu-wrapper position-relative">
-                                        <Link to="/list/new-tracks" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>트랙</Link>
-                                        <ul className="header-submenu d-flex flex-column justify-content-center">
-                                            <li className="header-menu-wrapper sub"><Link to="/list/new-tracks">최신 트랙</Link></li>
-                                            <li className="header-menu-wrapper sub"><Link to="/list/hot-tracks">인기 트랙</Link></li>
-                                        </ul>
-                                    </li>
+                                        {/* 트랙 메뉴 + 하단 메뉴 */}
+                                        <li className="header-menu-wrapper position-relative">
+                                            <Link to="/list/new-tracks" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>트랙</Link>
+                                            <ul className="header-submenu d-flex flex-column justify-content-center">
+                                                <li className="header-menu-wrapper sub"><Link to="/list/new-tracks">최신 트랙</Link></li>
+                                                <li className="header-menu-wrapper sub"><Link to="/list/hot-tracks">인기 트랙</Link></li>
+                                            </ul>
+                                        </li>
 
-                                    {/* 플레이리스트 메뉴 + 하단 메뉴 */}
-                                    <li className="header-menu-wrapper position-relative">
-                                        <Link to="/list/new-playlists" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>플레이리스트</Link>
-                                        <ul className="header-submenu d-flex flex-column justify-content-center">
-                                            <li className="header-menu-wrapper sub"><Link to="/list/new-playlists">최신 플레이리스트</Link></li>
-                                            <li className="header-menu-wrapper sub"><Link to="/list/hot-playlists">인기 플레이리스트</Link></li>
-                                        </ul>
-                                    </li>
-                                </>
-                                :
-                                <>
-                                    <li className="header-menu-wrapper position-relative">
-                                        <Link
-                                        to="/community/search/more?type=board&q=&page=1"
-                                        >
-                                            전체 게시판
-                                        </Link>
-                                    </li>
-                                </>
+                                        {/* 플레이리스트 메뉴 + 하단 메뉴 */}
+                                        <li className="header-menu-wrapper position-relative">
+                                            <Link to="/list/new-playlists" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>플레이리스트</Link>
+                                            <ul className="header-submenu d-flex flex-column justify-content-center">
+                                                <li className="header-menu-wrapper sub"><Link to="/list/new-playlists">최신 플레이리스트</Link></li>
+                                                <li className="header-menu-wrapper sub"><Link to="/list/hot-playlists">인기 플레이리스트</Link></li>
+                                            </ul>
+                                        </li>
+                                    </>
+                                    :
+                                    <>
+                                        <li className="header-menu-wrapper position-relative">
+                                            <Link
+                                                to="/community/search/more?type=board&q=&page=1"
+                                            >
+                                                전체 게시판
+                                            </Link>
+                                        </li>
+                                    </>
                             }
 
 
@@ -191,7 +225,7 @@ const Header = ({ currentUser = {} }) => {
                                             <li><hr className="dropdown-divider" /></li>
                                             <li>
                                                 <form action="/logout" method="post">
-                                                    <button type="submit" className="dropdown-item">로그아웃</button>
+                                                    <button type="button" className="dropdown-item" onClick={handleLogout}>로그아웃</button>
                                                 </form>
                                             </li>
                                         </ul>
