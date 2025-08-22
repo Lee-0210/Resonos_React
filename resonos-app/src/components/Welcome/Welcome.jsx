@@ -64,7 +64,7 @@ const Welcome = () => {
                                 </>
                             ) : (
                                 <span className="nickname-welcome">
-                                    {userInfo?.nickname} 님, 환영합니다.
+                                    <Link to="users/mypage" className="nickname-welcome">{userInfo?.nickname}</Link> 님, 환영합니다.
                                 </span>
                             )}
                         </div>

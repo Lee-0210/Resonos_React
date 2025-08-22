@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,10 +27,8 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.Comment;
-import com.cosmus.resonos.service.badge.BadgeGrantService;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommentService;
-import com.cosmus.resonos.service.community.LikesDislikesService;
 import com.github.pagehelper.PageInfo;
 
 import jakarta.servlet.http.Cookie;
@@ -50,10 +47,6 @@ public class BoardPostController {
 
     @Autowired
     private CommentService commentService;
-
-    @Autowired
-    private BadgeGrantService badgeGrantService;
-
 
     public BoardPostController(BoardPostService boardPostService) {
         this.boardPostService = boardPostService;
@@ -78,7 +71,7 @@ public class BoardPostController {
         HttpServletResponse response,
         HttpSession session,
         @RequestParam(value = "page", defaultValue = "1") int page,
-        @RequestParam(value = "size", defaultValue = "30") int size
+        @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Map<String, Object> postWithComments = new HashMap<>();
         try {
