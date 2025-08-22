@@ -1,14 +1,10 @@
 package com.cosmus.resonos.controller.community;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.CustomUser;
-import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.Report;
 import com.cosmus.resonos.service.admin.ReportService;
 
@@ -24,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/community/boards/{communityId}/posts/{postId}")
+@RequestMapping("/community/report/boards/{communityId}/posts/{postId}")
 public class ReportController {
 
     @Autowired
