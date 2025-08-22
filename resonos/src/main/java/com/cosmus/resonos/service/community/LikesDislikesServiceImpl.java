@@ -115,11 +115,11 @@ public class LikesDislikesServiceImpl implements LikesDislikesService {
 
         for (Map<String, Object> row : list) {
             Boolean isLikes = (Boolean) row.get("is_likes");
-            Long cnt = (Long) row.get("cnt");
+            Long count = (Long) row.get("count");
             if (isLikes != null && isLikes) {
-                result.put("likes", cnt.intValue());
+                result.put("likes", count.intValue());
             } else {
-                result.put("dislikes", cnt.intValue());
+                result.put("dislikes", count.intValue());
             }
         }
         return result;
