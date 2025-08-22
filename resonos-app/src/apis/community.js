@@ -31,8 +31,7 @@ export const updateDescription = async (boardId, description) => {
 }
 
 
-// 게시글 ==================================
-// TODO : 예외처리
+// 게시글댓 ==================================
 
 // 게시글 조회
 export const getPostData = async (ids) => {
@@ -42,7 +41,7 @@ export const getPostData = async (ids) => {
 export const getPostDataWithPage = async (ids,page) => {
   return api.get(`/community/boards/${ids.boardId}/posts/${ids.postId}`, {
     params : {
-      page : page.page,
+      page : page,
     }
   })
 }
@@ -75,6 +74,7 @@ export const deleteUnlogComment = async (data, ids) => {
 export const deleteComment = async (ids) => {
   return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`)
 }
+// 게시글 ==================
 
 // 회원, 비회원 게시글 등록 O
 export const postInsert = async (data, boardId) => {
@@ -93,7 +93,29 @@ export const deletePost = async (data, ids) => {
     data
   })
 }
+
 // 게시글 신고
-export const reportPost = async (ids) => {
-  return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}`)
+export const reportPost = async (ids, obj) => {
+  return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}`,obj, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+}
+// 좋아요 싫어요 ========
+// /community/likes-dislikes/boards/{communityId}/posts/{postId}
+// + /comments/{commentId}
+export const postLike = async (ids,data) => {
+  return api.post(`/community/likes-dislikes/boards/${ids.boardId}/posts/${ids.postId}`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+}
+export const commentLike = async (ids,data) => {
+  return api.post(`/community/likes-dislikes/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
 }
