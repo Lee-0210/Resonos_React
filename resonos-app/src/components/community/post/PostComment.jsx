@@ -19,7 +19,7 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
   const [comments, setComments] = useState([])
   const [pagination, setPagination] = useState(null)
   const [commentCount, setCommentCount] = useState(null)
-  
+
   console.log(page)
 
   const fetchComment = async (page) => {
@@ -402,9 +402,12 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
         if (response.status === 200) {
           setComments(prevComments => prevComments.map(com =>
             com.id === commentId
-              ? isLike
-                ? com = { ...com, commentLikes: response.data.likes }
-                : com = { ...com, commentDislikes: response.data.dislikes }
+              ?
+              {
+                ...com,
+                commentDislikes: response.data.dislikes,
+                commentLikes: response.data.likes
+              }
               : com
           ))
         }
@@ -423,9 +426,12 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
               {
                 ...prev, replies: prev.replies.map(rep =>
                   rep.id === commentId
-                    ? isLike
-                      ? { ...rep, commentLikes: response.data.likes }
-                      : { ...rep, commentDislikes: response.data.dislikes }
+                    ?
+                    { 
+                      ...rep,
+                      commentDislikes: response.data.dislikes,
+                      commentLikes: response.data.likes
+                    }
                     : rep
                 )
               } : prev
