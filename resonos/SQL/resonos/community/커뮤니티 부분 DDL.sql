@@ -226,6 +226,7 @@ ALTER TABLE `report` ADD CONSTRAINT `FK_board_post_TO_report_1` FOREIGN KEY (`bo
 -- TRUNCATE TABLE com_manager;
 -- TRUNCATE TABLE community;
 -- TRUNCATE TABLE community_category;
+-- TRUNCATE TABLE report;
 
 -- SET FOREIGN_KEY_CHECKS = 1;
 
@@ -241,3 +242,4 @@ ALTER TABLE `report` ADD CONSTRAINT `FK_board_post_TO_report_1` FOREIGN KEY (`bo
 -- drop table `com_manager`;
 -- drop table `community`;
 -- drop table `community_category`;
+-- drop table `report`;
