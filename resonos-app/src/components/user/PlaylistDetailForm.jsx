@@ -208,9 +208,13 @@ const PlaylistDetailForm = ({playlist, lastPath, isOwner, alreadyLiked, owner, o
                   <div>
                     <h2 className="text-start">트랙 목록</h2>
                     <span className="count">
-                      {playlist.trackList && playlist.trackList[0].id != null
-                        ? playlist.trackList.length
-                        : 0}
+                      {
+                        playlist.trackList
+                        ?
+                        playlist.trackList.length
+                        :
+                        0
+                      }
                     </span>
                   </div>
                   {isOwner && (
