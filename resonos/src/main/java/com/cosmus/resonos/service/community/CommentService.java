@@ -16,7 +16,7 @@ public interface CommentService extends BaseService<Comment> {
     public List<Comment> findByTarget(String type, Long targetId) throws Exception;
 
     // 조회 + 좋아요 싫어요 수
-    public PageInfo<Comment> selectWithLikesDislikes(@Param("postId") Long postId, @Param("pageNum") int pageNum, @Param("pageSize") int pageSize) throws Exception;
+    public PageInfo<Comment> selectWithLikesDislikes(@Param("postId") Long postId, @Param("userId") Long userId, @Param("pageNum") int pageNum, @Param("pageSize") int pageSize) throws Exception;
 
     // 페이지네이션 포함 댓글
     // public PageInfo<Comment> commentsWithPagination(@Param("postId") Long postId, @Param("pageNum") int pageNum, @Param("pageSize") int pageSize) throws Exception;

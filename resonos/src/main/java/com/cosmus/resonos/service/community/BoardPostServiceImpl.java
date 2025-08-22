@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,8 +67,8 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public BoardPost selectWithLikesDislikes(Long communityId, Long postId) throws Exception {
-        return boardPostMapper.selectWithLikesDislikes(communityId, postId);
+    public BoardPost selectWithLikesDislikes(Long communityId, Long postId, Long userId) throws Exception {
+        return boardPostMapper.selectWithLikesDislikes(communityId, postId, userId);
     }
 
     // 커뮤 main

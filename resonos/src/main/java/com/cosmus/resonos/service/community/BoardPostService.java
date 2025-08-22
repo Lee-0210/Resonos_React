@@ -17,7 +17,7 @@ public interface BoardPostService extends BaseService<BoardPost> {
     // 어드민 통계용
     public int countAll() throws Exception;
     // 조회 + 좋아요 싫어요 수
-    public BoardPost selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId) throws Exception;
+    public BoardPost selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId, @Param("userId") Long userId) throws Exception;
     // 로그인/비로그인 게시글 작성
     public void createPost(BoardPost boardPost, CustomUser loginUser) throws Exception;
     // 비로그인 게시글 비밀번호 체크

@@ -20,7 +20,7 @@ public interface BoardPostMapper extends BaseMapper<BoardPost> {
     // 게시글 구하기
     public int countByUserId(Long userId);
     // 조회 + 좋아요 싫어요 수
-    public BoardPost selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId) throws Exception;
+    public BoardPost selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId, @Param("userId") Long userId) throws Exception;
     // 게시글 조회수 증가
     public int incrementViewCount(Long id) throws Exception;
 

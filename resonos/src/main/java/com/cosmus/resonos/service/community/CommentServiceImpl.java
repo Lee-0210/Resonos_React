@@ -91,7 +91,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public PageInfo<Comment> selectWithLikesDislikes(Long postId, int pageNum, int pageSize) throws Exception {
+    public PageInfo<Comment> selectWithLikesDislikes(Long postId, Long userId, int pageNum, int pageSize) throws Exception {
         PageHelper.startPage(pageNum, pageSize);
 
         // List<Comment> comments = commentMapper.selectWithLikesDislikes(postId);
@@ -113,12 +113,12 @@ public class CommentServiceImpl implements CommentService {
         //     root.setReplies(replies);
         // }
 
-        List<Comment> rootComments = commentMapper.selectRootCommentsWithLikesDislikes(postId); // parent_comment_id IS NULL
+        List<Comment> rootComments = commentMapper.selectRootCommentsWithLikesDislikes(postId, userId); // parent_comment_id IS NULL
         PageInfo<Comment> pageInfo = new PageInfo<>(rootComments);
 
         // 2. 각 최상위 댓글의 대댓글(답글) 조회 및 세팅
         for (Comment root : rootComments) {
-            List<Comment> replies = commentMapper.selectRepliesWithLikesDislikes(root.getId());
+            List<Comment> replies = commentMapper.selectRepliesWithLikesDislikes(root.getId(), userId);
             replies.sort((a, b) -> a.getCreatedAt().compareTo(b.getCreatedAt())); // 원하는 정렬
             root.setReplies(replies);
         }

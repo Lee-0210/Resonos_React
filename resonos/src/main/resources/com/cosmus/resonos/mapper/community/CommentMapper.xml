@@ -20,6 +20,8 @@
     <result property="commentDislikes" column="comment_dislikes"/>
     <result property="guestNickname" column="guest_nickname"/>
     <result property="guestPassword" column="guest_password"/>
+    <result property="userLiked" column="user_liked"/>
+    <result property="userDisliked" column="user_disliked"/>
   </resultMap>
 
   <select id="list" resultType="com.cosmus.resonos.domain.community.Comment">
@@ -118,7 +120,23 @@
   <select id="selectRootCommentsWithLikesDislikes" resultMap="CommentResultMap">
     SELECT c.*, u.nickname AS user_nickname,
       (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type = 'comment' AND ld.target_id = c.id AND ld.is_likes = 1) AS comment_likes,
-      (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type = 'comment' AND ld.target_id = c.id AND ld.is_likes = 0) AS comment_dislikes
+      (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type = 'comment' AND ld.target_id = c.id AND ld.is_likes = 0) AS comment_dislikes,
+      -- 로그인한 유저가 좋아요 눌렀는지 여부 (1 or 0)
+      (SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM likes_dislikes ld
+        WHERE ld.type = 'comment'
+          AND ld.target_id = c.id
+          AND ld.is_likes = 1
+          AND ld.user_id = #{userId}
+      ) AS user_liked,
+      -- 로그인한 유저가 싫어요 눌렀는지 여부 (1 or 0)
+      (SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM likes_dislikes ld
+        WHERE ld.type = 'comment'
+          AND ld.target_id = c.id
+          AND ld.is_likes = 0
+          AND ld.user_id = #{userId}
+      ) AS user_disliked
     FROM comment c
     LEFT JOIN user u ON u.id = c.user_id
     WHERE c.board_post_id = #{postId}
@@ -129,7 +147,23 @@
   <select id="selectRepliesWithLikesDislikes" resultMap="CommentResultMap">
     SELECT c.*, u.nickname AS user_nickname,
       (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type = 'comment' AND ld.target_id = c.id AND ld.is_likes = 1) AS comment_likes,
-      (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type = 'comment' AND ld.target_id = c.id AND ld.is_likes = 0) AS comment_dislikes
+      (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type = 'comment' AND ld.target_id = c.id AND ld.is_likes = 0) AS comment_dislikes,
+      -- 로그인한 유저가 좋아요 눌렀는지 여부 (1 or 0)
+      (SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM likes_dislikes ld
+        WHERE ld.type = 'comment'
+          AND ld.target_id = c.id
+          AND ld.is_likes = 1
+          AND ld.user_id = #{userId}
+      ) AS user_liked,
+      -- 로그인한 유저가 싫어요 눌렀는지 여부 (1 or 0)
+      (SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM likes_dislikes ld
+        WHERE ld.type = 'comment'
+          AND ld.target_id = c.id
+          AND ld.is_likes = 0
+          AND ld.user_id = #{userId}
+      ) AS user_disliked
     FROM comment c
     LEFT JOIN user u ON u.id = c.user_id
     WHERE c.parent_comment_id = #{parentCommentId}
