@@ -82,8 +82,10 @@ public class BoardPostController {
     ) {
         Map<String, Object> postWithComments = new HashMap<>();
         try {
+            Long userId = (loginUser != null) ? loginUser.getId() : null;
+
             // 게시글 + 좋아요/싫어요 수
-            BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId);
+            BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId, userId);
             if (post == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -140,7 +142,7 @@ public class BoardPostController {
             // log.info("" + commentsWithPageInfo);
             // commentsPagination.setTotal(boardPostService.getCommentCount(postId));
             // postWithComments.put("pagedComments", pagedComments);
-            PageInfo<Comment> comments = commentService.selectWithLikesDislikes(postId, page, size);
+            PageInfo<Comment> comments = commentService.selectWithLikesDislikes(postId, userId, page, size);
             Pagination commentsPagination = new Pagination(comments);
             postWithComments.put("comments", comments.getList());
             postWithComments.put("commentsPagination", commentsPagination);

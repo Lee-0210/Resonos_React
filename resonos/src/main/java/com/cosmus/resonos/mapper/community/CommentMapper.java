@@ -22,8 +22,8 @@ public interface CommentMapper extends BaseMapper<Comment> {
     // 댓글, 대댓글 일괄 select
     public List<Comment> selectAllWithOrder(@Param("postId") Long postId) throws Exception;
     // 게시글 댓글만
-    public List<Comment> selectRootCommentsWithLikesDislikes(@Param("postId") Long postId);
+    public List<Comment> selectRootCommentsWithLikesDislikes(@Param("postId") Long postId, @Param("userId") Long userId);
     // 대댓글만
-    public List<Comment> selectRepliesWithLikesDislikes(@Param("parentCommentId") Long parentCommentId);
+    public List<Comment> selectRepliesWithLikesDislikes(@Param("parentCommentId") Long parentCommentId, @Param("userId") Long userId);
 
 }
