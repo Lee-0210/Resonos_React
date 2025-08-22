@@ -122,6 +122,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                           .path("/")
                                           .sameSite("Strict");
 
+    // 자동 로그인 체크시 maxAge 설정하여 persistent 쿠키로
     if(rememberMe) builder.maxAge(Duration.ofDays(7));
 
     ResponseCookie cookie = builder.build();
