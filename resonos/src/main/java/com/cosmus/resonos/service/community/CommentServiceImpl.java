@@ -17,6 +17,9 @@ import com.cosmus.resonos.mapper.community.CommentMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -88,35 +91,51 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> selectWithLikesDislikes(Long postId) throws Exception {
-        List<Comment> comments = commentMapper.selectWithLikesDislikes(postId);
+    public PageInfo<Comment> selectWithLikesDislikes(Long postId, int pageNum, int pageSize) throws Exception {
+        PageHelper.startPage(pageNum, pageSize);
 
-        List<Comment> rootComments = new ArrayList<>();
-        Map<Long, List<Comment>> repliesMap = new HashMap<>();
+        // List<Comment> comments = commentMapper.selectWithLikesDislikes(postId);
 
-        for (Comment c : comments) {
-            if (c.getParentCommentId() == null) {
-                rootComments.add(c); // 최상위 댓글
-            } else {
-                repliesMap.computeIfAbsent(c.getParentCommentId(), k -> new ArrayList<>()).add(c); // 대댓글 모음
-            }
-        }
+        // List<Comment> rootComments = new ArrayList<>();
+        // Map<Long, List<Comment>> repliesMap = new HashMap<>();
 
+        // for (Comment c : comments) {
+        //     if (c.getParentCommentId() == null) {
+        //         rootComments.add(c); // 최상위 댓글
+        //     } else {
+        //         repliesMap.computeIfAbsent(c.getParentCommentId(), k -> new ArrayList<>()).add(c); // 대댓글 모음
+        //     }
+        // }
+
+        // for (Comment root : rootComments) {
+        //     List<Comment> replies = repliesMap.getOrDefault(root.getId(), new ArrayList<>());
+        //     replies.sort((a, b) -> a.getCreatedAt().compareTo(b.getCreatedAt())); // 최신순 정렬
+        //     root.setReplies(replies);
+        // }
+
+        List<Comment> rootComments = commentMapper.selectRootCommentsWithLikesDislikes(postId); // parent_comment_id IS NULL
+        PageInfo<Comment> pageInfo = new PageInfo<>(rootComments);
+
+        // 2. 각 최상위 댓글의 대댓글(답글) 조회 및 세팅
         for (Comment root : rootComments) {
-            List<Comment> replies = repliesMap.getOrDefault(root.getId(), new ArrayList<>());
-            replies.sort((a, b) -> a.getCreatedAt().compareTo(b.getCreatedAt())); // 최신순 정렬
+            List<Comment> replies = commentMapper.selectRepliesWithLikesDislikes(root.getId());
+            replies.sort((a, b) -> a.getCreatedAt().compareTo(b.getCreatedAt())); // 원하는 정렬
             root.setReplies(replies);
         }
 
-        return rootComments;
+        return pageInfo;
     }
     
-    @Override
-    public PageInfo<Comment> commentsWithPagination(Long postId, int pageNum, int pageSize) throws Exception {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Comment> comments = selectWithLikesDislikes(postId);
-        return new PageInfo<>(comments);
-    }
+    // @Override
+    // public PageInfo<Comment> commentsWithPagination(Long postId, int pageNum, int pageSize) throws Exception {
+    //     PageHelper.startPage(pageNum, pageSize);
+    //     log.info("pageNum : " + pageNum);
+    //     log.info("pageSize : " + pageSize);
+    //     List<Comment> comments = selectWithLikesDislikes(postId);
+    //     log.info("pageNum : " + pageNum);
+    //     log.info("pageSize : " + pageSize);
+    //     return new PageInfo<>(comments);
+    // }
 
     @Override
     public void writeComment(Comment comment, CustomUser loginUser) throws Exception {
