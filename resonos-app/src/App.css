@@ -129,3 +129,8 @@
 .album-wrapper .swal2-icon {
     margin-top: 10px !important;
 }
+
+/* CKEditor */
+.ck-editor__editable_inline {
+    min-height: 500px;
+}
