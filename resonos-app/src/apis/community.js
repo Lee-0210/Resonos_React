@@ -96,7 +96,7 @@ export const deletePost = async (data, ids) => {
 
 // 게시글 신고
 export const reportPost = async (ids, obj) => {
-  return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}`,obj, {
+  return api.post(`/community/report/boards/${ids.boardId}/posts/${ids.postId}`, {
     headers: {
       'Content-Type': 'application/json',
     }

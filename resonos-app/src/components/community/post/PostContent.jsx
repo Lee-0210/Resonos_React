@@ -32,20 +32,22 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
     }
     else {
       const data = {
-        isLikes : isLike
+        isLikes: isLike
       }
-      postLike(ids,data)
+      postLike(ids, data)
     }
   }
-  const postLike = async (ids,data) => {
+  const postLike = async (ids, data) => {
     try {
-      const response = await api.postLike(ids,data)
+      const response = await api.postLike(ids, data)
       console.log(response)
       if (response.status === 200) {
         if (data.isLikes) {
-          setLikeCount(prev => prev + 1)
+          setLikeCount(response.data.likes)
+          setDislikeCount(response.data.dislikes)
         } else {
-          setDislikeCount(prev => prev + 1)
+          setDislikeCount(response.data.dislikes)
+          setLikeCount(response.data.likes)
         }
       }
     } catch (error) {
@@ -72,7 +74,7 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
                 <p>👍</p>
                 <p>{likeCount}</p>
               </div>
-              <div className="dislike btn btn-gold"onClick={() => handlePostLike(ids, false)}>
+              <div className="dislike btn btn-gold" onClick={() => handlePostLike(ids, false)}>
                 <p>👎</p>
                 <p>{dislikeCount}</p>
               </div>
