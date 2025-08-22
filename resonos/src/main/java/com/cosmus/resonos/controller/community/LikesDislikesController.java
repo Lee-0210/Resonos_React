@@ -1,5 +1,8 @@
 package com.cosmus.resonos.controller.community;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,7 +76,12 @@ public class LikesDislikesController {
         try {
             if (loginUser == null) return new ResponseEntity<>("로그인 후 좋아요/싫어요 평가가 가능합니다.", HttpStatus.UNAUTHORIZED);
             likesDislikesService.toggleReaction(loginUser.getId(), "post", postId, request.getIsLikes());
-            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+            Map<String, Integer> counts = likesDislikesService.getReactionCounts("post", postId);
+            Map<String, Object> response = new HashMap<>();
+            response.put("postId", postId);
+            response.put("likes", counts.get("likes"));
+            response.put("dislikes", counts.get("dislikes"));
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             log.error("게시글 반응 남기기 실패", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,9 +97,14 @@ public class LikesDislikesController {
         try {
             if (loginUser == null) return new ResponseEntity<>("로그인 후 좋아요/싫어요 평가가 가능합니다.", HttpStatus.UNAUTHORIZED);
             likesDislikesService.toggleReaction(loginUser.getId(), "comment", commentId, request.getIsLikes());
-            return new ResponseEntity<>("SUCCESS", HttpStatus.OK);
+            Map<String, Integer> counts = likesDislikesService.getReactionCounts("comment", commentId);
+            Map<String, Object> response = new HashMap<>();
+            response.put("commentId", commentId);
+            response.put("likes", counts.get("likes"));
+            response.put("dislikes", counts.get("dislikes"));
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("게시글 반응 남기기 실패", e);
+            log.error("댓글 반응 남기기 실패", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
