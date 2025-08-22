@@ -78,13 +78,33 @@
     FROM comment c
     LEFT JOIN user u ON u.id = c.user_id
     WHERE c.board_post_id = #{postId}
-    ORDER BY c.created_at
+    ORDER BY
+      CASE 
+        WHEN c.parent_comment_id IS NULL THEN c.id
+        ELSE c.parent_comment_id
+      END, 
+      c.parent_comment_id IS NULL DESC,
+      c.created_at
   </select>
 
   <select id="selectAllWithOrder" resultType="Comment">
     SELECT 
-      c.id, c.board_post_id, c.parent_comment_id, c.content, c.created_at, c.user_id
+      c.*,
+      u.nickname AS user_nickname,
+      (SELECT COUNT(*)
+        FROM likes_dislikes ld
+        WHERE ld.type = 'comment'
+          AND ld.target_id = c.id
+          AND ld.is_likes = 1
+      ) AS comment_likes,
+      (SELECT COUNT(*)
+        FROM likes_dislikes ld
+        WHERE ld.type = 'comment'
+          AND ld.target_id = c.id
+          AND ld.is_likes = 0
+      ) AS comment_dislikes
     FROM comment c
+    LEFT JOIN user u ON u.id = c.user_id
     WHERE c.board_post_id = #{postId}
     ORDER BY 
       CASE 

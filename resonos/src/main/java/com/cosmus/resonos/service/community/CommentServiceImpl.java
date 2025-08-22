@@ -114,7 +114,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public PageInfo<Comment> commentsWithPagination(Long postId, int pageNum, int pageSize) throws Exception {
         PageHelper.startPage(pageNum, pageSize);
-        List<Comment> comments = commentMapper.selectAllWithOrder(postId);
+        List<Comment> comments = selectWithLikesDislikes(postId);
         return new PageInfo<>(comments);
     }
 

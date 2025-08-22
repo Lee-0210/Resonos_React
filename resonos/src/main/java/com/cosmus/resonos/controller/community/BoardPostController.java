@@ -137,9 +137,11 @@ public class BoardPostController {
             // 댓글 리스트 반환 (각 댓글에 작성자, 내용, 작성일, 좋아요/싫어요 수 포함)
             List<Comment> comments = commentService.selectWithLikesDislikes(postId);
             PageInfo<Comment> commentsWithPageInfo = commentService.commentsWithPagination(postId, page, size);
+            // List<Comment> pagedComments = commentsWithPageInfo.getList();
             Pagination commentsPagination = new Pagination(commentsWithPageInfo);
             commentsPagination.setTotal(boardPostService.getCommentCount(postId));
-            postWithComments.put("comments", comments);
+            postWithComments.put("comments", commentsWithPageInfo.getList());
+            // postWithComments.put("pagedComments", pagedComments);
             postWithComments.put("commentsPagination", commentsPagination);
 
             return new ResponseEntity<>(postWithComments, HttpStatus.OK);
