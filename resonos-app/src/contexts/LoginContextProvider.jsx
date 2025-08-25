@@ -15,6 +15,7 @@ const LoginContextProvider = ({children}) => {
   const [path, setPath] = useState(location.pathname.split('/')[1])
   useEffect(() => {
     setPath(location.pathname.split('/')[1])
+    window.scrollTo(0, 0)
   }, [location])
 
   // state
