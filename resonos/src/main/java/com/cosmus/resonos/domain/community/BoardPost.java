@@ -21,15 +21,15 @@ public class BoardPost {
     private String userNickname;
     private String guestNickname;
     private String guestPassword;
-    
-    // 조인해서 가져올 데이터 
+
+    // 조인해서 가져올 데이터
     private int postLikes;
     private int postDislikes;
     private boolean userLiked;
     private boolean userDisliked;
 
-    // 실제DB상 없음 
-    // 커뮤니티 정보, 이름 
+    // 실제DB상 없음
+    // 커뮤니티 정보, 이름
     private Community community;
     // 댓글 수
     private int commentCount;
@@ -40,8 +40,10 @@ public class BoardPost {
     // 게시판 테이블 thumbnail_url 컬럼 추가
     private String thumbnailUrl;
 
-    // vote 
+    // vote
     // 투표 리스트
     private List<ComVote> comVotes;
+
+
 
 }

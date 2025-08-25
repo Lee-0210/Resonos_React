@@ -156,6 +156,9 @@ public class BoardPostController {
         @RequestBody BoardPost request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
+
+        log.info("request : {}", request);
+
         try {
             BoardPost boardPost = new BoardPost();
             boardPost.setTitle(request.getTitle());
@@ -229,7 +232,7 @@ public class BoardPostController {
     ) {
         try {
             BoardPost boardPost = boardPostService.select(postId);
-            
+
             if (boardPost == null) return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
 
             if (loginUser != null) {
