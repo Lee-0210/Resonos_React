@@ -21,8 +21,10 @@ const MoreCard = ({board}) => {
       </h3>
       <ul>
         {
-          board?.boardPosts?.map(post => (
-            <li onClick={() => handleNavigate(post.id)}>
+          board?.boardPosts?.map((post, index) => (
+            index < 5
+            &&
+            <li key={post.id} onClick={() => handleNavigate(post.id)}>
               <span>{post.title}</span> <span className="board-name">{post.userNickname}</span>
             </li>
           ))

@@ -1,4 +1,5 @@
 import React from "react"
+import {MySwal} from '../../../apis/alert'
 
 const DatePicker = ({ setClosedAt }) => {
   const now = new Date()
@@ -11,7 +12,19 @@ const DatePicker = ({ setClosedAt }) => {
     console.log("selected:", selected)
 
     if (selected < localISOTime) {
-      alert("현재 시간 이후로만 가능합니다.")
+      // MySwal.fire({
+      //   position: "center",
+      //   icon: "warning",
+      //   title: '현재시간 이후로 가능합니다.',
+      //   showConfirmButton: false,
+      //   timer: 800,
+      //   customClass: {
+      //     popup: 'follow-popup',
+      //     icon: 'success-icon',
+      //     title: 'alert-title'
+      //   }
+      // })
+      alert("현재시간 이후로 가능합니다.")
       selected = localISOTime
     }
 
