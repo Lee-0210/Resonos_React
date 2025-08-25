@@ -40,7 +40,8 @@ DROP TABLE IF EXISTS `com_vote_argument`;
 CREATE TABLE `com_vote_argument` (
     `id` BIGINT NOT NULL,
     `vote_id` BIGINT NOT NULL,
-    `content` VARCHAR(100) NOT NULL
+    `content` VARCHAR(100) NOT NULL,
+    `arg_no` INT NOT NULL
 );
 
 DROP TABLE IF EXISTS `com_vote`;
@@ -178,10 +179,10 @@ ALTER TABLE `vote_status`
 ADD CONSTRAINT `FK_user_TO_vote_status_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 ALTER TABLE `com_vote_argument`
-ADD CONSTRAINT `FK_com_vote_TO_com_vote_argument_1` FOREIGN KEY (`vote_id`) REFERENCES `com_vote` (`id`);
+ADD CONSTRAINT `FK_com_vote_TO_com_vote_argument_1` FOREIGN KEY (`vote_id`) REFERENCES `com_vote` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `com_vote`
-ADD CONSTRAINT `FK_board_post_TO_com_vote_1` FOREIGN KEY (`post_id`) REFERENCES `board_post` (`id`);
+ADD CONSTRAINT `FK_board_post_TO_com_vote_1` FOREIGN KEY (`post_id`) REFERENCES `board_post` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `comment`
 ADD CONSTRAINT `FK_user_TO_comment_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);

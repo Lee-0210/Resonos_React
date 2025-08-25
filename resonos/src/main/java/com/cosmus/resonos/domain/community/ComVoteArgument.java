@@ -8,11 +8,13 @@ import lombok.Data;
 public class ComVoteArgument {
 
 
-    private Long id; 
+    private Long id;
 
-    private Long voteId; 
+    private Long voteId;
 
-    private String content; 
+    private String content;
+
+    private int argNo;
 
     // DB 상 없는 컬럼 
     private int voteCount;  // 집계용
