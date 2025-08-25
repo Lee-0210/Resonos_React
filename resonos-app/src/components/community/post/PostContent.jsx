@@ -6,7 +6,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import VoteChart from '../card/VoteChart';
 import VoteArguments from '../card/VoteArguments';
 
-const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, reportPost, vote }) => {
+const PostContent = ({ post, swal, api, isLogin, userInfo,
+  ids, deletePost, reportPost, initVote, contributeVote }) => {
 
   const [openPw, setOpenPw] = useState(false)
   const [tempPw, setTempPw] = useState(null)
@@ -15,21 +16,44 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
   const [liked, setLiked] = useState(post.userLiked || false)
   const [disliked, setDisliked] = useState(post.userDisliked || false)
   const [voting, setVoting] = useState(false)
+  const [vote, setVote] = useState(initVote)
+  const [selectedId, setSelectedId] = useState(null)
 
-  const imsiVote = {
-    argument: [{ id: 28, voteId: null, content: "투표옵션 29", argNo: 0, voteCount: 6 },
-    { id: 29, voteId: null, content: "투표옵션 30", argNo: 1, voteCount: 2 },
-    { id: 30, voteId: null, content: "투표옵션 31", argNo: 2, voteCount: 1 },
-    ],
-    closedAt: '2025-08-26 10:00:00',
-    createdAt: '2024-08-25 10:00:00',
-    getQuestion: null,
-    id: 1,
-    isCompleted: false,
-    postId: null,
-    title: '투표 제목1'
-  }
+
   const openVote = () => {
+    if (!isLogin) {
+      swal.fire({
+        title: '로그인이 필요합니다',
+        text: '로그인시 사용 가능한 기능입니다.',
+        icon: 'warning',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+      return
+    }
+    setVoting(!voting)
+  }
+
+  const handleVote = (e) => {
+    e.preventDefault();
+    if (!selectedId) {
+      swal.fire({
+        title: '취소 되었습니다.',
+        text: '항목을 선택후 투표가 가능합니다.',
+        icon: 'warning',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+      return
+    }
+    const data = {
+      argId : selectedId,
+      userId : userInfo.id
+    }
+    contributeVote(data)
+    setSelectedId(null)
     setVoting(!voting)
   }
 
@@ -94,9 +118,11 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
           }}
         />
       </div>
-      {imsiVote && !voting && (
+      {vote && !voting && !vote.isComplete && (
         <div className="vote-view">
-          <VoteChart vote={imsiVote} />
+          <p className='headline'>투표명 : {vote.title}</p>
+          <p>투표 기간 : {vote.closedAt} 까지</p>
+          <VoteChart vote={vote} />
           <div className="vote-view-util">
             <button className='btn btn-gold' onClick={openVote}>투표하기</button>
           </div>
@@ -104,10 +130,15 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
       )}
       {voting && (
         <div className="vote-view">
-          <form action="" className='vote-form'>
-            {imsiVote.argument.map((arg, index) => <VoteArguments key={index} arg={arg} />)}
-            <button className='btn btn-gold' onClick={openVote}>투표완료</button>
+          <form action="" className='vote-form' onSubmit={handleVote}>
+            {vote.arguments.map((arg, index) => <VoteArguments key={index} arg={arg} selectedId={selectedId} onChange={setSelectedId} />)}
+            <button type='submit' className='btn btn-gold'>투표완료</button>
           </form>
+        </div>
+      )}
+      {vote && !voting && vote.isComplete && (
+        <div className="vote-view">
+          <VoteChart vote={vote} />
         </div>
       )}
       <div className="post-util">

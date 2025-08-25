@@ -13,19 +13,19 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const VoteChart = ({ vote }) => {
-  const colors = vote.argument.map(() => {
+  const colors = vote.arguments.map(() => {
     const r = Math.floor(Math.random() * 255);
     const g = Math.floor(Math.random() * 255);
     const b = Math.floor(Math.random() * 255);
     return `rgba(${r}, ${g}, ${b}, 1)`;
   });
-  const labels = vote.argument.map(arg => arg.content);
+  const labels = vote.arguments.map(arg => arg.content);
   const data = {
     labels,
     datasets: [
       {
         label: vote.title,
-        data: vote.argument.map(arg => arg.voteCount),
+        data: vote.arguments.map(arg => arg.voteCount),
         backgroundColor: colors,
         barThickness: 20,
       },
