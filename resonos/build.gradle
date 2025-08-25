@@ -23,7 +23,6 @@ configurations {
 repositories {
 	mavenCentral()
 }
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -64,6 +63,7 @@ dependencies {
     // Springdoc openapi
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
 }
+
 
 
 tasks.named('test') {

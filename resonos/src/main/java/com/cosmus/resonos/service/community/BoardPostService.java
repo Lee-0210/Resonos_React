@@ -60,7 +60,6 @@ public interface BoardPostService extends BaseService<BoardPost> {
     public List<ComVoteArgument> getArgumentsByVoteId(Long voteId) throws Exception;
     // 선택지별 투표 수 가져오기
     public int getVoteCountByArgumentId(Long argId) throws Exception;
-    
     // 게시글 ID로 투표 + 선택지 + 투표수 포함한 Map 조회
     Map<String, Object> getVotesWithResultsByPostId(Long postId) throws Exception;
 }

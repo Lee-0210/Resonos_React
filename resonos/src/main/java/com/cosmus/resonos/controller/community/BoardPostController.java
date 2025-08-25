@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.ComVote;
+import com.cosmus.resonos.domain.community.ComVoteArgument;
 import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommentService;
@@ -266,4 +269,132 @@ public class BoardPostController {
     //         return ResponseEntity.status(500).build();
     //     }
     // }
+
+
+// ===== 투표 관련 API 추가 =====
+
+    // 게시글별 투표 목록 조회
+    @GetMapping("/boards/{communityId}/posts/{postId}/votes")
+    public ResponseEntity<?> getVotesByPost(@PathVariable Long postId) {
+        try {
+            List<ComVote> votes = boardPostService.getVotesByPostId(postId);
+            return ResponseEntity.ok(votes);
+        } catch (Exception e) {
+            log.error("투표 목록 조회 실패", e);
+            return ResponseEntity.internalServerError()
+                .body(Map.of("error", "투표 목록 조회 중 오류가 발생했습니다."));
+        }
+    }
+
+    // 투표 상세 정보 조회 (선택지 + 투표수 포함)
+    @GetMapping("/votes/{voteId}/detail")
+    public ResponseEntity<?> getVoteDetail(@PathVariable Long voteId) {
+        try {
+            // 투표 선택지 목록
+            List<ComVoteArgument> arguments = boardPostService.getArgumentsByVoteId(voteId);
+            
+            // 각 선택지별 투표수 조회
+            Map<String, Object> response = new HashMap<>();
+            response.put("voteId", voteId);
+            
+            for (ComVoteArgument arg : arguments) {
+                int count = boardPostService.getVoteCountByArgumentId(arg.getId());
+                // ComVoteArgument에 voteCount 필드가 있다고 가정하거나, Map으로 처리
+            }
+            
+            response.put("arguments", arguments);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("투표 상세 조회 실패", e);
+            return ResponseEntity.internalServerError()
+                .body(Map.of("error", "투표 상세 조회 중 오류가 발생했습니다."));
+        }
+    }
+
+    // 투표 결과 조회 (게시글 단위)
+    @GetMapping("/boards/{communityId}/posts/{postId}/vote-results")
+    public ResponseEntity<?> getVoteResults(@PathVariable Long postId) {
+        try {
+            Map<String, Object> results = boardPostService.getVotesWithResultsByPostId(postId);
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            log.error("투표 결과 조회 실패", e);
+            return ResponseEntity.internalServerError()
+                .body(Map.of("error", "투표 결과 조회 중 오류가 발생했습니다."));
+        }
+    }
+
+    // 특정 선택지의 투표수 조회
+    @GetMapping("/vote-arguments/{argId}/count")
+    public ResponseEntity<?> getVoteCount(@PathVariable Long argId) {
+        try {
+            int count = boardPostService.getVoteCountByArgumentId(argId);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("argumentId", argId);
+            response.put("voteCount", count);
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("투표수 조회 실패", e);
+            return ResponseEntity.internalServerError()
+                .body(Map.of("error", "투표수 조회 중 오류가 발생했습니다."));
+        }
+    }
+
+  
+    // 투표 참여 (POST) - 실제 투표 기능
+    @PostMapping("/vote-arguments/{argId}/vote")
+    public ResponseEntity<?> submitVote(
+        @PathVariable Long argId, 
+        @RequestBody Map<String, Object> voteData,
+        @AuthenticationPrincipal CustomUser loginUser
+    ) {
+        try {
+            // 투표 처리 로직 (실제 구현은 Service에서)
+            Long userId = (loginUser != null) ? loginUser.getId() : null;
+            
+            // 실제 투표 처리 메소드 호출 필요
+            
+            
+            // 투표 후 결과 반환
+            int newCount = boardPostService.getVoteCountByArgumentId(argId);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "투표가 완료되었습니다.");
+            response.put("newCount", newCount);
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error("투표 처리 실패", e);
+            return ResponseEntity.internalServerError()
+                .body(Map.of("error", "투표 처리 중 오류가 발생했습니다."));
+        }
+    }
+
+    // 실시간 투표 결과 조회 (WebSocket에서도 사용 가능) - 아직 구현 안됨 
+    // @GetMapping("/boards/{communityId}/posts/{postId}/live-vote-results")
+    // public ResponseEntity<?> getLiveVoteResults(
+    //     @PathVariable Long communityId,
+    //     @PathVariable Long postId
+    // ) {
+    //     try {
+    //         Map<String, Object> results = boardPostService.getVotesWithResultsByPostId(postId);
+            
+    //         // 실시간 업데이트를 위한 타임스탬프 추가
+    //         results.put("timestamp", System.currentTimeMillis());
+            
+    //         return ResponseEntity.ok(results);
+    //     } catch (Exception e) {
+    //         log.error("실시간 투표 결과 조회 실패", e);
+    //         return ResponseEntity.internalServerError()
+    //             .body(Map.of("error", "실시간 투표 결과 조회 중 오류가 발생했습니다."));
+    //     }
+    // }
+
+
+
+
+
 }
