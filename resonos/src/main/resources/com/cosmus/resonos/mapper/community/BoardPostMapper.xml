@@ -38,14 +38,18 @@
         <result property="createdAt" column="vote_created_at"/>
         <result property="closedAt" column="vote_closed_at"/>
         <result property="isCompleted" column="vote_is_completed"/>
+        <result property="totalVoteCount" column="total_vote_count"/> 
+
         <collection property="arguments" ofType="com.cosmus.resonos.domain.community.ComVoteArgument">
             <id property="id" column="arg_id"/>
             <result property="content" column="arg_content"/>
             <result property="argNo" column="arg_no"/>
+            <result property="voteId" column="vote_id"/>
+            <result property="voteCount" column="vote_count"/> 
         </collection>
     </association>
-
   </resultMap>
+
 
   <select id="list" resultMap="BoardPostResultMap">
     SELECT * FROM board_post ORDER BY created_at DESC
@@ -315,18 +319,27 @@
 <!-- vote  -->
 <!-- 게시글 투표 목록 -->
 <select id="findVotesByPostId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVote">
-  SELECT id, post_id, title, is_completed
-  FROM com_vote
-  WHERE post_id = #{postId}
-  ORDER BY created_at DESC
+  SELECT v.id, v.post_id, v.title, v.is_completed,
+         COALESCE(COUNT(DISTINCT vs.id), 0) AS total_vote_count
+  FROM com_vote v
+  LEFT JOIN com_vote_argument a ON a.vote_id = v.id
+  LEFT JOIN vote_status vs ON vs.arg_id = a.id
+  WHERE v.post_id = #{postId}
+  GROUP BY v.id, v.post_id, v.title, v.is_completed, v.created_at
+  ORDER BY v.created_at DESC
 </select>
+
 
 <!-- 투표 선택지 목록 -->
 <select id="findArgumentsByVoteId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVoteArgument">
-  SELECT id, vote_id, content
-  FROM com_vote_argument
-  WHERE vote_id = #{voteId}
+  SELECT a.id, a.vote_id, a.content, a.arg_no,
+         COALESCE(COUNT(DISTINCT vs.id), 0) AS vote_count
+  FROM com_vote_argument a
+  LEFT JOIN vote_status vs ON vs.arg_id = a.id
+  WHERE a.vote_id = #{voteId}
+  GROUP BY a.id, a.vote_id, a.content, a.arg_no
 </select>
+
 
 <!-- 선택지별 투표 수 계산 -->
 <select id="countVoteResults" parameterType="long" resultType="com.cosmus.resonos.domain.community.VoteResult">

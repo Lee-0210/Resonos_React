@@ -25,6 +25,8 @@ public class ComVote {
     // DB 상 없는 컬럼
     // 투표 선택지
     private List<ComVoteArgument> arguments;
+    // 총 투표 수
+    private Long totalVoteCount;
 
     // 투표 결과 
     public Object getQuestion;

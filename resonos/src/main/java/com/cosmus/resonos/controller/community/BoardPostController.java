@@ -84,7 +84,7 @@ public class BoardPostController {
         try {
             Long userId = (loginUser != null) ? loginUser.getId() : null;
 
-            // 게시글 + 좋아요/싫어요 수
+            // 게시글 + 좋아요/싫어요 수 + 투표 정보 
             BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId, userId);
             if (post == null) {
                 return ResponseEntity.notFound().build();
