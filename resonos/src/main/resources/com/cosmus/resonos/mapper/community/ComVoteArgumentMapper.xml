@@ -11,15 +11,13 @@
 
   <insert id="insert" >
     INSERT INTO com_vote_argument (vote_id, content, arg_no)
-    VALUES (
+    SELECT
       #{voteId},
       #{content},
-      (SELECT new_arg_no FROM (
-        SELECT COALESCE(MAX(arg_no), 0) + 1 AS new_arg_no
-        FROM com_vote_argument
-        WHERE vote_id = #{voteId}
-      ) AS temp)
-    )
+      COALESCE(MAX(arg_no), 0) + 1
+    FROM (
+      SELECT * FROM com_vote_argument WHERE vote_id = #{voteId}
+    ) AS temp
   </insert>
 
 

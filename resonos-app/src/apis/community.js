@@ -119,3 +119,4 @@ export const commentLike = async (ids,data) => {
     }
   })
 }
+// 투표하기

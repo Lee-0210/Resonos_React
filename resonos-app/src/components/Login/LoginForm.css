@@ -1139,7 +1139,8 @@ h2 + #bio {
   border-radius: 10px;
   width: 500px;
   height: 300px;
-  color: var(--main-color)
+  color: var(--main-color);
+  z-index: 99;
 }
 .success-icon {
   margin-top: 80px !important;

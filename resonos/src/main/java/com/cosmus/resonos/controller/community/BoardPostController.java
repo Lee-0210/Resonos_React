@@ -172,13 +172,22 @@ public class BoardPostController {
             boardPost.setContent(request.getContent());
             boardPost.setCommunityId(communityId);
 
+            ComVote vote = null;
+            List<ComVoteArgument> arguments = null;
+
+            if (Boolean.TRUE.equals(request.getVoteActive()) && request.getVote() != null) {
+                vote = request.getVote();
+                arguments = vote.getArguments();
+            }
+
             if (loginUser != null) {
-                boardPostService.createPost(boardPost, loginUser);
+                boardPostService.createPost(boardPost, loginUser, vote, arguments, request.getVoteActive());
             } else {
                 boardPost.setGuestNickname(request.getGuestNickname());
                 boardPost.setGuestPassword(request.getGuestPassword());
-                boardPostService.createPost(boardPost, null);
+                boardPostService.createPost(boardPost, null, vote, arguments, request.getVoteActive());
             }
+            boardPost.setVote(vote);
 
             return new ResponseEntity<>(boardPost, HttpStatus.CREATED);
         } catch (Exception e) {
