@@ -736,13 +736,85 @@
 
 .wysiwyg-wrapper .cke {
   margin-bottom: 30px;
+  position: relative;
 }
 
 .wysiwyg-wrapper .actions {
-  width: 300px;
+  width: 350px;
   display: flex;
   justify-content: space-evenly;
 }
 .wysiwyg-wrapper .actions .btn {
   padding: 5px 30px;
 }
+
+/* CKEditor */
+.ck-editor__editable_inline {
+    min-height: 350px;
+}
+
+/* 투표 영역 */
+.free-vote {
+  border: 1px solid var(--main-color);
+  min-width: 500px;
+  padding: 20px;
+  margin-bottom: 50px;
+}
+
+.free-vote input[type="text"] {
+  padding-left: 10px;
+}
+.free-vote input[type="text"]:focus {outline: none;}
+.free-vote input[type="text"]::placeholder {
+  color: red;
+}
+
+.free-vote .top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  height: 35px;
+}
+.free-vote .top input[type="text"] {
+  width: 35%;
+}
+.free-vote .middle {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+.free-vote .middle label {color: var(--main-color);}
+.free-vote .middle #datePicker {
+  padding: 0 10px;
+}
+
+
+.free-vote ul {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.free-vote ul li {
+  width: 70%;
+  padding: 5px 0;
+  display: flex;
+  justify-content: center;
+}
+.free-vote ul li > div {width: 100%;}
+
+.free-vote ul li span {
+  display: inline-block;
+  min-width: 20px;
+}
+.free-vote ul li input[type="text"] {
+  margin-left: 20px;
+  width: 80%;
+}
+.free-vote ul li .btn {
+  margin-left: 10px;
+}
+
+

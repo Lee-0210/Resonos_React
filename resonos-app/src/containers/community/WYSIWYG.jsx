@@ -7,21 +7,32 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { LoginContext } from '../../contexts/LoginContextProvider';
 import * as api from '../../apis/community'
 import swal from 'sweetalert2';
+import FreeVote from '../../components/community/card/FreeVote';
 
 const WYSIWYG = ({ post, ids }) => {
-  // state 
+  // state
   const [title, setTitle] = useState('');
   const [guestNick, setGuestNick] = useState('');
   const [tempPw, setTempPw] = useState('');
   const [content, setContent] = useState('');
   const [fileIdList, setFileIdList] = useState([]) // 선택 삭제 id 목록
-  const [mainFile, setMainFile] = useState(null)   // 
+  const [mainFile, setMainFile] = useState(null)   //
   const [files, setFiles] = useState(null)
+
+  // 투표
+  const [voteActive, setVoteActive] = useState(false)
+  const [voteItems, setVoteItems] = useState([
+    {itemId: 1, orderNo: 1, content: '항목1'},
+    {itemId: 2, orderNo: 2, content: '항목2'}
+  ])
+  const [voteTitle, setVoteTitle] = useState()
+  console.log('voteTitle :', voteTitle)
+  const [closedAt, setClosedAt] = useState()
 
   const editorRef = useRef(null);
   const { userInfo, isLogin } = useContext(LoginContext)
   const navigate = useNavigate()
-  // id 가져오기 
+  // id 가져오기
 
   // post 값이 바뀌면 state 갱신
   useEffect(() => {
@@ -29,7 +40,7 @@ const WYSIWYG = ({ post, ids }) => {
       setTitle(post.title || '');
       setGuestNick(post.guestNickname || '');
       setContent(post.content || '');
-      
+
       // CKEditor가 준비된 상태라면 editor에 내용 설정
       if (editorRef.current) {
         editorRef.current.setData(post.content || '');
@@ -37,19 +48,46 @@ const WYSIWYG = ({ post, ids }) => {
     }
   }, [post]);
 
-  // 변경 이벤트 함수 
+  // 변경 이벤트 함수
   const changeTitle = (e) => { setTitle(e.target.value) }
   const changeWriter = (e) => { setGuestNick(e.target.value) }
   const changeTempPw = (e) => { setTempPw(e.target.value) }
   const changeContent = (e) => { setContent(e.target.value) }
 
-  // 게시글 등록 함수 
+  // 투표 관련 함수
+  const addVoteRow = () => {
+    setVoteItems(prev => {
+      const lastOrderNo = prev.length ? prev[prev.length - 1].orderNo : 0
+      const newId = prev.length ? Math.max(...prev.map(v => v.itemId)) + 1 : 1
+      return [
+        ...prev,
+        { itemId: newId, orderNo: lastOrderNo + 1, content: `항목${lastOrderNo + 1}` }
+      ]
+    })
+  }
+
+  const deleteVoteRow = (index) => {
+    setVoteItems(prev => {
+      const newArr = prev.filter((_, i) => i !== index)
+      return newArr.map((item, i) => ({ ...item, orderNo: i + 1 }))
+    })
+  }
+
+
+  // 게시글 등록 함수
   const postInsert = async (ids) => {
     const boardId = ids
     const data = {
       content: content,
       title: title,
       ...(isLogin ? {} : { guestNickname: guestNick, guestPassword: tempPw }),
+      comVotes: [
+        {
+          title: voteTitle,
+          closedAt: closedAt,
+          arguments: voteItems
+        }
+      ],
     }
     console.log(data)
     try {
@@ -109,7 +147,7 @@ const WYSIWYG = ({ post, ids }) => {
     }
   }
 
-  // 삭제 확인 
+  // 삭제 확인
   // const handleDelete = () => {
   //   const check = window.confirm('정말 삭제하시겠습니까?')
   //   if (check) {
@@ -284,18 +322,46 @@ const WYSIWYG = ({ post, ids }) => {
               }}
             />
           </div>
+          {
+            voteActive
+            &&
+            <FreeVote
+              voteItems={voteItems}
+              addVoteRow={addVoteRow}
+              deleteVoteRow={deleteVoteRow}
+              setClosedAt={setClosedAt}
+              setVoteTitle={setVoteTitle}
+            />
+          }
           {/* 등록시 */}
           {!post && (
             <div className="actions">
               <button className="btn btn-gold" onClick={() => postInsert(ids.boardId)}>등록</button>
               <Link className="btn btn-gold" to={`/community/boards/${ids.boardId}`}>취소</Link>
+              <button
+                className="btn btn-gold"
+                onClick={() => setVoteActive(!voteActive)}
+              >
+                {
+                  voteActive ? '투표취소' : '투표하기'
+                }
+              </button>
             </div>
+
           )}
           {/* 수정시 */}
           {post && (
             <div className="actions">
               <button className="btn btn-gold" onClick={() => postUpdate(ids)}>수정</button>
               <Link className="btn btn-gold" to={`/community/boards/${ids.boardId}/posts/${ids.postId}`}>취소</Link>
+              <button
+                className="btn btn-gold"
+                onClick={() => setVoteActive(!voteActive)}
+              >
+                {
+                  voteActive ? '투표취소' : '투표하기'
+                }
+              </button>
             </div>
           )}
         </div>
