@@ -22,6 +22,7 @@ import com.cosmus.resonos.mapper.community.ComVoteMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -233,54 +234,60 @@ public class BoardPostServiceImpl implements BoardPostService {
 
     @Override
     @Transactional
-    public void createPost(BoardPost boardPost, CustomUser loginUser, ComVote vote, List<ComVoteArgument> arguments, Boolean voteActive) throws Exception {
+    public void createPost(
+        @Valid BoardPost boardPost,
+        CustomUser loginUser,
+        @Valid ComVote vote,
+        @Valid List<ComVoteArgument> arguments,
+        Boolean voteActive
+    ) throws Exception {
         if (loginUser != null) {
-            if (boardPost.getTitle() == null || boardPost.getTitle().isBlank()) {
-                throw new IllegalArgumentException("제목을 입력하세요.");
-            }
-            if (boardPost.getContent() == null || boardPost.getContent().isBlank()) {
-                throw new IllegalArgumentException("내용을 입력하세요.");
-            }
+            // if (boardPost.getTitle() == null || boardPost.getTitle().isBlank()) {
+            //     throw new IllegalArgumentException("제목을 입력하세요.");
+            // }
+            // if (boardPost.getContent() == null || boardPost.getContent().isBlank()) {
+            //     throw new IllegalArgumentException("내용을 입력하세요.");
+            // }
             boardPost.setUserId(loginUser.getId());
             boardPost.setGuestNickname(null);
             boardPost.setGuestPassword(null);
             boardPost.setUserNickname(loginUser.getUser().getNickname());
         } else {
-            if (boardPost.getGuestNickname() == null || boardPost.getGuestNickname().isBlank()) {
-                throw new IllegalArgumentException("닉네임을 입력하세요.");
-            }
-            if (boardPost.getGuestPassword() == null || boardPost.getGuestPassword().isBlank()) {
-                throw new IllegalArgumentException("비밀번호를 입력하세요.");
-            }
-            if (boardPost.getTitle() == null || boardPost.getTitle().isBlank()) {
-                throw new IllegalArgumentException("제목을 입력하세요.");
-            }
-            if (boardPost.getContent() == null || boardPost.getContent().isBlank()) {
-                throw new IllegalArgumentException("내용을 입력하세요.");
-            }
+            // if (boardPost.getGuestNickname() == null || boardPost.getGuestNickname().isBlank()) {
+            //     throw new IllegalArgumentException("닉네임을 입력하세요.");
+            // }
+            // if (boardPost.getGuestPassword() == null || boardPost.getGuestPassword().isBlank()) {
+            //     throw new IllegalArgumentException("비밀번호를 입력하세요.");
+            // }
+            // if (boardPost.getTitle() == null || boardPost.getTitle().isBlank()) {
+            //     throw new IllegalArgumentException("제목을 입력하세요.");
+            // }
+            // if (boardPost.getContent() == null || boardPost.getContent().isBlank()) {
+            //     throw new IllegalArgumentException("내용을 입력하세요.");
+            // }
             boardPost.setUserId(null);
             boardPost.setGuestPassword(passwordEncoder.encode(boardPost.getGuestPassword()));
         }
         boardPostMapper.insert(boardPost);
         boardPost.setCreatedAt(new Date());
         if (Boolean.TRUE.equals(voteActive)) {
-            if (vote == null) {
-                throw new IllegalArgumentException("투표 정보를 입력하세요.");
-            }
-            if (vote.getTitle() == null || vote.getTitle().isBlank()) {
-                throw new IllegalArgumentException("투표 제목을 입력하세요.");
-            }
-            if (vote.getClosedAt() == null) {
-                throw new IllegalArgumentException("투표 종료일을 입력하세요.");
-            }
-            if (arguments == null || arguments.isEmpty()) {
-                throw new IllegalArgumentException("투표 항목을 모두 입력하세요.");
-            }
-            for (ComVoteArgument arg : arguments) {
-                if (arg.getContent() == null || arg.getContent().isBlank()) {
-                    throw new IllegalArgumentException("투표 항목의 내용을 모두 입력하세요.");
-                }
-            }
+            // if (vote == null) {
+            //     throw new IllegalArgumentException("투표 정보를 입력하세요.");
+            // }
+            // if (vote.getTitle() == null || vote.getTitle().isBlank()) {
+            //     throw new IllegalArgumentException("투표 제목을 입력하세요.");
+            // }
+            // if (vote.getClosedAt() == null) {
+            //     throw new IllegalArgumentException("투표 종료일을 입력하세요.");
+            // }
+            // if (arguments == null || arguments.isEmpty()) {
+            //     throw new IllegalArgumentException("투표 항목을 모두 입력하세요.");
+            // }
+            // for (ComVoteArgument arg : arguments) {
+            //     if (arg.getContent() == null || arg.getContent().isBlank()) {
+            //         throw new IllegalArgumentException("투표 항목의 내용을 모두 입력하세요.");
+            //     }
+            // }
             vote.setPostId(boardPost.getId()); // 게시글 id 연결
             comVoteMapper.insert(vote);
             comVoteService.createVoteWithArguments(vote, arguments);
