@@ -9,6 +9,7 @@ const PostTitle = ({ post }) => {
       <div className="writer-and-date">
         <p>{(post.userNickname ? post.userNickname : post.guestNickname)}</p>
         <p>{post.createdAt}</p>
+        <p>조회수 : {post.views}</p>
       </div>
     </div>
   )

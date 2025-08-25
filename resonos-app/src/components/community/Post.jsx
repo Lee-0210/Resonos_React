@@ -64,8 +64,8 @@ const Post = () => {
 
 
   // 회원, 비회원 게시글 삭제
-  const deletePost = async (pw, id, isLogged) => {
-    if (!pw) {
+  const deletePost = async (pw, ids, isLogged) => {
+    if (!isLogged && !pw) {
       swal.fire({
         title: '취소 되었습니다.',
         text: '비밀번호를 입력해주세요.',
@@ -76,8 +76,9 @@ const Post = () => {
       })
       return
     }
+
     const data = {
-      ...(!isLogged && {guestPassword : pw })
+      guestPassword: pw
     }
     const result = await swal.fire({
       title: '삭제 확인',
@@ -92,9 +93,17 @@ const Post = () => {
     })
     if (result.isConfirmed) {
       try {
-        const response = await api.deletePost(data,id)
+        const response = await api.deletePost(data, ids)
         console.log(response)
-        navigate(`/community/${boardId}`)
+        swal.fire({
+          title: '삭제 완료',
+          text: '게시글이 성공적으로 삭제되었습니다.',
+          icon: 'success',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+        navigate(`/community/boards/${boardId}`)
       } catch (error) {
         console.log(error)
         swal.fire({
@@ -170,10 +179,10 @@ const Post = () => {
       <div className="post-wrapper">
         <div className="container">
           <PostTitle post={post} />
-          <PostContent post={post} ids={{boardId, postId}} swal={swal}
+          <PostContent post={post} ids={{ boardId, postId }} swal={swal}
             isLogin={isLogin} userInfo={userInfo} api={api}
             deletePost={deletePost} reportPost={reportPost} />
-          <PostComment ids={{boardId, postId}} swal={swal}
+          <PostComment ids={{ boardId, postId }} swal={swal}
             initComments={comments} navigate={navigate}
             isLogin={isLogin} userInfo={userInfo} pagination={pagination} />
         </div>
