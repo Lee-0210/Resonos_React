@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cosmus.resonos.mapper.websocket.NotificationMapper">
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cosmus.resonos.mapper.websocket.WebsocketNotificationMapper">
 
-    <insert id="insert" parameterType="com.cosmus.resonos.domain.websocket.Notification"
+    <insert id="insert" parameterType="com.cosmus.resonos.domain.websocket.WebsocketNotification"
         useGeneratedKeys="true" keyProperty="id">
         INSERT INTO notification(type, message, content, is_read, created_at, target_id, user_id)
         VALUES(#{type}, #{message}, #{content}, #{isRead}, NOW(), #{targetId}, #{userId})
     </insert>
 
-    <select id="findByUserId" parameterType="long" resultType="com.cosmus.resonos.domain.websocket.Notification">
+    <select id="findByUserId" parameterType="long" resultType="com.cosmus.resonos.domain.websocket.WebsocketNotification">
         SELECT * FROM notification WHERE user_id = #{userId} ORDER BY created_at DESC
     </select>
 
-    <select id="findById" parameterType="long" resultType="com.cosmus.resonos.domain.websocket.Notification">
+    <select id="findById" parameterType="long" resultType="com.cosmus.resonos.domain.websocket.WebsocketNotification">
         SELECT * FROM notification WHERE id = #{id}
     </select>
 
@@ -25,4 +25,3 @@
         DELETE FROM notification WHERE id = #{id}
     </delete>
 </mapper>
-
