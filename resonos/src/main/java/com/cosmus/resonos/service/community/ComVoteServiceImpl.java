@@ -92,4 +92,23 @@ public class ComVoteServiceImpl implements ComVoteService {
     public ComVote selectByPostId(Long postId) throws Exception {
         return comVoteMapper.selectByPostId(postId);
     }
+
+    // 투표 결과 수정 
+    @Override
+    public void updateVoteAndArguments(Long voteId, ComVote updatedVote) throws Exception {
+        // 1. 투표 제목 및 종료일 등 기본 정보 업데이트
+        comVoteMapper.update(updatedVote);
+
+        // 2. 기존 선택지 삭제
+        comVoteArgumentMapper.deleteByVoteId(voteId);
+
+        // 3. 새로운 선택지 추가
+        List<ComVoteArgument> newArguments = updatedVote.getArguments();
+        if (newArguments != null) {
+            for (ComVoteArgument arg : newArguments) {
+                arg.setVoteId(voteId); // voteId 설정
+                comVoteArgumentMapper.insert(arg);
+            }
+        }
+    }
 }

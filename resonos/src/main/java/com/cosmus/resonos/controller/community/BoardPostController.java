@@ -147,6 +147,9 @@ public class BoardPostController {
             postWithComments.put("comments", comments.getList());
             postWithComments.put("commentsPagination", commentsPagination);
 
+            // 투표 정보 추가
+            postWithComments.put("vote", post.getVote());
+
             return new ResponseEntity<>(postWithComments, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -190,6 +193,7 @@ public class BoardPostController {
     public ResponseEntity<?> updatePost(
         @PathVariable("communityId") Long communityId,
         @PathVariable("postId") Long postId,
+        @PathVariable(value="voteId", required = false) Long voteId,
         @RequestBody BoardPost request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
@@ -214,6 +218,12 @@ public class BoardPostController {
                     !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword())) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
+            }
+            // 투표 수정 
+            if (voteId != null && request.getVote() != null) {
+                ComVote updatedVote = request.getVote();
+                updatedVote.setId(voteId);
+                comVoteService.updateVoteAndArguments(voteId, updatedVote);
             }
 
             boardPost.setTitle(request.getTitle());

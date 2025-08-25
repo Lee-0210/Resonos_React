@@ -9,4 +9,6 @@ public interface ComVoteArgumentMapper extends BaseMapper<ComVoteArgument> {
 
     int completeAll() throws Exception;
     int deleteAll() throws Exception;
+    // 특정 투표의 모든 선택지 삭제
+    void deleteByVoteId(Long voteId);
 }

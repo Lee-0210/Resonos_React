@@ -49,4 +49,11 @@
   <delete id="deleteAll">
     DELETE FROM com_vote_argument
   </delete>
+
+  <!-- 특정 투표의 모든 선택지 삭제 -->
+  <delete id="deleteByVoteId">
+    DELETE FROM com_vote_argument
+    WHERE vote_id = #{voteId}
+  </delete>
+
 </mapper>
