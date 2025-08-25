@@ -170,12 +170,13 @@ public class BoardPostController {
             boardPost.setCommunityId(communityId);
 
             if (loginUser != null) {
-                boardPostService.createPost(boardPost, loginUser);
+                boardPostService.createPost(boardPost, loginUser, request.getVote(), request.getVote().getArguments());
             } else {
                 boardPost.setGuestNickname(request.getGuestNickname());
                 boardPost.setGuestPassword(request.getGuestPassword());
-                boardPostService.createPost(boardPost, null);
+                boardPostService.createPost(boardPost, null, request.getVote(), request.getVote().getArguments());
             }
+            boardPost.setVote(request.getVote());
 
             return new ResponseEntity<>(boardPost, HttpStatus.CREATED);
         } catch (Exception e) {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.ComVoteArgument;
@@ -76,14 +77,15 @@ public class ComVoteServiceImpl implements ComVoteService {
     }
 
     @Override
-    public void createVoteWithArguments(ComVote comVote, List<String> arguments) throws Exception {
+    @Transactional
+    public void createVoteWithArguments(ComVote comVote, List<ComVoteArgument> arguments) throws Exception {
         comVoteMapper.insert(comVote);
         Long voteId = comVote.getId();
 
-        for (String arg : arguments) {
+        for (ComVoteArgument arg : arguments) {
             ComVoteArgument comVoteArgument = new ComVoteArgument();
             comVoteArgument.setVoteId(voteId);
-            comVoteArgument.setContent(arg);
+            comVoteArgument.setContent(arg.getContent());
             comVoteArgumentMapper.insert(comVoteArgument);
         }
     }

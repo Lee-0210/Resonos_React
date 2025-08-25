@@ -8,6 +8,7 @@ import { LoginContext } from '../../contexts/LoginContextProvider';
 import * as api from '../../apis/community'
 import swal from 'sweetalert2';
 import FreeVote from '../../components/community/card/FreeVote';
+import { MySwal } from '../../apis/alert';
 
 const WYSIWYG = ({ post, ids }) => {
   // state
@@ -26,7 +27,6 @@ const WYSIWYG = ({ post, ids }) => {
     {itemId: 2, orderNo: 2, content: '항목2'}
   ])
   const [voteTitle, setVoteTitle] = useState()
-  console.log('voteTitle :', voteTitle)
   const [closedAt, setClosedAt] = useState()
 
   const editorRef = useRef(null);
@@ -56,6 +56,21 @@ const WYSIWYG = ({ post, ids }) => {
 
   // 투표 관련 함수
   const addVoteRow = () => {
+    if(voteItems.length >= 7) {
+      MySwal.fire({
+        position: "center",
+        icon: "warning",
+        title: '항목의 최대 개수는 7개입니다.',
+        showConfirmButton: false,
+        timer: 800,
+        customClass: {
+          popup: 'follow-popup',
+          icon: 'success-icon',
+          title: 'alert-title'
+        }
+      })
+      return
+    }
     setVoteItems(prev => {
       const lastOrderNo = prev.length ? prev[prev.length - 1].orderNo : 0
       const newId = prev.length ? Math.max(...prev.map(v => v.itemId)) + 1 : 1
@@ -67,6 +82,21 @@ const WYSIWYG = ({ post, ids }) => {
   }
 
   const deleteVoteRow = (index) => {
+    if(voteItems.length <= 2) {
+      MySwal.fire({
+        position: "center",
+        icon: "warning",
+        title: '항목의 최소 개수는 2개입니다.',
+        showConfirmButton: false,
+        timer: 800,
+        customClass: {
+          popup: 'follow-popup',
+          icon: 'success-icon',
+          title: 'alert-title'
+        }
+      })
+      return
+    }
     setVoteItems(prev => {
       const newArr = prev.filter((_, i) => i !== index)
       return newArr.map((item, i) => ({ ...item, orderNo: i + 1 }))
@@ -81,13 +111,12 @@ const WYSIWYG = ({ post, ids }) => {
       content: content,
       title: title,
       ...(isLogin ? {} : { guestNickname: guestNick, guestPassword: tempPw }),
-      comVotes: [
-        {
-          title: voteTitle,
-          closedAt: closedAt,
-          arguments: voteItems
-        }
-      ],
+      vote: {
+        title: voteTitle,
+        closedAt: closedAt,
+        arguments: voteItems
+      },
+      voteActive
     }
     console.log(data)
     try {

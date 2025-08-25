@@ -18,6 +18,7 @@ import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.ComVoteArgument;
 import com.cosmus.resonos.domain.community.VoteResult;
 import com.cosmus.resonos.mapper.community.BoardPostMapper;
+import com.cosmus.resonos.mapper.community.ComVoteMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -32,6 +33,12 @@ public class BoardPostServiceImpl implements BoardPostService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ComVoteService comVoteService;
+
+    @Autowired
+    private ComVoteMapper comVoteMapper;
 
     public BoardPostServiceImpl(BoardPostMapper boardPostMapper) {
         this.boardPostMapper = boardPostMapper;
@@ -225,21 +232,25 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public void createPost(BoardPost boardPost, CustomUser loginUser) throws Exception {
+    @Transactional
+    public void createPost(BoardPost boardPost, CustomUser loginUser, ComVote vote, List<ComVoteArgument> arguments) throws Exception {
         if (loginUser != null) {
             boardPost.setUserId(loginUser.getId());
             boardPost.setGuestNickname(null);
             boardPost.setGuestPassword(null);
-            boardPostMapper.insert(boardPost);
-            boardPost.setUserNickname(boardPostMapper.select(boardPost.getId()).getUserNickname());
+            boardPost.setUserNickname(loginUser.getUser().getNickname());
         } else {
             boardPost.setUserId(null);
             if (boardPost.getGuestPassword() == null || boardPost.getGuestPassword().isBlank()) {
                 throw new IllegalArgumentException("비밀번호를 입력하세요.");
             }
             boardPost.setGuestPassword(passwordEncoder.encode(boardPost.getGuestPassword()));
-
-            boardPostMapper.insert(boardPost);
+        }
+        boardPostMapper.insert(boardPost);
+        if (vote != null && arguments != null && !arguments.isEmpty()) {
+            vote.setPostId(boardPost.getId()); // 게시글 id 연결
+            comVoteMapper.insert(vote);
+            comVoteService.createVoteWithArguments(vote, arguments);
         }
         boardPost.setCreatedAt(new Date());
     }

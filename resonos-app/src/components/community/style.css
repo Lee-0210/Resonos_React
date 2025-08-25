@@ -777,14 +777,28 @@
 /* CKEditor */
 .ck-editor__editable_inline {
     min-height: 100px;
+    border-radius: 0 0 10px 10px !important;
 }
 
-/* 투표 영역 */
+/* ===== 투표 영역 ===== */
+.free-vote .border-form {
+  border: 1px solid var(--main-color);
+  border-radius: 10px;
+  background-color: #1C202A;
+}
+
 .free-vote {
+  margin-bottom: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.free-vote .inner {
+  flex: 0.7;
   border: 1px solid var(--main-color);
   min-width: 500px;
   padding: 20px;
-  margin-bottom: 50px;
+  border-radius: 10px;
 }
 
 .free-vote input[type="text"] {
@@ -804,30 +818,47 @@
 }
 .free-vote .top input[type="text"] {
   width: 35%;
+  color: #fff;
 }
 .free-vote .middle {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin-top: 20px;
-  gap: 20px;
 }
-.free-vote .middle label {color: var(--main-color);}
+.free-vote .middle label {
+  color: var(--main-color);
+  display: block;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
 .free-vote .middle #datePicker {
+  width: 50%;
   padding: 0 10px;
+  text-align: center;
+  color: var(--main-color);
 }
-
+.free-vote .middle #datePicker::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  color: var(--main-color);
+}
 
 .free-vote ul {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 25px;
+  padding-left: 0;
 }
 .free-vote ul li {
-  width: 70%;
+  width: 80%;
   padding: 5px 0;
+}
+.free-vote ul li > div {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .free-vote ul li > div {width: 100%;}
 
@@ -836,11 +867,20 @@
   min-width: 20px;
 }
 .free-vote ul li input[type="text"] {
-  margin-left: 20px;
+  background-color: #fff;
   width: 80%;
 }
 .free-vote ul li .btn {
   margin-left: 10px;
 }
-
-
+.free-vote .btn-red {
+  font-size: 1.4rem;
+  padding: 3px 7px;
+  border-radius: 5px;
+  border: 1px solid rgb(255, 85, 85);
+  color: rgb(255, 85, 85);
+}
+.free-vote .btn-red:hover {
+  color: #fff;
+  border-color: #fff;
+}
