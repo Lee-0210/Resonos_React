@@ -2,26 +2,40 @@ package com.cosmus.resonos.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.socket.config.annotation.*;
 
-import com.cosmus.resonos.util.GlobalPrincipalAdvice;
+@Configuration
+@EnableWebSocketMessageBroker
+public class WebConfig implements WebSocketMessageBrokerConfigurer {
 
-@Configuration          // 빈 등록 설정 클래스 지정
-public class WebConfig {
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // 클라이언트 STOMP 접속 엔드포인트: "/ws-alarm"
+        registry.addEndpoint("/ws-alarm")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
+        
+        // SockJS 없는 순수 WebSocket 엔드포인트도 추가 (선택사항)
+        registry.addEndpoint("/ws-alarm")
+                .setAllowedOriginPatterns("*");
+    }
 
-    @Bean                   // 빈 등록
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        // /topic, /queue 브로커 활성화
+        config.enableSimpleBroker("/topic", "/queue");
+        // 클라이언트 SEND 주소 접두어: /app
+        config.setApplicationDestinationPrefixes("/app");
+        // 유저 푸시: /user/queue/alarms 등 자동 매핑
+        config.setUserDestinationPrefix("/user");
+    }
+
+    // PasswordEncoder Bean 등록 (임시 해결책)
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-        // return NoOpPasswordEncoder.getInstance();
-        // BCryptPasswordEncoder        : BCrypt 해시 알고리즘을 사용하여 비밀번호 암호화
-        // NoOpPasswordEncoder          : 암호화 없이 비밀번호를 저장
-        // ...
     }
-
-    @Bean
-    public GlobalPrincipalAdvice globalPrincipalAdvice() {
-        return new GlobalPrincipalAdvice();
-    }
-
 }

@@ -10,15 +10,20 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.ComVoteArgument;
+import com.cosmus.resonos.domain.community.VoteResult;
 import com.cosmus.resonos.mapper.community.BoardPostMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class BoardPostServiceImpl implements BoardPostService {
 
@@ -248,6 +253,63 @@ public class BoardPostServiceImpl implements BoardPostService {
     @Override
     public boolean incrementViewCount(Long id) throws Exception {
         return boardPostMapper.incrementViewCount(id) > 0;
+    }
+
+    // vote 
+    @Override
+    @Transactional
+    public boolean submitVote(Long argId, Long userId, String guestId) throws Exception {
+        try {
+            // 1. 중복 투표 확인
+            if (hasUserVoted(argId, userId, guestId)) {
+                throw new Exception("이미 투표하셨습니다.");
+            }
+            
+            // 2. 투표 선택지 존재 여부 확인
+            List<ComVoteArgument> arguments = boardPostMapper.findArgumentsByVoteId(argId);
+            if (arguments == null || arguments.isEmpty()) {
+                throw new Exception("존재하지 않는 투표 선택지입니다.");
+            }
+            
+            // 3. 투표 기록 저장
+            VoteResult voteResult = new VoteResult();
+            voteResult.setArgId(argId);
+            voteResult.setVoteId(userId);
+            voteResult.setCount(1);
+            voteResult.setCreatedAt(new Date());
+            
+            int result = boardPostMapper.insertVoteResult(voteResult);
+            return result > 0;
+            
+        } catch (Exception e) {
+            log.error("투표 처리 실패: argId={}, userId={}, guestId={}", argId, userId, guestId, e);
+            throw e;
+        }
+    }
+
+    @Override
+    public boolean hasUserVoted(Long argId, Long userId, String guestId) throws Exception {
+        try {
+            int count = boardPostMapper.checkUserVoteExists(argId, userId, guestId);
+            return count > 0;
+            
+        } catch (Exception e) {
+            log.error("투표 이력 확인 실패: argId={}, userId={}, guestId={}", argId, userId, guestId, e);
+            throw e;
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean cancelVote(Long argId, Long userId, String guestId) throws Exception {
+        try {
+            int result = boardPostMapper.deleteVoteResult(argId, userId, guestId);
+            return result > 0;
+            
+        } catch (Exception e) {
+            log.error("투표 취소 실패: argId={}, userId={}, guestId={}", argId, userId, guestId, e);
+            throw e;
+        }
     }
 
 

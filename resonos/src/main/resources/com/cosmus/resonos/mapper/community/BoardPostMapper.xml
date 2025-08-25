@@ -308,8 +308,26 @@
   WHERE arg_id = #{argId}
 </select>
 
+<!-- 투표 저장  -->
+<insert id="insertVoteResult" resultType="int">
+  INSERT INTO vote_result (vote_id, arg_id, user_id, guest_id, count, created_at)
+  VALUES (#{voteId}, #{argId}, #{userId}, #{guestId}, #{count}, #{createdAt})
+</insert>
 
+<!-- 투표 이력 확인 -->
+<select id="checkUserVoteExists" resultType="int">
+  SELECT COUNT(*)
+  FROM vote_result
+  WHERE arg_id = #{argId}
+    AND ((user_id IS NOT NULL AND user_id = #{userId})
+         OR (guest_id IS NOT NULL AND guest_id = #{guestId}))
+</select>
 
+<!-- 투표 결과 삭제 -->
+<delete id="deleteVoteResult" parameterType="long">
+    DELETE FROM vote_result
+    WHERE arg_id = #{argId}
+</delete>
 
 
 
