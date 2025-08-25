@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.cosmus.resonos.mapper.community.VoteStatusMapper">
+
+    <select id="list" resultType="VoteStatus">
+        SELECT * FROM vote_status
+    </select>
+    
+    <insert id="insert">
+        INSERT INTO vote_status(
+        user_id, arg_id
+        )
+        VALUES (
+        #{userId}, #{argId}
+        )
+    </insert>
+    
+    <update id="update">
+        UPDATE vote_status
+        <set>
+        arg_id = #{argId}, user_id = #{userId}, created_at = now()
+        </set>
+        WHERE id = #{id} 
+    </update>
+    
+    <delete id="delete">
+        DELETE FROM vote_status WHERE id = #{id}
+    </delete>
+
+<!-- deleteByArgId -->
+    <delete id="deleteByArgId">
+        DELETE FROM vote_status WHERE arg_id = #{argId}
+    </delete>
+
+
+</mapper>
+

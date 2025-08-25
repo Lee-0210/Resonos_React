@@ -9,4 +9,6 @@ public interface VoteStatusMapper extends BaseMapper<VoteStatus> {
 
     int completeAll() throws Exception;
     int deleteAll() throws Exception;
+    // 특정 선택지의 모든 투표 상태 삭제
+    void deleteByArgId(Long id);
 }
