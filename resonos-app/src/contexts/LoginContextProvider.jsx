@@ -183,14 +183,6 @@ const LoginContextProvider = ({children}) => {
     }
   }, [])
 
-  useEffect(() => {
-    const path = location.pathname.split('/')[3]
-    if (path !== "more") {
-      localStorage.removeItem("keyword");
-      localStorage.removeItem("type");
-    }
-  }, [location])
-
   return (
     // 컨텍스 값 지정 -> value{?, ?}
     <LoginContext.Provider value={{isLogin, login, userInfo, roles, isLoading, logout, api, path, setIsLogin, setUserInfo, setRoles}}>
