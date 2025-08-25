@@ -94,4 +94,9 @@ public class ComVoteServiceImpl implements ComVoteService {
     public ComVote selectByPostId(Long postId) throws Exception {
         return comVoteMapper.selectByPostId(postId);
     }
+
+    @Override
+    public boolean deleteByPostId(Long postId) throws Exception {
+        return comVoteMapper.deleteByPostId(postId) > 0;
+    }
 }

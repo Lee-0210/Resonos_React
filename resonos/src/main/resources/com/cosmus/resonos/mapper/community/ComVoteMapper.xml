@@ -52,6 +52,11 @@
     WHERE id = #{id}
   </delete>
 
+  <delete id="deleteByPostId">
+    DELETE FROM com_vote
+    WHERE post_id = #{postId}
+  </delete>
+
   <update id="completeAll">
     UPDATE com_vote SET -- 수정필드 없음
   </update>
