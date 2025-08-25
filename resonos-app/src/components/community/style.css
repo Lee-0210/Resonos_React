@@ -692,6 +692,32 @@
   border: none !important;
   box-shadow: none !important;
 }
+/* 투표 */
+.post-wrapper .vote-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--main-color);
+  max-width: 500px;
+  padding: 10px;
+  min-height: 150px;
+  margin: auto;
+  border-radius: 10px;
+  flex-direction: column;
+}
+
+.vote-view .vote-line {
+  display: flex;
+  gap: 15px;
+  /* padding: 3px 0px; */
+}
+
+.vote-view .vote-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .ck.ck-sticky-panel__content {
   border: none !important;
   box-shadow: none !important; /* 그림자까지 제거 */
@@ -750,7 +776,7 @@
 
 /* CKEditor */
 .ck-editor__editable_inline {
-    min-height: 350px;
+    min-height: 100px;
 }
 
 /* 투표 영역 */

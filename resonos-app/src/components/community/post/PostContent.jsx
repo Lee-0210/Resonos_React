@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 // ckeditor5
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import VoteChart from '../card/VoteChart';
+import VoteArguments from '../card/VoteArguments';
 
-const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, reportPost }) => {
+const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, reportPost, vote }) => {
 
   const [openPw, setOpenPw] = useState(false)
   const [tempPw, setTempPw] = useState(null)
@@ -12,6 +14,24 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
   const [dislikeCount, setDislikeCount] = useState(post.postDislikes || 0)
   const [liked, setLiked] = useState(post.userLiked || false)
   const [disliked, setDisliked] = useState(post.userDisliked || false)
+  const [voting, setVoting] = useState(false)
+
+  const imsiVote = {
+    argument: [{ id: 28, voteId: null, content: "투표옵션 29", argNo: 0, voteCount: 6 },
+    { id: 29, voteId: null, content: "투표옵션 30", argNo: 1, voteCount: 2 },
+    { id: 30, voteId: null, content: "투표옵션 31", argNo: 2, voteCount: 1 },
+    ],
+    closedAt: '2025-08-26 10:00:00',
+    createdAt: '2024-08-25 10:00:00',
+    getQuestion: null,
+    id: 1,
+    isCompleted: false,
+    postId: null,
+    title: '투표 제목1'
+  }
+  const openVote = () => {
+    setVoting(!voting)
+  }
 
   const isDelete = () => {
     setOpenPw(!openPw)
@@ -61,6 +81,8 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
     }
   }
 
+
+
   return (
     <div className="post-content">
       <div className="content">
@@ -72,6 +94,22 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
           }}
         />
       </div>
+      {imsiVote && !voting && (
+        <div className="vote-view">
+          <VoteChart vote={imsiVote} />
+          <div className="vote-view-util">
+            <button className='btn btn-gold' onClick={openVote}>투표하기</button>
+          </div>
+        </div>
+      )}
+      {voting && (
+        <div className="vote-view">
+          <form action="" className='vote-form'>
+            {imsiVote.argument.map((arg, index) => <VoteArguments key={index} arg={arg} />)}
+            <button className='btn btn-gold' onClick={openVote}>투표완료</button>
+          </form>
+        </div>
+      )}
       <div className="post-util">
         <div className="anybody">
           {isLogin ? (
@@ -121,15 +159,15 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
         )}
         {isLogin ? (
           userInfo.id !== post.userId && (
-          <div className="onlywriter">
-            <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
-          </div>
+            <div className="onlywriter">
+              <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
+            </div>
           )
         ) : (
           post.userId && (
-          <div className="onlywriter">
-            <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
-          </div>
+            <div className="onlywriter">
+              <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
+            </div>
           )
         )}
       </div>

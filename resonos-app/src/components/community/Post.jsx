@@ -18,6 +18,7 @@ const Post = () => {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState(null);
   const [pagination, setPagination] = useState(null)
+  const [vote, setVote] = useState(null)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -37,6 +38,7 @@ const Post = () => {
         setPost(data.post)
         setComments(data.comments)
         setPagination(data.commentsPagination)
+        setVote(data.vote)
 
         if (data.post.createdAt) {
           const date = new Date(data.post.createdAt)
@@ -180,7 +182,7 @@ const Post = () => {
         <div className="container">
           <PostTitle post={post} />
           <PostContent post={post} ids={{ boardId, postId }} swal={swal}
-            isLogin={isLogin} userInfo={userInfo} api={api}
+            isLogin={isLogin} userInfo={userInfo} api={api} vote={vote}
             deletePost={deletePost} reportPost={reportPost} />
           <PostComment ids={{ boardId, postId }} swal={swal}
             initComments={comments} navigate={navigate}

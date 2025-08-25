@@ -40,11 +40,11 @@ const Welcome = () => {
                 position: 'absolute', zIndex: -1, top: 0 }}>
                 <Galaxy
                     density={1}
-                    glowIntensity={1}
-                    saturation={1}
+                    glowIntensity={0.8}
+                    saturation={0.1}
                     rotationSpeed={0.1}
-                    hueShift={150}
-                    starSpeed={0.2}
+                    hueShift={130}
+                    starSpeed={0.5}
                 />
             </div>
             <div className="bg">
