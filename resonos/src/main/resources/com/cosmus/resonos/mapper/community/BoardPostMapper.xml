@@ -302,20 +302,20 @@
 </select>
 
 <!-- 선택지별 투표 수 계산 -->
-<select id="countVoteResults" parameterType="long" resultType="int">
+<select id="countVoteResults" parameterType="long" resultType="com.cosmus.resonos.domain.community.VoteResult">
   SELECT COALESCE(SUM(count), 0)
   FROM vote_result
   WHERE arg_id = #{argId}
 </select>
 
 <!-- 투표 저장  -->
-<insert id="insertVoteResult" resultType="int">
+<insert id="insertVoteResult" parameterType="int">
   INSERT INTO vote_result (vote_id, arg_id, user_id, guest_id, count, created_at)
   VALUES (#{voteId}, #{argId}, #{userId}, #{guestId}, #{count}, #{createdAt})
 </insert>
 
 <!-- 투표 이력 확인 -->
-<select id="checkUserVoteExists" resultType="int">
+<select id="checkUserVoteExists" resultType="com.cosmus.resonos.domain.community.VoteResult">
   SELECT COUNT(*)
   FROM vote_result
   WHERE arg_id = #{argId}
@@ -324,7 +324,7 @@
 </select>
 
 <!-- 투표 결과 삭제 -->
-<delete id="deleteVoteResult" parameterType="long">
+<delete id="deleteVoteResult" parameterType="int">
     DELETE FROM vote_result
     WHERE arg_id = #{argId}
 </delete>

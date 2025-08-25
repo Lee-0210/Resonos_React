@@ -431,7 +431,7 @@ public class BoardPostController {
 
     // 투표 수정 - 아직 미완성 
     @PutMapping("/vote-arguments/{argId}") 
-    public ResponseEntity<?> updateVoteArgument(
+    public ResponseEntity<?> updateVoteArgument( 
         @PathVariable Long argId,
         @RequestBody ComVoteArgument request
     ) {
