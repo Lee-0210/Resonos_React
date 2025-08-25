@@ -120,3 +120,10 @@ export const commentLike = async (ids,data) => {
   })
 }
 // 투표하기
+export const contributeVote = async (data) => {
+  return api.post(`/vote_status`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+}
