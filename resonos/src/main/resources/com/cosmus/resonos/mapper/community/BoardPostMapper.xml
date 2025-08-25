@@ -31,6 +31,20 @@
         <result property="categoryId" column="category_id"/>
     </association>
 
+    <!-- 투표 정보 매핑 -->
+    <association property="vote" javaType="com.cosmus.resonos.domain.community.ComVote">
+        <id property="id" column="vote_id"/>
+        <result property="title" column="vote_title"/>
+        <result property="createdAt" column="vote_created_at"/>
+        <result property="closedAt" column="vote_closed_at"/>
+        <result property="isCompleted" column="vote_is_completed"/>
+        <collection property="arguments" ofType="com.cosmus.resonos.domain.community.ComVoteArgument">
+            <id property="id" column="arg_id"/>
+            <result property="content" column="arg_content"/>
+            <result property="argNo" column="arg_no"/>
+        </collection>
+    </association>
+
   </resultMap>
 
   <select id="list" resultMap="BoardPostResultMap">
@@ -110,11 +124,22 @@
           AND ld.target_id = bp.id
           AND ld.is_likes = 0
           AND ld.user_id = #{userId}
-      ) AS user_disliked
+      ) AS user_disliked,
+      v.id AS vote_id,
+      v.title AS vote_title,
+      v.created_at AS vote_created_at,
+      v.closed_at AS vote_closed_at,
+      v.is_completed AS vote_is_completed,
+      va.id AS arg_id,
+      va.content AS arg_content,
+      va.arg_no AS arg_no
     FROM board_post bp
     LEFT JOIN user u ON u.id = bp.user_id
+    LEFT JOIN com_vote v ON v.post_id = bp.id
+    LEFT JOIN com_vote_argument va ON va.vote_id = v.id
     WHERE bp.id = #{postId}
       AND bp.community_id = #{communityId}
+    Order BY va.arg_no
   </select>
 
   <update id="incrementViewCount">
