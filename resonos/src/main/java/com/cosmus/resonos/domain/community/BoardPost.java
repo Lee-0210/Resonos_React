@@ -41,6 +41,7 @@ public class BoardPost {
     private String thumbnailUrl;
 
     // vote
+    private ComVote vote;
     // 투표 리스트
     private List<ComVote> comVotes;
 
