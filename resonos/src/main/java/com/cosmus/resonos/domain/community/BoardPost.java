@@ -40,7 +40,7 @@ public class BoardPost {
     // 게시판 테이블 thumbnail_url 컬럼 추가
     private String thumbnailUrl;
 
-    // vote 
+    // vote
     // 투표 리스트
     private List<ComVote> comVotes;
 
