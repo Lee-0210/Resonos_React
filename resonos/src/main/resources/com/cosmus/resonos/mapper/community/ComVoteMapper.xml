@@ -5,15 +5,38 @@
 
 <mapper namespace="com.cosmus.resonos.mapper.community.ComVoteMapper">
 
+  <resultMap id="ComVoteResultMap" type="ComVote">
+    <id property="id" column="id"/>
+    <result property="postId" column="post_id"/>
+    <result property="title" column="title"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="closedAt" column="closed_at"/>
+    <result property="isCompleted" column="is_completed"/>
+    
+    <!-- 투표 항목 -->
+    <collection property="arguments" ofType="ComVoteArgument">
+      <result property="argNo" column="arg_no"/>
+      <result property="content" column="content"/>
+    </collection>
+  </resultMap>
+
   <select id="list" resultType="ComVote">
     SELECT * FROM com_vote
   </select>
 
-  <insert id="insert">
-    INSERT INTO com_vote(
-    )
-    VALUES (
-    )
+  <select id="selectByPostId" resultType="ComVote">
+    SELECT cv.*, cva.arg_no, cva.content
+    FROM com_vote cv
+    LEFT JOIN com_vote_argument cva ON cv.id = cva.vote_id
+    WHERE cv.post_id = #{postId}
+    ORDER BY arg_no
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO com_vote
+    (post_id, title, closed_at)
+    VALUES
+    (#{postId}, #{title}, #{closedAt})
   </insert>
 
   <update id="update">
@@ -25,7 +48,8 @@
   </update>
 
   <delete id="delete">
-    DELETE FROM com_vote WHERE -- key 지정 필요
+    DELETE FROM com_vote
+    WHERE id = #{id}
   </delete>
 
   <update id="completeAll">
