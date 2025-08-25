@@ -20,24 +20,23 @@ const WYSIWYG = ({ post, ids }) => {
   const [mainFile, setMainFile] = useState(null)   //
   const [files, setFiles] = useState(null)
 
-  // 투표
+  // 투표 state
   const [voteActive, setVoteActive] = useState(() => {
     return post?.vote ? true : false
   })
-
   const [voteItems, setVoteItems] = useState(
-    post?.vote
-    ?
-      [...post?.vote?.arguments]
-    :
+    post?.vote ? [...post?.vote?.arguments] :
     [
       {id: 1, argNo: 1, content: '항목1'},
       {id: 2, argNo: 2, content: '항목2'}
     ]
   )
-  const [voteTitle, setVoteTitle] = useState()
-  const [closedAt, setClosedAt] = useState()
-  console.log(voteActive)
+  const [voteTitle, setVoteTitle] = useState(() => (
+    post ? post.vote.title : ''
+  ))
+  const [closedAt, setClosedAt] = useState(() => (
+    post ? post.vote.closedAt : ''
+  ))
 
   const editorRef = useRef(null);
   const { userInfo, isLogin } = useContext(LoginContext)
@@ -122,7 +121,7 @@ const WYSIWYG = ({ post, ids }) => {
     }
     setVoteItems(prev => {
       const newArr = prev.filter((_, i) => i !== index)
-      return newArr.map((item, i) => ({ ...item, orderNo: i + 1 }))
+      return newArr.map((item, i) => ({ ...item, argNo: i + 1 }))
     })
   }
 
@@ -170,10 +169,20 @@ const WYSIWYG = ({ post, ids }) => {
 
   // 게시글 수정 함수
   const postUpdate = async (ids) => {
+    console.log(voteTitle)
+    console.log(closedAt)
+    console.log(voteItems)
+
     const data = {
       content: content,
       title: title,
-      guestPassword : tempPw
+      guestPassword : tempPw,
+      vote: {
+        title: voteTitle,
+        closedAt: closedAt.replace(" ", "T").slice(0, 16),
+        arguments: voteItems
+      },
+      voteActive
     }
     try {
       const response = await api.postUpdate(data, ids)
