@@ -154,6 +154,9 @@ public class BoardPostController {
             postWithComments.put("comments", comments.getList());
             postWithComments.put("commentsPagination", commentsPagination);
 
+            // 투표 정보 추가
+            postWithComments.put("vote", post.getVote());
+
             return new ResponseEntity<>(postWithComments, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -232,6 +235,8 @@ public class BoardPostController {
         @PathVariable("postId") Long postId,
         @Validated @RequestBody BoardPost request,
         BindingResult bindingResult,
+        @RequestParam(value="voteId", required = false) Long voteId,
+        @RequestBody BoardPost request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
         try {
@@ -258,6 +263,29 @@ public class BoardPostController {
                     !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword())) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
+            }
+            // 투표 수정 
+            if (voteId != null && request.getVote() != null) {
+                ComVote updatedVote = request.getVote();
+                updatedVote.setId(voteId);
+                updatedVote.setPostId(postId);
+                updatedVote.setClosedAt(updatedVote.getClosedAt());
+                updatedVote.setCreatedAt(updatedVote.getCreatedAt());
+                updatedVote.setTitle(updatedVote.getTitle());
+                updatedVote.setGetQuestion(request);
+                if (updatedVote.getIsCompleted() == null) {
+                    updatedVote.setIsCompleted(false);
+                }
+
+                List<ComVoteArgument> updatedArguments = updatedVote.getArguments();
+                if (updatedArguments != null) {
+                    for (ComVoteArgument arg : updatedArguments) {
+                        arg.setVoteId(voteId);
+                    }
+                }
+                comVoteService.updateVoteAndArguments(voteId, updatedVote);
+                // 오류 확인
+                log.info("투표 수정 결과: {}", updatedVote);
             }
 
             if (loginUser == null) {

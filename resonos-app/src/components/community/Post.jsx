@@ -34,7 +34,7 @@ const Post = () => {
         setIsLoading(true)
         const response = await api.getPostData({ boardId, postId })
         const data = response.data
-        console.log(response.data)
+        console.log(data)
         setPost(data.post)
         setComments(data.comments)
         setPagination(data.commentsPagination)
@@ -158,6 +158,24 @@ const Post = () => {
     }
   }
 
+  // 투표
+  const contributeVote = async (data) => {
+    try {
+      const res = await api.contributeVote(data)
+      console.log(res)
+      swal.fire({
+        title: '투표 완료',
+        text: '투표가 성공적으로 완료되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   if (isLoading) {
     return (
       <div style={{ position: 'relative', height: '300px' }}>
@@ -182,8 +200,9 @@ const Post = () => {
         <div className="container">
           <PostTitle post={post} />
           <PostContent post={post} ids={{ boardId, postId }} swal={swal}
-            isLogin={isLogin} userInfo={userInfo} api={api} vote={vote}
-            deletePost={deletePost} reportPost={reportPost} />
+            isLogin={isLogin} userInfo={userInfo} api={api} initVote={vote}
+            deletePost={deletePost} reportPost={reportPost} contributeVote={contributeVote}
+          />
           <PostComment ids={{ boardId, postId }} swal={swal}
             initComments={comments} navigate={navigate}
             isLogin={isLogin} userInfo={userInfo} pagination={pagination} />

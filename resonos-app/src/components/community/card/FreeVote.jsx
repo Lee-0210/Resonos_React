@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import DatePicker from './DatePicker'
 
-const FreeVote = ({voteItems, addVoteRow, deleteVoteRow, setClosedAt, setVoteTitle}) => {
+const FreeVote = ({voteItems, addVoteRow, deleteVoteRow, setClosedAt, setVoteTitle, vote, onChangeVoteContent}) => {
 
   return (
     <section className="free-vote">
@@ -11,6 +11,7 @@ const FreeVote = ({voteItems, addVoteRow, deleteVoteRow, setClosedAt, setVoteTit
             className='border-form'
             type="text" placeholder='투표 제목을 입력해주세요.'
             onChange={e => setVoteTitle(e.target.value)}
+            defaultValue={vote?.title}
           />
           <button className='btn btn-gold' onClick={addVoteRow}>항목 추가</button>
         </div>
@@ -18,24 +19,26 @@ const FreeVote = ({voteItems, addVoteRow, deleteVoteRow, setClosedAt, setVoteTit
           <label htmlFor="datePicker">종료일</label>
           <DatePicker
             setClosedAt={setClosedAt}
+            vote={vote}
           />
         </div>
         <ul>
           {
             voteItems?.map((row, index) => (
-              <li key={row.itemId}>
+              <li key={row.id}>
                 <div>
                   <span>{index + 1}</span>
                   <input
                     type="text"
                     className="border-form"
                     defaultValue={row.content}
+                    onChange={e => onChangeVoteContent(row.argNo, e)}
                   />
                   <button
                     className="btn btn-red"
                     onClick={() => deleteVoteRow(index)}
                   >
-                    <i class="bi bi-trash"></i>
+                    <i className="bi bi-trash"></i>
                   </button>
                 </div>
               </li>

@@ -20,14 +20,23 @@ const WYSIWYG = ({ post, ids }) => {
   const [mainFile, setMainFile] = useState(null)   //
   const [files, setFiles] = useState(null)
 
-  // 투표
-  const [voteActive, setVoteActive] = useState(false)
-  const [voteItems, setVoteItems] = useState([
-    {itemId: 1, orderNo: 1, content: '항목1'},
-    {itemId: 2, orderNo: 2, content: '항목2'}
-  ])
-  const [voteTitle, setVoteTitle] = useState()
-  const [closedAt, setClosedAt] = useState()
+  // 투표 state
+  const [voteActive, setVoteActive] = useState(() => {
+    return post?.vote ? true : false
+  })
+  const [voteItems, setVoteItems] = useState(
+    post?.vote ? [...post?.vote?.arguments] :
+    [
+      {id: 1, argNo: 1, content: '항목1'},
+      {id: 2, argNo: 2, content: '항목2'}
+    ]
+  )
+  const [voteTitle, setVoteTitle] = useState(() => (
+    post ? post.vote.title : ''
+  ))
+  const [closedAt, setClosedAt] = useState(() => (
+    post ? post.vote.closedAt : ''
+  ))
 
   const editorRef = useRef(null);
   const { userInfo, isLogin } = useContext(LoginContext)
@@ -54,6 +63,19 @@ const WYSIWYG = ({ post, ids }) => {
   const changeTempPw = (e) => { setTempPw(e.target.value) }
   const changeContent = (e) => { setContent(e.target.value) }
 
+  // 항목 content 변경 함수
+  const onChangeVoteContent = (argNo, e) => {
+    const newContent = e.target.value
+
+    setVoteItems(prev =>
+      prev.map(item =>
+        item.argNo === argNo
+          ? { ...item, content: newContent }
+          : item
+      )
+    )
+  }
+
   // 투표 관련 함수
   const addVoteRow = () => {
     if(voteItems.length >= 7) {
@@ -72,11 +94,11 @@ const WYSIWYG = ({ post, ids }) => {
       return
     }
     setVoteItems(prev => {
-      const lastOrderNo = prev.length ? prev[prev.length - 1].orderNo : 0
-      const newId = prev.length ? Math.max(...prev.map(v => v.itemId)) + 1 : 1
+      const lastOrderNo = prev.length ? prev[prev.length - 1].argNo : 0
+      const newId = prev.length ? Math.max(...prev.map(v => v.id)) + 1 : 1
       return [
         ...prev,
-        { itemId: newId, orderNo: lastOrderNo + 1, content: `항목${lastOrderNo + 1}` }
+        { id: newId, argNo: lastOrderNo + 1, content: `항목${lastOrderNo + 1}` }
       ]
     })
   }
@@ -99,13 +121,14 @@ const WYSIWYG = ({ post, ids }) => {
     }
     setVoteItems(prev => {
       const newArr = prev.filter((_, i) => i !== index)
-      return newArr.map((item, i) => ({ ...item, orderNo: i + 1 }))
+      return newArr.map((item, i) => ({ ...item, argNo: i + 1 }))
     })
   }
 
 
   // 게시글 등록 함수
   const postInsert = async (ids) => {
+    console.log(voteItems)
     const boardId = ids
     const data = {
       content: content,
@@ -146,10 +169,20 @@ const WYSIWYG = ({ post, ids }) => {
 
   // 게시글 수정 함수
   const postUpdate = async (ids) => {
+    console.log(voteTitle)
+    console.log(closedAt)
+    console.log(voteItems)
+
     const data = {
       content: content,
       title: title,
-      guestPassword : tempPw
+      guestPassword : tempPw,
+      vote: {
+        title: voteTitle,
+        closedAt: closedAt.replace(" ", "T").slice(0, 16),
+        arguments: voteItems
+      },
+      voteActive
     }
     try {
       const response = await api.postUpdate(data, ids)
@@ -360,6 +393,8 @@ const WYSIWYG = ({ post, ids }) => {
               deleteVoteRow={deleteVoteRow}
               setClosedAt={setClosedAt}
               setVoteTitle={setVoteTitle}
+              vote={post?.vote}
+              onChangeVoteContent={onChangeVoteContent}
             />
           }
           {/* 등록시 */}
@@ -385,11 +420,11 @@ const WYSIWYG = ({ post, ids }) => {
               <Link className="btn btn-gold" to={`/community/boards/${ids.boardId}/posts/${ids.postId}`}>취소</Link>
               <button
                 className="btn btn-gold"
-                onClick={() => setVoteActive(!voteActive)}
+                onClick={() => {
+                  setVoteActive(!voteActive)
+                }}
               >
-                {
-                  voteActive ? '투표취소' : '투표하기'
-                }
+                {voteActive ? '투표취소' : '투표하기'}
               </button>
             </div>
           )}

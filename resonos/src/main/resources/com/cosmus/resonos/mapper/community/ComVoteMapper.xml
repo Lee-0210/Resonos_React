@@ -38,13 +38,23 @@
     VALUES
     (#{postId}, #{title}, #{closedAt})
   </insert>
-
-  <update id="update">
+  <!-- 원본 -->
+  <!-- <update id="update">
     UPDATE com_vote
     <set>
       updated_at = now()
     </set>
-    WHERE -- key 지정 필요
+    WHERE id = #{id}
+  </update> -->
+
+  <update id="update">
+    UPDATE com_vote
+    <set>
+      title = #{title},
+      closed_at = #{closedAt},
+      is_completed = #{isCompleted}
+    </set>
+    WHERE id = #{id}
   </update>
 
   <delete id="delete">
@@ -58,7 +68,7 @@
   </delete>
 
   <update id="completeAll">
-    UPDATE com_vote SET -- 수정필드 없음
+    UPDATE com_vote SET
   </update>
 
   <delete id="deleteAll">

@@ -10,6 +10,7 @@ import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.ComVoteArgument;
 import com.cosmus.resonos.mapper.community.ComVoteArgumentMapper;
 import com.cosmus.resonos.mapper.community.ComVoteMapper;
+import com.cosmus.resonos.mapper.community.VoteStatusMapper;
 import com.github.pagehelper.PageInfo;
 
 @Service
@@ -20,6 +21,9 @@ public class ComVoteServiceImpl implements ComVoteService {
 
     @Autowired
     private ComVoteArgumentMapper comVoteArgumentMapper;
+  
+    @Autowired
+    private VoteStatusMapper voteStatusMapper;
 
     @Override
     public List<ComVote> list() throws Exception{
@@ -69,8 +73,6 @@ public class ComVoteServiceImpl implements ComVoteService {
         return comVoteMapper.deleteById(id) > 0;
     }
 
-    
-
     @Override
     public boolean deleteAll() throws Exception {
         return comVoteMapper.deleteAll() > 0;
@@ -99,4 +101,30 @@ public class ComVoteServiceImpl implements ComVoteService {
     public boolean deleteByPostId(Long postId) throws Exception {
         return comVoteMapper.deleteByPostId(postId) > 0;
     }
+    // 투표 결과 수정 
+
+    @Override
+    public void updateVoteAndArguments(Long voteId, ComVote updatedVote) throws Exception {
+        // 1. 자식 테이블의 관련 데이터 삭제
+        
+        List<ComVoteArgument> existingArgs = comVoteArgumentMapper.selectById(voteId);
+        for (ComVoteArgument arg : existingArgs) {
+            voteStatusMapper.deleteByArgId(arg.getId()); // 자식 데이터 먼저 삭제
+        }
+        // 2. 기존 선택지 삭제
+        comVoteArgumentMapper.deleteByVoteId(voteId);
+
+        // 3. 투표 기본 정보 업데이트
+        comVoteMapper.update(updatedVote);
+
+        // 4. 새로운 선택지 추가
+        List<ComVoteArgument> newArguments = updatedVote.getArguments();
+        if (newArguments != null) {
+            for (ComVoteArgument arg : newArguments) {
+                arg.setVoteId(voteId);
+                comVoteArgumentMapper.insert(arg);
+            }
+        }
+    }
+
 }

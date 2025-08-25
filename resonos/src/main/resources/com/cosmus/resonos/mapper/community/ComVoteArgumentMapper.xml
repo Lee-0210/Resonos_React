@@ -9,7 +9,7 @@
     SELECT * FROM com_vote_argument
   </select>
 
-  <insert id="insert">
+  <insert id="insert" >
     INSERT INTO com_vote_argument (vote_id, content, arg_no)
     SELECT
       #{voteId},
@@ -19,6 +19,7 @@
       SELECT * FROM com_vote_argument WHERE vote_id = #{voteId}
     ) AS temp
   </insert>
+
 
 
   <update id="update">
@@ -51,4 +52,19 @@
   <delete id="deleteAll">
     DELETE FROM com_vote_argument
   </delete>
+
+  <!-- 특정 투표의 모든 선택지 삭제 -->
+  <delete id="deleteByVoteId">
+    DELETE FROM com_vote_argument
+    WHERE vote_id = #{voteId}
+  </delete>
+
+  <!-- 특정 투표의 모든 선택지 조회 -->
+  <select id="selectById" resultType="ComVoteArgument">
+    SELECT * FROM com_vote_argument
+    WHERE vote_id = #{voteId}
+  </select>
+
+
+
 </mapper>

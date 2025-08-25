@@ -32,4 +32,8 @@ public class ComVote {
     @Valid
     @NotNull(message = "투표 항목을 입력하세요.")
     private List<ComVoteArgument> arguments;
+
+    // 투표 결과 
+    public Object getQuestion;
+    
 }

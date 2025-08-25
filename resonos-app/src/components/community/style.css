@@ -776,8 +776,8 @@
 
 /* CKEditor */
 .ck-editor__editable_inline {
-    min-height: 100px;
-    border-radius: 0 0 10px 10px !important;
+  min-height: 300px;
+  border-radius: 0 0 10px 10px !important;
 }
 
 /* ===== 투표 영역 ===== */
@@ -838,10 +838,28 @@
   padding: 0 10px;
   text-align: center;
   color: var(--main-color);
+  position: relative;
 }
+
 .free-vote .middle #datePicker::-webkit-calendar-picker-indicator {
+  opacity: 0;
   cursor: pointer;
-  color: var(--main-color);
+  position: absolute;
+  right: 5px;
+  width: 20px;
+}
+
+.free-vote .middle #datePicker::after {
+  content: "📅";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: 0.1s;
+}
+.free-vote .middle #datePicker:hover::after {
+  transform: translateY(-55%);
 }
 
 .free-vote ul {

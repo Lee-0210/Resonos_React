@@ -14,4 +14,6 @@ public interface ComVoteService extends BaseService<ComVote> {
     public void createVoteWithArguments(ComVote comVote, List<ComVoteArgument> arguments) throws Exception;
     
     public boolean deleteAll() throws Exception;
+    // 투표 결과 업데이트
+    public void updateVoteAndArguments(Long voteId, ComVote updatedVote) throws Exception;
 }
