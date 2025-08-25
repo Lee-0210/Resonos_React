@@ -10,11 +10,14 @@
   </select>
 
   <insert id="insert">
-    INSERT INTO com_vote_argument(
-    )
-    VALUES (
+    INSERT INTO com_vote_argument (vote_id, content, arg_no)
+    VALUES (#{voteId}, #{content},
+      (SELECT COALESCE(MAX(arg_no), 0) + 1
+      FROM com_vote_argument
+      WHERE vote_id = #{voteId})
     )
   </insert>
+
 
   <update id="update">
     UPDATE com_vote_argument
@@ -25,8 +28,19 @@
   </update>
 
   <delete id="delete">
-    DELETE FROM com_vote_argument WHERE -- key 지정 필요
+    DELETE FROM com_vote_argument
+    WHERE id = #{id}
   </delete>
+
+  <!-- 항목 삭제 후 -->
+  <!-- <update id="reorderArguments">
+    UPDATE com_vote_argument
+    <set>
+      arg_no = arg_no - 1
+    </set>
+    WHERE vote_id = #{voteId}
+      AND arg_no > #{argNo}
+  </update> -->
 
   <update id="completeAll">
     UPDATE com_vote_argument SET -- 수정필드 없음
