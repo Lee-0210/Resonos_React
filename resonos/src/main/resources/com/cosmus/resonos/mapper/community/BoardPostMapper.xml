@@ -63,14 +63,16 @@
     VALUES (#{title}, #{content}, #{type}, #{communityId}, #{userId}, #{guestNickname}, #{guestPassword})
   </insert>
 
-  <update id="update">
-    UPDATE board_post
-    <set>
-      <if test="title != null">title = #{title},</if>
-      <if test="content != null">content = #{content},</if>
-    </set>
-    WHERE id = #{id}
-  </update>
+<update id="update">
+  UPDATE board_post
+  <set>
+    <if test="title != null">title = #{title}</if>
+    <if test="content != null">, content = #{content}</if>
+  </set>
+  WHERE id = #{id}
+</update>
+
+
 
   <delete id="delete">
     DELETE FROM board_post

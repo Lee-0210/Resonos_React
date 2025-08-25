@@ -193,7 +193,7 @@ public class BoardPostController {
     public ResponseEntity<?> updatePost(
         @PathVariable("communityId") Long communityId,
         @PathVariable("postId") Long postId,
-        @PathVariable(value="voteId", required = false) Long voteId,
+        @RequestParam(value="voteId", required = false) Long voteId,
         @RequestBody BoardPost request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
@@ -223,7 +223,24 @@ public class BoardPostController {
             if (voteId != null && request.getVote() != null) {
                 ComVote updatedVote = request.getVote();
                 updatedVote.setId(voteId);
+                updatedVote.setPostId(postId);
+                updatedVote.setClosedAt(updatedVote.getClosedAt());
+                updatedVote.setCreatedAt(updatedVote.getCreatedAt());
+                updatedVote.setTitle(updatedVote.getTitle());
+                updatedVote.setGetQuestion(request);
+                if (updatedVote.getIsCompleted() == null) {
+                    updatedVote.setIsCompleted(false);
+                }
+
+                List<ComVoteArgument> updatedArguments = updatedVote.getArguments();
+                if (updatedArguments != null) {
+                    for (ComVoteArgument arg : updatedArguments) {
+                        arg.setVoteId(voteId);
+                    }
+                }
                 comVoteService.updateVoteAndArguments(voteId, updatedVote);
+                // 오류 확인
+                log.info("투표 수정 결과: {}", updatedVote);
             }
 
             boardPost.setTitle(request.getTitle());
