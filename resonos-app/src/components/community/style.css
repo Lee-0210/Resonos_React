@@ -754,7 +754,7 @@
     border-radius: 0 0 10px 10px !important;
 }
 
-/* 투표 영역 */
+/* ===== 투표 영역 ===== */
 .free-vote .border-form {
   border: 1px solid var(--main-color);
   border-radius: 10px;
@@ -811,6 +811,10 @@
   width: 50%;
   padding: 0 10px;
   text-align: center;
+  color: var(--main-color);
+}
+.free-vote .middle #datePicker::-webkit-calendar-picker-indicator {
+  cursor: pointer;
   color: var(--main-color);
 }
 
