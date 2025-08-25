@@ -344,36 +344,121 @@ public class BoardPostController {
 
   
     // 투표 참여 (POST) - 실제 투표 기능
-    @PostMapping("/vote-arguments/{argId}/vote")
+   @PostMapping("/vote-arguments/{argId}/vote")
     public ResponseEntity<?> submitVote(
         @PathVariable Long argId, 
-        @RequestBody Map<String, Object> voteData,
-        @AuthenticationPrincipal CustomUser loginUser
+        @RequestBody(required = false) Map<String, Object> voteData,
+        @AuthenticationPrincipal CustomUser loginUser,
+        HttpServletRequest request,
+        HttpSession session
     ) {
         try {
-            // 투표 처리 로직 (실제 구현은 Service에서)
             Long userId = (loginUser != null) ? loginUser.getId() : null;
+            String sessionId = session.getId();
             
-            // 실제 투표 처리 메소드 호출 필요
+            // Service에서 중복 투표 확인 및 처리
+            boolean voteSuccess = boardPostService.submitVote(argId, userId, sessionId);
             
+            if (!voteSuccess) {
+                return ResponseEntity.internalServerError()
+                    .body(Map.of(
+                        "success", false,
+                        "error", "투표 처리에 실패했습니다."
+                    ));
+            }
             
-            // 투표 후 결과 반환
+            // 투표 후 최신 결과 반환
             int newCount = boardPostService.getVoteCountByArgumentId(argId);
             
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "투표가 완료되었습니다.");
             response.put("newCount", newCount);
+            response.put("argumentId", argId);
+            response.put("timestamp", System.currentTimeMillis());
             
             return ResponseEntity.ok(response);
+            
         } catch (Exception e) {
-            log.error("투표 처리 실패", e);
+            log.error("투표 처리 실패: argId={}, userId={}", argId, 
+                    (loginUser != null) ? loginUser.getId() : "guest", e);
+            
             return ResponseEntity.internalServerError()
-                .body(Map.of("error", "투표 처리 중 오류가 발생했습니다."));
+                .body(Map.of("success", false, "error", "투표 처리 중 오류가 발생했습니다."));
+        }
+    }
+    // 투표 취소
+    @DeleteMapping("/vote-arguments/{argId}/vote")
+    public ResponseEntity<?> cancelVote(
+        @PathVariable Long argId,
+        @AuthenticationPrincipal CustomUser loginUser,
+        HttpSession session
+    ) {
+        try {
+            Long userId = (loginUser != null) ? loginUser.getId() : null;
+            String sessionId = session.getId();
+            
+            // Service에서 투표 이력 확인 및 취소 처리
+            boolean cancelSuccess = boardPostService.cancelVote(argId, userId, sessionId);
+            
+            if (!cancelSuccess) {
+                return ResponseEntity.internalServerError()
+                    .body(Map.of(
+                        "success", false,
+                        "error", "투표 취소에 실패했습니다."
+                    ));
+            }
+            
+            // 취소 후 최신 투표수 반환
+            int newCount = boardPostService.getVoteCountByArgumentId(argId);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "투표가 취소되었습니다.");
+            response.put("newCount", newCount);
+            response.put("argumentId", argId);
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            log.error("투표 취소 실패: argId={}, userId={}", argId, 
+                    (loginUser != null) ? loginUser.getId() : "guest", e);
+
+            return ResponseEntity.internalServerError()
+                .body(Map.of("success", false, "error", "투표 취소 중 오류가 발생했습니다."));
         }
     }
 
-    // 실시간 투표 결과 조회 (WebSocket에서도 사용 가능) - 아직 구현 안됨 
+    // 투표 수정 - 아직 미완성 
+    @PutMapping("/vote-arguments/{argId}") 
+    public ResponseEntity<?> updateVoteArgument(
+        @PathVariable Long argId,
+        @RequestBody ComVoteArgument request
+    ) {
+        try {
+            // 선택지 내용 업데이트
+            ComVoteArgument argument = new ComVoteArgument();
+            argument.setId(argId);
+            argument.setContent(request.getContent());
+            // 필요한 다른 필드들도 설정
+            
+            // 수정 로직 미작성 
+
+            // 수정된 선택지 반환 (또는 성공 메시지)
+            return ResponseEntity.ok(argument);
+            
+        } catch (Exception e) {
+            log.error("투표 선택지 수정 실패: argId={}", argId, e);
+            return ResponseEntity.internalServerError()
+                .body(Map.of("error", "투표 선택지 수정 중 오류가 발생했습니다."));
+        }
+    }
+
+
+
+
+
+    // 실시간 투표 결과 조회 (WebSocket에서도 사용 가능) - 아직 구현 안됨
     // @GetMapping("/boards/{communityId}/posts/{postId}/live-vote-results")
     // public ResponseEntity<?> getLiveVoteResults(
     //     @PathVariable Long communityId,

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.ComVoteArgument;
-import com.github.pagehelper.PageInfo;
+import com.cosmus.resonos.domain.community.VoteResult;
 
 @Mapper
 public interface BoardPostMapper extends BaseMapper<BoardPost> {
@@ -60,14 +60,19 @@ public interface BoardPostMapper extends BaseMapper<BoardPost> {
     List<ComVoteArgument> findArgumentsByVoteId(@Param("voteId") Long voteId);
     // 각 선택지별 투표수 조회 (optional: 한번에 몰아서 처리 가능)
     int countVoteResults(@Param("argId") Long argId);
+    // 투표 저장 insertVoteResult
+    int insertVoteResult(VoteResult voteResult);
+    // 투표 이력 확인 
+    public int checkUserVoteExists(@Param("argId") Long argId, @Param("userId") Long userId, @Param("guestId") String guestId);
+    // 투표 취소 
+    public int deleteVoteResult(@Param("argId") Long argId, @Param("userId") Long userId, @Param("guestId") String guestId);
 
-
-
-    
     // 커뮤니티 ID 목록에 해당하는 게시글 조회
     public List<BoardPost> getPostsByCommunityIds(List<Long> communityIds);
     // 커뮤니티 id 목록에 해당하는 게시글 수 조회
     public List<Map<String, Object>> countPostsByCommunityIds(List<Long> communityIds);
+
+
 
 
     
