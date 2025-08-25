@@ -19,7 +19,7 @@ public interface BoardPostService extends BaseService<BoardPost> {
     // 조회 + 좋아요 싫어요 수
     public BoardPost selectWithLikesDislikes(@Param("communityId") Long communityId, @Param("postId") Long postId, @Param("userId") Long userId) throws Exception;
     // 로그인/비로그인 게시글 작성
-    public void createPost(BoardPost boardPost, CustomUser loginUser, ComVote vote, List<ComVoteArgument> arguments) throws Exception;
+    public void createPost(BoardPost boardPost, CustomUser loginUser, ComVote vote, List<ComVoteArgument> arguments, Boolean voteActive) throws Exception;
     // 비로그인 게시글 비밀번호 체크
     public boolean checkGuestPassword(BoardPost boardPost, String rawPassword) throws Exception;
     // 게시글 조회수 증가
