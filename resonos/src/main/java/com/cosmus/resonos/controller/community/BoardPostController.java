@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +27,6 @@ import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.community.BoardPost;
 import com.cosmus.resonos.domain.community.Comment;
-import com.cosmus.resonos.service.badge.BadgeGrantService;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.CommentService;
 import com.github.pagehelper.PageInfo;
@@ -49,10 +47,6 @@ public class BoardPostController {
 
     @Autowired
     private CommentService commentService;
-
-    @Autowired
-    private BadgeGrantService badgeGrantService;
-
 
     public BoardPostController(BoardPostService boardPostService) {
         this.boardPostService = boardPostService;
@@ -77,12 +71,14 @@ public class BoardPostController {
         HttpServletResponse response,
         HttpSession session,
         @RequestParam(value = "page", defaultValue = "1") int page,
-        @RequestParam(value = "size", defaultValue = "30") int size
+        @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Map<String, Object> postWithComments = new HashMap<>();
         try {
+            Long userId = (loginUser != null) ? loginUser.getId() : null;
+
             // 게시글 + 좋아요/싫어요 수
-            BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId);
+            BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId, userId);
             if (post == null) {
                 return ResponseEntity.notFound().build();
             }
@@ -134,11 +130,14 @@ public class BoardPostController {
 
             // 댓글 + 좋아요/싫어요 수
             // 댓글 리스트 반환 (각 댓글에 작성자, 내용, 작성일, 좋아요/싫어요 수 포함)
-            List<Comment> comments = commentService.selectWithLikesDislikes(postId);
-            PageInfo<Comment> commentsWithPageInfo = commentService.commentsWithPagination(postId, page, size);
-            Pagination commentsPagination = new Pagination(commentsWithPageInfo);
-            commentsPagination.setTotal(boardPostService.getCommentCount(postId));
-            postWithComments.put("comments", comments);
+            // List<Comment> comments = commentService.selectWithLikesDislikes(postId);
+            // List<Comment> pagedComments = commentsWithPageInfo.getList();
+            // log.info("" + commentsWithPageInfo);
+            // commentsPagination.setTotal(boardPostService.getCommentCount(postId));
+            // postWithComments.put("pagedComments", pagedComments);
+            PageInfo<Comment> comments = commentService.selectWithLikesDislikes(postId, userId, page, size);
+            Pagination commentsPagination = new Pagination(comments);
+            postWithComments.put("comments", comments.getList());
             postWithComments.put("commentsPagination", commentsPagination);
 
             return new ResponseEntity<>(postWithComments, HttpStatus.OK);

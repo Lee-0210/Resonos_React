@@ -678,7 +678,11 @@
     font-weight: bold;
     font-size: 1.5rem;
     padding: 5px;
-  }
+}
+.post-wrapper .btn-gold.active {
+    background-color: var(--main-color);
+    color: var(--background-color);
+}
 
 .wysiwyg-wrapper .btn-gold:hover,
 .post-wrapper .btn-gold:hover {

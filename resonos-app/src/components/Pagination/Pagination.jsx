@@ -42,7 +42,7 @@ export default function Pagination({
                 </li>
 
                 {/* [이전] */}
-                {page !== first && (
+                {page !== first && prev > 0 && (
                     <li>
                         <button onClick={() => onPageChange(prev)}>&lsaquo;</button>
                     </li>

@@ -9,8 +9,6 @@ import com.cosmus.resonos.domain.community.Comment;
 import com.github.pagehelper.PageInfo;
 
 public interface CommentService extends BaseService<Comment> {
-
-    
     
     boolean deleteAll() throws Exception;
 
@@ -18,10 +16,10 @@ public interface CommentService extends BaseService<Comment> {
     public List<Comment> findByTarget(String type, Long targetId) throws Exception;
 
     // 조회 + 좋아요 싫어요 수
-    public List<Comment> selectWithLikesDislikes(@Param("postId") Long postId) throws Exception;
+    public PageInfo<Comment> selectWithLikesDislikes(@Param("postId") Long postId, @Param("userId") Long userId, @Param("pageNum") int pageNum, @Param("pageSize") int pageSize) throws Exception;
 
     // 페이지네이션 포함 댓글
-    public PageInfo<Comment> commentsWithPagination(@Param("postId") Long postId, @Param("pageNum") int pageNum, @Param("pageSize") int pageSize) throws Exception;
+    // public PageInfo<Comment> commentsWithPagination(@Param("postId") Long postId, @Param("pageNum") int pageNum, @Param("pageSize") int pageSize) throws Exception;
 
     // 댓글/대댓글 작성
     public void writeComment(Comment comment, CustomUser loginUser) throws Exception;

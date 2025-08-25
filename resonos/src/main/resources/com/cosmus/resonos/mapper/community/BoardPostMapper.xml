@@ -22,6 +22,8 @@
     <result property="commentCount" column="comment_count"/>
     <result property="guestNickname" column="guest_nickname"/>
     <result property="guestPassword" column="guest_password"/>
+    <result property="userLiked" column="user_liked"/>
+    <result property="userDisliked" column="user_disliked"/>
 
     <association property="community" javaType="com.cosmus.resonos.domain.community.Community">
         <id property="id" column="community_id"/>
@@ -92,7 +94,23 @@
       (SELECT COUNT(*)
         FROM comment c
         WHERE c.board_post_id = bp.id
-      ) AS comment_count
+      ) AS comment_count,
+      -- 로그인한 유저가 좋아요 눌렀는지 여부 (1 or 0)
+      (SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM likes_dislikes ld
+        WHERE ld.type = 'post'
+          AND ld.target_id = bp.id
+          AND ld.is_likes = 1
+          AND ld.user_id = #{userId}
+      ) AS user_liked,
+      -- 로그인한 유저가 싫어요 눌렀는지 여부 (1 or 0)
+      (SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM likes_dislikes ld
+        WHERE ld.type = 'post'
+          AND ld.target_id = bp.id
+          AND ld.is_likes = 0
+          AND ld.user_id = #{userId}
+      ) AS user_disliked
     FROM board_post bp
     LEFT JOIN user u ON u.id = bp.user_id
     WHERE bp.id = #{postId}

@@ -9,7 +9,7 @@ public class LikesDislikes {
     private Long id;
     private String type;    // 'post', 'comment'
     private Long userId;
-    private boolean isLikes;
+    private Boolean isLikes;
     private Long targetId;
     private Date createdAt;
 }

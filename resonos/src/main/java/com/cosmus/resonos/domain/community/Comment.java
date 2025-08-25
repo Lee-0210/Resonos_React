@@ -44,4 +44,8 @@ public class Comment {
     //비로그인시
     private String guestPassword;
 
+    private boolean userLiked;
+    
+    private boolean userDisliked;
+
 }

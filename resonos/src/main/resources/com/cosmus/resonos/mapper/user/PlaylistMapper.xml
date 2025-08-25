@@ -29,7 +29,7 @@
     <result column="created_at" property="createdAt"/>
     <result column="likeCount" property="likeCount"/>
 
-    <collection property="trackList" ofType="com.cosmus.resonos.domain.review.Track">
+    <collection notNullColumn="trackId" property="trackList" ofType="com.cosmus.resonos.domain.review.Track">
       <id column="trackId" property="id"/>
       <result column="trackTitle" property="title"/>
       <result column="cover_image" property="coverImage"/>
@@ -181,7 +181,7 @@
       LEFT JOIN album a ON t.album_id = a.id
       LEFT JOIN artist art ON t.artist_id = art.id
       LEFT JOIN liked_track lt ON t.id = lt.track_id
-                              AND lt.user_id = #{loginUserId}
+                               AND lt.user_id = #{loginUserId}
     WHERE p.id = #{playlistId}
     ORDER BY pd.order_no;
   </select>

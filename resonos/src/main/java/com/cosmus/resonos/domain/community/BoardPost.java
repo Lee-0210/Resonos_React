@@ -25,6 +25,8 @@ public class BoardPost {
     // 조인해서 가져올 데이터 
     private int postLikes;
     private int postDislikes;
+    private boolean userLiked;
+    private boolean userDisliked;
 
     // 실제DB상 없음 
     // 커뮤니티 정보, 이름 

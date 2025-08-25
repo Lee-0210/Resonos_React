@@ -31,12 +31,19 @@ export const updateDescription = async (boardId, description) => {
 }
 
 
-// 게시글 ==================================
-// TODO : 예외처리
+// 게시글댓 ==================================
 
 // 게시글 조회
 export const getPostData = async (ids) => {
   return api.get(`/community/boards/${ids.boardId}/posts/${ids.postId}`)
+}
+// 게시글 댓 페이지네이션 조회
+export const getPostDataWithPage = async (ids,page) => {
+  return api.get(`/community/boards/${ids.boardId}/posts/${ids.postId}`, {
+    params : {
+      page : page,
+    }
+  })
 }
 // 회원, 비회원 게시글 댓글 달기 O
 export const postComment = async (data, ids) => {
@@ -54,7 +61,7 @@ export const postReply = async (data, ids) => {
 export const editReply = async (data, ids) => {
   return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, data)
 }
-// 게시글 비회원 댓,대댓글 삭제 // 비회원댓,대댓 오류?, // 대댓있을때 삭제안됨
+// 게시글 비회원 댓,대댓글 삭제
 export const deleteUnlogComment = async (data, ids) => {
   return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, {
     headers: {
@@ -67,6 +74,7 @@ export const deleteUnlogComment = async (data, ids) => {
 export const deleteComment = async (ids) => {
   return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`)
 }
+// 게시글 ==================
 
 // 회원, 비회원 게시글 등록 O
 export const postInsert = async (data, boardId) => {
@@ -83,5 +91,31 @@ export const deletePost = async (data, ids) => {
       'Content-Type': 'application/json',
     },
     data
+  })
+}
+
+// 게시글 신고
+export const reportPost = async (ids, obj) => {
+  return api.post(`/community/report/boards/${ids.boardId}/posts/${ids.postId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+}
+// 좋아요 싫어요 ========
+// /community/likes-dislikes/boards/{communityId}/posts/{postId}
+// + /comments/{commentId}
+export const postLike = async (ids,data) => {
+  return api.post(`/community/likes-dislikes/boards/${ids.boardId}/posts/${ids.postId}`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+}
+export const commentLike = async (ids,data) => {
+  return api.post(`/community/likes-dislikes/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+    }
   })
 }
