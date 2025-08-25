@@ -60,7 +60,7 @@ const WYSIWYG = ({ post, ids }) => {
         text: '게시글 작성완료',
         icon: 'success',
         customClass: {
-          confirmButton: 'album-wrapper'
+          popup: 'album-wrapper'
         }
       })
       navigate(`/community/boards/${boardId}/posts/${response.data.id}`)
@@ -71,7 +71,7 @@ const WYSIWYG = ({ post, ids }) => {
         text: '게시글 작성실패',
         icon: 'error',
         customClass: {
-          confirmButton: 'album-wrapper'
+          popup: 'album-wrapper'
         }
       })
     }
@@ -82,7 +82,7 @@ const WYSIWYG = ({ post, ids }) => {
     const data = {
       content: content,
       title: title,
-      ...(isLogin ? {} : { guestPassword : tempPw } )
+      guestPassword : tempPw
     }
     try {
       const response = await api.postUpdate(data, ids)
@@ -92,7 +92,7 @@ const WYSIWYG = ({ post, ids }) => {
         text: '게시글 수정완료',
         icon: 'success',
         customClass: {
-          confirmButton: 'album-wrapper'
+          popup: 'album-wrapper'
         }
       })
       navigate(`/community/boards/${ids.boardId}/posts/${response.data.id}`)
@@ -103,7 +103,7 @@ const WYSIWYG = ({ post, ids }) => {
         text: '게시글 수정실패',
         icon: 'error',
         customClass: {
-          confirmButton: 'album-wrapper'
+          popup: 'album-wrapper'
         }
       })
     }

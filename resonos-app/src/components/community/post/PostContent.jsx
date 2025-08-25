@@ -17,7 +17,7 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
     setOpenPw(!openPw)
   }
   const postDelete = (isLogged) => {
-    deletePost(tempPw, isLogged)
+    deletePost(tempPw, ids, isLogged)
     setTempPw('')
     setOpenPw(false)
   }
@@ -88,11 +88,11 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
             </>
           ) : (
             <>
-              <div className="like btn btn-gold">
+              <div className="like btn btn-gold" onClick={() => handlePostLike(ids, true)}>
                 <p>👍</p>
                 <p>{post.postLikes}</p>
               </div>
-              <div className="dislike btn btn-gold">
+              <div className="dislike btn btn-gold" onClick={() => handlePostLike(ids, false)}>
                 <p>👎</p>
                 <p>{post.postDislikes}</p>
               </div>
@@ -103,7 +103,7 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
           <div className="onlywriter">
             <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
             <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
-            <button className='btn btn-gold' href="#" onClick={() => deletePost(ids, true)}>삭제하기</button>
+            <button className='btn btn-gold' href="#" onClick={() => postDelete(true)}>삭제하기</button>
           </div>
         )}
         {!post.userId && (
@@ -113,21 +113,24 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, ids, deletePost, repo
             <button className='btn btn-gold' href="#" onClick={() => isDelete()}>{openPw ? '취소' : '삭제하기'}</button>
             {openPw && (
               <>
-                <input type="text" onChange={(e) => setTempPw(e.target.value)} />
+                <input type="password" placeholder="비밀번호를 입력해주세요." onChange={(e) => setTempPw(e.target.value)} />
                 <button className='btn btn-gold' onClick={() => postDelete(false)}>삭제</button>
               </>
             )}
           </div>
         )}
-        {isLogin && post.userId && (
+        {isLogin ? (
+          userInfo.id !== post.userId && (
           <div className="onlywriter">
             <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
           </div>
-        )}
-        {!isLogin && post.userId && (
+          )
+        ) : (
+          post.userId && (
           <div className="onlywriter">
             <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
           </div>
+          )
         )}
       </div>
     </div>

@@ -27,7 +27,7 @@ const PostForm = ({ postComment, isLogin }) => {
         {!isLogin && (
           <div className="for-unlogin">
             <input id="nickname" type="text" value={nick}
-              placeholder='ㅇㅇ' onChange={(e) => setNick(e.target.value)} required />
+              placeholder='닉네임' onChange={(e) => setNick(e.target.value)} required />
             <input id="tempPw" type="password" value={tempPw}
               placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
           </div>

@@ -75,7 +75,11 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
             popup: 'album-wrapper'
           }
         })
-        setComments(prevComments => [...prevComments, response.data])
+        if(comments.length % 10 === 0) {
+          fetchComment(page+1)
+        }
+        else setComments(prevComments => [...prevComments, response.data])
+        // setPage(pagination.last)
       }
     } catch (error) {
       console.log(error)
@@ -93,7 +97,7 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
   // 비회원 댓글 수정
   const editComment = async (data, commentId) => {
     if (!isLogin) {
-      if (!data.guestNickname || !data.guestPassword) {
+      if (!data.guestPassword) {
         swal.fire({
           title: '취소 되었습니다.',
           text: '아이디 또는 비밀번호를 입력해주세요.',
@@ -313,6 +317,14 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
       }
     } catch (error) {
       console.log(error)
+      swal.fire({
+          title: '삭제 실패',
+          text: '댓글 삭제 중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
     }
   }
 
