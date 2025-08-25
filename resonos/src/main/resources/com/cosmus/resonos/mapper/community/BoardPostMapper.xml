@@ -333,7 +333,7 @@
 <!-- 투표 선택지 목록 -->
 <select id="findArgumentsByVoteId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVoteArgument">
   SELECT a.id, a.vote_id, a.content, a.arg_no,
-         COALESCE(COUNT(DISTINCT vs.id), 0) AS vote_count
+         COALESCE(COUNT(DISTINCT vs.id), 0) AS voteCount
   FROM com_vote_argument a
   LEFT JOIN vote_status vs ON vs.arg_id = a.id
   WHERE a.vote_id = #{voteId}
