@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import WYSIWYG from '../../containers/community/WYSIWYG'
 import { useParams } from 'react-router-dom'
-import * as api from '../../apis/community' 
+import * as api from '../../apis/community'
 
 function CreateUpdate() {
 
@@ -30,7 +30,7 @@ function CreateUpdate() {
         }
       }
       fetchData();
-  
+
     }, [boardId, postId])
   if(isLoading) {
     return <div>Loading...</div>
@@ -38,7 +38,7 @@ function CreateUpdate() {
 
   return (
     <>
-    {postId ? (<WYSIWYG post={post} ids={{boardId, postId}}  />) : (<WYSIWYG post={null} ids={{boardId, postId}} />)}
+    {postId ? (<WYSIWYG post={post} setPost={setPost} ids={{boardId, postId}}  />) : (<WYSIWYG post={null} ids={{boardId, postId}} />)}
     </>
   )
 }

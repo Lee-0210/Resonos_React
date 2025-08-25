@@ -1,7 +1,7 @@
 import React from "react"
 import {MySwal} from '../../../apis/alert'
 
-const DatePicker = ({ setClosedAt }) => {
+const DatePicker = ({ setClosedAt, vote }) => {
   const now = new Date()
   const offset = now.getTimezoneOffset() * 60000
   const localISOTime = new Date(now - offset).toISOString().slice(0, 16)
@@ -39,6 +39,7 @@ const DatePicker = ({ setClosedAt }) => {
       className="border-form"
       id="datePicker"
       onChange={handleClosedAt}
+      defaultValue={vote?.closedAt}
     />
   )
 }
