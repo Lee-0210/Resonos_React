@@ -42,9 +42,6 @@ public class BoardPost {
 
     // vote
     private ComVote vote;
-    // 투표 리스트
-    private List<ComVote> comVotes;
-
-
+    private Boolean voteActive;
 
 }
