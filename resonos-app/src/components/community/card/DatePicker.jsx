@@ -23,6 +23,7 @@ const DatePicker = ({ setClosedAt }) => {
     <input
       type="datetime-local"
       min={localISOTime}
+      className="border-form"
       id="datePicker"
       onChange={handleClosedAt}
     />
