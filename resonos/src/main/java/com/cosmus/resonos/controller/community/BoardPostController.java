@@ -31,6 +31,7 @@ import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.ComVoteArgument;
 import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.service.community.BoardPostService;
+import com.cosmus.resonos.service.community.ComVoteService;
 import com.cosmus.resonos.service.community.CommentService;
 import com.github.pagehelper.PageInfo;
 
@@ -50,6 +51,9 @@ public class BoardPostController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private ComVoteService comVoteService;
 
     public BoardPostController(BoardPostService boardPostService) {
         this.boardPostService = boardPostService;
