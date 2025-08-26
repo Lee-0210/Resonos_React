@@ -21,7 +21,7 @@ public class ComVoteServiceImpl implements ComVoteService {
 
     @Autowired
     private ComVoteArgumentMapper comVoteArgumentMapper;
-  
+
     @Autowired
     private VoteStatusMapper voteStatusMapper;
 
