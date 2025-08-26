@@ -714,6 +714,10 @@
   border-radius: 10px;
   flex-direction: column;
 }
+.vote-view .vote-util {
+  display: flex;
+  gap: 10px;
+}
 
 .vote-view .vote-line {
   display: flex;
