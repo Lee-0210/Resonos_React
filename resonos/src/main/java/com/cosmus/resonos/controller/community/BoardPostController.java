@@ -168,6 +168,22 @@ public ResponseEntity<?> getPost(
         }
         postWithComments.put("vote", vote); // vote가 null이어도 put
 
+
+        // 투표 정보 및 참여 여부 확인
+        boolean hasUserVoted = false;
+        if (vote != null && arguments != null) {
+            vote.setArguments(arguments);
+            
+            // 로그인한 유저의 투표 참여 여부 확인
+            if (userId != null) {
+                log.info("userId : {}, voteId : {}", userId, vote.getId());
+                hasUserVoted = boardPostService.hasUserVoted(vote.getId() + 1, userId);
+                log.info("hasUserVoted : {}", hasUserVoted);
+                // argId가 아닌 vote Id로 수정해야함 
+            }
+        }
+        postWithComments.put("hasUserVoted", hasUserVoted); // 투표 참여 여부 추가
+
         return new ResponseEntity<>(postWithComments, HttpStatus.OK);
     } catch (Exception e) {
         e.printStackTrace();

@@ -356,11 +356,13 @@
 </insert>
 
 <!-- 투표 이력 확인 -->
-<select id="checkUserVoteExists" resultType="com.cosmus.resonos.domain.community.VoteResult">
-  SELECT COUNT(*)
-  FROM vote_result
-  WHERE arg_id = #{argId}
-    AND (user_id IS NOT NULL AND user_id = #{userId})
+<select id="checkUserVoteExists" resultType="int">
+     SELECT COUNT(1) 
+    FROM vote_status vs
+    INNER JOIN com_vote_argument cva ON vs.arg_id = cva.id
+    INNER JOIN com_vote cv ON cva.vote_id = cv.id
+    WHERE cv.id = #{voteId}
+      AND vs.user_id = #{userId}
 </select>
 
 <!-- 투표 결과 삭제 -->

@@ -63,7 +63,7 @@ public interface BoardPostMapper extends BaseMapper<BoardPost> {
     // 투표 저장 insertVoteResult
     int insertVoteResult(VoteResult voteResult);
     // 투표 이력 확인 
-    public int checkUserVoteExists(@Param("argId") Long argId, @Param("userId") Long userId);
+    public int checkUserVoteExists(@Param("voteId") Long voteId, @Param("userId") Long userId);
     // 투표 취소 
     public int deleteVoteResult(@Param("argId") Long argId, @Param("userId") Long userId);
 
