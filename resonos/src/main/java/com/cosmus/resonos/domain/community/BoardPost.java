@@ -44,4 +44,5 @@ public class BoardPost {
     private ComVote vote;
     private Boolean voteActive;
 
+
 }   

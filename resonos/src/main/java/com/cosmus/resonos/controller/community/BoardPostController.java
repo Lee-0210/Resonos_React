@@ -80,8 +80,13 @@ public class BoardPostController {
         @RequestParam(value = "page", defaultValue = "1") int page,
         @RequestParam(value = "size", defaultValue = "10") int size
     ) {
+        log.info("communityId: {}, postId: {}", communityId, postId);
         Map<String, Object> postWithComments = new HashMap<>();
         try {
+            List<ComVoteArgument> arguments = boardPostService.getArgumentsByVoteId(44L);
+            log.info("arguments : {}", arguments);
+
+
             Long userId = (loginUser != null) ? loginUser.getId() : null;
 
             // 게시글 + 좋아요/싫어요 수 + 투표 정보 
@@ -148,7 +153,13 @@ public class BoardPostController {
             postWithComments.put("commentsPagination", commentsPagination);
 
             // 투표 정보 추가
+            ComVote vote = post.getVote();
+            if (vote != null) {
+                vote.setArguments(arguments);
+            }
+
             postWithComments.put("vote", post.getVote());
+
 
             return new ResponseEntity<>(postWithComments, HttpStatus.OK);
         } catch (Exception e) {
@@ -331,7 +342,9 @@ public class BoardPostController {
 
     // 투표 상세 정보 조회 (선택지 + 투표수 포함)
     @GetMapping("/votes/{voteId}/detail")
-    public ResponseEntity<?> getVoteDetail(@PathVariable Long voteId) {
+    public ResponseEntity<?> getVoteDetail(@PathVariable("voteId") Long voteId) {
+        log.info("##############################################");
+        log.info("voteId : {}", voteId);
         try {
             // 투표 선택지 목록
             List<ComVoteArgument> arguments = boardPostService.getArgumentsByVoteId(voteId);
