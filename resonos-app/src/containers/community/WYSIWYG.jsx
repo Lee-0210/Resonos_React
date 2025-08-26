@@ -57,7 +57,8 @@ const WYSIWYG = ({ post, ids }) => {
       setTitle(post.title || '');
       setGuestNick(post.guestNickname || '');
       setContent(post.content || '');
-      isManager.current = post.community.creatorId === userInfo.id ? true : false
+      if(userInfo)
+        isManager.current = post.community.creatorId === userInfo.id ? true : false
 
       // CKEditor가 준비된 상태라면 editor에 내용 설정
       if (editorRef.current) {
@@ -193,7 +194,7 @@ const WYSIWYG = ({ post, ids }) => {
       : {}
       ),
       voteActive,
-      manager: isManager
+      manager: isManager.current
     }
 
     console.log('수정시 보내는 data :', data)
