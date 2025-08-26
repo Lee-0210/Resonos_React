@@ -75,8 +75,8 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
             popup: 'album-wrapper'
           }
         })
-        if(comments.length % 10 === 0) {
-          fetchComment(page+1)
+        if (comments.length % 10 === 0) {
+          fetchComment(page + 1)
         }
         else setComments(prevComments => [...prevComments, response.data])
         // setPage(pagination.last)
@@ -318,13 +318,13 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
     } catch (error) {
       console.log(error)
       swal.fire({
-          title: '삭제 실패',
-          text: '댓글 삭제 중 오류가 발생했습니다.',
-          icon: 'error',
-          customClass: {
-            popup: 'album-wrapper'
-          }
-        })
+        title: '삭제 실패',
+        text: '댓글 삭제 중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 
@@ -356,7 +356,14 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
                 popup: 'album-wrapper'
               }
             })
-            setComments(prevComments => prevComments.filter(com => com.id !== commentId))
+            setComments(prevComments => {
+              const updated = prevComments.filter(com => com.id !== commentId);
+              console.log("업데이트 후 길이:", updated.length);
+              if (updated.length === 0) {
+                fetchComment(page - 1);
+              }
+              return updated;
+            });
           }
         }
         else {
@@ -439,7 +446,7 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
                 ...prev, replies: prev.replies.map(rep =>
                   rep.id === commentId
                     ?
-                    { 
+                    {
                       ...rep,
                       commentDislikes: response.data.dislikes,
                       commentLikes: response.data.likes
