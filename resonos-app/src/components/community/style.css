@@ -199,10 +199,11 @@
 .commu.index .right-card {
   max-width: 100%;
   width: 100%;
-  min-height: 260px;
+  min-height: 325px;
   background-color: #1C202A;
-  padding: 20px;
+  padding: 15px 20px;
   border-radius: 20px;
+  box-sizing: border-box;
 }
 
 .commu.index .right-card ul {
@@ -817,6 +818,11 @@ figure iframe {
   border: 3px solid var(--main-color) !important;
   border-radius: 10px !important;
 }
+
+.ck-editor__editable_inline .media {
+  width: 500px;
+}
+
 /* ===== 투표 영역 ===== */
 .free-vote .border-form {
   border: 1px solid var(--main-color);
