@@ -36,6 +36,7 @@ const Post = () => {
         setIsLoading(true)
         const response = await api.getPostData({ boardId, postId })
         const data = response.data
+        console.log(data)
         setPost(data.post)
         setComments(data.comments)
         setPagination(data.commentsPagination)

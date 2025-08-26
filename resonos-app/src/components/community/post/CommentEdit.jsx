@@ -9,19 +9,12 @@ const CommentEdit = ({ isLogin, cancel, com, editComment }) => {
     e.preventDefault();
     const data = {
       content: content,
-      guestPassword: tempPw
+      ...(!com.userId && {guestPassword: tempPw} )
     }
-    if (isLogin) {
-      editComment(data, commentId)
-      setEditContent('')
-      cancel()
-    }
-    else {
-      editComment(data, commentId)
-      setEditContent('')
-      setTempPw('')
-      cancel()
-    }
+    editComment(data, commentId)
+    setEditContent('')
+    setTempPw('')
+    cancel()
   }
 
   return (
@@ -31,7 +24,7 @@ const CommentEdit = ({ isLogin, cancel, com, editComment }) => {
           <div className="for-unlogin">
             <input id="nickname" type="text"
               value={com.guestNickname} required readOnly />
-              <input id="tempPw" type="password"
+            <input id="tempPw" type="password"
               placeholder='비밀번호' onChange={(e) => setTempPw(e.target.value)} required />
           </div>
         )}
