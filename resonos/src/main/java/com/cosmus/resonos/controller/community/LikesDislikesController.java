@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.LikesDislikes;
+import com.cosmus.resonos.service.community.BoardPostService;
+import com.cosmus.resonos.service.community.CommentService;
 import com.cosmus.resonos.service.community.LikesDislikesService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,12 @@ public class LikesDislikesController {
 
     @Autowired
     private LikesDislikesService likesDislikesService;
+
+    @Autowired
+    private BoardPostService boardPostService;
+
+    @Autowired
+    private CommentService commentService;
 
     // @GetMapping()
     // public ResponseEntity<?> getAll(
@@ -81,6 +89,7 @@ public class LikesDislikesController {
             response.put("postId", postId);
             response.put("likes", counts.get("likes"));
             response.put("dislikes", counts.get("dislikes"));
+            response.put("post", boardPostService.select(postId));
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             log.error("게시글 반응 남기기 실패", e);
@@ -102,6 +111,7 @@ public class LikesDislikesController {
             response.put("commentId", commentId);
             response.put("likes", counts.get("likes"));
             response.put("dislikes", counts.get("dislikes"));
+            response.put("comment", commentService.select(commentId));
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             log.error("댓글 반응 남기기 실패", e);
