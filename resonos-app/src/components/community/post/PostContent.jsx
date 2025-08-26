@@ -61,6 +61,9 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
     }
     setVoting(!voting)
   }
+  const closeVote = () => {
+    setVoting(!voting)
+  }
 
   const handleVote = (e) => {
     e.preventDefault();
@@ -165,7 +168,10 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
         <div className="vote-view">
           <form action="" className='vote-form' onSubmit={handleVote}>
             {vote.arguments.map((arg, index) => <VoteArguments key={index} arg={arg} selectedId={selectedId} onChange={setSelectedId} />)}
-            <button type='submit' className='btn btn-gold'>투표완료</button>
+            <div className='vote-util'>
+              <button type='submit' className='btn btn-gold'>투표완료</button>
+              <button className="btn btn-gold" onClick={closeVote}>취소</button>
+            </div>
           </form>
         </div>
       )}
