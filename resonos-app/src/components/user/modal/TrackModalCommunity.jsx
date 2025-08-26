@@ -99,7 +99,7 @@ const TrackModalCommunity = ({onModal, setOnModal, setMusic, onSearchTrack, trac
       }
     };
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       if(inputRef.current) inputRef.current.focus()
         console.log(inputRef)
     }, 100)
@@ -109,6 +109,7 @@ const TrackModalCommunity = ({onModal, setOnModal, setMusic, onSearchTrack, trac
 
     // 컴포넌트 unmount 시 이벤트 제거
     return () => {
+      clearTimeout(timeout)
       window.removeEventListener("keydown", handleEsc);
     };
   }, [onModal]);
