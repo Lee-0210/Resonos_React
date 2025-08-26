@@ -10,7 +10,7 @@ const ReplyEdit = ({ isLogin, cancel, rep, editReplyf }) => {
     e.preventDefault();
     const data = {
       content: content,
-      ...(!rep.userId && {guestPassword: tempPw} )
+        ...(!rep.userId && {guestPassword: tempPw, guestNickname: rep.guestNickname} )
     }
     editReplyf(data, replyId)
     setEditContent('')
