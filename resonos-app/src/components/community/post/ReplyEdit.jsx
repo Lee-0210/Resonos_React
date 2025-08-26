@@ -10,20 +10,12 @@ const ReplyEdit = ({ isLogin, cancel, rep, editReplyf }) => {
     e.preventDefault();
     const data = {
       content: content,
-      guestPassword: tempPw
-    }
-    if (isLogin) {
-      editReplyf({ content }, replyId)
-      setEditContent('')
-      cancel()
-    }
-    else {
-      editReplyf(data, replyId)
-      setEditContent('')
-      setTempPw('')
-      cancel()
+      ...(!rep.userId && {guestPassword: tempPw} )
     }
     editReplyf(data, replyId)
+    setEditContent('')
+    setTempPw('')
+    cancel()
   }
 
   return (

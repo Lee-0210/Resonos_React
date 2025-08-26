@@ -6,6 +6,15 @@ const FreeVote = ({voteItems, addVoteRow, deleteVoteRow, setClosedAt, setVoteTit
   return (
     <section className="free-vote">
       <div className="inner">
+        <p className="fail-vali">
+          {
+            !vote?.isCompleted
+            ?
+            '진행중인 투표는 수정 반영이 되지 않습니다.'
+            :
+            ''
+          }
+        </p>
         <div className="top">
           <input
             className='border-form'
