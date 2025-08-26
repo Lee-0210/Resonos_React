@@ -236,7 +236,6 @@ public class BoardPostController {
         @Validated @RequestBody BoardPost request,
         BindingResult bindingResult,
         @RequestParam(value="voteId", required = false) Long voteId,
-        @RequestBody BoardPost request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
         try {
