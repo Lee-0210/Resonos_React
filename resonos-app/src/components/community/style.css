@@ -781,7 +781,7 @@
 .wysiwyg-wrapper .actions {
   width: 700px;
   display: flex;
-  justify-content: space-between;
+  gap: 15px;
 }
 .wysiwyg-wrapper .actions .btn {
   padding: 5px 30px;
@@ -803,7 +803,20 @@
   min-height: 300px;
   border-radius: 0 0 10px 10px !important;
 }
-
+figure.media {
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+figure.media.ck-widget {
+  border: none !important;
+  box-shadow: none !important;
+}
+figure iframe {
+  border: 3px solid var(--main-color) !important;
+  border-radius: 10px !important;
+}
 /* ===== 투표 영역 ===== */
 .free-vote .border-form {
   border: 1px solid var(--main-color);
