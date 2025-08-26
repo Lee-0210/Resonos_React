@@ -182,7 +182,10 @@ public ResponseEntity<?> getPost(
                 // argId가 아닌 vote Id로 수정해야함 
             }
         }
-        vote.setHasUserVoted(hasUserVoted); // 투표 참여 여부 추가
+
+        if (vote != null) {
+            vote.setHasUserVoted(hasUserVoted); // 투표 참여 여부 추가
+        }
 
         return new ResponseEntity<>(postWithComments, HttpStatus.OK);
     } catch (Exception e) {
