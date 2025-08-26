@@ -63,9 +63,9 @@ public interface BoardPostMapper extends BaseMapper<BoardPost> {
     // 투표 저장 insertVoteResult
     int insertVoteResult(VoteResult voteResult);
     // 투표 이력 확인 
-    public int checkUserVoteExists(@Param("argId") Long argId, @Param("userId") Long userId, @Param("guestId") String guestId);
+    public int checkUserVoteExists(@Param("argId") Long argId, @Param("userId") Long userId);
     // 투표 취소 
-    public int deleteVoteResult(@Param("argId") Long argId, @Param("userId") Long userId, @Param("guestId") String guestId);
+    public int deleteVoteResult(@Param("argId") Long argId, @Param("userId") Long userId);
 
     // 커뮤니티 ID 목록에 해당하는 게시글 조회
     public List<BoardPost> getPostsByCommunityIds(List<Long> communityIds);

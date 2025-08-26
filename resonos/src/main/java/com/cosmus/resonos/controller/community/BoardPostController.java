@@ -90,7 +90,15 @@ public class BoardPostController {
         log.info("communityId: {}, postId: {}", communityId, postId);
         Map<String, Object> postWithComments = new HashMap<>();
         try {
-            List<ComVoteArgument> arguments = boardPostService.getArgumentsByVoteId(44L);
+            // post id 로 vote id 가져오기
+
+
+            Long voteId = boardPostService.getVotesByPostId(postId).get(0).getId();
+            log.info("##############################################");
+            log.info("voteId : {}", voteId);
+            log.info("##############################################");
+
+            List<ComVoteArgument> arguments = boardPostService.getArgumentsByVoteId(voteId + 1);
             log.info("arguments : {}", arguments);
 
 
@@ -469,91 +477,91 @@ public class BoardPostController {
     }
 
   
-    // 투표 참여 (POST) - 실제 투표 기능
-   @PostMapping("/vote-arguments/{argId}/vote")
-    public ResponseEntity<?> submitVote(
-        @PathVariable Long argId, 
-        @RequestBody(required = false) Map<String, Object> voteData,
-        @AuthenticationPrincipal CustomUser loginUser,
-        HttpServletRequest request,
-        HttpSession session
-    ) {
-        try {
-            Long userId = (loginUser != null) ? loginUser.getId() : null;
-            String sessionId = session.getId();
+//     // 투표 참여 (POST) - 실제 투표 기능
+//    @PostMapping("/vote-arguments/{argId}/vote")
+//     public ResponseEntity<?> submitVote(
+//         @PathVariable Long argId, 
+//         @RequestBody(required = false) Map<String, Object> voteData,
+//         @AuthenticationPrincipal CustomUser loginUser,
+//         HttpServletRequest request,
+//         HttpSession session
+//     ) {
+//         try {
+//             Long userId = (loginUser != null) ? loginUser.getId() : null;
+//             String sessionId = session.getId();
             
-            // Service에서 중복 투표 확인 및 처리
-            boolean voteSuccess = boardPostService.submitVote(argId, userId, sessionId);
+//             // Service에서 중복 투표 확인 및 처리
+//             boolean voteSuccess = boardPostService.submitVote(argId, userId, sessionId);
             
-            if (!voteSuccess) {
-                return ResponseEntity.internalServerError()
-                    .body(Map.of(
-                        "success", false,
-                        "error", "투표 처리에 실패했습니다."
-                    ));
-            }
+//             if (!voteSuccess) {
+//                 return ResponseEntity.internalServerError()
+//                     .body(Map.of(
+//                         "success", false,
+//                         "error", "투표 처리에 실패했습니다."
+//                     ));
+//             }
             
-            // 투표 후 최신 결과 반환
-            int newCount = boardPostService.getVoteCountByArgumentId(argId);
+//             // 투표 후 최신 결과 반환
+//             int newCount = boardPostService.getVoteCountByArgumentId(argId);
             
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "투표가 완료되었습니다.");
-            response.put("newCount", newCount);
-            response.put("argumentId", argId);
-            response.put("timestamp", System.currentTimeMillis());
+//             Map<String, Object> response = new HashMap<>();
+//             response.put("success", true);
+//             response.put("message", "투표가 완료되었습니다.");
+//             response.put("newCount", newCount);
+//             response.put("argumentId", argId);
+//             response.put("timestamp", System.currentTimeMillis());
             
-            return ResponseEntity.ok(response);
+//             return ResponseEntity.ok(response);
             
-        } catch (Exception e) {
-            log.error("투표 처리 실패: argId={}, userId={}", argId, 
-                    (loginUser != null) ? loginUser.getId() : "guest", e);
+//         } catch (Exception e) {
+//             log.error("투표 처리 실패: argId={}, userId={}", argId, 
+//                     (loginUser != null) ? loginUser.getId() : "guest", e);
             
-            return ResponseEntity.internalServerError()
-                .body(Map.of("success", false, "error", "투표 처리 중 오류가 발생했습니다."));
-        }
-    }
-    // 투표 취소
-    @DeleteMapping("/vote-arguments/{argId}/vote")
-    public ResponseEntity<?> cancelVote(
-        @PathVariable Long argId,
-        @AuthenticationPrincipal CustomUser loginUser,
-        HttpSession session
-    ) {
-        try {
-            Long userId = (loginUser != null) ? loginUser.getId() : null;
-            String sessionId = session.getId();
+//             return ResponseEntity.internalServerError()
+//                 .body(Map.of("success", false, "error", "투표 처리 중 오류가 발생했습니다."));
+//         }
+//     }
+//     // 투표 취소
+//     @DeleteMapping("/vote-arguments/{argId}/vote")
+//     public ResponseEntity<?> cancelVote(
+//         @PathVariable Long argId,
+//         @AuthenticationPrincipal CustomUser loginUser,
+//         HttpSession session
+//     ) {
+//         try {
+//             Long userId = (loginUser != null) ? loginUser.getId() : null;
+//             String sessionId = session.getId();
             
-            // Service에서 투표 이력 확인 및 취소 처리
-            boolean cancelSuccess = boardPostService.cancelVote(argId, userId, sessionId);
+//             // Service에서 투표 이력 확인 및 취소 처리
+//             boolean cancelSuccess = boardPostService.cancelVote(argId, userId, sessionId);
             
-            if (!cancelSuccess) {
-                return ResponseEntity.internalServerError()
-                    .body(Map.of(
-                        "success", false,
-                        "error", "투표 취소에 실패했습니다."
-                    ));
-            }
+//             if (!cancelSuccess) {
+//                 return ResponseEntity.internalServerError()
+//                     .body(Map.of(
+//                         "success", false,
+//                         "error", "투표 취소에 실패했습니다."
+//                     ));
+//             }
             
-            // 취소 후 최신 투표수 반환
-            int newCount = boardPostService.getVoteCountByArgumentId(argId);
+//             // 취소 후 최신 투표수 반환
+//             int newCount = boardPostService.getVoteCountByArgumentId(argId);
             
-            Map<String, Object> response = new HashMap<>();
-            response.put("success", true);
-            response.put("message", "투표가 취소되었습니다.");
-            response.put("newCount", newCount);
-            response.put("argumentId", argId);
+//             Map<String, Object> response = new HashMap<>();
+//             response.put("success", true);
+//             response.put("message", "투표가 취소되었습니다.");
+//             response.put("newCount", newCount);
+//             response.put("argumentId", argId);
             
-            return ResponseEntity.ok(response);
+//             return ResponseEntity.ok(response);
             
-        } catch (Exception e) {
-            log.error("투표 취소 실패: argId={}, userId={}", argId, 
-                    (loginUser != null) ? loginUser.getId() : "guest", e);
+//         } catch (Exception e) {
+//             log.error("투표 취소 실패: argId={}, userId={}", argId, 
+//                     (loginUser != null) ? loginUser.getId() : "guest", e);
 
-            return ResponseEntity.internalServerError()
-                .body(Map.of("success", false, "error", "투표 취소 중 오류가 발생했습니다."));
-        }
-    }
+//             return ResponseEntity.internalServerError()
+//                 .body(Map.of("success", false, "error", "투표 취소 중 오류가 발생했습니다."));
+//         }
+//     }
 
     // 투표 수정 - 아직 미완성 
     @PutMapping("/vote-arguments/{argId}") 

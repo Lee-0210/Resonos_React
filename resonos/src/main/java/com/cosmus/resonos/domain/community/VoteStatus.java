@@ -15,6 +15,9 @@ public class VoteStatus {
 
     private Long userId; 
 
-    private Date createdAt; 
+    private Date createdAt;
+
+    // 없는 컬럼 
+    public ComVote Vote;
 
 }

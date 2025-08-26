@@ -62,11 +62,11 @@ public interface BoardPostService extends BaseService<BoardPost> {
     public int getVoteCountByArgumentId(Long argId) throws Exception;
     // 게시글 ID로 투표 + 선택지 + 투표수 포함한 Map 조회
     Map<String, Object> getVotesWithResultsByPostId(Long postId) throws Exception;
-    // 중복 투표 확인 - Cookie 기반 
-    boolean hasUserVoted(Long voteId, Long userId, String sessionId) throws Exception;
-    // 투표 참여 - Cookie 기반 
-    boolean submitVote(Long argId, Long userId, String sessionId) throws Exception;
-    // 투표 취소 - Cookie 기반 
-    boolean cancelVote(Long argId, Long userId, String sessionId) throws Exception;
+    // 중복 투표 확인 
+    boolean hasUserVoted(Long voteId, Long userId) throws Exception;
+    // 투표 참여 - 중복 확인 
+    boolean submitVote(Long argId, Long userId) throws Exception;
+    // 투표 취소 
+    boolean cancelVote(Long argId, Long userId) throws Exception;
 
 }

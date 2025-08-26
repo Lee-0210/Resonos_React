@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
+import com.cosmus.resonos.domain.community.ComVote;
 import com.cosmus.resonos.domain.community.VoteStatus;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.VoteStatusService;
@@ -95,51 +97,6 @@ public class VoteStatusController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    // @Autowired
-    // private BoardPostService boardPostService;
-
-    
-    // // 투표 기능
-    // @PostMapping("{argId}")
-    // public ResponseEntity<?> submitVote(
-    //         @PathVariable Long argId,
-    //         @RequestBody(required = false) Map<String, Object> voteData,
-    //         @AuthenticationPrincipal CustomUser loginUser,
-    //         HttpServletRequest request,
-    //         HttpSession session
-    // ) {
-    //     try {
-    //         Long userId = (loginUser != null) ? loginUser.getId() : null;
-    //         String sessionId = session.getId();
-
-    //         boolean voteSuccess = boardPostService.submitVote(argId, userId, sessionId);
-
-    //         if (!voteSuccess) {
-    //             return ResponseEntity.internalServerError()
-    //                     .body(Map.of("success", false, "error", "투표 처리에 실패했습니다."));
-    //         }
-
-    //         int newCount = boardPostService.getVoteCountByArgumentId(argId);
-
-    //         Map<String, Object> response = new HashMap<>();
-    //         response.put("success", true);
-    //         response.put("message", "투표가 완료되었습니다.");
-    //         response.put("newCount", newCount);
-    //         response.put("argumentId", argId);
-    //         response.put("timestamp", System.currentTimeMillis());
-    //         response.put("vote", voteData);
-
-    //         return ResponseEntity.ok(response);
-
-    //     } catch (Exception e) {
-    //         log.error("투표 처리 실패: argId={}, userId={}", argId, (loginUser != null) ? loginUser.getId() : "guest", e);
-    //         return ResponseEntity.internalServerError()
-    //                 .body(Map.of("success", false, "error", "투표 처리 중 오류가 발생했습니다."));
-    //     }
-    // }
-
-
 
     @PutMapping()
     public ResponseEntity<?> update(@RequestBody VoteStatus entity) {
