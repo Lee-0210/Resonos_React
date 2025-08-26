@@ -3,8 +3,6 @@ package com.cosmus.resonos.domain.community;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +22,6 @@ public class ComVote {
 
     private Date createdAt;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @Future(message = "투표 종료일시는 미래 일시여야 합니다.")
     private Date closedAt;
 
