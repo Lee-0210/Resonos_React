@@ -49,8 +49,8 @@ public class Comment {
     @NotBlank(message = "비밀번호를 입력하세요.", groups = GuestCheck.class)
     private String guestPassword;
 
-    private boolean userLiked;
+    private Boolean userLiked;
     
-    private boolean userDisliked;
+    private Boolean userDisliked;
 
 }

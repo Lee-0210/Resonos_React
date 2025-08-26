@@ -85,7 +85,7 @@ public class LikesDislikesServiceImpl implements LikesDislikesService {
 
     @Override
     @Transactional
-    public void toggleReaction(Long userId, String type, Long targetId, boolean isLike) throws Exception {
+    public void toggleReaction(Long userId, String type, Long targetId, Boolean isLike) throws Exception {
         LikesDislikes existing = likesDislikesMapper.selectByUser(userId, type, targetId);
         
         if (existing == null) {
