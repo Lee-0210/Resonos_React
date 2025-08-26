@@ -71,26 +71,26 @@ public class MainPageController {
             response.put("popularPagination", new Pagination(popularPage));
 
             // 4. 실시간 인기글
-            PageInfo<BoardPost> realTimePage = boardPostService.getRealTimePopularPosts(page, size);
+            PageInfo<BoardPost> realTimePage = boardPostService.getRealTimePopularPosts(page, 7);
             List<BoardPost> realTimePosts = realTimePage.getList() != null ? realTimePage.getList() : new ArrayList<>();
             response.put("realTimePopularPosts", realTimePosts);
             response.put("realTimePopularPagination", new Pagination(realTimePage));
 
             // 5. 카테고리 순위 Top5
-            List<CommunityCategory> topCategories = communityCategoryService.getTopCategories(5);
+            List<CommunityCategory> topCategories = communityCategoryService.getTopCategories(7);
             response.put("topCategories", topCategories);
 
             // 6. 카테고리 신설
-            List<CommunityCategory> newCategories = communityCategoryService.getNewCategories(5);
+            List<CommunityCategory> newCategories = communityCategoryService.getNewCategories(7);
             response.put("newCategories", newCategories);
             log.info("데이터 문제 없음");
 
             // 7. 게시판 순위 Top5 - communityService
-            List<Community> topCommunities = communityService.getTopCommunities(5);
+            List<Community> topCommunities = communityService.getTopCommunities(7);
             response.put("topCommunities", topCommunities);
 
             // 8. 신설 게시판 - communityService
-            List<Community> newCommunities = communityService.getNewCommunities(5);
+            List<Community> newCommunities = communityService.getNewCommunities(7);
             response.put("newCommunities", newCommunities);
 
 

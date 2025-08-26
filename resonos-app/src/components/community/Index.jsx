@@ -82,7 +82,7 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
           </div>
           {/* 게시판 순위 */}
           <div className='right-card ranking'>
-            <h3>게시판 순위 Top5</h3>
+            <h3>게시판 순위 Top7</h3>
             <ul>
               {
                 topCommunities.map((board, index) => (

@@ -31,10 +31,10 @@ const WYSIWYG = ({ post, ids }) => {
   // 투표 항목 리스트
   const [voteItems, setVoteItems] = useState(
     post?.vote ? [...post?.vote?.arguments] :
-    [
-      {id: 1, argNo: 1, content: '항목1'},
-      {id: 2, argNo: 2, content: '항목2'}
-    ]
+      [
+        { id: 1, argNo: 1, content: '항목1' },
+        { id: 2, argNo: 2, content: '항목2' }
+      ]
   )
 
   // 투표 제목
@@ -57,7 +57,7 @@ const WYSIWYG = ({ post, ids }) => {
       setTitle(post.title || '');
       setGuestNick(post.guestNickname || '');
       setContent(post.content || '');
-      if(userInfo)
+      if (userInfo)
         isManager.current = post.community.creatorId === userInfo.id ? true : false
 
       // CKEditor가 준비된 상태라면 editor에 내용 설정
@@ -88,7 +88,7 @@ const WYSIWYG = ({ post, ids }) => {
 
   // 투표 관련 함수
   const addVoteRow = () => {
-    if(voteItems.length >= 7) {
+    if (voteItems.length >= 7) {
       MySwal.fire({
         position: "center",
         icon: "warning",
@@ -114,7 +114,7 @@ const WYSIWYG = ({ post, ids }) => {
   }
 
   const deleteVoteRow = (index) => {
-    if(voteItems.length <= 2) {
+    if (voteItems.length <= 2) {
       MySwal.fire({
         position: "center",
         icon: "warning",
@@ -146,8 +146,8 @@ const WYSIWYG = ({ post, ids }) => {
       title: title,
       ...(isLogin ? {} : { guestNickname: guestNick, guestPassword: tempPw }),
       ...(voteActive
-      ? { vote: { title: voteTitle, closedAt, arguments: voteItems } }
-      : {}
+        ? { vote: { title: voteTitle, closedAt, arguments: voteItems } }
+        : {}
       ),
       voteActive
     }
@@ -188,10 +188,10 @@ const WYSIWYG = ({ post, ids }) => {
       content: content,
       title: title,
       guestNickname: guestNick,
-      guestPassword : tempPw,
+      guestPassword: tempPw,
       ...(voteActive
-      ? { vote: { title: voteTitle, closedAt, arguments: voteItems } }
-      : {}
+        ? { vote: { title: voteTitle, closedAt, arguments: voteItems } }
+        : {}
       ),
       voteActive,
       manager: isManager.current
@@ -325,34 +325,34 @@ const WYSIWYG = ({ post, ids }) => {
             {post ? (
               !post.userId && (
                 <>
-                <div className="title-box">
-                  <p className='subtitle'>작성자</p>
-                  <input className='styled-form' type="text" id='writer'
-                    value={guestNick}
-                    onChange={changeWriter} />
-                </div>
-                <div className="title-box">
+                  <div className="title-box">
+                    <p className='subtitle'>작성자</p>
+                    <input className='styled-form' type="text" id='writer'
+                      value={guestNick}
+                      onChange={changeWriter} />
+                  </div>
+                  {/* <div className="title-box">
                   <p className='subtitle'>비밀번호</p>
                   <input className='styled-form' type="password" id='password'
                     onChange={changeTempPw} />
-                </div>
-              </>
+                </div> */}
+                </>
               )
             ) : (
               !isLogin && (
                 <>
-                <div className="title-box">
-                  <p className='subtitle'>작성자</p>
-                  <input className='styled-form' type="text" id='writer'
-                    value={guestNick}
-                    onChange={changeWriter} />
-                </div>
-                <div className="title-box">
-                  <p className='subtitle'>비밀번호</p>
-                  <input className='styled-form' type="password" id='password'
-                    onChange={changeTempPw} />
-                </div>
-              </>
+                  <div className="title-box">
+                    <p className='subtitle'>작성자</p>
+                    <input className='styled-form' type="text" id='writer'
+                      value={guestNick}
+                      onChange={changeWriter} />
+                  </div>
+                  <div className="title-box">
+                    <p className='subtitle'>비밀번호</p>
+                    <input className='styled-form' type="password" id='password'
+                      onChange={changeTempPw} />
+                  </div>
+                </>
               )
             )}
           </div>
@@ -441,6 +441,13 @@ const WYSIWYG = ({ post, ids }) => {
               >
                 {voteActive ? '투표취소' : '투표생성'}
               </button>
+              {!post.userId && (
+                <div className="title-box">
+                  <h4>비밀번호</h4>
+                  <input className='styled-form' type="password" id='password'
+                    onChange={changeTempPw} required/>
+                </div>
+              )}
             </div>
           )}
         </div>

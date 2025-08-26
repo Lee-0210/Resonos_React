@@ -9,7 +9,18 @@ const CommentEdit = ({ isLogin, cancel, com, editComment }) => {
     e.preventDefault();
     const data = {
       content: content,
-      ...(!com.userId && {guestPassword: tempPw} )
+      ...(!com.userId && {guestPassword: tempPw,guestNickname: com.guestNickname} )
+    }
+    if (isLogin) {
+      editComment(data, commentId)
+      setEditContent('')
+      cancel()
+    }
+    else {
+      editComment(data, commentId)
+      setEditContent('')
+      setTempPw('')
+      cancel()
     }
     editComment(data, commentId)
     setEditContent('')
