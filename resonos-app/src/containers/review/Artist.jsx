@@ -58,7 +58,6 @@ const Artist = () => {
 
         const response = await api.getArtistPage(id);
         const data = response.data;
-        console.log(data)
 
         // API 응답 데이터를 각각의 useState에 설정
         setArtist(data.artist);
@@ -79,7 +78,14 @@ const Artist = () => {
         setUserId(data.userId);
 
       } catch (err) {
-        console.error("Failed to fetch artist data:", err);
+        swal.fire({
+          title: '초기 로딩 실패',
+          text: '화면을 불러오는중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       } finally {
         setLoading(false); // 로딩 상태 종료
       }
@@ -92,7 +98,6 @@ const Artist = () => {
   const likeArtist = async (dto) => {
     try {
       const response = await api.toggleArtistLike(dto);
-      console.log(response.data)
       setIsArtistFollowed(response.data.followed);
       setFollowCount(response.data.count)
     } catch (error) {
@@ -114,7 +119,6 @@ const Artist = () => {
     const artistDTO = { ...dto, artistId: id }
     try {
       const response = await api.voteArtistMood(artistDTO)
-      console.log(response.data)
       const data = response.data
       if (data != null) {
         setUserVotedMoodId(data.votedMoodId)

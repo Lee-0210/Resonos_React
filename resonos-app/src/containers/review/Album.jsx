@@ -54,15 +54,10 @@ const Album = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
-        console.log('API 호출 시작, ID:', id);
         try {
           setLoading(true);
-          // axios 응답 객체 전체를 받음
           const response = await api.getAlbumPage(id);
-          // console.log(await albumApi.albumPage(id))
-          // 실제 데이터는 response.data에 들어있음
           const data = response.data;
-          console.log('API 응답 데이터:', data);
 
           // 응답 데이터를 기반으로 각 상태 업데이트
           setAlbum(data.album);
@@ -104,10 +99,16 @@ const Album = () => {
 
 
         } catch (error) {
-          console.error('API 호출 실패:', error);
+          swal.fire({
+            title: '초기 로딩 실패',
+            text: '화면을 불러오는중 오류가 발생했습니다.',
+            icon: 'error',
+            customClass: {
+              popup: 'album-wrapper'
+            }
+          })
         } finally {
           setLoading(false);
-          console.log('페이지 데이터 로딩 완료');
         }
       }
     };
@@ -122,7 +123,6 @@ const Album = () => {
   const toggleLike = async (userId, album) => {
     try {
       const response = await api.toggleLike(userId, album.id);
-      console.log(response.data)
       setIsAlbumLikedByUser(response.data.liked);
       setAlbumLikeCount(response.data.count)
     } catch (error) {
@@ -157,7 +157,6 @@ const Album = () => {
   // 리뷰 작성
   const handleSubmitReview = async (reviewForm) => {
     try {
-      console.log(reviewForm)
       const response = await api.writeAlbumReview(album.id, reviewForm);
 
       const updatedResponse = response.data
@@ -172,7 +171,6 @@ const Album = () => {
         }
       })
     } catch (error) {
-      console.error(error);
       if (error.response.data === 'User is null') {
         swal.fire({
           title: '로그인이 필요합니다',
@@ -212,7 +210,6 @@ const Album = () => {
     if (result.isConfirmed) {
       try {
         const response = await api.deleteAlbumReview(albumId, reviewId);
-        console.log(response.data)
         const data = response.data
         swal.fire({
           title: '성공',
@@ -228,7 +225,6 @@ const Album = () => {
         setScore(data.score);
 
       } catch (error) {
-        console.error(error)
         swal.fire({
           title: '오류',
           text: '리뷰 삭제 중 오류가 발생했습니다.',
@@ -246,7 +242,6 @@ const Album = () => {
     try {
       const reponse = await api.updateAlbumReview(id, reviewForm.id, reviewForm.content, reviewForm.rating);
       const data = reponse.data
-      console.log(data)
       setReviews(prevReviews => prevReviews.map(review =>
         review.id === data.review.id
           ? { ...review, content: data.review.content, rating: data.review.rating }
@@ -262,7 +257,6 @@ const Album = () => {
         }
       })
     } catch (error) {
-      console.error(error)
       swal.fire({
         title: '오류',
         text: '리뷰 수정 중 오류가 발생했습니다.',
@@ -278,13 +272,19 @@ const Album = () => {
   const loadMoreReviews = async (page) => {
     try {
       const response = await api.moreAlbumReview(id, page);
-      console.log(response.data)
       const data = response.data
       setReviews(prevReviews => [...prevReviews, ...data.review]);
       setPage(page + 1)
       setHasNext(data.hasNext);
     } catch (error) {
-      console.error(error)
+      swal.fire({
+        title: '리뷰 로딩 실패',
+        text: '리뷰를 불러오는중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 
@@ -293,7 +293,6 @@ const Album = () => {
     try {
       const response = await api.likeAlbumReview(reviewId)
       const data = response.data
-      console.log(response)
       setReviews(prevReviews => prevReviews.map(review => {
         if (review.id === reviewId) {
           return {
@@ -304,7 +303,6 @@ const Album = () => {
         return review
       }))
     } catch (error) {
-      console.error(error);
       if (error.response.data === 'User is null') {
         swal.fire({
           title: '로그인이 필요합니다',
@@ -332,7 +330,6 @@ const Album = () => {
     try {
       const response = await api.reportAlbumReview(reviewId)
       const data = response.data
-      console.log(response)
       swal.fire({
         title: '신고 완료',
         text: `해당 리뷰의 신고 건수는 ${data.reportCount}건 입니다`,
@@ -342,7 +339,6 @@ const Album = () => {
         }
       })
     } catch (error) {
-      console.error(error);
       if (error.response.data === 'User is null') {
         swal.fire({
           title: '로그인이 필요합니다',
@@ -371,7 +367,6 @@ const Album = () => {
     try {
       const response = await api.voteElement(id, element);
       const data = response.data
-      console.log(data)
       setUserVote(data.userArg)
       setArgValues(data.avgArg)
       if (data.userArg != null) {
@@ -386,7 +381,14 @@ const Album = () => {
         }
       })
     } catch (error) {
-      console.error(error)
+      swal.fire({
+        title: '투표 실패',
+        text: '투표 처리중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 

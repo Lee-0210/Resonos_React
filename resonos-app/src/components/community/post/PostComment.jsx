@@ -20,12 +20,10 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
   const [pagination, setPagination] = useState(null)
   const [commentCount, setCommentCount] = useState(null)
 
-  console.log(page)
 
   const fetchComment = async (page) => {
     try {
       const response = await api.getPostDataWithPage(ids, page)
-      console.log(response.data)
       setCommentCount(response.data.post.commentCount)
       setComments(response.data.comments)
       setPagination(response.data.commentsPagination)
@@ -65,7 +63,6 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
     }
     try {
       const response = await api.postComment(data, ids)
-      console.log(response)
       if (response.status === 201) {
         swal.fire({
           title: '작성 완료',
@@ -82,7 +79,6 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
         // setPage(pagination.last)
       }
     } catch (error) {
-      console.log(error)
       swal.fire({
         title: '오류',
         text: '댓글 작성 중 오류가 발생했습니다.',
@@ -122,7 +118,6 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
     }
     try {
       const response = await api.editComment(data, { ...ids, commentId })
-      console.log(response)
       if (response.status === 200) {
         swal.fire({
           title: '수정 완료',
@@ -178,7 +173,6 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
     }
     try {
       const response = await api.postReply(data, ids)
-      console.log(response)
       if (response.status === 201) {
         swal.fire({
           title: '작성 완료',
@@ -234,7 +228,6 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
     }
     try {
       const response = await api.editReply(data, { ...ids, commentId })
-      console.log(response)
       if (response.status === 200) {
         swal.fire({
           title: '수정 완료',
@@ -280,11 +273,9 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
     const data = {
       guestPassword: pw
     }
-    console.log(data)
     try {
       const response = await api.deleteUnlogComment(data, { ...ids, commentId })
       if (isRoot) {
-        console.log('댓글입니다.')
         if (response.status === 200) {
           swal.fire({
             title: '삭제 완료',
@@ -298,7 +289,6 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
         }
       }
       else {
-        console.log('대댓글입니다.')
         if (response.status === 200) {
           swal.fire({
             title: '삭제 완료',
@@ -316,7 +306,6 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
         }
       }
     } catch (error) {
-      console.log(error)
       swal.fire({
         title: '삭제 실패',
         text: '댓글 삭제 중 오류가 발생했습니다.',
@@ -344,9 +333,7 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
     if (result.isConfirmed) {
       try {
         const response = await api.deleteComment({ ...ids, commentId })
-        console.log(response)
         if (isRoot) {
-          console.log('댓글입니다.')
           if (response.status === 200) {
             swal.fire({
               title: '삭제 완료',
@@ -358,7 +345,6 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
             })
             setComments(prevComments => {
               const updated = prevComments.filter(com => com.id !== commentId);
-              console.log("업데이트 후 길이:", updated.length);
               if (updated.length === 0) {
                 fetchComment(page - 1);
               }
@@ -367,7 +353,6 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
           }
         }
         else {
-          console.log('대댓글입니다.')
           if (response.status === 200) {
             swal.fire({
               title: '삭제 완료',
@@ -414,10 +399,8 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
       isLikes: isLike
     }
     if (isRoot) {
-      console.log('댓글입니다.')
       try {
         const response = await api.commentLike({ ...ids, commentId }, data)
-        console.log(response)
         if (response.status === 200) {
           setComments(prevComments => prevComments.map(com =>
             com.id === commentId
@@ -433,14 +416,19 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
           ))
         }
       } catch (error) {
-        console.log(error)
+        swal.fire({
+          title: '좋아요 실패',
+          text: '처리 중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
     else {
-      console.log('대댓글입니다.')
       try {
         const response = await api.commentLike({ ...ids, commentId }, data)
-        console.log(response)
         if (response.status === 200) {
           setComments(prevComments => prevComments.map(prev =>
             prev.id === pId ?
@@ -461,7 +449,14 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
           ))
         }
       } catch (error) {
-        console.log(error)
+        swal.fire({
+          title: '좋아요 실패',
+          text: '처리 중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
   }
