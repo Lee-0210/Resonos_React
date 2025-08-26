@@ -93,19 +93,20 @@ public ResponseEntity<?> getPost(
         // post id 로 vote 정보 가져오기 - null 처리 추가
         List<ComVote> votes = boardPostService.getVotesByPostId(postId);
         ComVote vote = (votes != null && !votes.isEmpty()) ? votes.get(0) : null;
-        
+        log.info("vote : {}", vote);
+
         // vote가 있을 때만 argument 조회
         List<ComVoteArgument> arguments = null;
         if (vote != null) {
             Long voteId = vote.getId();
             log.info("voteId : {}", voteId);
-            arguments = boardPostService.getArgumentsByVoteId(voteId + 1);
+            arguments = boardPostService.getArgumentsByVoteId(voteId);
             log.info("arguments : {}", arguments);
         }
 
         Long userId = (loginUser != null) ? loginUser.getId() : null;
 
-        // 게시글 + 좋아요/싫어요 수 + 투표 정보 
+        // 게시글 + 좋아요/싫어요 수 + 투표 정보
         BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId, userId);
         if (post == null) {
             return ResponseEntity.notFound().build();
@@ -173,13 +174,13 @@ public ResponseEntity<?> getPost(
         boolean hasUserVoted = false;
         if (vote != null && arguments != null) {
             vote.setArguments(arguments);
-            
+
             // 로그인한 유저의 투표 참여 여부 확인
             if (userId != null) {
                 log.info("userId : {}, voteId : {}", userId, vote.getId());
                 hasUserVoted = boardPostService.hasUserVoted(vote.getId() + 1, userId);
                 log.info("hasUserVoted : {}", hasUserVoted);
-                // argId가 아닌 vote Id로 수정해야함 
+                // argId가 아닌 vote Id로 수정해야함
             }
         }
         postWithComments.put("hasUserVoted", hasUserVoted); // 투표 참여 여부 추가

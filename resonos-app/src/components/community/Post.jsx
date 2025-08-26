@@ -25,7 +25,6 @@ const Post = () => {
   const { userInfo, isLogin } = useContext(LoginContext)
 
   const isManager = useRef(false)
-  console.log('isManager :', isManager)
 
   const navigate = useNavigate()
 

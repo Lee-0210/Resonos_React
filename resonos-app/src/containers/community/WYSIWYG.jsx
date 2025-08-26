@@ -14,11 +14,14 @@ const WYSIWYG = ({ post, ids }) => {
   // state
   const [title, setTitle] = useState('');
   const [guestNick, setGuestNick] = useState('');
+  console.log(guestNick)
   const [tempPw, setTempPw] = useState('');
   const [content, setContent] = useState('');
   const [fileIdList, setFileIdList] = useState([]) // 선택 삭제 id 목록
   const [mainFile, setMainFile] = useState(null)   //
   const [files, setFiles] = useState(null)
+
+  const isManager = useRef(false)
 
   /* 투표 state */
   // 투표 on/off
@@ -33,6 +36,7 @@ const WYSIWYG = ({ post, ids }) => {
       {id: 2, argNo: 2, content: '항목2'}
     ]
   )
+
   // 투표 제목
   const [voteTitle, setVoteTitle] = useState(() => (
     post ? post?.vote?.title : ''
@@ -53,6 +57,7 @@ const WYSIWYG = ({ post, ids }) => {
       setTitle(post.title || '');
       setGuestNick(post.guestNickname || '');
       setContent(post.content || '');
+      isManager.current = post.community.creatorId === userInfo.id ? true : false
 
       // CKEditor가 준비된 상태라면 editor에 내용 설정
       if (editorRef.current) {
@@ -181,14 +186,18 @@ const WYSIWYG = ({ post, ids }) => {
     const data = {
       content: content,
       title: title,
+      guestNickname: guestNick,
       guestPassword : tempPw,
-      vote: {
-        title: voteTitle,
-        closedAt: closedAt.replace(" ", "T").slice(0, 16),
-        arguments: voteItems
-      },
-      voteActive
+      ...(voteActive
+      ? { vote: { title: voteTitle, closedAt, arguments: voteItems } }
+      : {}
+      ),
+      voteActive,
+      manager: isManager
     }
+
+    console.log('수정시 보내는 data :', data)
+
     try {
       const response = await api.postUpdate(data, ids)
       console.log(response);

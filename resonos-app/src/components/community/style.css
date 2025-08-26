@@ -808,6 +808,7 @@
   min-width: 500px;
   padding: 20px;
   border-radius: 10px;
+  background-color: var(--background-color);
 }
 
 .free-vote input[type="text"] {
@@ -910,4 +911,9 @@
 .free-vote .btn-red:hover {
   color: #fff;
   border-color: #fff;
+}
+.free-vote .fail-vali {
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 20px;
 }
