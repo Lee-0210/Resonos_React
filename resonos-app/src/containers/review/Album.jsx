@@ -162,7 +162,7 @@ const Album = () => {
 
       const updatedResponse = response.data
       setScore(updatedResponse.score);
-      setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
+      // setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
       swal.fire({
         title: '성공',
         text: '리뷰가 성공적으로 작성되었습니다.',
