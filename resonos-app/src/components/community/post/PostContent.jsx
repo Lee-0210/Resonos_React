@@ -18,7 +18,6 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
   const [voting, setVoting] = useState(false)
   const [vote, setVote] = useState(initVote)
   const [selectedId, setSelectedId] = useState(null)
-  const [isVoted, setIsVoted] = useState(initVote.hasUserVoted || false)
 
 
   // 투표
@@ -158,7 +157,7 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
           <p>투표 기간 : {vote.closedAt} 까지</p>
           <VoteChart vote={vote} />
           <div className="vote-view-util">
-            <button className='btn btn-gold' onClick={openVote}>{isVoted ? '재투표하기' : '투표하기'}</button>
+            <button className='btn btn-gold' onClick={openVote}>{vote.hasUserVoted ? '재투표하기' : '투표하기'}</button>
           </div>
         </div>
       )}
