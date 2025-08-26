@@ -269,7 +269,8 @@ public ResponseEntity<?> getPost(
         @RequestParam(value="voteId", required = false) Long voteId,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
-
+        log.info("수정요청 communityId: {}, postId: {}", communityId, postId);
+        log.info("isManager : {}", request != null ? request.isManager() : false);
         log.info("request : {}", request);
 
         try {
@@ -281,25 +282,27 @@ public ResponseEntity<?> getPost(
 
             if (boardPost == null) return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
 
+            boolean isManager = request != null && request.isManager(); 
+
             if (loginUser != null) {
-                if (boardPost.getUserId() != null && !loginUser.getId().equals(boardPost.getUserId())) {
+                if (boardPost.getUserId() != null && !loginUser.getId().equals(boardPost.getUserId()) && !isManager) {
                     return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
-                else if (boardPost.getUserId() == null && (request.getGuestPassword() == null ||
+                else if (boardPost.getUserId() == null && !isManager && (request.getGuestPassword() == null ||
                     !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword()))) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             } else {
-                if (boardPost.getUserId() != null) {
+                if (boardPost.getUserId() != null && !isManager) {
                     return new ResponseEntity<>("수정 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
-                if (request.getGuestPassword() == null ||
-                    !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword())) {
+                if (!isManager && (request.getGuestPassword() == null ||
+                    !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword()))) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             }
 
-            if (loginUser == null) {
+            if (loginUser == null && !isManager) {
                 Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
                 validator.validate(request, GuestCheck.class)
                         .forEach(v -> bindingResult.addError(new FieldError(
@@ -332,7 +335,6 @@ public ResponseEntity<?> getPost(
             if (Boolean.TRUE.equals(beforeVoteActive) && Boolean.FALSE.equals(afterVoteActive)) {
                 log.info("boardPost.getVote() : " + boardPost.getVote());
                 log.info("request.getVote() : " + request.getVote());
-                // 투표 비활성화 → 기존 투표 삭제
                 if (boardPost.getVote() != null) {
                     comVoteService.deleteByPostId(postId);
                     boardPost.setVote(null);
@@ -341,7 +343,7 @@ public ResponseEntity<?> getPost(
 
             boolean result = boardPostService.update(boardPost);
             return result ? new ResponseEntity<>(boardPost, HttpStatus.OK)
-                          : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+                        : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             log.error("게시글 수정 실패", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -350,40 +352,49 @@ public ResponseEntity<?> getPost(
 
     @DeleteMapping("/edit/boards/{communityId}/posts/{postId}")
     public ResponseEntity<?> deletePost(
-        @PathVariable("communityId") Long communityId,
-        @PathVariable("postId") Long postId,
-        @RequestBody(required = false) BoardPost request,
-        @AuthenticationPrincipal CustomUser loginUser
+            @PathVariable("communityId") Long communityId,
+            @PathVariable("postId") Long postId,
+            @RequestBody(required = false) BoardPost request,
+            @AuthenticationPrincipal CustomUser loginUser
     ) {
-        // TODO: manager 라는 키값으로 true, false 넘어 오니 조건문으로 제어
-        log.info("isManager : {}", request.isManager());
-
+        log.info("isManager : {}", request != null ? request.isManager() : false);
+        
         try {
             BoardPost boardPost = boardPostService.select(postId);
-
+            
             if (boardPost == null) return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
-
+            
+            // 매니저인 경우 권한 검증 없이 삭제 허용
+            boolean isManager = request != null && request.isManager();
+            if (isManager) {
+                log.info("매니저 권한으로 게시글 삭제 시도");
+                boolean result = boardPostService.delete(postId);
+                return result ? new ResponseEntity<>(boardPost, HttpStatus.OK)
+                            : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+            }
+            
+            // 일반 사용자의 경우 기존 권한 검증 로직 수행 + 관리자인 경우 삭제 가능 
             if (loginUser != null) {
-                if (boardPost.getUserId() != null && !loginUser.getId().equals(boardPost.getUserId())) {
+                if (boardPost.getUserId() != null && !loginUser.getId().equals(boardPost.getUserId()) && !isManager) {
                     return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
-                else if (boardPost.getUserId() == null && (request.getGuestPassword() == null ||
+                else if (boardPost.getUserId() == null && !isManager && (request == null || request.getGuestPassword() == null ||
                     !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword()))) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             } else {
-                if (boardPost.getUserId() != null) {
+                if (boardPost.getUserId() != null && !isManager) {
                     return new ResponseEntity<>("삭제 권한이 없습니다.", HttpStatus.UNAUTHORIZED);
                 }
-                if (request.getGuestPassword() == null ||
-                    !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword())) {
+                if (!isManager && (request == null || request.getGuestPassword() == null ||
+                    !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword()))) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
             }
-
+            
             boolean result = boardPostService.delete(postId);
             return result ? new ResponseEntity<>(boardPost, HttpStatus.OK)
-                          : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
+                        : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             log.error("게시글 삭제 실패", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
