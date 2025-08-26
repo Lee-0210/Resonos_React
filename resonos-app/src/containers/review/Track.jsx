@@ -47,7 +47,6 @@ const Track = () => {
       setLoading(true);
       try {
         const response = await api.getTrackPage(id);
-        console.log(response.data);
         const data = response.data;
 
         // 가져온 데이터를 각각의 상태에 설정합니다.
@@ -74,7 +73,14 @@ const Track = () => {
         setReviewType(data.reviewType);
 
       } catch (err) {
-        console.error(err)
+        swal.fire({
+          title: '초기 로딩 실패',
+          text: '화면을 불러오는중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       } finally {
         setLoading(false);
       }
@@ -91,7 +97,6 @@ const Track = () => {
     try {
       const response = await api.toggleTrackLike(dto);
       const data = response.data
-      console.log(response.data)
       setIsTrackLikedByUser(data.liked);
       setTrackLikeCount(data.count)
     } catch (error) {
@@ -111,9 +116,7 @@ const Track = () => {
   // 트랙 플레이리스트 추가
   const addTrackToPlaylist = async (plId, trackId) => {
     try {
-      console.log(plId, trackId)
       const response = await api.addTrackToPlaylist(plId, trackId)
-      console.log(response.data)
       swal.fire({
         title: '성공',
         text: '플레이리스트에 추가되었습니다.',
@@ -151,7 +154,6 @@ const Track = () => {
   const loadMoreReviews = async (page) => {
     try {
       const response = await api.moreTrackReview(id, page);
-      console.log(response.data)
       const data = response.data
       setReviews(prevReviews => [...prevReviews, ...data.review]);
       setPage(page + 1)
@@ -166,7 +168,6 @@ const Track = () => {
     try {
       const response = await api.likeTrackReview(reviewId)
       const data = response.data
-      console.log(response)
       setReviews(prevReviews => prevReviews.map(review => {
         if (review.id === reviewId) {
           return {
@@ -204,7 +205,6 @@ const Track = () => {
     try {
       const response = await api.reportTrackReview(reviewId)
       const data = response.data
-      console.log(response.data)
       swal.fire({
         title: '신고 완료',
         text: `해당 리뷰의 신고 건수는 ${data}건 입니다`,
@@ -262,7 +262,6 @@ const Track = () => {
     }
     try {
       const response = await api.writeTrackReview(track.id, reviewForm);
-      console.log(response.data)
       swal.fire({
         title: '리뷰 작성 완료',
         text: '리뷰가 성공적으로 작성되었습니다.',
@@ -275,7 +274,6 @@ const Track = () => {
       setScore(updatedResponse.score);
       // setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
     } catch (error) {
-      console.error('리뷰 작성 실패:', error);
       swal.fire({
         title: '오류',
         text: '리뷰 작성 중 오류가 발생했습니다.',
@@ -304,7 +302,6 @@ const Track = () => {
     if (result.isConfirmed) {
       try {
         const response = await api.deleteTrackReview(trackId, reviewId)
-        console.log(response.data)
         const data = response.data
         swal.fire({
           title: '삭제 완료',
@@ -317,7 +314,6 @@ const Track = () => {
         setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
         setScore(data.score)
       } catch (error) {
-        console.error(error)
         swal.fire({
           title: '오류',
           text: '리뷰 삭제 중 오류가 발생했습니다.',
@@ -335,7 +331,6 @@ const Track = () => {
     const trackDTO = { ...dto, trackId: id }
     try {
       const response = await api.voteTrackMood(trackDTO)
-      console.log(response.data)
       const data = response.data
       if (data != null) {
         setUserVotedMoodId(data.votedMoodId)
@@ -352,7 +347,14 @@ const Track = () => {
         }
       })
     } catch (error) {
-
+      swal.fire({
+        title: '투표 실패',
+        text: '투표처리 중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 
