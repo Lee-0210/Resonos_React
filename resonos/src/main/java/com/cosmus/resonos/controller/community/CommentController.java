@@ -1,9 +1,15 @@
 package com.cosmus.resonos.controller.community;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.service.community.CommentService;
+import com.cosmus.resonos.validation.GuestCheck;
 
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -69,11 +79,31 @@ public class CommentController {
     @PostMapping()
     public ResponseEntity<?> createComment(
         @PathVariable("postId") Long postId,
-        @RequestBody Comment request,
+        @Validated @RequestBody Comment request,
+        BindingResult bindingResult,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
         System.out.println("loginUser : " + loginUser);
+
         try {
+            if (loginUser == null) {
+                // 비회원 검증 시 GuestCheck 그룹 적용
+                ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+                Validator validator = factory.getValidator();
+    
+                validator.validate(request, GuestCheck.class)
+                        .forEach(v -> bindingResult.addError(new FieldError(
+                        "comment", v.getPropertyPath().toString(), v.getMessage())));
+            }
+    
+            if (bindingResult.hasErrors()) {
+                Map<String, String> errors = new HashMap<>();
+                bindingResult.getFieldErrors().forEach(error ->
+                        errors.put(error.getField(), error.getDefaultMessage())
+                );
+                return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            }
+
             Comment comment = new Comment();
             comment.setContent(request.getContent());
             if (request.getParentCommentId() == null) {
@@ -110,10 +140,29 @@ public class CommentController {
     public ResponseEntity<?> updateComment(
         @PathVariable("postId") Long postId,
         @PathVariable("commentId") Long commentId,
-        @RequestBody Comment request,
+        @Validated @RequestBody Comment request,
+        BindingResult bindingResult,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
         try {
+            if (loginUser == null) {
+                // 비회원 검증 시 GuestCheck 그룹 적용
+                ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+                Validator validator = factory.getValidator();
+    
+                validator.validate(request, GuestCheck.class)
+                        .forEach(v -> bindingResult.addError(new FieldError(
+                        "comment", v.getPropertyPath().toString(), v.getMessage())));
+            }
+    
+            if (bindingResult.hasErrors()) {
+                Map<String, String> errors = new HashMap<>();
+                bindingResult.getFieldErrors().forEach(error ->
+                        errors.put(error.getField(), error.getDefaultMessage())
+                );
+                return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            }
+
             Comment comment = commentService.select(commentId);
             if (comment == null) return new ResponseEntity<>("댓글이 없습니다.", HttpStatus.NOT_FOUND);
 

@@ -17,6 +17,7 @@ import com.cosmus.resonos.mapper.community.CommentMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -138,7 +139,7 @@ public class CommentServiceImpl implements CommentService {
     // }
 
     @Override
-    public void writeComment(Comment comment, CustomUser loginUser) throws Exception {
+    public void writeComment(@Valid Comment comment, CustomUser loginUser) throws Exception {
         if (loginUser != null) {
             // 로그인 상태 → userId 설정
             comment.setUserId(loginUser.getId());
