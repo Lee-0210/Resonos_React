@@ -27,16 +27,17 @@ const BandsintownWidget = ({ artistName }) => {
       script.async = true;
 
       // 3. 스크립트 로드 완료 시 위젯 초기화
-      script.onload = () => {
-        if (window.Bandsintown) {
-          window.Bandsintown.init();
-          setIsReady(true);
-        }
-      };
-
+      script.onload = () => setIsReady(true);
       document.body.appendChild(script);
+    } else {
+      setIsReady(true);
     }
   }, [artistName]);
+  useEffect(() => {
+    if (isReady && window.Bandsintown) {
+      window.Bandsintown.init();
+    }
+  }, [isReady, artistName]);
 
   // artistName이 유효할 때만 위젯 div를 반환
   if (!artistName) {

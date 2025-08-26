@@ -12,7 +12,7 @@ const CommentEdit = ({ isLogin, cancel, com, editComment }) => {
       guestPassword: tempPw
     }
     if (isLogin) {
-      editComment({ content }, commentId)
+      editComment(data, commentId)
       setEditContent('')
       cancel()
     }

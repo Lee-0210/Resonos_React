@@ -49,19 +49,19 @@ export const getPostDataWithPage = async (ids,page) => {
 export const postComment = async (data, ids) => {
   return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`, data)
 }
-// 회원, 비회원 게시글 댓글 수정 // 로그인시 비회원 댓글 수정안됨 (비정상) 비로그인시에는 수정됨
+// 회원, 비회원 게시글 댓글 수정 O
 export const editComment = async (data, ids) => {
   return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, data)
 }
-// 회원, 비회원 게시글 대댓 달기 O // 이름 null로도 등록됨 (프론트에서 막음)
+// 회원, 비회원 게시글 대댓 달기 O
 export const postReply = async (data, ids) => {
   return api.post(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments`, data)
 }
-// 회원, 비회원 게시글 대댓 수정 // 로그인시 비회원 대댓 수정 가능(정상)
+// 회원, 비회원 게시글 대댓 수정 O
 export const editReply = async (data, ids) => {
   return api.put(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, data)
 }
-// 비회원 댓,대댓글 삭제 // 댓글 대댓글있을시 삭제안됨
+// 비회원 댓,대댓글 삭제 O
 export const deleteUnlogComment = async (data, ids) => {
   return api.delete(`/community/boards/${ids.boardId}/posts/${ids.postId}/comments/${ids.commentId}`, {
     headers: {
@@ -84,7 +84,7 @@ export const postInsert = async (data, boardId) => {
 export const postUpdate = async (data, ids) => {
   return api.put(`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`, data)
 }
-// 게시글 삭제 // 댓글있을때 글 삭제 안됨
+// 게시글 삭제 O
 export const deletePost = async (data, ids) => {
   return api.delete(`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`, {
     headers: {
@@ -94,7 +94,7 @@ export const deletePost = async (data, ids) => {
   })
 }
 
-// 게시글 신고
+// 게시글 신고 O
 export const reportPost = async (ids, obj) => {
   return api.post(`/community/report/boards/${ids.boardId}/posts/${ids.postId}`, {
     headers: {
