@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.Pagination;
 import com.cosmus.resonos.domain.community.ComVote;
+import com.cosmus.resonos.domain.community.ComVoteArgument;
 import com.cosmus.resonos.domain.community.VoteStatus;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.VoteStatusService;
@@ -79,12 +80,40 @@ public class VoteStatusController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Autowired
+    private BoardPostService boardPostService;
+
     @PostMapping()
     public ResponseEntity<?> create(@RequestBody VoteStatus entity) {
         try {
             boolean result = voteStatusService.insert(entity);
             Map<String, Object> response = new HashMap<>();
-            response.put("vote", entity);
+            
+            Long postId = voteStatusService.getPostIdByArgId(entity.getArgId());
+            
+            // post id 로 vote 정보 가져오기 - null 처리 추가
+            List<ComVote> votes = boardPostService.getVotesByPostId(postId);
+            ComVote vote = (votes != null && !votes.isEmpty()) ? votes.get(0) : null;
+            
+            // vote가 있을 때만 argument 조회
+            List<ComVoteArgument> arguments = null;
+            if (vote != null) {
+                Long voteId = vote.getId();
+                log.info("voteId : {}", voteId);
+                arguments = boardPostService.getArgumentsByVoteId(voteId + 1);
+                log.info("arguments : {}", arguments);
+                
+                // postId 설정 및 arguments 설정
+                vote.setPostId(postId);
+                if (arguments != null) {
+                    vote.setArguments(arguments);
+                }
+            }
+            
+            // 단일 vote 객체로 반환
+            response.put("vote", vote);
+            
             if (result) {
                 response.put("status", "SUCCESS");
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -97,6 +126,7 @@ public class VoteStatusController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @PutMapping()
     public ResponseEntity<?> update(@RequestBody VoteStatus entity) {

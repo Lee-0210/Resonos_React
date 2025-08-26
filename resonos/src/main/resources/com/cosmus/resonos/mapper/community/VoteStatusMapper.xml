@@ -58,5 +58,15 @@
         DELETE FROM vote_status WHERE user_id = #{userId}
     </delete>
 
+    <!-- argId로 PostId 조회 -->
+    <select id="selectPostIdByArgId" resultType="Long">
+        SELECT cv.post_id
+        FROM vote_status vs
+        INNER JOIN com_vote_argument cva ON vs.arg_id = cva.id
+        INNER JOIN com_vote cv ON cva.vote_id = cv.id
+        WHERE vs.arg_id = #{argId}
+        LIMIT 1
+    </select>
+
 </mapper>
 

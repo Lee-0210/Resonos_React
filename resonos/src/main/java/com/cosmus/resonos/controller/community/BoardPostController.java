@@ -76,112 +76,120 @@ public class BoardPostController {
     //     }
     // }
 
-    @GetMapping("/boards/{communityId}/posts/{postId}")
-    public ResponseEntity<?> getPost(
-        @PathVariable("communityId") Long communityId,
-        @PathVariable("postId") Long postId,
-        @AuthenticationPrincipal CustomUser loginUser,
-        HttpServletRequest request,
-        HttpServletResponse response,
-        HttpSession session,
-        @RequestParam(value = "page", defaultValue = "1") int page,
-        @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        log.info("communityId: {}, postId: {}", communityId, postId);
-        Map<String, Object> postWithComments = new HashMap<>();
-        try {
-            // post id 로 vote id 가져오기
-
-
-            Long voteId = boardPostService.getVotesByPostId(postId).get(0).getId();
-            log.info("##############################################");
+@GetMapping("/boards/{communityId}/posts/{postId}")
+public ResponseEntity<?> getPost(
+    @PathVariable("communityId") Long communityId,
+    @PathVariable("postId") Long postId,
+    @AuthenticationPrincipal CustomUser loginUser,
+    HttpServletRequest request,
+    HttpServletResponse response,
+    HttpSession session,
+    @RequestParam(value = "page", defaultValue = "1") int page,
+    @RequestParam(value = "size", defaultValue = "10") int size
+) {
+    log.info("communityId: {}, postId: {}", communityId, postId);
+    Map<String, Object> postWithComments = new HashMap<>();
+    try {
+        // post id 로 vote 정보 가져오기 - null 처리 추가
+        List<ComVote> votes = boardPostService.getVotesByPostId(postId);
+        ComVote vote = (votes != null && !votes.isEmpty()) ? votes.get(0) : null;
+        
+        // vote가 있을 때만 argument 조회
+        List<ComVoteArgument> arguments = null;
+        if (vote != null) {
+            Long voteId = vote.getId();
             log.info("voteId : {}", voteId);
-            log.info("##############################################");
-
-            List<ComVoteArgument> arguments = boardPostService.getArgumentsByVoteId(voteId + 1);
+            arguments = boardPostService.getArgumentsByVoteId(voteId + 1);
             log.info("arguments : {}", arguments);
+        }
 
+        Long userId = (loginUser != null) ? loginUser.getId() : null;
 
-            Long userId = (loginUser != null) ? loginUser.getId() : null;
+        // 게시글 + 좋아요/싫어요 수 + 투표 정보 
+        BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId, userId);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-            // 게시글 + 좋아요/싫어요 수 + 투표 정보
-            BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId, userId);
-            if (post == null) {
-                return ResponseEntity.notFound().build();
+        // 조회수 증가
+        if (loginUser != null) {
+            // 로그인 유저 → 세션 활용
+            Set<Long> viewedPost = (Set<Long>) session.getAttribute("viewedPost");
+            if (viewedPost == null) {
+                viewedPost = new HashSet<>();
+                session.setAttribute("viewedPost", viewedPost);
             }
 
-            // 조회수 증가
-            if (loginUser != null) {
-                // 로그인 유저 → 세션 활용
-                Set<Long> viewedPost = (Set<Long>) session.getAttribute("viewedPost");
-                if (viewedPost == null) {
-                    viewedPost = new HashSet<>();
-                    session.setAttribute("viewedPost", viewedPost);
-                }
-
-                if (!viewedPost.contains(postId)) {
-                    boardPostService.incrementViewCount(postId);
-                    viewedPost.add(postId);
-                }
-            } else {
-                // 비로그인 유저 → 쿠키 활용
-                Cookie[] cookies = request.getCookies();
-                String viewed = null;
-                if (cookies != null) {
-                    for (Cookie cookie : cookies) {
-                        if ("viewedPost".equals(cookie.getName())) {
-                            try {
-                                viewed = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
-                            } catch (Exception e) {
-                                viewed = "";
-                            }
-                            break;
+            if (!viewedPost.contains(postId)) {
+                boardPostService.incrementViewCount(postId);
+                viewedPost.add(postId);
+            }
+        } else {
+            // 비로그인 유저 → 쿠키 활용
+            Cookie[] cookies = request.getCookies();
+            String viewed = null;
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("viewedPost".equals(cookie.getName())) {
+                        try {
+                            viewed = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                        } catch (Exception e) {
+                            viewed = "";
                         }
+                        break;
                     }
                 }
-
-                // 이미 조회했는지 확인
-                boolean alreadyViewed = viewed != null && Arrays.asList(viewed.split("\\|")).contains(postId.toString());
-
-                if (!alreadyViewed) {
-                    boardPostService.incrementViewCount(postId);
-                    String newValue = (viewed == null || viewed.isEmpty() ? "" : viewed + "|") + postId;
-                    Cookie newCookie = new Cookie("viewedPost", URLEncoder.encode(newValue, StandardCharsets.UTF_8));
-                    newCookie.setPath("/");
-                    newCookie.setMaxAge(60 * 60); // 1시간동안 조회수 중복 카운팅 방지
-                    response.addCookie(newCookie);
-                }
-
-            }
-            postWithComments.put("post", post);
-
-            // 댓글 + 좋아요/싫어요 수
-            // 댓글 리스트 반환 (각 댓글에 작성자, 내용, 작성일, 좋아요/싫어요 수 포함)
-            // List<Comment> comments = commentService.selectWithLikesDislikes(postId);
-            // List<Comment> pagedComments = commentsWithPageInfo.getList();
-            // log.info("" + commentsWithPageInfo);
-            // commentsPagination.setTotal(boardPostService.getCommentCount(postId));
-            // postWithComments.put("pagedComments", pagedComments);
-            PageInfo<Comment> comments = commentService.selectWithLikesDislikes(postId, userId, page, size);
-            Pagination commentsPagination = new Pagination(comments);
-            postWithComments.put("comments", comments.getList());
-            postWithComments.put("commentsPagination", commentsPagination);
-
-            // 투표 정보 추가
-            ComVote vote = post.getVote();
-            if (vote != null) {
-                vote.setArguments(arguments);
             }
 
-            postWithComments.put("vote", post.getVote());
+            // 이미 조회했는지 확인
+            boolean alreadyViewed = viewed != null && Arrays.asList(viewed.split("\\|")).contains(postId.toString());
 
+            if (!alreadyViewed) {
+                boardPostService.incrementViewCount(postId);
+                String newValue = (viewed == null || viewed.isEmpty() ? "" : viewed + "|") + postId;
+                Cookie newCookie = new Cookie("viewedPost", URLEncoder.encode(newValue, StandardCharsets.UTF_8));
+                newCookie.setPath("/");
+                newCookie.setMaxAge(60 * 60); // 1시간동안 조회수 중복 카운팅 방지
+                response.addCookie(newCookie);
+            }
 
-            return new ResponseEntity<>(postWithComments, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        postWithComments.put("post", post);
+
+        // 댓글 + 좋아요/싫어요 수
+        PageInfo<Comment> comments = commentService.selectWithLikesDislikes(postId, userId, page, size);
+        Pagination commentsPagination = new Pagination(comments);
+        postWithComments.put("comments", comments.getList());
+        postWithComments.put("commentsPagination", commentsPagination);
+
+        // 투표 정보 추가 - null 처리 적용
+        if (vote != null && arguments != null) {
+            vote.setArguments(arguments);
+        }
+        postWithComments.put("vote", vote); // vote가 null이어도 put
+
+
+        // 투표 정보 및 참여 여부 확인
+        boolean hasUserVoted = false;
+        if (vote != null && arguments != null) {
+            vote.setArguments(arguments);
+            
+            // 로그인한 유저의 투표 참여 여부 확인
+            if (userId != null) {
+                log.info("userId : {}, voteId : {}", userId, vote.getId());
+                hasUserVoted = boardPostService.hasUserVoted(vote.getId() + 1, userId);
+                log.info("hasUserVoted : {}", hasUserVoted);
+                // argId가 아닌 vote Id로 수정해야함 
+            }
+        }
+        postWithComments.put("hasUserVoted", hasUserVoted); // 투표 참여 여부 추가
+
+        return new ResponseEntity<>(postWithComments, HttpStatus.OK);
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
 
     @PostMapping("/create/boards/{communityId}")
     public ResponseEntity<?> createPost(
