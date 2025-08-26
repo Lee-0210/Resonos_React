@@ -39,14 +39,14 @@
         <result property="createdAt" column="vote_created_at"/>
         <result property="closedAt" column="vote_closed_at"/>
         <result property="isCompleted" column="vote_is_completed"/>
-        <result property="totalVoteCount" column="total_vote_count"/> 
+        <result property="totalVoteCount" column="total_vote_count"/>
 
         <collection property="arguments" ofType="com.cosmus.resonos.domain.community.ComVoteArgument">
             <id property="id" column="arg_id"/>
             <result property="content" column="arg_content"/>
             <result property="argNo" column="arg_no"/>
             <result property="voteId" column="vote_id"/>
-            <result property="voteCount" column="vote_count"/> 
+            <result property="voteCount" column="vote_count"/>
         </collection>
     </association>
   </resultMap>
@@ -163,7 +163,7 @@
 <!-- Hot Posts (조회수 기준) -->
 <select id="selectHotPosts" resultMap="BoardPostResultMap">
   SELECT bp.*,
-         c.name AS community_name,
+         c.name AS name,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
@@ -176,7 +176,7 @@
 <!-- 전체 게시글 -->
 <select id="selectAll" resultMap="BoardPostResultMap">
   SELECT bp.*,
-         c.name AS community_name,
+         c.name AS name,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
@@ -188,7 +188,7 @@
 <!-- 인기 게시글 -->
 <select id="selectPopularPosts" resultMap="BoardPostResultMap">
   SELECT bp.*,
-         c.name AS community_name,
+         c.name AS name,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
@@ -200,7 +200,7 @@
 <!-- 실시간 인기 게시글 (72시간 기준) -->
 <select id="selectRealTimePopularPosts" resultMap="BoardPostResultMap">
   SELECT bp.*,
-         c.name AS community_name,
+         c.name AS name,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
@@ -213,7 +213,7 @@
 <!-- 검색 게시글 -->
 <select id="searchPosts" resultMap="BoardPostResultMap">
   SELECT bp.*,
-         c.name AS community_name,
+         c.name AS name,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count,
@@ -284,7 +284,7 @@
   <select id="listByCommunityId" resultMap="BoardPostResultMap">
 
     SELECT bp.*,
-      c.name AS community_name,
+      c.name AS name,
       (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
       (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
       (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
@@ -299,7 +299,7 @@
 <select id="getNoticesByCommunityId" resultMap="BoardPostResultMap">
 
   SELECT bp.*,
-    c.name AS community_name,
+    c.name AS name,
     (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
     (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
     (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
