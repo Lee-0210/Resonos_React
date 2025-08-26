@@ -106,40 +106,6 @@ public class CombinedAlbumService {
             e.printStackTrace();
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        // 리뷰 관련
-
-        // List<AlbumReview> IndexReviews =
-        // albumReviewService.reviewWithReviewerByAlbumId(id);
-        // // 찾는 리뷰의 순서
-        // if (reviewId != null) {
-        // int index = IntStream.range(0, IndexReviews.size())
-        // .filter(i -> IndexReviews.get(i).getId().equals(reviewId))
-        // .findFirst()
-        // .orElse(-1);
-
-        // log.info("reviewId가 위치한 인덱스: {}", index);
-        // if (index != -1) {
-        // size = ((index + 1 - 1) / size + 1) * 5;
-        // model.addAttribute("size", size);
-        // }
-        // }
-
-        // Map<String, Integer> argValues = chartElementService.getAverageScoresByAlbumId(albumId);
-
-        // // 요소 이름 리스트 (순서 고정)
-        // List<String> argLabels = Arrays.asList("가사", "사운드", "멜로디", "스토리텔링", "유기성", "독창성");
-        // // 요소 점수 리스트
-        // List<Integer> argScores = null;
-        // if (argValues != null && !argValues.isEmpty()) {
-        //     argScores = Arrays.asList(
-        //             argValues.getOrDefault("lyric", 0),
-        //             argValues.getOrDefault("sound", 0),
-        //             argValues.getOrDefault("melody", 0),
-        //             argValues.getOrDefault("storytelling", 0),
-        //             argValues.getOrDefault("cohesiveness", 0),
-        //             argValues.getOrDefault("creativity", 0));
-        // }
     }
 
     // 앨범 좋아요

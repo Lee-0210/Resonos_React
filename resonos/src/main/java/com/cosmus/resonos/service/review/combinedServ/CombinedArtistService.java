@@ -48,7 +48,7 @@ public class CombinedArtistService {
                 loginUser = user.getUser();
                 artistPageDTO.setUserId(loginUser.getId());
                 // 아티스트 해당 유저가 아티스트 팔로우 여부
-                    artistPageDTO.setArtistFollowed(artistFollowService.isLikedByUser(loginUser.getId(), ArtistId));
+                artistPageDTO.setArtistFollowed(artistFollowService.isLikedByUser(loginUser.getId(), ArtistId));
             }
             // 아티스트 기본 정보
             artistPageDTO.setArtist(artistService.selectById(ArtistId));
@@ -79,7 +79,8 @@ public class CombinedArtistService {
             if (!artistPageDTO.isMoodEmpty()) {
                 if (loginUser != null) {
                     // 로그인 시 아티스트의 분위기 투표했을시 분위기 id
-                    artistPageDTO.setUserVotedMoodId(artistMoodVoteService.getUserVotedMoodId(loginUser.getId(), ArtistId));
+                    artistPageDTO
+                            .setUserVotedMoodId(artistMoodVoteService.getUserVotedMoodId(loginUser.getId(), ArtistId));
                 }
                 List<String> moodLabels = artistPageDTO.getMoodStats().stream().map(MoodStat::getMoodName).toList();
                 List<Integer> moodValues = artistPageDTO.getMoodStats().stream().map(MoodStat::getVoteCount).toList();
@@ -109,9 +110,6 @@ public class CombinedArtistService {
         if (userId == null) {
             return new ResponseEntity<>("User is null", HttpStatus.UNAUTHORIZED);
         } else {
-            // ArtistFollow artistFollow = new ArtistFollow();
-            // artistFollow.setUserId(userId);
-            // artistFollow.setArtistId(artistId);
             try {
                 // 팔로우여부 확인 후에 현재 팔로우 카운트 가져옴
                 boolean followed = artistFollowService.toggleLike(userId, artistId);
