@@ -171,31 +171,7 @@ const Post = () => {
     }
   }
 
-  // 투표
-  const contributeVote = async (data) => {
-    try {
-      const res = await api.contributeVote(data)
-      if (res.status === 200) {
-        swal.fire({
-          title: '투표 완료',
-          text: '투표가 성공적으로 완료되었습니다.',
-          icon: 'success',
-          customClass: {
-            popup: 'album-wrapper'
-          }
-        })
-      }
-    } catch (error) {
-      swal.fire({
-        title: '투표 실패',
-        text: '투표 처리중 오류가 발생했습니다.',
-        icon: 'error',
-        customClass: {
-          popup: 'album-wrapper'
-        }
-      })
-    }
-  }
+  
 
   if (isLoading) {
     return (
@@ -222,8 +198,7 @@ const Post = () => {
           <PostTitle post={post} />
           <PostContent post={post} ids={{ boardId, postId }} swal={swal}
             isLogin={isLogin} userInfo={userInfo} api={api} initVote={vote}
-            deletePost={deletePost} reportPost={reportPost} contributeVote={contributeVote}
-            isManager={isManager}
+            deletePost={deletePost} reportPost={reportPost} isManager={isManager}
           />
           <PostComment ids={{ boardId, postId }} swal={swal}
             initComments={comments} navigate={navigate}

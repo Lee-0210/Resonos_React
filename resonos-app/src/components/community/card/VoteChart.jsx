@@ -83,7 +83,7 @@ const VoteChart = ({ vote }) => {
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return <Bar data={data} options={options} redraw />;
 };
 
 export default VoteChart;

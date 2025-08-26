@@ -6,8 +6,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import VoteChart from '../card/VoteChart';
 import VoteArguments from '../card/VoteArguments';
 
-const PostContent = ({ post, swal, api, isLogin, userInfo,
-  ids, deletePost, reportPost, initVote, contributeVote, isManager }) => {
+const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
+  ids, deletePost, reportPost, isManager }) => {
 
   const [openPw, setOpenPw] = useState(false)
   const [tempPw, setTempPw] = useState(null)
@@ -19,6 +19,34 @@ const PostContent = ({ post, swal, api, isLogin, userInfo,
   const [vote, setVote] = useState(initVote)
   const [selectedId, setSelectedId] = useState(null)
 
+
+  // 투표
+  const contributeVote = async (data) => {
+    try {
+      const res = await api.contributeVote(data)
+      console.log(res)
+      if (res.status === 201) {
+        swal.fire({
+          title: '투표 완료',
+          text: '투표가 성공적으로 완료되었습니다.',
+          icon: 'success',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+        setVote(res.data.vote)
+      }
+    } catch (error) {
+      swal.fire({
+        title: '투표 실패',
+        text: '투표 처리중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+    }
+  }
 
   const openVote = () => {
     if (!isLogin) {
