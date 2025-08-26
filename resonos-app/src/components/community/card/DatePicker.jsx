@@ -4,6 +4,7 @@ import {MySwal} from '../../../apis/alert'
 const DatePicker = ({ setClosedAt, vote }) => {
   const now = new Date();
   const offset = now.getTimezoneOffset() * 60000;
+  console.log(now.getTimezoneOffset())
   const localISOTime = new Date(now - offset).toISOString().slice(0, 16);
 
   // 데이트 객체 값 시:분 까지 자르는 함수
@@ -15,8 +16,9 @@ const DatePicker = ({ setClosedAt, vote }) => {
 
   const handleClosedAt = (e) => {
     let selected = e.target.value // YYYY-MM-DDTHH:mm
-    console.log("localISOTime:", localISOTime)
-    console.log("selected:", selected)
+    console.log("ISOString() :", new Date().toISOString())
+    console.log("localISOTime :", localISOTime)
+    console.log("selected :", selected)
 
     if (selected < localISOTime) {
       // MySwal.fire({

@@ -20,10 +20,12 @@ const WYSIWYG = ({ post, ids }) => {
   const [mainFile, setMainFile] = useState(null)   //
   const [files, setFiles] = useState(null)
 
-  // 투표 state
+  /* 투표 state */
+  // 투표 on/off
   const [voteActive, setVoteActive] = useState(() => {
     return post?.vote ? true : false
   })
+  // 투표 항목 리스트
   const [voteItems, setVoteItems] = useState(
     post?.vote ? [...post?.vote?.arguments] :
     [
@@ -31,11 +33,13 @@ const WYSIWYG = ({ post, ids }) => {
       {id: 2, argNo: 2, content: '항목2'}
     ]
   )
+  // 투표 제목
   const [voteTitle, setVoteTitle] = useState(() => (
-    post ? post.vote.title : ''
+    post ? post?.vote?.title : ''
   ))
+  // 투표 종료 일자
   const [closedAt, setClosedAt] = useState(() => (
-    post ? post.vote.closedAt : ''
+    post ? post?.vote?.closedAt : ''
   ))
 
   const editorRef = useRef(null);
