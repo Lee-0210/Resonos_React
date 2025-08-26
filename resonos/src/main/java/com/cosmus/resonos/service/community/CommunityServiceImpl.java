@@ -14,6 +14,9 @@ import com.cosmus.resonos.mapper.community.CommunityMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class CommunityServiceImpl implements CommunityService {
 
