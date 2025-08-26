@@ -779,14 +779,25 @@
 }
 
 .wysiwyg-wrapper .actions {
-  width: 350px;
+  width: 700px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 .wysiwyg-wrapper .actions .btn {
   padding: 5px 30px;
 }
-
+.wysiwyg-wrapper .actions .title-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: var(--main-color);
+}
+.wysiwyg-wrapper .actions .title-box input {
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  background: transparent;
+  color: white;
+}
 /* CKEditor */
 .ck-editor__editable_inline {
   min-height: 300px;
