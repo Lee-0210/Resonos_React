@@ -240,9 +240,10 @@ public class BoardPostController {
     ) {
         try {
             BoardPost boardPost = boardPostService.select(postId);
-            Boolean beforeVoteActive = boardPost.getVoteActive();
+            Boolean beforeVoteActive = boardPost.getVote() != null;
             Boolean afterVoteActive = request.getVoteActive();
-
+            log.info("beforeVoteActive : " + beforeVoteActive);
+            log.info("afterVoteActive : " + afterVoteActive);
 
             if (boardPost == null) return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
 
@@ -262,29 +263,6 @@ public class BoardPostController {
                     !boardPostService.checkGuestPassword(boardPost, request.getGuestPassword())) {
                     return new ResponseEntity<>("비밀번호가 다릅니다.", HttpStatus.UNAUTHORIZED);
                 }
-            }
-            // 투표 수정 
-            if (voteId != null && request.getVote() != null) {
-                ComVote updatedVote = request.getVote();
-                updatedVote.setId(voteId);
-                updatedVote.setPostId(postId);
-                updatedVote.setClosedAt(updatedVote.getClosedAt());
-                updatedVote.setCreatedAt(updatedVote.getCreatedAt());
-                updatedVote.setTitle(updatedVote.getTitle());
-                updatedVote.setGetQuestion(request);
-                if (updatedVote.getIsCompleted() == null) {
-                    updatedVote.setIsCompleted(false);
-                }
-
-                List<ComVoteArgument> updatedArguments = updatedVote.getArguments();
-                if (updatedArguments != null) {
-                    for (ComVoteArgument arg : updatedArguments) {
-                        arg.setVoteId(voteId);
-                    }
-                }
-                comVoteService.updateVoteAndArguments(voteId, updatedVote);
-                // 오류 확인
-                log.info("투표 수정 결과: {}", updatedVote);
             }
 
             if (loginUser == null) {
@@ -312,11 +290,14 @@ public class BoardPostController {
 
             if (Boolean.FALSE.equals(beforeVoteActive) && Boolean.TRUE.equals(afterVoteActive)) {
                 if (request.getVote() != null) {
+                    request.getVote().setPostId(postId);
                     comVoteService.createVoteWithArguments(request.getVote(), request.getVote().getArguments());
                     boardPost.setVote(request.getVote());
                 }
             }
             if (Boolean.TRUE.equals(beforeVoteActive) && Boolean.FALSE.equals(afterVoteActive)) {
+                log.info("boardPost.getVote() : " + boardPost.getVote());
+                log.info("request.getVote() : " + request.getVote());
                 // 투표 비활성화 → 기존 투표 삭제
                 if (boardPost.getVote() != null) {
                     comVoteService.deleteByPostId(postId);
