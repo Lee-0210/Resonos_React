@@ -11,6 +11,17 @@ const CommentEdit = ({ isLogin, cancel, com, editComment }) => {
       content: content,
       ...(!com.userId && {guestPassword: tempPw,guestNickname: com.guestNickname} )
     }
+    if (isLogin) {
+      editComment(data, commentId)
+      setEditContent('')
+      cancel()
+    }
+    else {
+      editComment(data, commentId)
+      setEditContent('')
+      setTempPw('')
+      cancel()
+    }
     editComment(data, commentId)
     setEditContent('')
     setTempPw('')
