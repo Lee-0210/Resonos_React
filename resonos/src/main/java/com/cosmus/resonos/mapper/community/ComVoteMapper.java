@@ -9,6 +9,7 @@ import com.cosmus.resonos.domain.community.ComVote;
 public interface ComVoteMapper extends BaseMapper<ComVote> {
 
     public ComVote selectByPostId(@Param("postId") Long postId) throws Exception;
+    public int deleteByPostId(@Param("postId") Long postId) throws Exception;
     public int completeAll() throws Exception;
     public int deleteAll() throws Exception;
 }

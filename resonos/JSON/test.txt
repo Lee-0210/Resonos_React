@@ -1,0 +1,45 @@
+<로그인 게시글, 투표 생성>
+{
+    "title": "로그인 게시글 제목",
+    "content": "로그인 게시글 내용",
+    "vote": {
+        "title": "로그인 투표 제목1",
+        "closedAt": "2025-08-26T04:02:33.769Z",
+        "arguments": [
+            {
+                "content": "로그인 투표 항목1"
+            },
+            {
+                "content": "로그인 투표 항목2"
+            },
+            {
+                "content": "로그인 투표 항목3"
+            }
+        ]
+    },
+    "voteActive": true
+}
+
+<비로그인 게시글, 투표 생성>
+{
+    "title": "비로그인 게시글 제목",
+    "content": "비로그인 게시글 내용",
+    "guestNickname": "비회원 닉네임",
+    "guestPassword": "123456",
+    "vote": {
+        "title": "비로그인 투표 제목1",
+        "closedAt": "2025-08-26T04:02:33.769Z",
+        "arguments": [
+            {
+                "content": "비로그인 투표 항목1"
+            },
+            {
+                "content": "비로그인 투표 항목2"
+            },
+            {
+                "content": "비로그인 투표 항목3"
+            }
+        ]
+    },
+    "voteActive": true
+}

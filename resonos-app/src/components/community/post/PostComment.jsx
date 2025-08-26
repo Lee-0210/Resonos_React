@@ -509,8 +509,8 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
                 </div>
                 <div className="comment-info">
                   <p>{com.createdAt}</p>
-                  <p className="btn btn-gold" onClick={() => likeComment(ids, com.id, true, true)}>👍 {com.commentLikes}</p>
-                  <p className="btn btn-gold" onClick={() => likeComment(ids, com.id, false, true)}>👎 {com.commentDislikes}</p>
+                  <p className={`btn btn-gold ${com.userLiked ? 'active' : ''}`} onClick={() => likeComment(ids, com.id, true, true)}>👍 {com.commentLikes}</p>
+                  <p className={`btn btn-gold ${com.userDisliked ? 'active' : ''}`} onClick={() => likeComment(ids, com.id, false, true)}>👎 {com.commentDislikes}</p>
                   {!com.userId && (
                     <>
                       <div className="btn btn-gold" onClick={() => handleCommentEdit(idx)}>수정</div>

@@ -145,7 +145,7 @@
     LEFT JOIN com_vote_argument va ON va.vote_id = v.id
     WHERE bp.id = #{postId}
       AND bp.community_id = #{communityId}
-    Order BY va.arg_no
+    ORDER BY va.arg_no
   </select>
 
   <update id="incrementViewCount">

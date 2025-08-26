@@ -21,6 +21,9 @@ public class ComVoteServiceImpl implements ComVoteService {
 
     @Autowired
     private ComVoteArgumentMapper comVoteArgumentMapper;
+  
+    @Autowired
+    private VoteStatusMapper voteStatusMapper;
 
     @Override
     public List<ComVote> list() throws Exception{
@@ -70,8 +73,6 @@ public class ComVoteServiceImpl implements ComVoteService {
         return comVoteMapper.deleteById(id) > 0;
     }
 
-    
-
     @Override
     public boolean deleteAll() throws Exception {
         return comVoteMapper.deleteAll() > 0;
@@ -96,10 +97,11 @@ public class ComVoteServiceImpl implements ComVoteService {
         return comVoteMapper.selectByPostId(postId);
     }
 
+    @Override
+    public boolean deleteByPostId(Long postId) throws Exception {
+        return comVoteMapper.deleteByPostId(postId) > 0;
+    }
     // 투표 결과 수정 
-
-    @Autowired
-    private VoteStatusMapper voteStatusMapper;
 
     @Override
     public void updateVoteAndArguments(Long voteId, ComVote updatedVote) throws Exception {

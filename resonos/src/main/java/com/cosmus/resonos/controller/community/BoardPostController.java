@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,12 +36,16 @@ import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.service.community.BoardPostService;
 import com.cosmus.resonos.service.community.ComVoteService;
 import com.cosmus.resonos.service.community.CommentService;
+import com.cosmus.resonos.validation.GuestCheck;
 import com.github.pagehelper.PageInfo;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -171,25 +178,49 @@ public class BoardPostController {
     @PostMapping("/create/boards/{communityId}")
     public ResponseEntity<?> createPost(
         @PathVariable("communityId") Long communityId,
-        @RequestBody BoardPost request,
+        @Validated @RequestBody BoardPost request,
+        BindingResult bindingResult,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
-
         log.info("request : {}", request);
+
+        if (loginUser == null) {
+            // 비회원 검증 시 GuestCheck 그룹 적용
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            Validator validator = factory.getValidator();
+
+            validator.validate(request, GuestCheck.class)
+                    .forEach(v -> bindingResult.addError(new FieldError(
+                    "boardPost", v.getPropertyPath().toString(), v.getMessage())));
+        }
+
+        // voteActive true일 경우, 투표 객체 존재 여부 추가 검사
+        if (Boolean.TRUE.equals(request.getVoteActive()) && request.getVote() == null) {
+            bindingResult.addError(new FieldError("boardPost", "vote", "투표 정보를 입력하세요."));
+        }
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->
+                    errors.put(error.getField(), error.getDefaultMessage())
+            );
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
 
         try {
             BoardPost boardPost = new BoardPost();
             boardPost.setTitle(request.getTitle());
             boardPost.setContent(request.getContent());
             boardPost.setCommunityId(communityId);
+            boardPost.setVoteActive(request.getVoteActive());
 
-            ComVote vote = null;
-            List<ComVoteArgument> arguments = null;
+            ComVote vote = request.getVote();
+            List<ComVoteArgument> arguments = (vote != null) ? vote.getArguments() : null;
 
-            if (Boolean.TRUE.equals(request.getVoteActive()) && request.getVote() != null) {
-                vote = request.getVote();
-                arguments = vote.getArguments();
-            }
+            // if (Boolean.TRUE.equals(request.getVoteActive()) && request.getVote() != null) {
+            //     vote = request.getVote();
+            //     arguments = vote.getArguments();
+            // }
 
             if (loginUser != null) {
                 boardPostService.createPost(boardPost, loginUser, vote, arguments, request.getVoteActive());
@@ -213,12 +244,16 @@ public class BoardPostController {
     public ResponseEntity<?> updatePost(
         @PathVariable("communityId") Long communityId,
         @PathVariable("postId") Long postId,
+        @Validated @RequestBody BoardPost request,
+        BindingResult bindingResult,
         @RequestParam(value="voteId", required = false) Long voteId,
-        @RequestBody BoardPost request,
         @AuthenticationPrincipal CustomUser loginUser
     ) {
         try {
             BoardPost boardPost = boardPostService.select(postId);
+            Boolean beforeVoteActive = boardPost.getVoteActive();
+            Boolean afterVoteActive = request.getVoteActive();
+
 
             if (boardPost == null) return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
 
@@ -263,8 +298,43 @@ public class BoardPostController {
                 log.info("투표 수정 결과: {}", updatedVote);
             }
 
+            if (loginUser == null) {
+                Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+                validator.validate(request, GuestCheck.class)
+                        .forEach(v -> bindingResult.addError(new FieldError(
+                        "boardPost", v.getPropertyPath().toString(), v.getMessage())));
+            }
+
+            if (Boolean.TRUE.equals(request.getVoteActive()) && request.getVote() == null) {
+                bindingResult.addError(new FieldError("boardPost", "vote", "투표 정보를 입력하세요."));
+            }
+
+            if (bindingResult.hasErrors()) {
+                Map<String, String> errors = new HashMap<>();
+                bindingResult.getFieldErrors().forEach(error ->
+                        errors.put(error.getField(), error.getDefaultMessage())
+                );
+                return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            }
+
             boardPost.setTitle(request.getTitle());
             boardPost.setContent(request.getContent());
+            boardPost.setVoteActive(request.getVoteActive());
+
+            if (Boolean.FALSE.equals(beforeVoteActive) && Boolean.TRUE.equals(afterVoteActive)) {
+                if (request.getVote() != null) {
+                    comVoteService.createVoteWithArguments(request.getVote(), request.getVote().getArguments());
+                    boardPost.setVote(request.getVote());
+                }
+            }
+            if (Boolean.TRUE.equals(beforeVoteActive) && Boolean.FALSE.equals(afterVoteActive)) {
+                // 투표 비활성화 → 기존 투표 삭제
+                if (boardPost.getVote() != null) {
+                    comVoteService.deleteByPostId(postId);
+                    boardPost.setVote(null);
+                }
+            }
+
             boolean result = boardPostService.update(boardPost);
             return result ? new ResponseEntity<>(boardPost, HttpStatus.OK)
                           : new ResponseEntity<>("FAIL", HttpStatus.BAD_REQUEST);
