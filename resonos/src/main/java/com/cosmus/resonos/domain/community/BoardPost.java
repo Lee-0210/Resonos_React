@@ -29,11 +29,14 @@ public class BoardPost {
     @NotBlank(message = "비밀번호를 입력하세요.", groups = GuestCheck.class)
     private String guestPassword;
 
+    // 매니저 확인
+    private boolean manager;
+
     // 조인해서 가져올 데이터
     private int postLikes;
     private int postDislikes;
-    private boolean userLiked;
-    private boolean userDisliked;
+    private Boolean userLiked;
+    private Boolean userDisliked;
 
     // 실제DB상 없음
     // 커뮤니티 정보, 이름

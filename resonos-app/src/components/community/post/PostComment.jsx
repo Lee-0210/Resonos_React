@@ -75,8 +75,8 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
             popup: 'album-wrapper'
           }
         })
-        if(comments.length % 10 === 0) {
-          fetchComment(page+1)
+        if (comments.length % 10 === 0) {
+          fetchComment(page + 1)
         }
         else setComments(prevComments => [...prevComments, response.data])
         // setPage(pagination.last)
@@ -318,13 +318,13 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
     } catch (error) {
       console.log(error)
       swal.fire({
-          title: '삭제 실패',
-          text: '댓글 삭제 중 오류가 발생했습니다.',
-          icon: 'error',
-          customClass: {
-            popup: 'album-wrapper'
-          }
-        })
+        title: '삭제 실패',
+        text: '댓글 삭제 중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 
@@ -356,7 +356,14 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
                 popup: 'album-wrapper'
               }
             })
-            setComments(prevComments => prevComments.filter(com => com.id !== commentId))
+            setComments(prevComments => {
+              const updated = prevComments.filter(com => com.id !== commentId);
+              console.log("업데이트 후 길이:", updated.length);
+              if (updated.length === 0) {
+                fetchComment(page - 1);
+              }
+              return updated;
+            });
           }
         }
         else {
@@ -418,7 +425,9 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
               {
                 ...com,
                 commentDislikes: response.data.dislikes,
-                commentLikes: response.data.likes
+                commentLikes: response.data.likes,
+                userLiked: response.data.comment.userLiked,
+                userDisliked: response.data.comment.userDisliked
               }
               : com
           ))
@@ -439,10 +448,12 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
                 ...prev, replies: prev.replies.map(rep =>
                   rep.id === commentId
                     ?
-                    { 
+                    {
                       ...rep,
                       commentDislikes: response.data.dislikes,
-                      commentLikes: response.data.likes
+                      commentLikes: response.data.likes,
+                      userLiked: response.data.comment.userLiked,
+                      userDisliked: response.data.comment.userDisliked
                     }
                     : rep
                 )
@@ -554,8 +565,8 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
                     </div>
                     <div className="comment-info">
                       <p>{rep.createdAt}</p>
-                      <p className="btn btn-gold" onClick={() => likeComment(ids, rep.id, true, false, com.id)}>👍 {rep.commentLikes}</p>
-                      <p className="btn btn-gold" onClick={() => likeComment(ids, rep.id, false, false, com.id)}>👎 {rep.commentDislikes}</p>
+                      <p className={`btn btn-gold ${rep.userLiked ? 'active' : ''}`} onClick={() => likeComment(ids, rep.id, true, false, com.id)}>👍 {rep.commentLikes}</p>
+                      <p className={`btn btn-gold ${rep.userDisliked ? 'active' : ''}`} onClick={() => likeComment(ids, rep.id, false, false, com.id)}>👎 {rep.commentDislikes}</p>
                       {!rep.userId && (
                         <>
                           <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>

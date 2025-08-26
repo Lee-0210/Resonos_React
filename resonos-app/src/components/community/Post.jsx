@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import PostTitle from './post/PostTitle'
 import PostContent from './post/PostContent'
 import PostComment from './post/PostComment'
@@ -24,6 +24,9 @@ const Post = () => {
 
   const { userInfo, isLogin } = useContext(LoginContext)
 
+  const isManager = useRef(false)
+  console.log('isManager :', isManager)
+
   const navigate = useNavigate()
 
 
@@ -34,7 +37,7 @@ const Post = () => {
         setIsLoading(true)
         const response = await api.getPostData({ boardId, postId })
         const data = response.data
-        console.log(data)
+        console.log('data :', data)
         setPost(data.post)
         setComments(data.comments)
         setPagination(data.commentsPagination)
@@ -54,6 +57,8 @@ const Post = () => {
           }))
           setComments(formatted)
         }
+        if(userInfo)
+          isManager.current = data.post.community.creatorId === userInfo.id
 
         setIsLoading(false)
       } catch (error) {
@@ -80,8 +85,10 @@ const Post = () => {
     }
 
     const data = {
-      guestPassword: pw
+      guestPassword: pw,
+      manager: isManager.current
     }
+    console.log('data :', data)
     const result = await swal.fire({
       title: '삭제 확인',
       text: '정말로 삭제하시겠습니까?',
@@ -202,6 +209,7 @@ const Post = () => {
           <PostContent post={post} ids={{ boardId, postId }} swal={swal}
             isLogin={isLogin} userInfo={userInfo} api={api} initVote={vote}
             deletePost={deletePost} reportPost={reportPost} contributeVote={contributeVote}
+            isManager={isManager}
           />
           <PostComment ids={{ boardId, postId }} swal={swal}
             initComments={comments} navigate={navigate}

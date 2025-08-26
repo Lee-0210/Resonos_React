@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.community.BoardPost;
+import com.cosmus.resonos.domain.community.Comment;
 import com.cosmus.resonos.domain.community.LikesDislikes;
+import com.cosmus.resonos.service.community.BoardPostService;
+import com.cosmus.resonos.service.community.CommentService;
 import com.cosmus.resonos.service.community.LikesDislikesService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +32,12 @@ public class LikesDislikesController {
 
     @Autowired
     private LikesDislikesService likesDislikesService;
+
+    @Autowired
+    private BoardPostService boardPostService;
+
+    @Autowired
+    private CommentService commentService;
 
     // @GetMapping()
     // public ResponseEntity<?> getAll(
@@ -78,9 +88,25 @@ public class LikesDislikesController {
             likesDislikesService.toggleReaction(loginUser.getId(), "post", postId, request.getIsLikes());
             Map<String, Integer> counts = likesDislikesService.getReactionCounts("post", postId);
             Map<String, Object> response = new HashMap<>();
+            BoardPost post = new BoardPost();
+            post = boardPostService.select(postId);
             response.put("postId", postId);
             response.put("likes", counts.get("likes"));
             response.put("dislikes", counts.get("dislikes"));
+            LikesDislikes reaction = likesDislikesService.selectByUser(loginUser.getId(), "post", postId);
+            if (reaction != null) {
+                if (Boolean.TRUE.equals(reaction.getIsLikes())) {
+                    post.setUserLiked(true);
+                    post.setUserDisliked(false);
+                } else {
+                    post.setUserLiked(false);
+                    post.setUserDisliked(true);
+                }
+            } else {
+                post.setUserLiked(false);
+                post.setUserDisliked(false);
+            }
+            response.put("post", post);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             log.error("게시글 반응 남기기 실패", e);
@@ -99,9 +125,25 @@ public class LikesDislikesController {
             likesDislikesService.toggleReaction(loginUser.getId(), "comment", commentId, request.getIsLikes());
             Map<String, Integer> counts = likesDislikesService.getReactionCounts("comment", commentId);
             Map<String, Object> response = new HashMap<>();
+            Comment comment = new Comment();
+            comment = commentService.select(commentId);
             response.put("commentId", commentId);
             response.put("likes", counts.get("likes"));
             response.put("dislikes", counts.get("dislikes"));
+            LikesDislikes reaction = likesDislikesService.selectByUser(loginUser.getId(), "comment", commentId);
+            if (reaction != null) {
+                if (Boolean.TRUE.equals(reaction.getIsLikes())) {
+                    comment.setUserLiked(true);
+                    comment.setUserDisliked(false);
+                } else {
+                    comment.setUserLiked(false);
+                    comment.setUserDisliked(true);
+                }
+            } else {
+                comment.setUserLiked(false);
+                comment.setUserDisliked(false);
+            }
+            response.put("comment", comment);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             log.error("댓글 반응 남기기 실패", e);

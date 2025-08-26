@@ -273,7 +273,7 @@ const Track = () => {
       })
       const updatedResponse = response.data
       setScore(updatedResponse.score);
-      setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
+      // setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
     } catch (error) {
       console.error('리뷰 작성 실패:', error);
       swal.fire({

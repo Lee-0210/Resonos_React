@@ -17,7 +17,7 @@ const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCa
             <Link
               to={`boards/${hotPost.community.id}/posts/${hotPost.id}`} key={hotPost.id}
             >
-              <img src="/img/profileImg.png" alt="썸네일" />
+              <img src={hotPost.thumbnailUrl} alt="썸네일" />
               <p>{hotPost.title}</p>
             </Link>
           ))
