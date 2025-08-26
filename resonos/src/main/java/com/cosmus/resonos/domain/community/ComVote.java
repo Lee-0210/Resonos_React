@@ -32,6 +32,8 @@ public class ComVote {
     @Valid
     @NotNull(message = "투표 항목을 입력하세요.")
     private List<ComVoteArgument> arguments;
+    // 총 투표 수
+    private Long totalVoteCount;
 
     // 투표 결과 
     public Object getQuestion;
