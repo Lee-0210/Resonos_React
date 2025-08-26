@@ -38,4 +38,6 @@ public class ComVote {
     // 투표 결과 
     public Object getQuestion;
     
+    // 과거 투표 여부 확인용
+    private Boolean hasUserVoted;
 }
