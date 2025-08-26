@@ -480,6 +480,16 @@
   display: flex;
   flex-direction: column;
 }
+.post-wrapper .post-info .board-name {
+  margin-bottom: 30px;
+}
+.post-wrapper .post-info .board-name a {
+  color: var(--main-color);
+  font-size: 3rem;
+}
+.post-wrapper .post-info .board-name a:hover {
+  text-decoration: underline;
+}
 
 .post-wrapper .writer-and-date {
   display: flex;

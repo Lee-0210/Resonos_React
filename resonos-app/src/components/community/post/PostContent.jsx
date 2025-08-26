@@ -7,7 +7,7 @@ import VoteChart from '../card/VoteChart';
 import VoteArguments from '../card/VoteArguments';
 
 const PostContent = ({ post, swal, api, isLogin, userInfo,
-  ids, deletePost, reportPost, initVote, contributeVote }) => {
+  ids, deletePost, reportPost, initVote, contributeVote, isManager }) => {
 
   const [openPw, setOpenPw] = useState(false)
   const [tempPw, setTempPw] = useState(null)
@@ -111,7 +111,7 @@ const PostContent = ({ post, swal, api, isLogin, userInfo,
     <div className="post-content">
       <div className="content">
         <CKEditor editor={ClassicEditor}
-          data={post.content}           // 조회할 데이터 컨텐츠 
+          data={post.content}           // 조회할 데이터 컨텐츠
           disabled={true}
           config={{
             toolbar: [],
@@ -168,26 +168,37 @@ const PostContent = ({ post, swal, api, isLogin, userInfo,
             </>
           )}
         </div>
-        {isLogin && userInfo.id === post.userId && (
+        {
+          isManager.current
+          ?
           <div className="onlywriter">
-            <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
             <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
             <button className='btn btn-gold' href="#" onClick={() => postDelete(true)}>삭제하기</button>
           </div>
-        )}
-        {!post.userId && (
-          <div className="onlywriter">
-            <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
-            <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
-            <button className='btn btn-gold' href="#" onClick={() => isDelete()}>{openPw ? '취소' : '삭제하기'}</button>
-            {openPw && (
-              <>
-                <input type="password" placeholder="비밀번호를 입력해주세요." onChange={(e) => setTempPw(e.target.value)} />
-                <button className='btn btn-gold' onClick={() => postDelete(false)}>삭제</button>
-              </>
-            )}
-          </div>
-        )}
+          :
+          isLogin && userInfo.id === post.userId ? (
+            <div className="onlywriter">
+              <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
+              <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
+              <button className='btn btn-gold' href="#" onClick={() => postDelete(true)}>삭제하기</button>
+            </div>
+            )
+          :
+          !post.userId && (
+            <div className="onlywriter">
+              <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
+              <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
+              <button className='btn btn-gold' href="#" onClick={() => isDelete()}>{openPw ? '취소' : '삭제하기'}</button>
+              {openPw && (
+                <>
+                  <input type="password" placeholder="비밀번호를 입력해주세요." onChange={(e) => setTempPw(e.target.value)} />
+                  <button className='btn btn-gold' onClick={() => postDelete(false)}>삭제</button>
+                </>
+              )}
+            </div>
+          )
+        }
+
         {isLogin ? (
           userInfo.id !== post.userId && (
             <div className="onlywriter">

@@ -27,8 +27,9 @@
 
     <association property="community" javaType="com.cosmus.resonos.domain.community.Community">
         <id property="id" column="community_id"/>
-        <result property="name" column="community_name"/>
+        <result property="name" column="name"/>
         <result property="categoryId" column="category_id"/>
+        <result property="creatorId" column="creator_id"/>
     </association>
 
     <!-- 투표 정보 매핑 -->
@@ -139,11 +140,14 @@
       v.is_completed AS vote_is_completed,
       va.id AS arg_id,
       va.content AS arg_content,
-      va.arg_no AS arg_no
+      va.arg_no AS arg_no,
+      c.creator_id,
+      c.name
     FROM board_post bp
     LEFT JOIN user u ON u.id = bp.user_id
     LEFT JOIN com_vote v ON v.post_id = bp.id
     LEFT JOIN com_vote_argument va ON va.vote_id = v.id
+    JOIN community c ON c.id = bp.community_id
     WHERE bp.id = #{postId}
       AND bp.community_id = #{communityId}
     ORDER BY va.arg_no
