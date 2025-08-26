@@ -134,17 +134,18 @@ const WYSIWYG = ({ post, ids }) => {
   const postInsert = async (ids) => {
     console.log(voteItems)
     const boardId = ids
+
     const data = {
       content: content,
       title: title,
       ...(isLogin ? {} : { guestNickname: guestNick, guestPassword: tempPw }),
-      vote: {
-        title: voteTitle,
-        closedAt: closedAt,
-        arguments: voteItems
-      },
+      ...(voteActive
+      ? { vote: { title: voteTitle, closedAt, arguments: voteItems } }
+      : {}
+      ),
       voteActive
     }
+
     console.log(data)
     try {
       const response = await api.postInsert(data, boardId)
@@ -411,7 +412,7 @@ const WYSIWYG = ({ post, ids }) => {
                 onClick={() => setVoteActive(!voteActive)}
               >
                 {
-                  voteActive ? '투표취소' : '투표하기'
+                  voteActive ? '투표취소' : '투표생성'
                 }
               </button>
             </div>
@@ -428,7 +429,7 @@ const WYSIWYG = ({ post, ids }) => {
                   setVoteActive(!voteActive)
                 }}
               >
-                {voteActive ? '투표취소' : '투표하기'}
+                {voteActive ? '투표취소' : '투표생성'}
               </button>
             </div>
           )}
