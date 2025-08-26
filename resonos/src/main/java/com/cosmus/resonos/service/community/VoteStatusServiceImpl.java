@@ -84,4 +84,9 @@ public boolean insert(VoteStatus entity) throws Exception {
     public boolean deleteAll() throws Exception {
         return voteStatusMapper.deleteAll() > 0;
     }
+
+    @Override
+    public Long getPostIdByArgId(Long argId) throws Exception {
+        return voteStatusMapper.selectPostIdByArgId(argId);
+    }
 }

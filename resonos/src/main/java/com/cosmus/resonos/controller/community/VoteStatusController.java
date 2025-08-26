@@ -79,12 +79,25 @@ public class VoteStatusController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Autowired
+    private BoardPostService boardPostService;
+
     @PostMapping()
     public ResponseEntity<?> create(@RequestBody VoteStatus entity) {
         try {
             boolean result = voteStatusService.insert(entity);
             Map<String, Object> response = new HashMap<>();
-            response.put("vote", entity);
+
+            Long postId = voteStatusService.getPostIdByArgId(entity.getArgId());
+
+            List<ComVote> votes = boardPostService.getVotesByPostId(postId);
+            for (ComVote vote : votes) {
+                vote.setPostId(postId);
+            }
+            // response.put("votes", entity);
+            response.put("vote", votes);
+
             if (result) {
                 response.put("status", "SUCCESS");
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -97,6 +110,7 @@ public class VoteStatusController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @PutMapping()
     public ResponseEntity<?> update(@RequestBody VoteStatus entity) {

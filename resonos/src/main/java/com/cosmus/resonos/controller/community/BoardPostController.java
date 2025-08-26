@@ -94,9 +94,7 @@ public class BoardPostController {
 
 
             Long voteId = boardPostService.getVotesByPostId(postId).get(0).getId();
-            log.info("##############################################");
             log.info("voteId : {}", voteId);
-            log.info("##############################################");
 
             List<ComVoteArgument> arguments = boardPostService.getArgumentsByVoteId(voteId + 1);
             log.info("arguments : {}", arguments);
