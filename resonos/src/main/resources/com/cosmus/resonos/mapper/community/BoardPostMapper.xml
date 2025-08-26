@@ -324,7 +324,7 @@
 <!-- vote  -->
 <!-- 게시글 투표 목록 -->
 <select id="findVotesByPostId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVote">
-  SELECT v.id, v.post_id, v.title, v.is_completed,
+  SELECT v.id, v.post_id, v.title, v.is_completed, v.closed_at,
          COALESCE(COUNT(DISTINCT vs.id), 0) AS total_vote_count
   FROM com_vote v
   LEFT JOIN com_vote_argument a ON a.vote_id = v.id
@@ -337,7 +337,7 @@
 
 <!-- 투표 선택지 목록 -->
 <select id="findArgumentsByVoteId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVoteArgument">
-  SELECT a.id, a.vote_id, a.content, a.arg_no,
+  SELECT a.id, a.vote_id, a.content, a.arg_no, 
          COALESCE(COUNT(DISTINCT vs.id), 0) vote_count
   FROM com_vote_argument a
   LEFT JOIN vote_status vs ON vs.arg_id = a.id
@@ -360,11 +360,13 @@
 </insert>
 
 <!-- 투표 이력 확인 -->
-<select id="checkUserVoteExists" resultType="com.cosmus.resonos.domain.community.VoteResult">
-  SELECT COUNT(*)
-  FROM vote_result
-  WHERE arg_id = #{argId}
-    AND (user_id IS NOT NULL AND user_id = #{userId})
+<select id="checkUserVoteExists" resultType="int">
+     SELECT COUNT(1) 
+    FROM vote_status vs
+    INNER JOIN com_vote_argument cva ON vs.arg_id = cva.id
+    INNER JOIN com_vote cv ON cva.vote_id = cv.id
+    WHERE cv.id = #{voteId}
+      AND vs.user_id = #{userId}
 </select>
 
 <!-- 투표 결과 삭제 -->

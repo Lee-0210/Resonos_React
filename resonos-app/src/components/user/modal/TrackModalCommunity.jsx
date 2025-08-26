@@ -20,6 +20,8 @@ const TrackModalCommunity = ({onModal, setOnModal, setMusic, onSearchTrack, trac
   const [keyword, setKeyword] = useState('')
   const debouncedKeyword = useDebounce(keyword, 300)
 
+  const inputRef = useRef(null)
+
   const offsetRef = useRef(0);
   const limitRef = useRef(20);
   const loadingRef = useRef(false);
@@ -97,6 +99,11 @@ const TrackModalCommunity = ({onModal, setOnModal, setMusic, onSearchTrack, trac
       }
     };
 
+    setTimeout(() => {
+      if(inputRef.current) inputRef.current.focus()
+        console.log(inputRef)
+    }, 100)
+
     // ESC 키 이벤트 등록
     window.addEventListener("keydown", handleEsc);
 
@@ -104,7 +111,7 @@ const TrackModalCommunity = ({onModal, setOnModal, setMusic, onSearchTrack, trac
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
-  }, [setOnModal]);
+  }, [onModal]);
 
   return (
     <>
@@ -123,6 +130,7 @@ const TrackModalCommunity = ({onModal, setOnModal, setMusic, onSearchTrack, trac
               name="keyword"
               placeholder="키워드를 입력하세요."
               onChange={handleSearchTrack}
+              ref={inputRef}
             />
           </div>
           <div>

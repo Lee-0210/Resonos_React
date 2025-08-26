@@ -20,5 +20,7 @@ public interface VoteStatusMapper extends BaseMapper<VoteStatus> {
     List<VoteStatus> selectByUserId(Long userId);
     // userId 로 모든 투표 상태 삭제
     void deleteByUserId(Long userId);
+    // argId로 PostId 조회
+    Long selectPostIdByArgId(Long argId);
     
 }

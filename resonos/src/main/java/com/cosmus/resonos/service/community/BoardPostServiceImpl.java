@@ -303,13 +303,14 @@ public class BoardPostServiceImpl implements BoardPostService {
     }
 
     @Override
-    public boolean hasUserVoted(Long argId, Long userId) throws Exception {
+    public boolean hasUserVoted(Long voteId, Long userId) throws Exception {
         try {
-            int count = boardPostMapper.checkUserVoteExists(argId, userId);
-            return count > 0;
-            
+            Integer count = boardPostMapper.checkUserVoteExists(voteId, userId);
+            log.info("impl hasUserVoted - voteId: {}, userId: {}", voteId, userId);
+            log.info("checkUserVoteExists count: {}", count);
+            return count != null && count > 0;
         } catch (Exception e) {
-            log.error("투표 이력 확인 실패: argId={}, userId={}", argId, userId, e);
+            log.error("투표 이력 확인 실패: voteIdq={}, userId={}", voteId, userId, e);
             throw e;
         }
     }

@@ -1,7 +1,7 @@
 package com.cosmus.resonos.domain.community;
 
 import java.util.Date;
-import java.util.UUID;
+import java.util.List;
 
 import lombok.Data;
 
@@ -18,6 +18,7 @@ public class VoteStatus {
     private Date createdAt;
 
     // 없는 컬럼 
-    public ComVote Vote;
+    public ComVote vote;
+    public List<ComVote> votes;
 
 }
