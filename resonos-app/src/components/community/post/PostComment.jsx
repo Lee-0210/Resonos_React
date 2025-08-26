@@ -425,7 +425,9 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
               {
                 ...com,
                 commentDislikes: response.data.dislikes,
-                commentLikes: response.data.likes
+                commentLikes: response.data.likes,
+                userLiked: response.data.comment.userLiked,
+                userDisliked: response.data.comment.userDisliked
               }
               : com
           ))
@@ -449,7 +451,9 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
                     {
                       ...rep,
                       commentDislikes: response.data.dislikes,
-                      commentLikes: response.data.likes
+                      commentLikes: response.data.likes,
+                      userLiked: response.data.comment.userLiked,
+                      userDisliked: response.data.comment.userDisliked
                     }
                     : rep
                 )
@@ -561,8 +565,8 @@ const PostComment = ({ ids, isLogin, userInfo, swal }) => {
                     </div>
                     <div className="comment-info">
                       <p>{rep.createdAt}</p>
-                      <p className="btn btn-gold" onClick={() => likeComment(ids, rep.id, true, false, com.id)}>👍 {rep.commentLikes}</p>
-                      <p className="btn btn-gold" onClick={() => likeComment(ids, rep.id, false, false, com.id)}>👎 {rep.commentDislikes}</p>
+                      <p className={`btn btn-gold ${rep.userLiked ? 'active' : ''}`} onClick={() => likeComment(ids, rep.id, true, false, com.id)}>👍 {rep.commentLikes}</p>
+                      <p className={`btn btn-gold ${rep.userDisliked ? 'active' : ''}`} onClick={() => likeComment(ids, rep.id, false, false, com.id)}>👎 {rep.commentDislikes}</p>
                       {!rep.userId && (
                         <>
                           <div className="btn btn-gold" onClick={() => handleEditReply(rep.id)}>수정</div>
