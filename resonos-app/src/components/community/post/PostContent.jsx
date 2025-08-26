@@ -24,7 +24,6 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
   const contributeVote = async (data) => {
     try {
       const res = await api.contributeVote(data)
-      console.log(res)
       if (res.status === 201) {
         swal.fire({
           title: '투표 완료',
@@ -60,6 +59,9 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
       })
       return
     }
+    setVoting(!voting)
+  }
+  const closeVote = () => {
     setVoting(!voting)
   }
 
@@ -158,7 +160,7 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
           <p>투표 기간 : {vote.closedAt} 까지</p>
           <VoteChart vote={vote} />
           <div className="vote-view-util">
-            <button className='btn btn-gold' onClick={openVote}>투표하기</button>
+            <button className='btn btn-gold' onClick={openVote}>{vote.hasUserVoted ? '재투표하기' : '투표하기'}</button>
           </div>
         </div>
       )}
@@ -166,7 +168,10 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
         <div className="vote-view">
           <form action="" className='vote-form' onSubmit={handleVote}>
             {vote.arguments.map((arg, index) => <VoteArguments key={index} arg={arg} selectedId={selectedId} onChange={setSelectedId} />)}
-            <button type='submit' className='btn btn-gold'>투표완료</button>
+            <div className='vote-util'>
+              <button type='submit' className='btn btn-gold'>투표완료</button>
+              <button className="btn btn-gold" onClick={closeVote}>취소</button>
+            </div>
           </form>
         </div>
       )}
