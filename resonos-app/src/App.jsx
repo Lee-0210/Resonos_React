@@ -62,6 +62,7 @@ import SearchMore from './pages/community/SearchMore';
 import Post from './pages/community/Post';
 import CreateUpdate from './pages/community/CreateUpdate';
 import App3 from './components/websocket/App3';
+import {ThemeProvider} from './components/admin/toggle/ThemeToggle';
 
 
 
@@ -75,6 +76,7 @@ const App = () => {
     <>
 
     <BrowserRouter>
+    <ThemeProvider>
       <LoginContextProvider>
         <Routes>
           <Route path='/' element={<Home />} />
@@ -161,6 +163,7 @@ const App = () => {
 
         </Routes>
       </LoginContextProvider>
+      </ThemeProvider>
     </BrowserRouter>
     </>
   )
