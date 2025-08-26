@@ -13,19 +13,28 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const VoteChart = ({ vote }) => {
-  const colors = vote.arguments.map(() => {
-    const r = Math.floor(Math.random() * 255);
-    const g = Math.floor(Math.random() * 255);
-    const b = Math.floor(Math.random() * 255);
-    return `rgba(${r}, ${g}, ${b}, 1)`;
-  });
-  const labels = vote.arguments.map(arg => arg.content);
+
+  const pastelPalette = [
+    "#D4B97F", // 1번째 (고정 금색)
+    "#A8DADC", // 민트 파스텔
+    "#F6BD60", // 파스텔 오렌지
+    "#F28482", // 파스텔 레드
+    "#84A59D", // 파스텔 그레이그린
+    "#B8A9C9", // 라벤더
+    "#FFD6A5", // 파스텔 옐로우
+  ];
+
+  const sortedArgs = [...vote.arguments].sort((a, b) => b.voteCount - a.voteCount);
+  const colors = pastelPalette.slice(0, vote.arguments.length);
+  const labels = sortedArgs.map(arg => arg.content);
+  const datasetData = sortedArgs.map(arg => arg.voteCount);
+
   const data = {
     labels,
     datasets: [
       {
         label: vote.title,
-        data: vote.arguments.map(arg => arg.voteCount),
+        data: datasetData,
         backgroundColor: colors,
         barThickness: 20,
       },

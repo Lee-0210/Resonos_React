@@ -56,9 +56,10 @@
   </select>
 
   <select id="select" resultMap="BoardPostResultMap">
-    SELECT bp.*, u.nickname AS user_nickname
+    SELECT bp.*, u.nickname AS user_nickname, v.title AS vote_title
     FROM board_post bp
     LEFT JOIN user u ON bp.user_id = u.id
+    LEFT JOIN com_vote v ON v.post_id = bp.id
     WHERE bp.id = #{id}
   </select>
 
