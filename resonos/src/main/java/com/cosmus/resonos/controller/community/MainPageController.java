@@ -87,6 +87,7 @@ public class MainPageController {
 
             // 7. 게시판 순위 Top5 - communityService
             List<Community> topCommunities = communityService.getTopCommunities(7);
+            log.info("controller-topCommunities: {}", topCommunities);
             response.put("topCommunities", topCommunities);
 
             // 8. 신설 게시판 - communityService

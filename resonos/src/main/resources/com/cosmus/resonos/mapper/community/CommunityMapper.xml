@@ -90,18 +90,19 @@
 
   <!-- 게시판 순위 Top5 - communityService -->
   <select id="getTopCommunities" resultMap="CommunityResultMap" parameterType="int">
-    SELECT
-      c.*,
-      bp.id AS board_post_id,
-      bp.title AS board_post_title,
-      bp.content AS board_post_content,
-      bp.created_at AS board_post_created_at,
-      u2.nickname AS user_nickname
-    FROM community c
-    LEFT JOIN user u ON u.id = c.creator_id
-    LEFT JOIN board_post bp ON bp.community_id = c.id
-    LEFT JOIN user u2 ON u2.id = bp.user_id
-    ORDER BY bp.created_at DESC
+  SELECT
+      c.id AS community_id,
+      c.name AS community_name,
+      c.category_id,
+      u.nickname AS creator_nickname,
+      SUM(bp.views) AS total_views,
+      COUNT(bp.id) AS post_count
+  FROM community c
+  LEFT JOIN user u ON u.id = c.creator_id
+  LEFT JOIN board_post bp ON bp.community_id = c.id
+  WHERE bp.id IS NOT NULL
+  GROUP BY c.id, c.name, c.category_id, u.nickname
+  ORDER BY total_views DESC
     LIMIT #{limit}
   </select>
 
