@@ -25,7 +25,6 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
   const contributeVote = async (data) => {
     try {
       const res = await api.contributeVote(data)
-      console.log(res)
       if (res.status === 201) {
         swal.fire({
           title: '투표 완료',

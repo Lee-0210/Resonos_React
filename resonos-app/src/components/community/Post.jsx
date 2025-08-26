@@ -25,7 +25,6 @@ const Post = () => {
   const { userInfo, isLogin } = useContext(LoginContext)
 
   const isManager = useRef(false)
-  console.log('isManager :', isManager)
 
   const navigate = useNavigate()
 
@@ -37,7 +36,6 @@ const Post = () => {
         setIsLoading(true)
         const response = await api.getPostData({ boardId, postId })
         const data = response.data
-        console.log('data :', data)
         setPost(data.post)
         setComments(data.comments)
         setPagination(data.commentsPagination)
