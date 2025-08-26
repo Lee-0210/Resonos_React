@@ -308,10 +308,10 @@ public class BoardPostServiceImpl implements BoardPostService {
     // vote 
     @Override
     @Transactional
-    public boolean submitVote(Long argId, Long userId, String guestId) throws Exception {
+    public boolean submitVote(Long argId, Long userId) throws Exception {
         try {
             // 1. 중복 투표 확인
-            if (hasUserVoted(argId, userId, guestId)) {
+            if (hasUserVoted(argId, userId)) {
                 throw new Exception("이미 투표하셨습니다.");
             }
             
@@ -332,32 +332,32 @@ public class BoardPostServiceImpl implements BoardPostService {
             return result > 0;
             
         } catch (Exception e) {
-            log.error("투표 처리 실패: argId={}, userId={}, guestId={}", argId, userId, guestId, e);
+            log.error("투표 처리 실패: argId={}, userId={}", argId, userId, e);
             throw e;
         }
     }
 
     @Override
-    public boolean hasUserVoted(Long argId, Long userId, String guestId) throws Exception {
+    public boolean hasUserVoted(Long argId, Long userId) throws Exception {
         try {
-            int count = boardPostMapper.checkUserVoteExists(argId, userId, guestId);
+            int count = boardPostMapper.checkUserVoteExists(argId, userId);
             return count > 0;
             
         } catch (Exception e) {
-            log.error("투표 이력 확인 실패: argId={}, userId={}, guestId={}", argId, userId, guestId, e);
+            log.error("투표 이력 확인 실패: argId={}, userId={}", argId, userId, e);
             throw e;
         }
     }
 
     @Override
     @Transactional
-    public boolean cancelVote(Long argId, Long userId, String guestId) throws Exception {
+    public boolean cancelVote(Long argId, Long userId) throws Exception {
         try {
-            int result = boardPostMapper.deleteVoteResult(argId, userId, guestId);
+            int result = boardPostMapper.deleteVoteResult(argId, userId);
             return result > 0;
             
         } catch (Exception e) {
-            log.error("투표 취소 실패: argId={}, userId={}, guestId={}", argId, userId, guestId, e);
+            log.error("투표 취소 실패: argId={}, userId={}", argId, userId, e);
             throw e;
         }
     }

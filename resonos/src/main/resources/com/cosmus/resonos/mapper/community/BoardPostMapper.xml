@@ -360,8 +360,7 @@
   SELECT COUNT(*)
   FROM vote_result
   WHERE arg_id = #{argId}
-    AND ((user_id IS NOT NULL AND user_id = #{userId})
-         OR (guest_id IS NOT NULL AND guest_id = #{guestId}))
+    AND (user_id IS NOT NULL AND user_id = #{userId})
 </select>
 
 <!-- 투표 결과 삭제 -->

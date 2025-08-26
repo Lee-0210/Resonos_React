@@ -8,6 +8,9 @@ import com.cosmus.resonos.domain.community.VoteStatus;
 import com.cosmus.resonos.mapper.community.VoteStatusMapper;
 import com.github.pagehelper.PageInfo;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class VoteStatusServiceImpl implements VoteStatusService {
 
@@ -37,10 +40,23 @@ public class VoteStatusServiceImpl implements VoteStatusService {
         return voteStatusMapper.selectById(id);
     }
 
-    @Override
-    public boolean insert(VoteStatus entity) throws Exception{
-        return voteStatusMapper.insert(entity) > 0;
+  @Override
+public boolean insert(VoteStatus entity) throws Exception {
+    log.info("Inserting VoteStatus: {}", entity);
+
+    // 기존의 동일 userId 투표 기록(다른 argument도 포함) 조회
+    List<VoteStatus> existingVotes = voteStatusMapper.selectByUserId(entity.getUserId());
+    log.info("existingVotes: {}", existingVotes);
+
+    if (existingVotes != null && !existingVotes.isEmpty()) {
+        // 기존 모든 투표 기록 삭제
+        voteStatusMapper.deleteByUserId(entity.getUserId());
     }
+
+    // 새 투표 inserted
+    return voteStatusMapper.insert(entity) > 0;
+}
+
 
     @Override
     public boolean update(VoteStatus entity) throws Exception{

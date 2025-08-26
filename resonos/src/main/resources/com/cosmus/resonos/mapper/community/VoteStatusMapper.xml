@@ -36,6 +36,27 @@
         DELETE FROM vote_status WHERE arg_id = #{argId}
     </delete>
 
+    <!-- userId + postId 로 투표 상태 조회 (중복 투표 방지용) -->
+    <select id="selectByUserIdAndPostId" resultType="VoteStatus">
+  SELECT 
+    vs.*
+  FROM 
+    vote_status vs
+    INNER JOIN com_vote_argument cva ON vs.arg_id = cva.id
+  WHERE 
+    vs.user_id = #{userId}
+    AND cva.vote_id = #{argId}
+    </select>
+
+    <!-- userId 로 모든 투표 상태 조회 (투표 변경용) -->
+    <select id="selectByUserId" resultType="VoteStatus">
+        SELECT * FROM vote_status WHERE user_id = #{userId}
+    </select>
+
+    <!-- userId 로 모든 투표 상태 삭제 -->
+    <delete id="deleteByUserId">
+        DELETE FROM vote_status WHERE user_id = #{userId}
+    </delete>
 
 </mapper>
 
