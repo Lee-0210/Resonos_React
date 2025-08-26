@@ -282,7 +282,7 @@ public ResponseEntity<?> getPost(
 
             if (boardPost == null) return new ResponseEntity<>("게시글이 없습니다.", HttpStatus.NOT_FOUND);
 
-            boolean isManager = request != null && request.isManager();
+            boolean isManager = request != null && request.isManager(); 
 
             if (loginUser != null) {
                 if (boardPost.getUserId() != null && !loginUser.getId().equals(boardPost.getUserId()) && !isManager) {
