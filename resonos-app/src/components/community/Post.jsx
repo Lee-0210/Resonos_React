@@ -57,12 +57,19 @@ const Post = () => {
           }))
           setComments(formatted)
         }
-        if(userInfo)
+        if (userInfo)
           isManager.current = data.post.community.creatorId === userInfo.id
 
         setIsLoading(false)
       } catch (error) {
-        console.error(error)
+        swal.fire({
+          title: '초기로딩 실패',
+          text: '조회중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
       }
     }
     fetchData();
@@ -88,7 +95,6 @@ const Post = () => {
       guestPassword: pw,
       manager: isManager.current
     }
-    console.log('data :', data)
     const result = await swal.fire({
       title: '삭제 확인',
       text: '정말로 삭제하시겠습니까?',
@@ -103,18 +109,18 @@ const Post = () => {
     if (result.isConfirmed) {
       try {
         const response = await api.deletePost(data, ids)
-        console.log(response)
-        swal.fire({
-          title: '삭제 완료',
-          text: '게시글이 성공적으로 삭제되었습니다.',
-          icon: 'success',
-          customClass: {
-            popup: 'album-wrapper'
-          }
-        })
+        if (response.status === 200) {
+          swal.fire({
+            title: '삭제 완료',
+            text: '게시글이 성공적으로 삭제되었습니다.',
+            icon: 'success',
+            customClass: {
+              popup: 'album-wrapper'
+            }
+          })
+        }
         navigate(`/community/boards/${boardId}`)
       } catch (error) {
-        console.log(error)
         swal.fire({
           title: '삭제 실패',
           text: '게시글 삭제 중 오류가 발생했습니다.',
@@ -142,17 +148,17 @@ const Post = () => {
     if (result.isConfirmed) {
       try {
         const response = await api.reportPost(ids)
-        console.log(response)
-        swal.fire({
-          title: '신고 완료',
-          text: '게시글이 신고되었습니다.',
-          icon: 'success',
-          customClass: {
-            popup: 'album-wrapper'
-          }
-        })
+        if (response.status === 200) {
+          swal.fire({
+            title: '신고 완료',
+            text: '게시글이 신고되었습니다.',
+            icon: 'success',
+            customClass: {
+              popup: 'album-wrapper'
+            }
+          })
+        }
       } catch (error) {
-        console.log(error)
         swal.fire({
           title: '신고 실패',
           text: '게시글 신고 중 오류가 발생했습니다.',
@@ -169,17 +175,25 @@ const Post = () => {
   const contributeVote = async (data) => {
     try {
       const res = await api.contributeVote(data)
-      console.log(res)
+      if (res.status === 200) {
+        swal.fire({
+          title: '투표 완료',
+          text: '투표가 성공적으로 완료되었습니다.',
+          icon: 'success',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
+    } catch (error) {
       swal.fire({
-        title: '투표 완료',
-        text: '투표가 성공적으로 완료되었습니다.',
-        icon: 'success',
+        title: '투표 실패',
+        text: '투표 처리중 오류가 발생했습니다.',
+        icon: 'error',
         customClass: {
           popup: 'album-wrapper'
         }
       })
-    } catch (error) {
-      console.log(error)
     }
   }
 

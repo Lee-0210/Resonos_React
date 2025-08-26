@@ -49,8 +49,8 @@ const PostContent = ({ post, swal, api, isLogin, userInfo,
       return
     }
     const data = {
-      argId : selectedId,
-      userId : userInfo.id
+      argId: selectedId,
+      userId: userInfo.id
     }
     contributeVote(data)
     setSelectedId(null)
@@ -86,7 +86,6 @@ const PostContent = ({ post, swal, api, isLogin, userInfo,
   const postLike = async (ids, data, isLike) => {
     try {
       const response = await api.postLike(ids, data)
-      console.log(response)
       if (response.status === 200) {
         setLikeCount(response.data.likes)
         setDislikeCount(response.data.dislikes)
@@ -101,7 +100,14 @@ const PostContent = ({ post, swal, api, isLogin, userInfo,
         }
       }
     } catch (error) {
-      console.log(error)
+      swal.fire({
+        title: '좋아요 실패',
+        text: '좋아요 처리 중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
   }
 
@@ -170,33 +176,33 @@ const PostContent = ({ post, swal, api, isLogin, userInfo,
         </div>
         {
           isManager.current
-          ?
-          <div className="onlywriter">
-            <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
-            <button className='btn btn-gold' href="#" onClick={() => postDelete(true)}>삭제하기</button>
-          </div>
-          :
-          isLogin && userInfo.id === post.userId ? (
+            ?
             <div className="onlywriter">
-              <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
               <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
               <button className='btn btn-gold' href="#" onClick={() => postDelete(true)}>삭제하기</button>
             </div>
+            :
+            isLogin && userInfo.id === post.userId ? (
+              <div className="onlywriter">
+                <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
+                <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
+                <button className='btn btn-gold' href="#" onClick={() => postDelete(true)}>삭제하기</button>
+              </div>
             )
-          :
-          !post.userId && (
-            <div className="onlywriter">
-              <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
-              <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
-              <button className='btn btn-gold' href="#" onClick={() => isDelete()}>{openPw ? '취소' : '삭제하기'}</button>
-              {openPw && (
-                <>
-                  <input type="password" placeholder="비밀번호를 입력해주세요." onChange={(e) => setTempPw(e.target.value)} />
-                  <button className='btn btn-gold' onClick={() => postDelete(false)}>삭제</button>
-                </>
-              )}
-            </div>
-          )
+              :
+              !post.userId && (
+                <div className="onlywriter">
+                  <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
+                  <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
+                  <button className='btn btn-gold' href="#" onClick={() => isDelete()}>{openPw ? '취소' : '삭제하기'}</button>
+                  {openPw && (
+                    <>
+                      <input type="password" placeholder="비밀번호를 입력해주세요." onChange={(e) => setTempPw(e.target.value)} />
+                      <button className='btn btn-gold' onClick={() => postDelete(false)}>삭제</button>
+                    </>
+                  )}
+                </div>
+              )
         }
 
         {isLogin ? (
