@@ -19,8 +19,12 @@ body {font-size: 1.6rem;}
   --commu-backColor : #1C202A;
   /* 컨테이너 크기 */
   --container : 1440px;
-  /* 마이페이지 아이템 컬러 */
+
+  /* 마이페이지 컬러 */
   --card-color: #222;
+  --card-color2: rgba(24,28,35,0.82);
+  --mypage-info: rgba(24,28,35,0.94);
+  --mypage-text: #fffbe6;
 }
 
 body {

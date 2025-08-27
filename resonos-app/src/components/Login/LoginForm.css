@@ -37,7 +37,7 @@ p {margin-bottom: 0;}
 body {
   background-color: var(--background-color) !important;
   font-family: 'Segoe UI', 'Pretendard', sans-serif;
-  color: #D4B97F;
+  color: var(--main-color);
   min-height: 100vh;
 }
 .con {margin: 120px 0 200px; padding: 0 10px;}
@@ -48,7 +48,7 @@ body {
 }
 .con .user-form {
   background-color: var(--background-color);
-  border: 1.5px solid #D4B97F;
+  border: 1.5px solid var(--main-color);
   border-radius: 24px;
   padding: 30px;
   max-width: 400px;
@@ -56,20 +56,20 @@ body {
   text-align: center;
 }
 .con.btn-gold {
-  background-color: #D4B97F;
+  background-color: var(--main-color);
   color: #181C23;
   border-radius: 30px;
   font-weight: bold;
   padding: 12px 16px;
 }
 .btn-gold:hover {
-  background-color: #fffbe6;
+  background-color: var(--mypage-text);
   color: #181C23;
 }
 button.social-btn {
   background-color: var(--card-color);;
-  color: #D4B97F;
-  border: 1.5px solid #D4B97F;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
   border-radius: 30px;
   font-weight: bold;
   padding: 10px 0;
@@ -80,29 +80,29 @@ button.social-btn {
   margin-bottom: 20px;
 }
 button.social-btn:hover {
-  background-color: #D4B97F;
+  background-color: var(--main-color);
   color: #181C23;
 }
 .form-control {
   background-color: var(--card-color);;
-  color: #fffbe6;
-  border: 1.5px solid #D4B97F;
+  color: var(--mypage-text);
+  border: 1.5px solid var(--main-color);
   border-radius: 14px;
   padding: 12px 16px;
 }
 .form-control:focus {
   background-color: var(--card-color);;
-  color: #fffbe6;
-  border-color: #fffbe6;
+  color: var(--mypage-text);
+  border-color: var(--mypage-text);
   box-shadow: none;
 }
 .login-link {
-  color: #D4B97F;
+  color: var(--main-color);
   text-decoration: underline;
   font-size: 1.2rem;
 }
 .login-link:hover {
-  color: #fffbe6;
+  color: var(--mypage-text);
 }
 .find-area {
   display: flex;
@@ -155,7 +155,7 @@ input::placeholder {color: #bbb !important;}
   border-bottom: 1px solid var(--card-color);;
 }
 .con nav a {
-  color: #D4B97F;
+  color: var(--main-color);
   text-decoration: none;
   margin: 0 16px;
   font-size: 1.05rem;
@@ -163,13 +163,13 @@ input::placeholder {color: #bbb !important;}
 }
 .con nav a.active,
 .con nav a:hover {
-  color: #fffbe6;
+  color: var(--mypage-text);
 }
 .profile-section {
   display: flex;
   align-items: center;
-  background: rgba(24,28,35,0.94);
-  border: 1.5px solid #D4B97F;
+  background: var(--mypage-info);
+  border: 1.5px solid var(--main-color);
   border-radius: 20px;
   padding: 32px 38px;
   margin-bottom: 38px;
@@ -179,17 +179,17 @@ input::placeholder {color: #bbb !important;}
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  border: 1px solid #D4B97F;
+  border: 1px solid var(--main-color);
   object-fit: cover;
 }
 .profile-info h2 {
   font-size: 1.5rem;
   margin-bottom: 0;
   line-height: 1.5;
-  color: #fffbe6;
+  color: var(--mypage-text);
 }
 .profile-info p {
-  color: #D4B97F;
+  color: var(--main-color);
   margin: 0 0 14px 0;
   width: 100%;
   overflow: hidden;
@@ -204,7 +204,7 @@ input::placeholder {color: #bbb !important;}
 .mybtn-gold, .mybtn-gold-sm {
   display: flex;
   justify-content: center;
-  background: #D4B97F;
+  background: var(--main-color);
   color: #181C23 !important;
   border: none;
   width: 100px;
@@ -223,13 +223,13 @@ input::placeholder {color: #bbb !important;}
   margin-top: 12px;
 }
 .mybtn-gold:hover, .mybtn-gold-sm:hover {
-  background: #fffbe6;
+  background: var(--mypage-text);
   color: #181C23;
 }
 .mybtn-outline {
   background: none;
-  color: #D4B97F;
-  border: 1.5px solid #D4B97F;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
   width: 100px;
   padding: 10px 0;
   border-radius: 30px;
@@ -239,7 +239,7 @@ input::placeholder {color: #bbb !important;}
   transition: background 0.2s, color 0.2s;
 }
 .mybtn-outline:hover {
-  background: #D4B97F;
+  background: var(--main-color);
   color: #181C23;
 }
 .profile-meta {
@@ -249,12 +249,15 @@ input::placeholder {color: #bbb !important;}
   margin-left: auto;
   text-align: center;
 }
+.profile-meta span {
+  color: var(--mypage-text);
+}
 .profile-meta div {
   font-size: 1.6rem;
-  color: #fffbe6;
+  color: var(--mypage-text);
 }
 .profile-meta b {
-  color: #D4B97F;
+  color: var(--main-color);
   font-size: 2rem;
 }
 .mypage-grid {
@@ -267,10 +270,10 @@ input::placeholder {color: #bbb !important;}
   min-height: 233px;
   width: 100%;
   padding:  15px 13px;
-  color: #fffbe6;
-  background: rgba(24,28,35,0.82);
+  color: var(--mypage-text);
+  background: var(--card-color2);
   border-radius: 17px;
-  border: 1.5px solid #D4B97F;
+  border: 1.5px solid var(--main-color);
   box-shadow: 0 2px 12px rgba(24,28,35,0.10);
   transition: all 0.3s;
 }
@@ -295,7 +298,7 @@ input::placeholder {color: #bbb !important;}
   justify-content: space-between;
   align-items: center;
   font-size: 1.6rem;
-  color: #D4B97F;
+  color: var(--main-color);
   margin-bottom: 10px;
 }
 .mypage-card h3 p {
@@ -331,7 +334,7 @@ input::placeholder {color: #bbb !important;}
   display: flex;
   margin-bottom: 7px;
   font-size: 1.3rem;
-  color: #fffbe6;
+  color: var(--mypage-text);
 }
 .mypage-card.album li, .mypage-card.track li, .mypage-card.artist li {
   gap: 20px;
@@ -369,7 +372,7 @@ input::placeholder {color: #bbb !important;}
 }
 .con .like {
   font-size: 2.5rem;
-  color: #D4B97F;
+  color: var(--main-color);
   margin-left: 8px;
   cursor: pointer;
 }
@@ -391,7 +394,7 @@ input::placeholder {color: #bbb !important;}
 }
 .con .badge {
   display: inline-block;
-  background: #D4B97F;
+  background: var(--main-color);
   color: #181C23;
   border-radius: 14px;
   font-size: 1.4rem;
@@ -420,11 +423,12 @@ input::placeholder {color: #bbb !important;}
 .chart-area h3 {
   position: absolute;
   top: -18px;
+  color: var(--main-color);
 }
 #doughnut {width: 70%;}
 a:hover > .mypage-card {
   transform: translateY(-1px) scale(1.01);
-  border-color: #fffbe6;
+  border-color: var(--mypage-text);
   box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
 }
 .con .title {display: flex; align-items: center; justify-content: space-between;}
@@ -449,8 +453,8 @@ a:hover > .mypage-card {
 /* 회원정보수정 */
 .profile-edit-box {
   align-items: center;
-  background: rgba(24, 28, 35, 0.96);
-  border: 1.5px solid #D4B97F;
+  background: var(--card-color2);
+  border: 1.5px solid var(--main-color);
   border-radius: 24px;
   box-shadow: 0 2px 16px rgba(24, 28, 35, 0.13);
   padding: 44px 36px 32px 36px;
@@ -471,7 +475,7 @@ a:hover > .mypage-card {
   width: 150px;
   object-fit: cover;
   border-radius: 50%;
-  border: 1px solid #D4B97F;
+  border: 1px solid var(--main-color);
   background: #181C23;
 }
 .profile-img.edit + p {
@@ -480,21 +484,21 @@ a:hover > .mypage-card {
 }
 .con .form-control {
   background: var(--card-color);;
-  color: #fffbe6;
-  border: 1.5px solid #D4B97F;
+  color: var(--mypage-text);
+  border: 1.5px solid var(--main-color);
   border-radius: 14px;
   font-size: 1.4rem;
   margin-bottom: 16px;
   padding: 12px 16px;
 }
 .con .form-control:focus {
-  border-color: #fffbe6;
+  border-color: var(--mypage-text);
   box-shadow: none;
   background: var(--card-color);;
-  color: #fffbe6;
+  color: var(--mypage-text);
 }
 .con .btn-gold, .modal-track .btn-gold {
-  background: #D4B97F;
+  background: var(--main-color);
   color: #181C23;
   border: none;
   border-radius: 30px;
@@ -506,13 +510,13 @@ a:hover > .mypage-card {
   transition: background 0.2s, color 0.2s;
 }
 .con .btn-gold:hover, .btn-gold:focus, .modal-track .btn-gold:hover {
-  background: #fffbe6;
+  background: var(--mypage-text);
   color: #181C23;
 }
 .con .btn-outline-gold {
   background: none;
-  color: #D4B97F;
-  border: 1.5px solid #D4B97F;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
   border-radius: 30px;
   font-weight: bold;
   font-size: 1.05rem;
@@ -527,7 +531,7 @@ a:hover > .mypage-card {
   color: #181C23 !important;
 }
 .con .profile-edit-label {
-  color: #D4B97F;
+  color: var(--main-color);
   font-weight: bold;
   text-align: left;
   display: block;
@@ -544,7 +548,7 @@ a:hover > .mypage-card {
 .change-edge {
   background: rgba(24,28,35,0.82);
   border-radius: 17px;
-  border: 1.5px solid #D4B97F;
+  border: 1.5px solid var(--main-color);
   box-shadow: 0 2px 12px rgba(24,28,35,0.10);
   overflow: hidden;
 }
@@ -576,17 +580,17 @@ textarea.form-control {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid #D4B97F;
+  border: 1.5px solid var(--main-color);
   border-radius: 15px;
   gap: 10px;
   flex: 0 0 auto;
   cursor: pointer;
 }
 .con .bg-badge:hover {
-  border-color: #fffbe6;
+  border-color: var(--mypage-text);
   box-shadow: 0 8px 32px rgba(212, 185, 127, 0.18);
 }
-.con .bg-badge p {color: #fff;}
+.con .bg-badge p {color: var(--mypage-text);}
 #profileImg, #thumbnail {display: none;}
 #profileBtn {cursor: pointer;}
 
@@ -597,8 +601,8 @@ textarea.form-control {
 
 .btn-gold.already {
   background: none;
-  color: #D4B97F;
-  border: 1.5px solid #D4B97F;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
   border-radius: 30px;
   font-weight: bold;
   font-size: 0.97rem;
@@ -614,7 +618,7 @@ textarea.form-control {
   gap: 5px;
   width: 12%;
   text-align: center;
-  border: 1.5px solid #D4B97F;
+  border: 1.5px solid var(--main-color);
   border-radius: 14px;
   position: absolute;
   left: 40px;
@@ -623,7 +627,7 @@ textarea.form-control {
 }
 .mypage-tabs .tab {
   display: block;
-  color: #D4B97F;
+  color: var(--main-color);
   background: none;
   border: none;
   font-size: 1.2rem;
@@ -636,13 +640,13 @@ textarea.form-control {
 }
 .mypage-tabs .tab.active,
 .mypage-tabs .tab:hover {
-  background: #D4B97F;
+  background: var(--main-color);
   color: #fff;
 }
 .info-wrapper {
   overflow: hidden;
   border-radius: 15px;
-  border: 1.5px solid #D4B97F;
+  border: 1.5px solid var(--main-color);
   box-shadow: 0 2px 16px rgba(24, 28, 35, 0.13);
   margin-left: 20%;
   max-width: 1000px;
@@ -664,7 +668,7 @@ textarea.form-control {
   height: 450px;
 }
 .info-section .title {
-  color: #D4B97F;
+  color: var(--main-color);
   font-size: 1.6rem;
   font-weight: bold;
   padding: 25px 0;
@@ -688,10 +692,10 @@ textarea.form-control {
   display: flex;
   align-items: center;
   background: var(--card-color);;
-  border: 1.5px solid #D4B97F;
+  border: 1.5px solid var(--main-color);
   border-radius: 14px;
   padding: 14px 22px;
-  color: #fffbe6;
+  color: var(--mypage-text);
   gap: 18px;
   transition: border-color 0.18s, box-shadow 0.18s;
   cursor: pointer;
@@ -700,14 +704,14 @@ textarea.form-control {
   margin-top: 14px;
 }
 .list-item:hover {
-  border-color: #fffbe6;
+  border-color: var(--mypage-text);
   box-shadow: 0 2px 10px rgba(212,185,127,0.10);
 }
 .follow-img {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 1px solid #D4B97F;
+  border: 1px solid var(--main-color);
   object-fit: cover;
   background: #181C23;
 }
@@ -718,11 +722,11 @@ textarea.form-control {
 }
 .follow-nick {
   font-weight: bold;
-  color: #D4B97F;
+  color: var(--main-color);
   font-size: 1.08rem;
 }
 .follow-badge {
-  background: #D4B97F;
+  background: var(--main-color);
   color: #181C23;
   border-radius: 10px;
   font-size: 0.93rem;
@@ -732,8 +736,8 @@ textarea.form-control {
 }
 .con .btn-outline-gold, .con .btn-outline-gold.btn-sm {
   background: none;
-  color: #D4B97F;
-  border: 1.5px solid #D4B97F;
+  color: var(--main-color);
+  border: 1.5px solid var(--main-color);
   border-radius: 30px;
   font-weight: bold;
   font-size: 0.97rem;
@@ -742,7 +746,7 @@ textarea.form-control {
   transition: background 0.2s, color 0.2s;
 }
 .btn-outline-gold:hover {
-  background: #D4B97F;
+  background: var(--main-color);
   color: #181C23;
 }
 .con-follow .info-wrapper + .info-wrapper,
@@ -853,7 +857,7 @@ button.like {background-color: inherit; border: none;}
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border: 1.5px solid #D4B97F;
+  border: 1.5px solid var(--main-color);
   object-fit: cover;
   background: #181C23;
 }
@@ -879,7 +883,7 @@ button.like {background-color: inherit; border: none;}
 .text-item:hover {transform: scale(1.01);}
 .ul-list .text-item:last-child {border-bottom: none;}
 .text-item .sm-title {color: var(--main-color); font-size: 1.4rem}
-.text-item .sm-content {overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 5px; color: #fff;}
+.text-item .sm-content {overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 5px; color: var(--mypage-text);}
 .text-item .like {margin-left: 5px;}
 .text-item .sm-content, .text-item .date, .text-item .like {font-size: 1.4rem;}
 .text-item .like, .text-item .date {color: #bbb;}
@@ -909,11 +913,11 @@ button.like {background-color: inherit; border: none;}
 }
 .con-activity .tab-area > button.active {
   background-color: var(--main-color);
-  color: var(--silver-color);
+  color: var(--mypage-text);
 }
 .con-activity .tab-area > button:hover {
   background-color: var(--main-color);
-  color: var(--silver-color);
+  color: var(--mypage-text);
 }
 .con-activity .tab-area > button:not(:first-child) {border-left: 1px solid var(--silver-color);}
 
