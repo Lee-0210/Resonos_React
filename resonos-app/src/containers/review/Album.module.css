@@ -8,6 +8,9 @@ li {
   list-style-type: none;
 }
 
+.album-wrapper a {
+  color: white;
+}
 
 /* 애니메이션 */
 @keyframes spin360 {
@@ -341,7 +344,10 @@ body {
 .comment p {
   margin: 0;
 }
-
+.name-and-score .reviewer-name {
+    font-weight: bold;
+    color: var(--main-color);
+}
 .review-util {
   display: flex;
   align-items: center;

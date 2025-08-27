@@ -65,7 +65,7 @@ const Reviews = ({ styles, reviews, reviewType, isAdmin, userId,
         >
           <div className={styles.nameAndScore}>
             <Link to={`/users/${rv.reviewer.id}`}>
-              <p>{rv.reviewer.nickname}</p>
+              <p className={styles.reviewerName}>{rv.reviewer.nickname}</p>
             </Link>
             {rv.critic && <span>✅</span>}
             <span> 🔮<span>{rv.rating}</span></span>
