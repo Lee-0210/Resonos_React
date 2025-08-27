@@ -38,14 +38,6 @@
     VALUES
     (#{postId}, #{title}, #{closedAt})
   </insert>
-  <!-- 원본 -->
-  <!-- <update id="update">
-    UPDATE com_vote
-    <set>
-      updated_at = now()
-    </set>
-    WHERE id = #{id}
-  </update> -->
 
   <update id="update">
     UPDATE com_vote
