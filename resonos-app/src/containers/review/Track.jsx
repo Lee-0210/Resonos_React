@@ -400,10 +400,10 @@ const Track = () => {
           moodStats={moodStats} userVotedMoodId={userVotedMoodId} moodLabels={moodLabels}
           voteMood={voteMood} />
       </SlideIn>
-      <SlideIn delay={2.5} direction="up">
+      {/* <SlideIn delay={2.5} direction="up">
         <TrackStatus styles={styles} top5List={top5List} album={album}
           emptyPlayList={emptyPlayList} playLists={playLists} />
-      </SlideIn>
+      </SlideIn> */}
     </div>
   )
 }
