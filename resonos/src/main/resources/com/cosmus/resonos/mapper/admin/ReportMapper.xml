@@ -12,6 +12,8 @@
         <result property="reporterId" column="reporter_id"/>
         <result property="boardPostId" column="board_post_id"/>
         <result property="adminId" column="admin_id"/>
+        <!-- 이동용 -->
+        <result property="communityId" column="community_id"/>
     </resultMap>
 
     <select id="findByReporterId" resultMap="ReportResultMap">
@@ -45,7 +47,10 @@
     </select>
 
     <select id="select" resultMap="ReportResultMap">
-        SELECT * FROM report WHERE id = #{id}
+        SELECT r.*, bp.community_id
+        FROM report r
+        JOIN board_post bp ON r.board_post_id = bp.id
+        WHERE r.id = #{id}
     </select>
 
     <update id="update">
@@ -88,9 +93,12 @@
     </select>
 
     <select id="findAllPaging" resultMap="ReportResultMap">
-        SELECT * FROM report
-        ORDER BY created_at DESC
+        SELECT r.*, bp.community_id 
+        FROM report r
+        JOIN board_post bp ON r.board_post_id = bp.id
+        ORDER BY r.created_at DESC
         LIMIT #{index}, #{size}
+
     </select>
 
 
