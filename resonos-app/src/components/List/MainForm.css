@@ -89,7 +89,7 @@ body {
 
 .main-title {
     font-size: 24px;
-    color: #fff;
+    color: var(--text-color);
     font-weight: 400;
     text-align: center;
     margin-bottom: 20px;
@@ -97,7 +97,7 @@ body {
 
 .section-title {
     font-size: 20px;
-    color: #fff;
+    color: var(--text-color);
     font-weight: 400;
 }
 
@@ -122,7 +122,7 @@ body {
 .album-grid .card {
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--text-color);
 }
 
 .album-grid .card-img-top {
@@ -136,7 +136,7 @@ body {
 
 .album-grid .card-title {
     font-size: 16px;
-    color: #fff;
+    color: var(--text-color);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
