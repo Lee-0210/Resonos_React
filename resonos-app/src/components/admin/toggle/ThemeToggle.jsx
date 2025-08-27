@@ -187,7 +187,6 @@ body {
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
   margin: 0;
-  padding: 20px;
   font-family: var(--font-family);
   font-size: var(--font-size-base);
   
@@ -211,9 +210,8 @@ button:hover {
 
 /* 헤더 스타일 */
 header {
-  background-color: var(--header-bg);
+  background-color: transparent ;
   color: var(--header-color);
-  padding: 1rem 2rem;
   box-shadow: var(--box-shadow);
 }
 
@@ -247,12 +245,8 @@ a:hover {
   /* 폼 스타일 */
 form {
   background-color: var(--card-bg);
-  border: 1px solid var(--card-border);
   border-radius: var(--border-radius);
-  padding: 1.5rem;
   box-shadow: var(--box-shadow);
-  max-width: 600px;
-  margin: 2rem auto;
 }
 
 /* 입력창 스타일 */
@@ -306,7 +300,7 @@ label {
 
 /* 네비게이션 바 (예시) */
 nav {
-  background-color: var(--card-bg);
+  background-color: transparent;
   border-bottom: 1px solid var(--card-border);
   padding: 1rem 2rem;
   display: flex;
