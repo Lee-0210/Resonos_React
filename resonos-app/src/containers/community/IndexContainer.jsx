@@ -10,9 +10,7 @@ const IndexContainer = () => {
   const [latestPosts, setLatestPosts] = useState([])
   const [popularPosts, setPopularPosts] = useState([])
   const [realTimePopularPosts, setRealTimePopularPosts] = useState([])
-  const [topCategories, setTopCategories] = useState([])
   const [topCommunities, setTopCommunities] = useState([])
-  const [newCategories, setNewCategories] = useState([])
   const [newCommunities, setNewCommunities] = useState([])
 
   const getCommunityData = async () => {
@@ -25,8 +23,6 @@ const IndexContainer = () => {
         setLatestPosts(data.latestPosts)
         setPopularPosts(data.popularPosts)
         setRealTimePopularPosts(data.realTimePopularPosts)
-        setTopCategories(data.topCategories)
-        setNewCategories(data.newCategories)
         setNewCommunities(data.newCommunities)
         setTopCommunities(data.topCommunities)
       }
@@ -48,8 +44,6 @@ const IndexContainer = () => {
         latestPosts={latestPosts}
         popularPosts={popularPosts}
         realTimePopularPosts={realTimePopularPosts}
-        topCategories={topCategories}
-        newCategories={newCategories}
         topCommunities={topCommunities}
         newCommunities={newCommunities}
       />

@@ -15,11 +15,12 @@ body {font-size: 1.6rem;}
   --silver-color: #fffbe6;
   /* 백그라운드 컬러 */
   --background-color : #181C23;
+  /* 커뮤니티 컨테이너 컬러 */
+  --commu-backColor : #1C202A;
   /* 컨테이너 크기 */
   --container : 1440px;
-
-  /* 커뮤니티 컨테이너 컬러 */
-  --container-color: #1C202A;
+  /* 마이페이지 아이템 컬러 */
+  --card-color: #222;
 }
 
 body {
