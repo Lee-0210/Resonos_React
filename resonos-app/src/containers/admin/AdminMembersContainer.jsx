@@ -72,7 +72,8 @@ const fetchMembers = async (page = 1, size = 10, kw = '') => {
     const response = await list(page, size, kw);
     const data = response.data;
     
-    console.log('멤버 목록 API 응답:', data); // 응답 전체 확인용
+    // console.log('멤버 목록 API 응답:', data); // 응답 전체 확인용
+    
     
     // members 배열 설정 (members 또는 content 키 중 존재하는 값으로)
     setMembers(data.members || data.content || []);

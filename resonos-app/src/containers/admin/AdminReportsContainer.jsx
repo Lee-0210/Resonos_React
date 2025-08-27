@@ -69,7 +69,7 @@ const fetchReports = async (tab = selectedTab, pageNum = page, size = pagination
 
     // 목록
     setReports(data.reports || []);
-    console.log('Fetched reports:', data.reports || []);
+    // console.log('Fetched reports:', data.reports || []);
 
     // 페이지네이션 정보 설정 (data.pagination 활용)
     if (data.pagination) {
@@ -118,7 +118,8 @@ const fetchReports = async (tab = selectedTab, pageNum = page, size = pagination
       const res = await getReportDetail(id);
       setDetailReportId(id);
       setDetailReportData(res.data);
-      console.log('Fetched report detail:', res.data);
+      // console.log('Fetched report detail:', res.data);
+      
     } catch (e) {
       alert('상세 정보 조회 실패');
     }
