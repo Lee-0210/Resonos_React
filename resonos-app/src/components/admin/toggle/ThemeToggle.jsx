@@ -161,7 +161,7 @@ html[data-theme='light'] {
   --silver-color: #333;
   --background-color: #f8f9fa;
   --commu-backColor: #f3f3f3ff;
-  --text-color: #000;
+  --text-color: #000!important;
   --card-bg: #ffffff;
   --card-border: #ddd;
   --border-color: #ccc;
@@ -201,7 +201,6 @@ body {
 button {
   background-color: var(--btn-bg);
   color: var(--btn-color);
-  padding: 0.5em 1em;
   border: 1px solid var(--card-border);
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -209,15 +208,10 @@ button {
   transition: background-color 0.2s ease;
 }
 
-button:hover {
-  background-color: var(--btn-hover-bg);
-}
-
 /* 헤더 스타일 */
 header {
   background-color: transparent ;
   color: var(--header-color);
-  box-shadow: var(--box-shadow);
 }
 
 /* a 링크 스타일 */
@@ -329,6 +323,10 @@ nav a:hover {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
   padding: 1rem 0;
+}
+.p { 
+    color: var(--main-color);
+
 }
 
     `;
