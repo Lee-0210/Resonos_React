@@ -34,7 +34,7 @@ const SearchMoreContainer = () => {
         const response = await cr.searchCommunity(q, type, page)
         if(response.status === 200) {
           const data = response.data
-          console.log('data :', data)
+          // console.log('data :', data)
           if(type === 'board') {
             setSearchedBoard(data.searchedCommunities)
             setPagination(data.communityPagination)

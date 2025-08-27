@@ -20,7 +20,7 @@ const SetNotificationContainer = () => {
     try {
       response = await ur.updateNotificationSettings(type)
       if(response.status === 200) {
-        console.log(response)
+        // console.log(response)
       }
     } catch(e) {
       console.log('error :', e)

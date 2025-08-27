@@ -54,7 +54,7 @@ const FollowArtistContainer = () => {
     try {
       const response = await ur.followArtist({userId, artistId})
       const data = response.data
-      console.log(data)
+      // console.log(data)
       if(response.status === 200) {
         const followed = data.followed
         const text = followed ? '팔로우 하였습니다.' : '언팔로우 하였습니다.'

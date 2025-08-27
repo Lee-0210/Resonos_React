@@ -26,7 +26,7 @@ const SearchContainer = () => {
     try {
       const response = await cr.searchCommunity(keyword, '', 1)
       if(response.status === 200) {
-        console.log(response)
+        // console.log(response)
         const data = response.data
         setSearchedBoard(data.searchedCommunities)
         setSearchedPost(data.searchedPosts)

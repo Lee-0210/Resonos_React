@@ -18,7 +18,7 @@ const IndexContainer = () => {
       const response = await cr.getIndex()
       if(response.status === 200) {
         const data = response.data
-        console.log(response)
+        // console.log(response)
         setHotPosts(data.hotPosts)
         setLatestPosts(data.latestPosts)
         setPopularPosts(data.popularPosts)

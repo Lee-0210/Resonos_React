@@ -115,7 +115,7 @@ function JoinForm() {
     // 에러 있는지 판단
     const hasError = Object.values(tempErrors).some(msg => msg !== '')
     if (!hasError) {
-      console.log('폼 데이터 제출', formData)
+      // console.log('폼 데이터 제출', formData)
       onSubmit(formData)
     } else {
       console.log('에러 있음', tempErrors)

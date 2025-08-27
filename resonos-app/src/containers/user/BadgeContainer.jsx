@@ -22,7 +22,7 @@ const BadgeContainer = () => {
       response = await ur.getUserBadges()
       if(response.status === 200) {
         const data = response.data
-        console.log(data)
+        // console.log(data)
         setHaveBadgeList(data.haveBadgeList)
         setNotHaveBadgeList(data.notHaveBadgeList)
         setLastPath(data.lastPath)
