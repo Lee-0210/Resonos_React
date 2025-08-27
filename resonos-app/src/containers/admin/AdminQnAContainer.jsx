@@ -7,6 +7,7 @@ import Pagination from "../../components/admin/Pagination";
 import SearchForm from "../../components/admin/first/SearchForm";
 import FormInput from "../../components/admin/first/FormInput";
 import QuickMenu from "../../components/admin/first/QuickMenu";
+import LoginContextProvider from "../../contexts/LoginContextProvider";
 
 const AdminQnAContainer = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -61,6 +62,8 @@ const AdminQnAContainer = () => {
       if (res.data.success) {
         setCurrentQna(res.data.qna);
         setAnswers(res.data.answers || []);
+
+        console.log("QnA 상세 조회 성공-fetchQnaDetail", res.data);
       }
     } catch (err) {
       console.error("QnA 상세 조회 실패", err);
@@ -88,10 +91,12 @@ const AdminQnAContainer = () => {
       : answeredQnaList;
 
   /** 답변 CRUD */
+  // 답변 등록 
   const handleCreateAnswer = async (e) => {
+    const adminId = getAdminIdSomehow();
     e.preventDefault();
     if (!newAnswer.trim()) return;
-    await createQnaAnswer(currentQna.id, newAnswer);
+    await createQnaAnswer(currentQna.id, newAnswer, adminId);
     setNewAnswer("");
     fetchQnaDetail(currentQna.id);
   };
@@ -104,19 +109,39 @@ const AdminQnAContainer = () => {
     }, 0);
   };
 
-  const saveEditAnswer = async (e) => {
-    e.preventDefault();
-    await updateQnaAnswer(editAnswerId, currentQna.id, editAnswerContent);
+    const getAdminIdSomehow = () => {
+    // 실제 어드민 ID를 가져오는 로직 (예: localStorage, context API 등)
+    // 이 예시에서는 하드코딩된 값을 사용합니다.
+    return 1; 
+  };
+  
+  // 답변 수정
+const saveEditAnswer = async (e) => {
+  e.preventDefault();
+  try {
+    const adminId = getAdminIdSomehow();
+    console.log("adminId",adminId )
+    await updateQnaAnswer(editAnswerId, currentQna.id, editAnswerContent, adminId);
     setEditAnswerId(null);
     setEditAnswerContent("");
     fetchQnaDetail(currentQna.id);
-  };
+  } catch (error) {
+    console.error("답변 수정 실패", error);
+  }
+};
 
+
+  // 답변 삭제
   const removeAnswer = async (id) => {
     if (!window.confirm("삭제하시겠습니까?")) return;
-    await deleteQnaAnswer(id);
-    fetchQnaDetail(currentQna.id);
+    try {
+      await deleteQnaAnswer(id);
+      fetchQnaDetail(currentQna.id);
+    } catch (error) {
+      console.error("답변 삭제 실패", error);
+    }
   };
+
 
   const removeQnaItem = async (id) => {
     if (!window.confirm("질문을 삭제하시겠습니까?")) return;
@@ -170,6 +195,7 @@ const AdminQnAContainer = () => {
           {/* 우측 상세 */}
           <div className="col-md-8">
             <section className="resonos-card p-4 bg-resonos-dark rounded-3 mt-4 overflow-auto qna-detail">
+              {console.log("currentQna : {}", currentQna )}
               {!currentQna ? (
                 <p className="text-center text-muted fs-5">
                   문의글을 선택하세요.

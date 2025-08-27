@@ -17,4 +17,6 @@ public interface QnaAnswerService {
     public boolean delete(Long id) throws Exception;
     // Qna 원본
     public List<QnaAnswer> findByQnaId(Long qnaId) throws Exception;
+    // qna 답변 삭제 
+    public void deleteByQnaId(Long id) throws Exception;
 }

@@ -44,4 +44,9 @@ public class QnaAnswerServiceImpl implements QnaAnswerService {
     public List<QnaAnswer> findByQnaId(Long qnaId) throws Exception {
         return qnaAnswerMapper.findByQnaId(qnaId);
     }
+
+    @Override
+    public void deleteByQnaId(Long id) throws Exception{
+        qnaAnswerMapper.deleteByQnaId(id);
+    }
 }

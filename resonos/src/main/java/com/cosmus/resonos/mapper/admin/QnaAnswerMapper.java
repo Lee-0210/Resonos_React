@@ -19,4 +19,6 @@ public interface QnaAnswerMapper {
     public int delete(Long id) throws Exception;
     // Qna 원본
     public List<QnaAnswer> findByQnaId(Long qnaId) throws Exception;
+    // qna answer 삭제
+    public int deleteByQnaId(Long qnaId) throws Exception;
 }
