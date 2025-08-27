@@ -131,7 +131,7 @@ const Header = () => {
                                     <>
                                         {/* 앨범 메뉴 + 하단 메뉴 */}
                                         <li className="header-menu-wrapper">
-                                            <Link to="/list/new-albums" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>앨범</Link>
+                                            <Link to="/list/new-albums" className="submenu-item" style={{ fontSize: '1.6rem', color: 'var(--text-color)' }}>앨범</Link>
                                             <ul className="header-submenu d-flex flex-column justify-content-center">
                                                 <li className="header-menu-wrapper sub"><Link to="/list/new-albums">최신 앨범</Link></li>
                                                 <li className="header-menu-wrapper sub"><Link to="/list/hot-albums">인기 앨범</Link></li>
@@ -140,7 +140,7 @@ const Header = () => {
 
                                         {/* 트랙 메뉴 + 하단 메뉴 */}
                                         <li className="header-menu-wrapper position-relative">
-                                            <Link to="/list/new-tracks" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>트랙</Link>
+                                            <Link to="/list/new-tracks" className="submenu-item" style={{ fontSize: '1.6rem', color: 'var(--text-color)' }}>트랙</Link>
                                             <ul className="header-submenu d-flex flex-column justify-content-center">
                                                 <li className="header-menu-wrapper sub"><Link to="/list/new-tracks">최신 트랙</Link></li>
                                                 <li className="header-menu-wrapper sub"><Link to="/list/hot-tracks">인기 트랙</Link></li>
@@ -149,7 +149,7 @@ const Header = () => {
 
                                         {/* 플레이리스트 메뉴 + 하단 메뉴 */}
                                         <li className="header-menu-wrapper position-relative">
-                                            <Link to="/list/new-playlists" className="submenu-item" style={{ fontSize: '1.6rem', color: 'white' }}>플레이리스트</Link>
+                                            <Link to="/list/new-playlists" className="submenu-item" style={{ fontSize: '1.6rem', color: 'var(--text-color)' }}>플레이리스트</Link>
                                             <ul className="header-submenu d-flex flex-column justify-content-center">
                                                 <li className="header-menu-wrapper sub"><Link to="/list/new-playlists">최신 플레이리스트</Link></li>
                                                 <li className="header-menu-wrapper sub"><Link to="/list/hot-playlists">인기 플레이리스트</Link></li>
