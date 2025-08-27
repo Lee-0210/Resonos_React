@@ -50,7 +50,7 @@ const ActivityContainer = () => {
         type
       })
 
-      console.log('data :', data)
+      // console.log('data :', data)
 
       switch(type) {
         case 'board':
@@ -79,8 +79,6 @@ const ActivityContainer = () => {
       }
 
       offsetRef.current += limitRef.current
-
-      console.log(offsetRef.current)
 
       if (data.length < limitRef.current) {
         allLoadedRef.current = true
@@ -141,8 +139,6 @@ const ActivityContainer = () => {
 
       offsetRef.current += limitRef.current
 
-      console.log(offsetRef.current)
-
       if (data.length < limitRef.current) {
         allLoadedRef.current = true
       }
@@ -159,7 +155,7 @@ const ActivityContainer = () => {
       const response = await ur.getUserCommunity()
       if(response.status === 200) {
         const data = response.data
-        console.log('data :', data)
+        // console.log('data :', data)
         setBoardList(data.boardList)
         setBoardCount(data.boardCount)
         setPostList(data.postList)
@@ -179,7 +175,7 @@ const ActivityContainer = () => {
       const response = await ur.getUserReviews()
       if(response.status === 200) {
         const data = response.data
-        console.log('data :', data)
+        // console.log('data :', data)
         setUtl(data.utl);
         setCountAReview(data.countAReview);
         setCountLaReview(data.countLaReview);

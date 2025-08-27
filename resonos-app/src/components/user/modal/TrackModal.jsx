@@ -135,7 +135,6 @@ const TrackModal = ({onModal, onAddTrack, onSearchTrack, trackList, setTrackList
 
     const timeout = setTimeout(() => {
       if(inputRef.current) inputRef.current.focus()
-        console.log(inputRef)
     }, 100)
 
     // ESC 키 이벤트 등록

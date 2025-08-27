@@ -19,8 +19,6 @@ const PlaylistContainer = () => {
   const [isOwner, setIsOwner] = useState(false)
   const [userId, setUserId] = useState()
 
-  console.log(likedPlaylistCount)
-
   const params = useParams()
 
   const navigate = useNavigate()
@@ -91,7 +89,7 @@ const PlaylistContainer = () => {
 
   // 좋아요한 플레이리스트 검색, 요청
   const onSearchPlaylist = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
-    console.log(keyword)
+
     if (loadingRef.current || allLoadedRef.current) return
 
     loadingRef.current = true
@@ -112,8 +110,6 @@ const PlaylistContainer = () => {
 
       offsetRef.current += limitRef.current
 
-      console.log(offsetRef.current)
-
       if (data.length < limitRef.current) {
         allLoadedRef.current = true
       }
@@ -129,7 +125,7 @@ const PlaylistContainer = () => {
     try {
       const response = await ur.getUserPlaylists(params.id)
       const data = response.data
-      console.log(data)
+      // console.log(data)
       // state 세팅
       setLikedPlaylists(data.likedPlaylists)
       setMyPlaylists(data.myPlaylists)

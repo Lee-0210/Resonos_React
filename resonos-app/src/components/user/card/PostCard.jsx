@@ -14,7 +14,7 @@ const PostCard = ({post}) => {
       className='text-item'
     >
       <p className="sm-title">{post.title}</p>
-      <p className="sm-content">{post.content}</p>
+      <p className="sm-content">{new DOMParser().parseFromString(post.content, 'text/html').body.textContent}</p>
       <span className="date">{new Date(post.createdAt).toLocaleString()}</span>
       <span className="like">👍 {post.postLikes}</span>
     </li>
