@@ -25,7 +25,7 @@ const AdminRoleManageContainer = () => {
     try {
       const res = await getRoleMemberList(pageNum, size, kw);
       const data = res.data;
-      console.log(data);
+      // console.log(data);
 
       setMembers(data.members || []);
       if (data.pagination) {

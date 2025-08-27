@@ -20,7 +20,7 @@ const MemberLogContainer = ({ userId }) => {
   ];
 
   useEffect(() => {
-    console.log('MemberLogContainer useEffect 실행, userId:', userId);
+    // console.log('MemberLogContainer useEffect 실행, userId:', userId);
 
     if (!userId) {
       setLogs([]);
@@ -31,11 +31,11 @@ const MemberLogContainer = ({ userId }) => {
     setLoading(true);
     getMemberLogsByUserId(userId)
       .then((res) => {
-        console.log('받은 활동 로그:', res.data);
+        // console.log('받은 활동 로그:', res.data);
         setLogs(res.data || []);
       })
       .catch((error) => {
-        console.error('활동 로그 조회 실패', error);
+        // console.error('활동 로그 조회 실패', error);
         setLogs([]);
       })
       .finally(() => setLoading(false));

@@ -41,7 +41,7 @@ const fetchNotices = async (page = 1, size = 10, kw = keyword) => {
   try {
     const res = await listNotices(page, size, kw);
     const data = res.data;
-    console.log("Fetched notices:", data);
+    // console.log("Fetched notices:", data);
     setNotices(data.notices || []);
     if (data.pagination) {
       setPagination({
@@ -95,7 +95,7 @@ const handleChange = (e) => {
       startAt: n.startAt ? n.startAt.slice(0, 10) : "",
       endAt: n.endAt ? n.endAt.slice(0, 10) : "",
     });
-    console.log("Editing notice:", n);
+    // console.log("Editing notice:", n);
   };
 
 
