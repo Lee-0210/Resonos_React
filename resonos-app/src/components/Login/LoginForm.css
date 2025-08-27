@@ -546,7 +546,7 @@ a:hover > .mypage-card {
   display: block;
 }
 .change-edge {
-  background: rgba(24,28,35,0.82);
+  background: var(--card-color2);
   border-radius: 17px;
   border: 1.5px solid var(--main-color);
   box-shadow: 0 2px 12px rgba(24,28,35,0.10);
@@ -894,7 +894,7 @@ button.like {background-color: inherit; border: none;}
 .text-item .rv-name {font-size: 1.4rem; color: var(--main-color);}
 .text-item .rv-name + .date {margin-left: 5px;}
 .con-activity .mypage-grid {margin-left: 20%; margin-bottom: 25px; grid-template-columns: repeat(2, 1fr); max-width: 1000px;}
-.con-activity .mypage-grid .mypage-card {min-height: 100px; display: flex; align-items: center; justify-content: center; flex-direction: column; border-color: var(--main-color);}
+.con-activity .mypage-grid .mypage-card {min-height: 100px; display: flex; align-items: center; justify-content: center; flex-direction: column; border-color: var(--main-color); background-color: var(--card-color2);}
 .con-activity .tab-area {
   margin-left: 20%;
   display: flex;
