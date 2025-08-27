@@ -109,7 +109,7 @@ const MypageContainer = () => {
         response = await ur.getUserPage(params.id)
 
       const data = response.data
-      console.log(data)
+      // console.log(data)
       setAlbumList(data.albumList || []);
       setArtistList(data.artistList || []);
       // setBadgeCount(data.badgeCount);

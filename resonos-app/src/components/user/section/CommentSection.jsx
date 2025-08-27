@@ -33,7 +33,7 @@ const CommentSection = ({commentList, setCommentList, commentCount, onSearchComm
     const container = document.querySelector('.info-section.comment')
     const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
     if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
-      console.log('데이터 요청')
+      // console.log('데이터 요청')
       onSearchCommunityData(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef, 'comment')
     }
   }, [onSearchCommunityData, debouncedKeyword])

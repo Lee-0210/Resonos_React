@@ -36,7 +36,7 @@ const Playlist = ({likedPlaylists, setLikedPlaylists, myPlaylists, lastPath, isO
     const container = document.querySelector('.info-section.lp')
     const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
     if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
-      console.log('데이터 요청')
+      // console.log('데이터 요청')
       onSearchPlaylist(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef, 'ar')
     }
   }, [onSearchPlaylist, debouncedKeyword])

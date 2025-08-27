@@ -33,7 +33,7 @@ const PostSection = ({postList, setPostList, postCount, onSearchCommunityData}) 
     const container = document.querySelector('.info-section.post')
     const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
     if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
-      console.log('데이터 요청')
+      // console.log('데이터 요청')
       onSearchCommunityData(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef, 'post')
     }
   }, [onSearchCommunityData, debouncedKeyword])

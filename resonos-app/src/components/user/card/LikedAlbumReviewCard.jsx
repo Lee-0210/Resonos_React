@@ -31,7 +31,7 @@ const LikedAlbumReviewCard = ({countLaReview, laReviewList, onSearchReview, setL
     const container = document.querySelector('.info-section.lar')
     const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
     if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
-      console.log('데이터 요청')
+      // console.log('데이터 요청')
       onSearchReview(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef, 'lar')
     }
   }, [onSearchReview, debouncedKeyword])

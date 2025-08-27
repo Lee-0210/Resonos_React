@@ -31,7 +31,7 @@ const AlbumReviewCard = ({countAReview, aReviewList, onSearchReview, setAReviewL
     const container = document.querySelector('.info-section.ar')
     const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
     if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
-      console.log('데이터 요청')
+      // console.log('데이터 요청')
       onSearchReview(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef, 'ar')
     }
   }, [onSearchReview, debouncedKeyword])

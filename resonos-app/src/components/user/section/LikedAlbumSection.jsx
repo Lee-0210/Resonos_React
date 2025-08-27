@@ -34,7 +34,7 @@ const LikedAlbumSection = ({isOwner, likedAlbumList, countAlbum, setLikedAlbumLi
     const container = document.querySelector('.info-section.album')
     const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
     if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
-      console.log('데이터 요청')
+      // console.log('데이터 요청')
       onSearchLikedAlbum(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef)
     }
   }, [onSearchLikedAlbum, debouncedKeyword])
