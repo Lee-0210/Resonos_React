@@ -17,7 +17,6 @@ const NewAlbum = () => {
         api.get(`/list/new-albums?page=${page}`)
             .then((res) => {
                 const data = res.data;
-                console.log('받은 데이터:', data);
                 setNewAlbumList(data.newAlbumList);
                 setNewAlbumCount(data.newAlbumCount);
                 setPagination(data.pagination);

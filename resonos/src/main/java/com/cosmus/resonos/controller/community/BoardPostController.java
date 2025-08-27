@@ -66,134 +66,124 @@ public class BoardPostController {
         this.boardPostService = boardPostService;
     }
 
-    // @GetMapping
-    // public ResponseEntity<?> getAllPosts() {
-    //     try {
-    //         List<BoardPost> posts = boardPostService.list();
-    //         return ResponseEntity.ok(posts);
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
+    @GetMapping("/boards/{communityId}/posts/{postId}")
+    public ResponseEntity<?> getPost(
+        @PathVariable("communityId") Long communityId,
+        @PathVariable("postId") Long postId,
+        @AuthenticationPrincipal CustomUser loginUser,
+        HttpServletRequest request,
+        HttpServletResponse response,
+        HttpSession session,
+        @RequestParam(value = "page", defaultValue = "1") int page,
+        @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        log.info("communityId: {}, postId: {}", communityId, postId);
+        Map<String, Object> postWithComments = new HashMap<>();
+        try {
+            // post id 로 vote 정보 가져오기 - null 처리 추가
+            List<ComVote> votes = boardPostService.getVotesByPostId(postId);
+            ComVote vote = (votes != null && !votes.isEmpty()) ? votes.get(0) : null;
+            log.info("vote : {}", vote);
 
-@GetMapping("/boards/{communityId}/posts/{postId}")
-public ResponseEntity<?> getPost(
-    @PathVariable("communityId") Long communityId,
-    @PathVariable("postId") Long postId,
-    @AuthenticationPrincipal CustomUser loginUser,
-    HttpServletRequest request,
-    HttpServletResponse response,
-    HttpSession session,
-    @RequestParam(value = "page", defaultValue = "1") int page,
-    @RequestParam(value = "size", defaultValue = "10") int size
-) {
-    log.info("communityId: {}, postId: {}", communityId, postId);
-    Map<String, Object> postWithComments = new HashMap<>();
-    try {
-        // post id 로 vote 정보 가져오기 - null 처리 추가
-        List<ComVote> votes = boardPostService.getVotesByPostId(postId);
-        ComVote vote = (votes != null && !votes.isEmpty()) ? votes.get(0) : null;
-        log.info("vote : {}", vote);
-
-        // vote가 있을 때만 argument 조회
-        List<ComVoteArgument> arguments = null;
-        if (vote != null) {
-            Long voteId = vote.getId();
-            log.info("voteId : {}", voteId);
-            arguments = boardPostService.getArgumentsByVoteId(voteId);
-            log.info("arguments : {}", arguments);
-        }
-
-        Long userId = (loginUser != null) ? loginUser.getId() : null;
-
-        // 게시글 + 좋아요/싫어요 수 + 투표 정보
-        BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId, userId);
-        if (post == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        // 조회수 증가
-        if (loginUser != null) {
-            // 로그인 유저 → 세션 활용
-            Set<Long> viewedPost = (Set<Long>) session.getAttribute("viewedPost");
-            if (viewedPost == null) {
-                viewedPost = new HashSet<>();
-                session.setAttribute("viewedPost", viewedPost);
+            // vote가 있을 때만 argument 조회
+            List<ComVoteArgument> arguments = null;
+            if (vote != null) {
+                Long voteId = vote.getId();
+                log.info("voteId : {}", voteId);
+                arguments = boardPostService.getArgumentsByVoteId(voteId);
+                log.info("arguments : {}", arguments);
             }
 
-            if (!viewedPost.contains(postId)) {
-                boardPostService.incrementViewCount(postId);
-                viewedPost.add(postId);
+            Long userId = (loginUser != null) ? loginUser.getId() : null;
+
+            // 게시글 + 좋아요/싫어요 수 + 투표 정보
+            BoardPost post = boardPostService.selectWithLikesDislikes(communityId, postId, userId);
+            if (post == null) {
+                return ResponseEntity.notFound().build();
             }
-        } else {
-            // 비로그인 유저 → 쿠키 활용
-            Cookie[] cookies = request.getCookies();
-            String viewed = null;
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if ("viewedPost".equals(cookie.getName())) {
-                        try {
-                            viewed = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
-                        } catch (Exception e) {
-                            viewed = "";
+
+            // 조회수 증가
+            if (loginUser != null) {
+                // 로그인 유저 → 세션 활용
+                Set<Long> viewedPost = (Set<Long>) session.getAttribute("viewedPost");
+                if (viewedPost == null) {
+                    viewedPost = new HashSet<>();
+                    session.setAttribute("viewedPost", viewedPost);
+                }
+
+                if (!viewedPost.contains(postId)) {
+                    boardPostService.incrementViewCount(postId);
+                    viewedPost.add(postId);
+                }
+            } else {
+                // 비로그인 유저 → 쿠키 활용
+                Cookie[] cookies = request.getCookies();
+                String viewed = null;
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                        if ("viewedPost".equals(cookie.getName())) {
+                            try {
+                                viewed = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
+                            } catch (Exception e) {
+                                viewed = "";
+                            }
+                            break;
                         }
-                        break;
                     }
+                }
+
+                // 이미 조회했는지 확인
+                boolean alreadyViewed = viewed != null && Arrays.asList(viewed.split("\\|")).contains(postId.toString());
+
+                if (!alreadyViewed) {
+                    boardPostService.incrementViewCount(postId);
+                    String newValue = (viewed == null || viewed.isEmpty() ? "" : viewed + "|") + postId;
+                    Cookie newCookie = new Cookie("viewedPost", URLEncoder.encode(newValue, StandardCharsets.UTF_8));
+                    newCookie.setPath("/");
+                    newCookie.setMaxAge(60 * 60); // 1시간동안 조회수 중복 카운팅 방지
+                    response.addCookie(newCookie);
+                }
+
+            }
+            postWithComments.put("post", post);
+
+            // 댓글 + 좋아요/싫어요 수
+            PageInfo<Comment> comments = commentService.selectWithLikesDislikes(postId, userId, page, size);
+            Pagination commentsPagination = new Pagination(comments);
+            postWithComments.put("comments", comments.getList());
+            postWithComments.put("commentsPagination", commentsPagination);
+
+            // 투표 정보 추가 - null 처리 적용
+            if (vote != null && arguments != null) {
+                vote.setArguments(arguments);
+            }
+            postWithComments.put("vote", vote); // vote가 null이어도 put
+
+
+            // 투표 정보 및 참여 여부 확인
+            boolean hasUserVoted = false;
+            if (vote != null && arguments != null) {
+                vote.setArguments(arguments);
+
+                // 로그인한 유저의 투표 참여 여부 확인
+                if (userId != null) {
+                    log.info("userId : {}, voteId : {}", userId, vote.getId());
+                    hasUserVoted = boardPostService.hasUserVoted(vote.getId() + 1, userId);
+                    log.info("hasUserVoted : {}", hasUserVoted);
+                    // argId가 아닌 vote Id로 수정해야함
                 }
             }
 
-            // 이미 조회했는지 확인
-            boolean alreadyViewed = viewed != null && Arrays.asList(viewed.split("\\|")).contains(postId.toString());
-
-            if (!alreadyViewed) {
-                boardPostService.incrementViewCount(postId);
-                String newValue = (viewed == null || viewed.isEmpty() ? "" : viewed + "|") + postId;
-                Cookie newCookie = new Cookie("viewedPost", URLEncoder.encode(newValue, StandardCharsets.UTF_8));
-                newCookie.setPath("/");
-                newCookie.setMaxAge(60 * 60); // 1시간동안 조회수 중복 카운팅 방지
-                response.addCookie(newCookie);
+            if (vote != null) {
+                vote.setHasUserVoted(hasUserVoted); // 투표 참여 여부 추가
             }
 
+            return new ResponseEntity<>(postWithComments, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        postWithComments.put("post", post);
-
-        // 댓글 + 좋아요/싫어요 수
-        PageInfo<Comment> comments = commentService.selectWithLikesDislikes(postId, userId, page, size);
-        Pagination commentsPagination = new Pagination(comments);
-        postWithComments.put("comments", comments.getList());
-        postWithComments.put("commentsPagination", commentsPagination);
-
-        // 투표 정보 추가 - null 처리 적용
-        if (vote != null && arguments != null) {
-            vote.setArguments(arguments);
-        }
-        postWithComments.put("vote", vote); // vote가 null이어도 put
-
-
-        // 투표 정보 및 참여 여부 확인
-        boolean hasUserVoted = false;
-        if (vote != null && arguments != null) {
-            vote.setArguments(arguments);
-
-            // 로그인한 유저의 투표 참여 여부 확인
-            if (userId != null) {
-                log.info("userId : {}, voteId : {}", userId, vote.getId());
-                hasUserVoted = boardPostService.hasUserVoted(vote.getId() + 1, userId);
-                log.info("hasUserVoted : {}", hasUserVoted);
-                // argId가 아닌 vote Id로 수정해야함
-            }
-        }
-
-        if (vote != null) {
-            vote.setHasUserVoted(hasUserVoted); // 투표 참여 여부 추가
-        }
-
-        return new ResponseEntity<>(postWithComments, HttpStatus.OK);
-    } catch (Exception e) {
-        e.printStackTrace();
-        return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
 
     @PostMapping("/create/boards/{communityId}")
     public ResponseEntity<?> createPost(
@@ -203,31 +193,31 @@ public ResponseEntity<?> getPost(
         @AuthenticationPrincipal CustomUser loginUser
     ) {
         log.info("request : {}", request);
-
-        if (loginUser == null) {
-            // 비회원 검증 시 GuestCheck 그룹 적용
-            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-            Validator validator = factory.getValidator();
-
-            validator.validate(request, GuestCheck.class)
-                    .forEach(v -> bindingResult.addError(new FieldError(
-                    "boardPost", v.getPropertyPath().toString(), v.getMessage())));
-        }
-
-        // voteActive true일 경우, 투표 객체 존재 여부 추가 검사
-        if (Boolean.TRUE.equals(request.getVoteActive()) && request.getVote() == null) {
-            bindingResult.addError(new FieldError("boardPost", "vote", "투표 정보를 입력하세요."));
-        }
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage())
-            );
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
-
+        
         try {
+            if (loginUser == null) {
+                // 비회원 검증 시 GuestCheck 그룹 적용
+                ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+                Validator validator = factory.getValidator();
+    
+                validator.validate(request, GuestCheck.class)
+                        .forEach(v -> bindingResult.addError(new FieldError(
+                        "boardPost", v.getPropertyPath().toString(), v.getMessage())));
+            }
+    
+            // voteActive true일 경우, 투표 객체 존재 여부 추가 검사
+            if (Boolean.TRUE.equals(request.getVoteActive()) && request.getVote() == null) {
+                bindingResult.addError(new FieldError("boardPost", "vote", "투표 정보를 입력하세요."));
+            }
+    
+            if (bindingResult.hasErrors()) {
+                Map<String, String> errors = new HashMap<>();
+                bindingResult.getFieldErrors().forEach(error ->
+                        errors.put(error.getField(), error.getDefaultMessage())
+                );
+                return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            }
+
             BoardPost boardPost = new BoardPost();
             boardPost.setTitle(request.getTitle());
             boardPost.setContent(request.getContent());
@@ -236,11 +226,6 @@ public ResponseEntity<?> getPost(
 
             ComVote vote = request.getVote();
             List<ComVoteArgument> arguments = (vote != null) ? vote.getArguments() : null;
-
-            // if (Boolean.TRUE.equals(request.getVoteActive()) && request.getVote() != null) {
-            //     vote = request.getVote();
-            //     arguments = vote.getArguments();
-            // }
 
             if (loginUser != null) {
                 boardPostService.createPost(boardPost, loginUser, vote, arguments, request.getVoteActive());
@@ -401,19 +386,7 @@ public ResponseEntity<?> getPost(
         }
     }
 
-    // 커뮤니티별 게시글 목록 조회
-    // @GetMapping("/community/{communityId}")
-    // public ResponseEntity<?> getPostsByCommunity(@PathVariable Long communityId) {
-    //     try {
-    //         List<BoardPost> posts = boardPostService.findByCommunity(communityId);
-    //         return ResponseEntity.ok(posts);
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(500).build();
-    //     }
-    // }
-
-
-// ===== 투표 관련 API 추가 =====
+    // ===== 투표 관련 API 추가 =====
 
     // 게시글별 투표 목록 조회
     @GetMapping("/boards/{communityId}/posts/{postId}/votes")

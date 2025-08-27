@@ -18,7 +18,6 @@ const ArtistSearch = () => {
         api.get(`/search/artists?q=${q}&page=${page}`)
             .then((res) => {
                 const data = res.data;
-                console.log('받은 데이터:', data);
                 setArtistSearchList(data.artistSearchList);
                 setArtistSearchCount(data.artistSearchCount);
                 setPagination(data.pagination);

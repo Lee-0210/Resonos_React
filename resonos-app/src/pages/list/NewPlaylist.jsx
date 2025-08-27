@@ -17,7 +17,6 @@ const NewPlaylist = () => {
         api.get(`/list/new-playlists?page=${page}`)
             .then((res) => {
                 const data = res.data;
-                console.log('받은 데이터:', data);
                 setNewPlaylistList(data.newPlaylistList);
                 setNewPlaylistCount(data.newPlaylistCount);
                 setPagination(data.pagination);

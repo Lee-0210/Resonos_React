@@ -1,10 +1,7 @@
 package com.cosmus.resonos.service.community;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.cosmus.resonos.domain.CustomUser;
 import com.cosmus.resonos.domain.community.Comment;
-import com.cosmus.resonos.mapper.community.BoardPostMapper;
 import com.cosmus.resonos.mapper.community.CommentMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -26,9 +22,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private CommentMapper commentMapper;
-
-    @Autowired
-    private BoardPostMapper boardPostMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -95,25 +88,6 @@ public class CommentServiceImpl implements CommentService {
     public PageInfo<Comment> selectWithLikesDislikes(Long postId, Long userId, int pageNum, int pageSize) throws Exception {
         PageHelper.startPage(pageNum, pageSize);
 
-        // List<Comment> comments = commentMapper.selectWithLikesDislikes(postId);
-
-        // List<Comment> rootComments = new ArrayList<>();
-        // Map<Long, List<Comment>> repliesMap = new HashMap<>();
-
-        // for (Comment c : comments) {
-        //     if (c.getParentCommentId() == null) {
-        //         rootComments.add(c); // 최상위 댓글
-        //     } else {
-        //         repliesMap.computeIfAbsent(c.getParentCommentId(), k -> new ArrayList<>()).add(c); // 대댓글 모음
-        //     }
-        // }
-
-        // for (Comment root : rootComments) {
-        //     List<Comment> replies = repliesMap.getOrDefault(root.getId(), new ArrayList<>());
-        //     replies.sort((a, b) -> a.getCreatedAt().compareTo(b.getCreatedAt())); // 최신순 정렬
-        //     root.setReplies(replies);
-        // }
-
         List<Comment> rootComments = commentMapper.selectRootCommentsWithLikesDislikes(postId, userId); // parent_comment_id IS NULL
         PageInfo<Comment> pageInfo = new PageInfo<>(rootComments);
 
@@ -126,17 +100,6 @@ public class CommentServiceImpl implements CommentService {
 
         return pageInfo;
     }
-    
-    // @Override
-    // public PageInfo<Comment> commentsWithPagination(Long postId, int pageNum, int pageSize) throws Exception {
-    //     PageHelper.startPage(pageNum, pageSize);
-    //     log.info("pageNum : " + pageNum);
-    //     log.info("pageSize : " + pageSize);
-    //     List<Comment> comments = selectWithLikesDislikes(postId);
-    //     log.info("pageNum : " + pageNum);
-    //     log.info("pageSize : " + pageSize);
-    //     return new PageInfo<>(comments);
-    // }
 
     @Override
     public void writeComment(@Valid Comment comment, CustomUser loginUser) throws Exception {
