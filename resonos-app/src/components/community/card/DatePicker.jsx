@@ -22,9 +22,9 @@ const DatePicker = ({ setClosedAt, vote }) => {
 
   const handleClosedAt = (e) => {
     let selected = e.target.value // YYYY-MM-DDTHH:mm
-    console.log("ISOString() :", new Date().toISOString())
-    console.log("minTime :", minTime)
-    console.log("selected :", selected)
+    // console.log("ISOString() :", new Date().toISOString())
+    // console.log("minTime :", minTime)
+    // console.log("selected :", selected)
 
     if (selected < minTime) {
       // MySwal.fire({

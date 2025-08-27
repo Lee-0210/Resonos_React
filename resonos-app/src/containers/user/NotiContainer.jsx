@@ -102,7 +102,7 @@ const NotiContainer = () => {
 
     try {
       const response = await ur.readOne(id)
-      console.log(response)
+      // console.log(response)
       if(response.status === 200) {
         getNotifications()
       }
@@ -118,7 +118,7 @@ const NotiContainer = () => {
       const data = response.data
 
       if(response.status === 200){
-        console.log(response)
+        // console.log(response)
         setLastPath(data.lastPath)
         setNotiList(data.notiList)
         setCount(data.count)

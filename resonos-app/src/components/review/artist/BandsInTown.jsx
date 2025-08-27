@@ -1,81 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import TextPressure from '../../../assets/TextPressure';
+import React, { useEffect } from 'react';
 
 const BandsintownWidget = ({ artistName }) => {
-
-  const [isReady, setIsReady] = useState(false);
-
   useEffect(() => {
-    if (!artistName) {
-      return;
-    }
+    if (!artistName) return;
 
-    const scriptId = 'bandsintown-widget-script';
-
-    // 1. 스크립트가 이미 로드되었는지 확인
+    // 이미 로드되어 있으면 init만
     if (window.Bandsintown) {
       window.Bandsintown.init();
-      setIsReady(true);
       return;
     }
 
-    // 2. 스크립트가 없으면 동적으로 스크립트 추가
-    if (!document.getElementById(scriptId)) {
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = "https://widgetv3.bandsintown.com/main.min.js";
-      script.async = true;
-
-      // 3. 스크립트 로드 완료 시 위젯 초기화
-      script.onload = () => setIsReady(true);
-      document.body.appendChild(script);
-    } else {
-      setIsReady(true);
-    }
-  }, [artistName]);
-  useEffect(() => {
-    if (isReady && window.Bandsintown) {
+    // 스크립트 없으면 추가
+    const script = document.createElement('script');
+    script.src = 'https://widgetv3.bandsintown.com/main.min.js';
+    script.async = true;
+    script.onload = () => {
       window.Bandsintown.init();
-    }
-  }, [isReady, artistName]);
+    };
+    document.body.appendChild(script);
 
-  // artistName이 유효할 때만 위젯 div를 반환
-  if (!artistName) {
-    return (
-      <div style={{ height: '160px' }}>
-        <TextPressure
-          text="Something goes wrong..."
-          flex={true}
-          alpha={false}
-          stroke={false}
-          width={true}
-          weight={true}
-          italic={true}
-          textColor="#ffffff"
-          strokeColor="#ff0000"
-          minFontSize={36}
-        />
-      </div>
-    )
-  }
-  if (!isReady) {
-    return (
-      <div style={{ height: '160px' }}>
-        <TextPressure
-          text="LOADING...!"
-          flex={true}
-          alpha={false}
-          stroke={false}
-          width={true}
-          weight={true}
-          italic={true}
-          textColor="#ffffff"
-          strokeColor="#ff0000"
-          minFontSize={36}
-        />
-      </div>
-    )
-  }
+    // cleanup
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [artistName]);
+
+  if (!artistName) return null;
 
   return (
     <div

@@ -104,7 +104,7 @@ const FollowUserContainer = () => {
         response = await ur.getUserFollows(params.id)
       else
         response = await ur.getUserFollows()
-      console.log(response.data)
+      // console.log(response.data)
       if(response.status === 200) {
         const data = response.data
         userId.current = data.userId

@@ -116,7 +116,7 @@ const PlaylistDetailContainer = () => {
 
   // 트랙 검색, 요청 함수
   const onSearchTrack = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
-    console.log(keyword)
+
     if (loadingRef.current || allLoadedRef.current) return
 
     loadingRef.current = true
@@ -128,7 +128,7 @@ const PlaylistDetailContainer = () => {
         limit: limitRef.current
       })
 
-      console.log(data)
+      // console.log(data)
 
       setTrackList(prev => {
         const existingIds = new Set(prev.map(t => t.id))
@@ -137,8 +137,6 @@ const PlaylistDetailContainer = () => {
       })
 
       offsetRef.current += limitRef.current
-
-      console.log(offsetRef.current)
 
       if (data.length < limitRef.current) {
         allLoadedRef.current = true
@@ -177,7 +175,7 @@ const PlaylistDetailContainer = () => {
   const onChangeTrackOrder = async orderData => {
     try {
       const response = await ur.changeTrackOrder(playlist.id, orderData)
-      console.log(response.data)
+      // console.log(response.data)
     } catch(e) {
       console.error('error :', e)
     }
@@ -185,7 +183,7 @@ const PlaylistDetailContainer = () => {
 
   // 플레이리스트 트랙 삭제 요청
   const onDelete = async (orderNo) => {
-    console.log(playlist.id, orderNo)
+
     try {
       const response = await ur.deleteTrackByOrderNo(playlist.id, orderNo)
       setPlaylist(prev => ({
@@ -258,7 +256,7 @@ const PlaylistDetailContainer = () => {
     try {
       const response = await ur.getPlaylistDetail(params.id)
       const data = response.data
-      console.log(data)
+      // console.log(data)
       setPlaylist(data.playlist)
       setLastPath(data.lastPath)
       setIsOwner(data.isOwner)

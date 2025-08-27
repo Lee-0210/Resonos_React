@@ -29,11 +29,9 @@ const UserEditForm = ({badgeList, badgeName, user, onSubmit, result, success}) =
     const element = document.querySelector('.current.badge')
 
     if(currentBadge == id) {
-      console.log('취소')
       setCurrentBadge(0)
       element.innerText = ''
     } else {
-      console.log('변경')
       setCurrentBadge(id)
       element.innerText = e.currentTarget.querySelector('.badge-name').innerText
     }

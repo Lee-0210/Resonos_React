@@ -18,16 +18,16 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     // HTML 요소에 data-theme 속성 설정
     document.documentElement.setAttribute('data-theme', theme);
-    
+
     // body 클래스 업데이트 (기존 클래스 유지하면서 테마 클래스만 변경)
     const currentClasses = document.body.className
       .split(' ')
       .filter(cls => cls !== 'dark-mode' && cls !== 'light-mode');
-    
+
     const newClasses = [...currentClasses, `${theme}-mode`];
-    
+
     document.body.className = newClasses.join(' ').trim();
-    
+
     // localStorage에 저장
     if (typeof window !== 'undefined') {
       localStorage.setItem('theme', theme);
@@ -60,7 +60,7 @@ const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <button 
+    <button
       className="theme-toggle-btn"
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
@@ -157,9 +157,11 @@ const App = () => {
 }
 
 html[data-theme='light'] {
-  --main-color: #181C23;
+  --main-color: #3981ffff;
+  --card-color: #fff;
   --silver-color: #333;
   --background-color: #f8f9fa;
+  --commu-backColor: #f3f3f3ff;
   --text-color: #000;
   --card-bg: #ffffff;
   --card-border: #ddd;
@@ -189,7 +191,7 @@ body {
   margin: 0;
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-  
+
 }
 
 /* 버튼 기본 스타일 */
@@ -329,7 +331,7 @@ nav a:hover {
 
     `;
     document.head.appendChild(style);
-    
+
     return () => document.head.removeChild(style);
   }, []);
 

@@ -101,7 +101,6 @@ const TrackModalCommunity = ({onModal, setOnModal, setMusic, onSearchTrack, trac
 
     const timeout = setTimeout(() => {
       if(inputRef.current) inputRef.current.focus()
-        console.log(inputRef)
     }, 100)
 
     // ESC 키 이벤트 등록

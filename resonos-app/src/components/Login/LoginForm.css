@@ -10,7 +10,7 @@ button {background-color: inherit; border: none;}
 
 /* 가로 스크롤바 트랙 (배경) */
 ::-webkit-scrollbar-track:horizontal {
-  background: #222;
+  background: var(--card-color);;
   border-radius: 50%;
 }
 
@@ -22,7 +22,7 @@ button {background-color: inherit; border: none;}
 
 /* 세로 스크롤바 트랙 */
 ::-webkit-scrollbar-track:vertical {
-  background: #222;
+  background: var(--card-color);;
   border-radius: 5px;
 }
 
@@ -67,7 +67,7 @@ body {
   color: #181C23;
 }
 button.social-btn {
-  background-color: #222;
+  background-color: var(--card-color);;
   color: #D4B97F;
   border: 1.5px solid #D4B97F;
   border-radius: 30px;
@@ -84,14 +84,14 @@ button.social-btn:hover {
   color: #181C23;
 }
 .form-control {
-  background-color: #222;
+  background-color: var(--card-color);;
   color: #fffbe6;
   border: 1.5px solid #D4B97F;
   border-radius: 14px;
   padding: 12px 16px;
 }
 .form-control:focus {
-  background-color: #222;
+  background-color: var(--card-color);;
   color: #fffbe6;
   border-color: #fffbe6;
   box-shadow: none;
@@ -152,7 +152,7 @@ input::placeholder {color: #bbb !important;}
   align-items: center;
   padding: 22px 48px 10px 48px;
   background: #181C23;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid var(--card-color);;
 }
 .con nav a {
   color: #D4B97F;
@@ -375,7 +375,7 @@ input::placeholder {color: #bbb !important;}
 }
 .con-pli-detail .like.top-margin {margin-left: 0; margin-top: 20px; font-size: 4rem;}
 .stats-card .stat-bar {
-  background: #222;
+  background: var(--card-color);;
   border-radius: 8px;
   height: 12px;
   margin: 10px 0 8px 0;
@@ -479,7 +479,7 @@ a:hover > .mypage-card {
   margin-bottom: 60px;
 }
 .con .form-control {
-  background: #222;
+  background: var(--card-color);;
   color: #fffbe6;
   border: 1.5px solid #D4B97F;
   border-radius: 14px;
@@ -490,7 +490,7 @@ a:hover > .mypage-card {
 .con .form-control:focus {
   border-color: #fffbe6;
   box-shadow: none;
-  background: #222;
+  background: var(--card-color);;
   color: #fffbe6;
 }
 .con .btn-gold, .modal-track .btn-gold {
@@ -569,7 +569,7 @@ textarea.form-control {
 }
 .con .bg-badge {
   transition: all 0.3s;
-  background-color: #222;
+  background-color: var(--card-color);;
   width: 200px;
   padding: 10px 0;
   display: flex;
@@ -656,7 +656,7 @@ textarea.form-control {
 .info-section {
   padding: 0 30px 20px;
   align-items: center;
-  background: rgba(24, 28, 35, 0.96);
+  background: var(--background-color);
   text-align: center;
   overflow-y: auto;
   position: relative;
@@ -687,7 +687,7 @@ textarea.form-control {
 .list-item {
   display: flex;
   align-items: center;
-  background: #222;
+  background: var(--card-color);;
   border: 1.5px solid #D4B97F;
   border-radius: 14px;
   padding: 14px 22px;
