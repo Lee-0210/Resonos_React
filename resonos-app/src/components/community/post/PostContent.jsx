@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 // ckeditor5
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import VoteChart from '../card/VoteChart';
 import VoteArguments from '../card/VoteArguments';
+import * as dfmt from '../../../apis/util'
 
 const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
   ids, deletePost, reportPost, isManager }) => {
@@ -18,6 +19,13 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
   const [voting, setVoting] = useState(false)
   const [vote, setVote] = useState(initVote)
   const [selectedId, setSelectedId] = useState(null)
+
+  useEffect(() => {
+    if (vote?.closedAt) {
+      const date = dfmt.formatDateWithSeconds(vote.closedAt)
+      setVote(prev => ({ ...prev, closedAt: date }))
+    }
+  }, [vote?.closedAt])
 
 
   // 투표
