@@ -25,7 +25,6 @@ const Search = () => {
         api.get(`/search?q=${q}`)
             .then((res) => {
                 const data = res.data;
-                console.log('받은 데이터:', data);
                 setArtistSearchList(data.artistSearchList);
                 setAlbumSearchList(data.albumSearchList);
                 setTrackSearchList(data.trackSearchList);

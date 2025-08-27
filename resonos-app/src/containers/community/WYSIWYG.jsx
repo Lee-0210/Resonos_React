@@ -14,7 +14,6 @@ const WYSIWYG = ({ post, ids }) => {
   // state
   const [title, setTitle] = useState('');
   const [guestNick, setGuestNick] = useState('');
-  console.log(guestNick)
   const [tempPw, setTempPw] = useState('');
   const [content, setContent] = useState('');
   const [fileIdList, setFileIdList] = useState([]) // 선택 삭제 id 목록
@@ -138,7 +137,6 @@ const WYSIWYG = ({ post, ids }) => {
 
   // 게시글 등록 함수
   const postInsert = async (ids) => {
-    console.log(voteItems)
     const boardId = ids
 
     const data = {
@@ -151,11 +149,19 @@ const WYSIWYG = ({ post, ids }) => {
       ),
       voteActive
     }
+    if(!data.content) {
+      swal.fire({
+        title: '내용을 입력해주세요',
+        text: '내용을 입력해주세요',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+    }
 
-    console.log(data)
     try {
       const response = await api.postInsert(data, boardId)
-      console.log(response);
       swal.fire({
         title: '작성완료',
         text: '게시글 작성완료',
@@ -166,7 +172,6 @@ const WYSIWYG = ({ post, ids }) => {
       })
       navigate(`/community/boards/${boardId}/posts/${response.data.id}`)
     } catch (error) {
-      console.log(error)
       swal.fire({
         title: '작성실패',
         text: '게시글 작성실패',
@@ -180,9 +185,6 @@ const WYSIWYG = ({ post, ids }) => {
 
   // 게시글 수정 함수
   const postUpdate = async (ids) => {
-    console.log(voteTitle)
-    console.log(closedAt)
-    console.log(voteItems)
 
     const data = {
       content: content,
@@ -197,11 +199,9 @@ const WYSIWYG = ({ post, ids }) => {
       manager: isManager.current
     }
 
-    console.log('수정시 보내는 data :', data)
 
     try {
       const response = await api.postUpdate(data, ids)
-      console.log(response);
       swal.fire({
         title: '수정완료',
         text: '게시글 수정완료',
@@ -212,7 +212,6 @@ const WYSIWYG = ({ post, ids }) => {
       })
       navigate(`/community/boards/${ids.boardId}/posts/${response.data.id}`)
     } catch (error) {
-      console.log(error)
       swal.fire({
         title: '수정실패',
         text: '게시글 수정실패',
@@ -224,93 +223,7 @@ const WYSIWYG = ({ post, ids }) => {
     }
   }
 
-  // 삭제 확인
-  // const handleDelete = () => {
-  //   const check = window.confirm('정말 삭제하시겠습니까?')
-  //   if (check) {
-  //     onDelete(id)
-  //   }
-  // }
 
-  // 선택 삭제 핸들러
-  // const handleCheckedFileDelete = (id) => {
-  //   const check = window.confirm(`선택한 ${fileIdList.length} 개의 파일들을 정말 삭제하시겠습니까?`)
-  //   if (check) {
-  //     deleteCheckedFiles(fileIdList)
-  //     setFileIdList([])
-  //   }
-  // }
-
-  // ✅ 파일 선택 핸들러
-  // const checkFileId = (id) => {
-  //   console.log(id);
-
-  //   let checked = false
-  //   // 체크 여부 확인
-  //   for (let i = 0; i < fileIdList.length; i++) {
-  //     const fileId = fileIdList[i];
-  //     // 체크⭕ ➡ 체크박스 해제 🟩
-  //     if (fileId == id) {
-  //       fileIdList.splice(i, 1)
-  //       checked = true
-  //     }
-  //   }
-
-  //   // 체크❌ ➡ 체크박스 지정 ✅
-  //   if (!checked) {
-  //     fileIdList.push(id)
-  //   }
-  //   console.log(`체크한 아이디 : ${fileIdList}`);
-  //   setFileIdList(fileIdList)
-  // }
-  // // 파일 삭제
-  // const handleFileDelete = (id) => {
-  //   const check = window.confirm('정말 삭제하시겠습니까?')
-  //   if (check) {
-  //     onDeleteFile(id)
-  //   }
-  // }
-  // // 이미지 drag & drop 기능1
-  function uploadPlugin(editor) {
-    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return customUploadAdapter(loader);
-    };
-  }
-
-  // 이미지 drag & drop 기능2
-  // const customUploadAdapter = (loader) => {
-  //   return {
-  //     upload() {
-  //       return new Promise((resolve, reject) => {
-  //         const formData = new FormData();
-  //         loader.file.then(async (file) => {
-  //           console.log(file);
-  //           formData.append("pTable", 'editor');
-  //           formData.append("pNo", 0);
-  //           formData.append("type", 'SUB');
-  //           formData.append("data", file);  //파일 데이터
-
-  //           const headers = {
-  //             headers: {
-  //               'Content-Type': 'multipart/form-data',
-  //             },
-  //           };
-
-  //           let response = await fileAPI.upload(formData, headers);
-  //           let data = await response.data;
-  //           console.log(`data : ${data}`);
-
-
-  //           // 이미지 렌더링
-  //           await resolve({
-  //             default: `http://localhost:8080/files/img/${data.id}`
-  //           })
-
-  //         });
-  //       });
-  //     },
-  //   };
-  // };
   return (
     <>
       <Header />
@@ -379,8 +292,6 @@ const WYSIWYG = ({ post, ids }) => {
                 alignment: {
                   options: ['left', 'center', 'right', 'justify'],
                 },
-
-                extraPlugins: [uploadPlugin]            // 업로드 플러그인
               }}
               data={content}
               onReady={(editor) => {
@@ -388,14 +299,11 @@ const WYSIWYG = ({ post, ids }) => {
                 if (post?.content) editor.setData(post.content);
               }}
               onChange={(event, editor) => {
-                // console.log({ event, editor, data });
                 setContent(editor.getData());
               }}
               onBlur={(event, editor) => {
-                // console.log('Blur.', editor);
               }}
               onFocus={(event, editor) => {
-                // console.log('Focus.', editor);
               }}
             />
           </div>

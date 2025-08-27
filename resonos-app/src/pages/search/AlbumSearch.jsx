@@ -19,7 +19,6 @@ const AlbumSearch = () => {
         api.get(`/search/albums?q=${q}&page=${page}&sort=${sort}`)
             .then((res) => {
                 const data = res.data;
-                console.log('받은 데이터:', data);
                 setAlbumSearchList(data.albumSearchList);
                 setAlbumSearchCount(data.albumSearchCount);
                 setPagination(data.pagination);

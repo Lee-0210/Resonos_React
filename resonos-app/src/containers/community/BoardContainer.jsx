@@ -81,7 +81,7 @@ const BoardContainer = () => {
 
   // 트랙 검색, 요청 함수
   const onSearchTrack = async (keyword, offsetRef, limitRef, loadingRef, allLoadedRef) => {
-    console.log(keyword)
+
     if (loadingRef.current || allLoadedRef.current) return
 
     loadingRef.current = true
@@ -93,7 +93,7 @@ const BoardContainer = () => {
         limit: limitRef.current
       })
 
-      console.log(data)
+      // console.log(data)
 
       setTrackList(prev => {
         const existingIds = new Set(prev.map(t => t.id))
@@ -102,8 +102,6 @@ const BoardContainer = () => {
       })
 
       offsetRef.current += limitRef.current
-
-      console.log(offsetRef.current)
 
       if (data.length < limitRef.current) {
         allLoadedRef.current = true
@@ -121,7 +119,7 @@ const BoardContainer = () => {
       const response = await cr.getBoardData(params.id, pPage, nPage)
       if(response.status === 200) {
         const data = response.data
-        console.log(data)
+        // console.log(data)
         setBoard(data.community)
         setPosts(data.posts)
         setNotices(data.notices)

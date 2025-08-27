@@ -17,7 +17,6 @@ const HotPlaylist = () => {
         api.get(`/list/hot-playlists?page=${page}`)
             .then((res) => {
                 const data = res.data;
-                console.log('받은 데이터:', data);
                 setHotPlaylistList(data.hotPlaylistList);
                 setHotPlaylistCount(data.hotPlaylistCount);
                 setPagination(data.pagination);

@@ -18,7 +18,6 @@ const PlaylistSearch = () => {
         api.get(`/search/playlists?q=${q}&page=${page}`)
             .then((res) => {
                 const data = res.data;
-                console.log('받은 데이터:', data);
                 setPlaylistSearchList(data.playlistSearchList);
                 setPlaylistSearchCount(data.playlistSearchCount);
                 setPagination(data.pagination);
