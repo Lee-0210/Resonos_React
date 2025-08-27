@@ -310,7 +310,6 @@ nav {
 nav a {
   color: var(--text-color);
   text-decoration: none;
-  font-weight: 600;
   transition: color 0.2s ease;
 }
 
