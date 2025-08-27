@@ -18,9 +18,9 @@ const BadgeUsersContainer = () => {
       const res = await getBadgeUsers(badgeId);
       setUsers(res.data.users || []);
       setLogs(res.data.logs || []);
-      console.log("배지 지급자 목록 조회 성공", res.data);
+      // console.log("배지 지급자 목록 조회 성공", res.data);
     } catch (err) {
-      console.error("배지 지급자 목록 조회 실패", err);
+      // console.error("배지 지급자 목록 조회 실패", err);
     } finally {
       setLoading(false);
     }

@@ -169,7 +169,7 @@ const Post = () => {
     }
   }
 
-  
+
 
   if (isLoading) {
     return (

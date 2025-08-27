@@ -44,7 +44,7 @@ const BanMemberForm = ({ userId, onComplete, onCancel }) => {
         startAt,
         endAt: endAt || null,
       });
-      console.log('Ban submit success', response);
+      // console.log('Ban submit success', response);
       alert('제재 처리가 완료되었습니다.');
       setLoading(false);
       if (onComplete) onComplete();

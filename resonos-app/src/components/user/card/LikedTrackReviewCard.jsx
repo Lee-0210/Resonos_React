@@ -31,7 +31,7 @@ const LikedTrackReviewCard = ({countLtReview, ltReviewList, onSearchReview, setL
     const container = document.querySelector('.info-section.tr')
     const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
     if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
-      console.log('데이터 요청')
+      // console.log('데이터 요청')
       onSearchReview(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef, 'tr')
     }
   }, [onSearchReview, debouncedKeyword])

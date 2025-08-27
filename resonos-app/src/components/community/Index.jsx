@@ -6,7 +6,7 @@ import BoardTitleCard from './card/BoardTitleCard'
 import { Link } from 'react-router-dom'
 import PostTitleCard from './card/PostTitleCard'
 
-const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCategories, newCategories, topCommunities, newCommunities}) => {
+const Index = ({hotPosts, latestPosts, popularPosts, realTimePopularPosts, topCommunities, newCommunities}) => {
 
   return (
     <main className='commu index'>

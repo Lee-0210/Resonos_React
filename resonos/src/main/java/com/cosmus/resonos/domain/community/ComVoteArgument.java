@@ -1,7 +1,5 @@
 package com.cosmus.resonos.domain.community;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 

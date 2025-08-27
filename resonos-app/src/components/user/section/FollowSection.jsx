@@ -34,7 +34,7 @@ setMyFollow, onFollowUser}) => {
     const container = document.querySelector('.info-section.follow')
     const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
     if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
-      console.log('데이터 요청')
+      // console.log('데이터 요청')
       onSearchUsers(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef, 'follow')
     }
   }, [onSearchUsers, debouncedKeyword])

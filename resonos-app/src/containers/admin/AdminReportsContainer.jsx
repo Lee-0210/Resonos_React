@@ -37,13 +37,12 @@ const AdminReportsContainer = () => {
   /** 테이블 컬럼 정의 */
   const reportColumns = [
     { label: 'ID', style: { flexBasis: '8%', minWidth: '60px' }, render: (r) => r.id },
-    { label: '유형', style: { flexBasis: '10%', minWidth: '80px' }, render: (r) => r.targetType },
-    { label: '대상ID', style: { flexBasis: '10%', minWidth: '80px' }, render: (r) => r.targetId },
+    { label: '대상ID', style: { flexBasis: '10%', minWidth: '80px' }, render: (r) => r.boardPostId },
     { label: '사유', style: { flexBasis: '16%', minWidth: '120px' }, render: (r) => r.reason },
     { label: '신고자', style: { flexBasis: '10%', minWidth: '80px' }, render: (r) => r.reporterId },
-    { label: '일시', style: { flexBasis: '10%', minWidth: '80px' }, render: (r) => r.createdAt },
+    { label: '일시', style: { flexBasis: '20%', minWidth: '80px' }, render: (r) => r.createdAt },
     { label: '상태', style: { flexBasis: '10%', minWidth: '80px' }, render: (r) => r.status },
-    { label: '처리자', style: { flexBasis: '10%', minWidth: '80px' }, render: (r) => r.processedBy || '-' },
+    { label: '처리자', style: { flexBasis: '10%', minWidth: '80px' }, render: (r) => r.adminId || '-' },
     {
       label: '관리',
       style: { flexBasis: '16%', minWidth: '120px' },
@@ -70,6 +69,7 @@ const fetchReports = async (tab = selectedTab, pageNum = page, size = pagination
 
     // 목록
     setReports(data.reports || []);
+    // console.log('Fetched reports:', data.reports || []);
 
     // 페이지네이션 정보 설정 (data.pagination 활용)
     if (data.pagination) {
@@ -118,6 +118,8 @@ const fetchReports = async (tab = selectedTab, pageNum = page, size = pagination
       const res = await getReportDetail(id);
       setDetailReportId(id);
       setDetailReportData(res.data);
+      // console.log('Fetched report detail:', res.data);
+      
     } catch (e) {
       alert('상세 정보 조회 실패');
     }

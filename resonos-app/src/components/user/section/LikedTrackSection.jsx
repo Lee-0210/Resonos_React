@@ -34,7 +34,7 @@ const LikedTrackSection = ({isOwner, likedTrackList, countTrack, setLikedTrackLi
     const container = document.querySelector('.info-section.track')
     const nearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 150
     if (nearBottom && !loadingRef.current && !allLoadedRef.current) {
-      console.log('데이터 요청')
+      // console.log('데이터 요청')
       onSearchLikedTrack(debouncedKeyword, offsetRef, limitRef, loadingRef, allLoadedRef)
     }
   }, [onSearchLikedTrack, debouncedKeyword])

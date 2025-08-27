@@ -17,7 +17,6 @@ const HotAlbum = () => {
         api.get(`/list/hot-albums?page=${page}`)
             .then((res) => {
                 const data = res.data;
-                console.log('받은 데이터:', data);
                 setHotAlbumList(data.hotAlbumList);
                 setHotAlbumCount(data.hotAlbumCount);
                 setPagination(data.pagination);

@@ -69,14 +69,14 @@
     VALUES (#{title}, #{content}, #{type}, #{communityId}, #{userId}, #{guestNickname}, #{guestPassword})
   </insert>
 
-<update id="update">
-  UPDATE board_post
-  <set>
-    <if test="title != null">title = #{title}</if>
-    <if test="content != null">, content = #{content}</if>
-  </set>
-  WHERE id = #{id}
-</update>
+  <update id="update">
+    UPDATE board_post
+    <set>
+      <if test="title != null">title = #{title}</if>
+      <if test="content != null">, content = #{content}</if>
+    </set>
+    WHERE id = #{id}
+  </update>
 
 
 
@@ -160,104 +160,104 @@
   </update>
 
   <!-- 커뮤 메인 -->
-<!-- Hot Posts (조회수 기준) -->
-<select id="selectHotPosts" resultMap="BoardPostResultMap">
-  SELECT bp.*,
-         c.name AS name,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
-  FROM board_post bp
-  LEFT JOIN community c ON bp.community_id = c.id
-  ORDER BY bp.views DESC
-  LIMIT #{limit}
-</select>
+  <!-- Hot Posts (조회수 기준) -->
+  <select id="selectHotPosts" resultMap="BoardPostResultMap">
+    SELECT bp.*,
+          c.name AS name,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
+          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    ORDER BY bp.views DESC
+    LIMIT #{limit}
+  </select>
 
-<!-- 전체 게시글 -->
-<select id="selectAll" resultMap="BoardPostResultMap">
-  SELECT bp.*,
-         c.name AS name,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
-  FROM board_post bp
-  LEFT JOIN community c ON bp.community_id = c.id
-  ORDER BY bp.created_at DESC
-</select>
+  <!-- 전체 게시글 -->
+  <select id="selectAll" resultMap="BoardPostResultMap">
+    SELECT bp.*,
+          c.name AS name,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
+          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    ORDER BY bp.created_at DESC
+  </select>
 
-<!-- 인기 게시글 -->
-<select id="selectPopularPosts" resultMap="BoardPostResultMap">
-  SELECT bp.*,
-         c.name AS name,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
-  FROM board_post bp
-  LEFT JOIN community c ON bp.community_id = c.id
-  ORDER BY bp.views DESC, bp.created_at DESC
-</select>
+  <!-- 인기 게시글 -->
+  <select id="selectPopularPosts" resultMap="BoardPostResultMap">
+    SELECT bp.*,
+          c.name AS name,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
+          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    ORDER BY bp.views DESC, bp.created_at DESC
+  </select>
 
-<!-- 실시간 인기 게시글 (72시간 기준) -->
-<select id="selectRealTimePopularPosts" resultMap="BoardPostResultMap">
-  SELECT bp.*,
-         c.name AS name,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
-  FROM board_post bp
-  LEFT JOIN community c ON bp.community_id = c.id
-  WHERE bp.created_at >= NOW() - INTERVAL 72 HOUR
-  ORDER BY bp.views DESC, bp.created_at DESC
-</select>
+  <!-- 실시간 인기 게시글 (72시간 기준) -->
+  <select id="selectRealTimePopularPosts" resultMap="BoardPostResultMap">
+    SELECT bp.*,
+          c.name AS name,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
+          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    WHERE bp.created_at >= NOW() - INTERVAL 72 HOUR
+    ORDER BY bp.views DESC, bp.created_at DESC
+  </select>
 
-<!-- 검색 게시글 -->
-<select id="searchPosts" resultMap="BoardPostResultMap">
-  SELECT bp.*,
-         c.name AS name,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count,
-         u.nickname AS user_nickname
-  FROM board_post bp
-  LEFT JOIN community c ON bp.community_id = c.id
-  LEFT JOIN user AS u ON u.id = bp.user_id
-  <where>
-    <if test="query != null and query.trim() != ''">
-      (bp.title LIKE CONCAT('%', #{query}, '%')
-       OR bp.content LIKE CONCAT('%', #{query}, '%'))
-    </if>
-  </where>
-  ORDER BY bp.created_at DESC
-</select>
+  <!-- 검색 게시글 -->
+  <select id="searchPosts" resultMap="BoardPostResultMap">
+    SELECT bp.*,
+          c.name AS name,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
+          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count,
+          u.nickname AS user_nickname
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    LEFT JOIN user AS u ON u.id = bp.user_id
+    <where>
+      <if test="query != null and query.trim() != ''">
+        (bp.title LIKE CONCAT('%', #{query}, '%')
+        OR bp.content LIKE CONCAT('%', #{query}, '%'))
+      </if>
+    </where>
+    ORDER BY bp.created_at DESC
+  </select>
 
-<!-- 카테고리별 게시글 -->
-<select id="selectByCategoryId" resultMap="BoardPostResultMap">
-  SELECT bp.*,
-         c.category_id AS categoryId,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
-  FROM board_post bp
-  LEFT JOIN community c ON bp.community_id = c.id
-  WHERE c.id = #{categoryId}
-  ORDER BY bp.created_at DESC
-</select>
+  <!-- 카테고리별 게시글 -->
+  <select id="selectByCategoryId" resultMap="BoardPostResultMap">
+    SELECT bp.*,
+          c.category_id AS categoryId,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
+          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
+    FROM board_post bp
+    LEFT JOIN community c ON bp.community_id = c.id
+    WHERE c.id = #{categoryId}
+    ORDER BY bp.created_at DESC
+  </select>
 
-<!-- 공지 게시글 -->
-<select id="selectNoticesByCategoryId" resultMap="BoardPostResultMap">
-  SELECT bp.*,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
-  FROM board_post bp
-  INNER JOIN user u ON bp.user_id = u.id
-  INNER JOIN user_auth ua ON ua.username = u.username
-  INNER JOIN community c ON bp.community_id = c.id
-  WHERE ua.auth = 'ROLE_ADMIN'
-    AND c.category_id = #{categoryId}
-  ORDER BY bp.created_at DESC
-  LIMIT #{limit}
-</select>
+  <!-- 공지 게시글 -->
+  <select id="selectNoticesByCategoryId" resultMap="BoardPostResultMap">
+    SELECT bp.*,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
+          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
+    FROM board_post bp
+    INNER JOIN user u ON bp.user_id = u.id
+    INNER JOIN user_auth ua ON ua.username = u.username
+    INNER JOIN community c ON bp.community_id = c.id
+    WHERE ua.auth = 'ROLE_ADMIN'
+      AND c.category_id = #{categoryId}
+    ORDER BY bp.created_at DESC
+    LIMIT #{limit}
+  </select>
 
 
   <!-- 게시판 대표 음악 설정 -->
@@ -296,113 +296,113 @@
     ORDER BY bp.created_at DESC
   </select>
 
-<select id="getNoticesByCommunityId" resultMap="BoardPostResultMap">
+  <select id="getNoticesByCommunityId" resultMap="BoardPostResultMap">
 
-  SELECT bp.*,
-    c.name AS name,
-    (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
-    (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-    (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
-  FROM board_post bp
-	  INNER JOIN community c ON bp.community_id = c.id
-  WHERE c.creator_id = bp.user_id
-    AND bp.community_id = #{communityId}
-  ORDER BY bp.created_at DESC
-</select>
-
-
-<!-- 모든 게시글 가져오기 -->
-<select id="getAllPosts" resultMap="BoardPostResultMap">
-  SELECT bp.*,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
-         (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
-         (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
-  FROM board_post bp
-</select>
+    SELECT bp.*,
+      c.name AS name,
+      (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
+      (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
+      (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
+    FROM board_post bp
+      INNER JOIN community c ON bp.community_id = c.id
+    WHERE c.creator_id = bp.user_id
+      AND bp.community_id = #{communityId}
+    ORDER BY bp.created_at DESC
+  </select>
 
 
-<!-- vote  -->
-<!-- 게시글 투표 목록 -->
-<select id="findVotesByPostId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVote">
-  SELECT v.id, v.post_id, v.title, v.is_completed, v.closed_at,
-         COALESCE(COUNT(DISTINCT vs.id), 0) AS total_vote_count
-  FROM com_vote v
-  LEFT JOIN com_vote_argument a ON a.vote_id = v.id
-  LEFT JOIN vote_status vs ON vs.arg_id = a.id
-  WHERE v.post_id = #{postId}
-  GROUP BY v.id, v.post_id, v.title, v.is_completed, v.created_at
-  ORDER BY v.created_at DESC
-</select>
+  <!-- 모든 게시글 가져오기 -->
+  <select id="getAllPosts" resultMap="BoardPostResultMap">
+    SELECT bp.*,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=1) AS post_likes,
+          (SELECT COUNT(*) FROM likes_dislikes ld WHERE ld.type='post' AND ld.target_id=bp.id AND ld.is_likes=0) AS post_dislikes,
+          (SELECT COUNT(*) FROM comment cm WHERE cm.board_post_id=bp.id) AS comment_count
+    FROM board_post bp
+  </select>
 
 
-<!-- 투표 선택지 목록 -->
-<select id="findArgumentsByVoteId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVoteArgument">
-  SELECT a.id, a.vote_id, a.content, a.arg_no, 
-         COALESCE(COUNT(DISTINCT vs.id), 0) vote_count
-  FROM com_vote_argument a
-  LEFT JOIN vote_status vs ON vs.arg_id = a.id
-  WHERE a.vote_id = #{voteId}
-  GROUP BY a.id, a.vote_id, a.content, a.arg_no
-</select>
+  <!-- vote  -->
+  <!-- 게시글 투표 목록 -->
+  <select id="findVotesByPostId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVote">
+    SELECT v.id, v.post_id, v.title, v.is_completed, v.closed_at,
+          COALESCE(COUNT(DISTINCT vs.id), 0) AS total_vote_count
+    FROM com_vote v
+    LEFT JOIN com_vote_argument a ON a.vote_id = v.id
+    LEFT JOIN vote_status vs ON vs.arg_id = a.id
+    WHERE v.post_id = #{postId}
+    GROUP BY v.id, v.post_id, v.title, v.is_completed, v.created_at
+    ORDER BY v.created_at DESC
+  </select>
 
 
-<!-- 선택지별 투표 수 계산 -->
-<select id="countVoteResults" parameterType="long" resultType="com.cosmus.resonos.domain.community.VoteResult">
-  SELECT COALESCE(SUM(count), 0)
-  FROM vote_result
-  WHERE arg_id = #{argId}
-</select>
+  <!-- 투표 선택지 목록 -->
+  <select id="findArgumentsByVoteId" parameterType="long" resultType="com.cosmus.resonos.domain.community.ComVoteArgument">
+    SELECT a.id, a.vote_id, a.content, a.arg_no, 
+          COALESCE(COUNT(DISTINCT vs.id), 0) vote_count
+    FROM com_vote_argument a
+    LEFT JOIN vote_status vs ON vs.arg_id = a.id
+    WHERE a.vote_id = #{voteId}
+    GROUP BY a.id, a.vote_id, a.content, a.arg_no
+  </select>
 
-<!-- 투표 저장  -->
-<insert id="insertVoteResult" parameterType="int">
-  INSERT INTO vote_result (vote_id, arg_id, user_id, guest_id, count, created_at)
-  VALUES (#{voteId}, #{argId}, #{userId}, #{guestId}, #{count}, #{createdAt})
-</insert>
 
-<!-- 투표 이력 확인 -->
-<select id="checkUserVoteExists" resultType="int">
-     SELECT COUNT(1) 
-    FROM vote_status vs
-    INNER JOIN com_vote_argument cva ON vs.arg_id = cva.id
-    INNER JOIN com_vote cv ON cva.vote_id = cv.id
-    WHERE cv.id = #{voteId}
-      AND vs.user_id = #{userId}
-</select>
-
-<!-- 투표 결과 삭제 -->
-<delete id="deleteVoteResult" parameterType="int">
-    DELETE FROM vote_result
+  <!-- 선택지별 투표 수 계산 -->
+  <select id="countVoteResults" parameterType="long" resultType="com.cosmus.resonos.domain.community.VoteResult">
+    SELECT COALESCE(SUM(count), 0)
+    FROM vote_result
     WHERE arg_id = #{argId}
-</delete>
+  </select>
+
+  <!-- 투표 저장  -->
+  <insert id="insertVoteResult" parameterType="int">
+    INSERT INTO vote_result (vote_id, arg_id, user_id, guest_id, count, created_at)
+    VALUES (#{voteId}, #{argId}, #{userId}, #{guestId}, #{count}, #{createdAt})
+  </insert>
+
+  <!-- 투표 이력 확인 -->
+  <select id="checkUserVoteExists" resultType="int">
+      SELECT COUNT(1) 
+      FROM vote_status vs
+      INNER JOIN com_vote_argument cva ON vs.arg_id = cva.id
+      INNER JOIN com_vote cv ON cva.vote_id = cv.id
+      WHERE cv.id = #{voteId}
+        AND vs.user_id = #{userId}
+  </select>
+
+  <!-- 투표 결과 삭제 -->
+  <delete id="deleteVoteResult" parameterType="int">
+      DELETE FROM vote_result
+      WHERE arg_id = #{argId}
+  </delete>
 
 
 
-<!-- 키워드 기본 검색을 위한 - 커뮤니티 ID 목록에 해당하는 게시글 조회 -->
-<select id="getPostsByCommunityIds" resultMap="BoardPostResultMap">
-  SELECT bp.*, u.nickname AS user_nickname
-  FROM board_post bp
-  LEFT JOIN user u ON u.id = bp.user_id
-  WHERE bp.community_id IN
-  <foreach collection="list" item="communityId" open="(" separator="," close=")">
-    #{communityId}
-  </foreach>
-  ORDER BY bp.created_at DESC
-</select>
+  <!-- 키워드 기본 검색을 위한 - 커뮤니티 ID 목록에 해당하는 게시글 조회 -->
+  <select id="getPostsByCommunityIds" resultMap="BoardPostResultMap">
+    SELECT bp.*, u.nickname AS user_nickname
+    FROM board_post bp
+    LEFT JOIN user u ON u.id = bp.user_id
+    WHERE bp.community_id IN
+    <foreach collection="list" item="communityId" open="(" separator="," close=")">
+      #{communityId}
+    </foreach>
+    ORDER BY bp.created_at DESC
+  </select>
 
 
-<!-- 모든 커뮤니티 + 키워드 + 커뮤니티별 작성된 boardPost count -->
-<select id="countPostsByCommunityIds" resultType="map">
-  SELECT
-    c.id AS community_id,
-    COUNT(bp.id) AS board_post_count
-  FROM community c
-  LEFT JOIN board_post bp ON bp.community_id = c.id
-  WHERE c.id IN
-  <foreach item="id" collection="list" open="(" separator="," close=")">
-    #{id}
-  </foreach>
-  GROUP BY c.id
-</select>
+  <!-- 모든 커뮤니티 + 키워드 + 커뮤니티별 작성된 boardPost count -->
+  <select id="countPostsByCommunityIds" resultType="map">
+    SELECT
+      c.id AS community_id,
+      COUNT(bp.id) AS board_post_count
+    FROM community c
+    LEFT JOIN board_post bp ON bp.community_id = c.id
+    WHERE c.id IN
+    <foreach item="id" collection="list" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+    GROUP BY c.id
+  </select>
 
 
 </mapper>

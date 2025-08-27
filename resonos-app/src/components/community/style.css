@@ -170,7 +170,7 @@
 
 .commu.index .post-area {
   padding: 20px 30px;
-  background-color: #1C202A;
+  background-color: var(--commu-backColor);
   border-radius: 20px;
 }
 
@@ -200,7 +200,7 @@
   max-width: 100%;
   width: 100%;
   min-height: 325px;
-  background-color: #1C202A;
+  background-color: var(--commu-backColor);
   padding: 15px 20px;
   border-radius: 20px;
   box-sizing: border-box;
@@ -827,7 +827,7 @@ figure iframe {
 .free-vote .border-form {
   border: 1px solid var(--main-color);
   border-radius: 10px;
-  background-color: #1C202A;
+  background-color: var(--commu-backColor);
 }
 
 .free-vote {

@@ -43,15 +43,15 @@ const LoginContextProvider = ({children}) => {
 
   // 🔐 로그인 함수
   const login = async (username, password, rememberId, rememberMe) => {
-    console.log(`username : ${username}`)
-    console.log(`password : ${password}`)
+    // console.log(`username : ${username}`)
+    // console.log(`password : ${password}`)
 
     try {
       const response = await auth.login(username, password, rememberMe)
       const data = response.data
       const status = response.status
-      console.dir(`data : ${data}`)
-      console.log(`status : ${status}`)
+      // console.dir(`data : ${data}`)
+      // console.log(`status : ${status}`)
 
       // 로그인 성공 ✅
       if(status == 200) {
@@ -110,7 +110,7 @@ const LoginContextProvider = ({children}) => {
 
     try {
       response = await auth.info()
-      console.log('response :', response)
+      // console.log('response :', response)
 
     } catch(e) {
       console.error(`error : ${e}`)
@@ -123,7 +123,7 @@ const LoginContextProvider = ({children}) => {
     }
 
     // 인증 성공
-    console.log('jwt 로 자동 로그인 성공')
+    // console.log('jwt 로 자동 로그인 성공')
     data = response.data
 
     // 로그인 세팅 - loginSetting()

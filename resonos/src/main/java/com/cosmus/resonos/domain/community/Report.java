@@ -12,4 +12,7 @@ public class Report {
     private Long reporterId;
     private Long boardPostId;
     private Long adminId;
+
+    // 이동용
+    private Long communityId;
 }

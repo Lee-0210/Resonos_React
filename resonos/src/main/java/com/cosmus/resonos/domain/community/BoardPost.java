@@ -1,7 +1,6 @@
 package com.cosmus.resonos.domain.community;
 
 import java.util.Date;
-import java.util.List;
 
 import com.cosmus.resonos.validation.GuestCheck;
 import com.fasterxml.jackson.annotation.JsonFormat;

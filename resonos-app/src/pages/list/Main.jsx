@@ -26,7 +26,6 @@ const Main = () => {
         api.get('/list/main')
             .then((res) => {
                 const data = res.data;
-                console.log('받은 데이터:', data);
                 setKorHotReviewAlbumList(data.korHotReviewAlbumList);
                 setWorldHotReviewAlbumList(data.worldHotReviewAlbumList);
                 setNewAlbumList(data.newAlbumList);
