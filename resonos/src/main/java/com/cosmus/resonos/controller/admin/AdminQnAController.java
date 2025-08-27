@@ -32,9 +32,14 @@ public class AdminQnAController {
     public ResponseEntity<?> getQnaList(
             @RequestParam(value="page", defaultValue = "1") int page,
             @RequestParam(value="size", defaultValue = "10") int size,
-            @RequestParam(value="keyword", defaultValue = "") String keyword) {
+            @RequestParam(value="keyword", defaultValue = "") String keyword) throws Exception {
 
-        Pagination pagination = new Pagination(page, size, 10, qnaService.count(keyword )); // 10은 노출 페이지 수
+
+        long total = keyword.isBlank()
+        ? qnaService.list().size()
+        : qnaService.count(keyword);
+
+        Pagination pagination = new Pagination(page, size, 10, total); // 10은 노출 페이지 수
         List<Qna> allQnaList = qnaService.getAll(keyword, pagination.getIndex(), pagination.getSize());
         List<Qna> noAnswerQnaList = qnaService.getNoAnswer(keyword, pagination.getIndex(), pagination.getSize());
         List<Qna> answeredQnaList = qnaService.getAnswered(keyword, pagination.getIndex(), pagination.getSize());
@@ -101,6 +106,9 @@ public class AdminQnAController {
         qnaService.delete(id);
         return ResponseEntity.ok(Map.of("success", true));
     }
+
+    
+
 
 
 

@@ -110,7 +110,7 @@ public class VoteStatusController {
                     vote.setArguments(arguments);
                 }
             }
-            vote.setHasUserVoted(boardPostService.hasUserVoted(vote.getId()+ 1, entity.getUserId())); // 투표 여부
+            vote.setHasUserVoted(boardPostService.hasUserVoted(vote.getId(), entity.getUserId())); // 투표 여부
 
             // 단일 vote 객체로 반환
             response.put("vote", vote);

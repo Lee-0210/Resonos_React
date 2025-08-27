@@ -32,9 +32,8 @@
   </select>
 
   <insert id="insert">
-    INSERT INTO community (name, description, created_at, updated_at, track_id)
-    VALUES (#{name}, #{description}, NOW(), NOW(), #{trackId})
-    FROM community
+    INSERT INTO community (name, description, created_at, category_id)
+    VALUES (#{name}, #{description}, NOW(), #{categorId})
   </insert>
 
   <update id="update">

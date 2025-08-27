@@ -8,6 +8,7 @@ import SearchForm from "../../components/admin/first/SearchForm";
 import FormInput from "../../components/admin/first/FormInput";
 import QuickMenu from "../../components/admin/first/QuickMenu";
 import LoginContextProvider from "../../contexts/LoginContextProvider";
+import CommunityCreate from "../../components/admin/second/CommunityCreate"
 
 const AdminQnAContainer = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -38,22 +39,36 @@ const AdminQnAContainer = () => {
   ];
 
   /** 목록 조회 */
-  const fetchQnaList = async () => {
-    try {
-      const res = await getQnaList(page, pagination.size, keyword);
-      if (res.data.success) {
-        setAllQnaList(res.data.allQnaList || []);
-        setNoAnswerQnaList(res.data.noAnswerQnaList || []);
-        setAnsweredQnaList(res.data.answeredQnaList || []);
-        if (res.data.pagination) {
-          setPagination(res.data.pagination);
-        }
+const fetchQnaList = async () => {
+  try {
+    console.log("요청 페이지, 사이즈, 키워드:", page, pagination.size, keyword);
+
+    const res = await getQnaList(page, pagination.size, keyword);
+
+    if (res.data.success) {
+      setAllQnaList(res.data.allQnaList || []);
+      setNoAnswerQnaList(res.data.noAnswerQnaList || []);
+      setAnsweredQnaList(res.data.answeredQnaList || []);
+      if (res.data.pagination) {
+        // res.data.pagination의 필드명을 콘솔로 확인해서 맞게 세팅
+        console.log("서버에서 받은 페이징 데이터:", res.data.pagination);
+        setPagination({
+          page: res.data.pagination.page,
+          size: res.data.pagination.size,
+          totalPages: res.data.pagination.totalPages,
+          total: res.data.pagination.total,
+          // 만약 totalPages나 total이 없으면 직접 계산 필요할 수도 있음
+        });
       }
-      console.log("QnA 목록 조회 성공", res.data);
-    } catch (err) {
-      console.error("QnA 목록 조회 실패", err);
+    } else {
+      console.error("QnA 목록 조회 실패: success=false");
     }
-  };
+    console.log("QnA 목록 조회 성공", res.data);
+  } catch (err) {
+    console.error("QnA 목록 조회 중 오류", err);
+  }
+};
+
 
   // 상세 조회
   const fetchQnaDetail = async (id) => {
@@ -151,11 +166,12 @@ const saveEditAnswer = async (e) => {
     setAnswers([]);
   };
 
+
   return (
     <main className="admin py-5 bg-resonos-dark min-vh-80">
       <div className="container admin-container max-w-1200">
         <h2 className="mb-4 text-light-gold fw-bold">Q&A 관리</h2>
-
+        <CommunityCreate/>
         <SearchForm
           initialKeyword={keyword}
           onSearch={setKeyword}
@@ -176,20 +192,20 @@ const saveEditAnswer = async (e) => {
               columns={qnaColumns}
               onRowClick={handleRowClick}   
             />
-            {pagination.totalPages > 1 && (
-            <Pagination
-              page={page}
-              first={1}
-              last={pagination.totalPages}
-              prev={page > 1 ? page - 1 : 1}
-              next={page < pagination.totalPages ? page + 1 : pagination.totalPages}
-              start={Math.max(1, page - 4)}
-              end={Math.min(pagination.totalPages, page + 5)}
-              pageUri={`/admin/qna?keyword=${encodeURIComponent(keyword)}`}
-              onPageChange={setPage}   // ✅
-            />
-
+            {pagination.last > 1 && (
+              <Pagination
+                page={page}
+                first={pagination.first}
+                last={pagination.last}
+                prev={pagination.prev > 0 ? pagination.prev : 1}
+                next={pagination.next <= pagination.last ? pagination.next : pagination.last}
+                start={Math.max(1, page - 4)}
+                end={Math.min(pagination.last, page + 5)}
+                pageUri={`/admin/qna?keyword=${encodeURIComponent(keyword)}`} // 기존에 ?가 포함되어 있어 &page=가 붙는게 맞음
+                onPageChange={setPage}
+              />
             )}
+
           </div>
 
           {/* 우측 상세 */}

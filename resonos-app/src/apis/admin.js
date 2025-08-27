@@ -444,6 +444,11 @@ export const deleteQnaAnswer = (answerId) =>
 export const deleteQna = (id) =>
   axios.delete(`${qnaPath}/${id}`);
 
+// QnA community 생성
+export const communityCreate = (communityData) =>
+  axios.post("/community", communityData, {
+    headers: { "Content-Type": "application/json" },
+  });
 
 
 // admin - QnA 페이지  하단 ##########################################################################################
