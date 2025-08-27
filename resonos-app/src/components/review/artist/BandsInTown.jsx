@@ -58,39 +58,40 @@ const BandsintownWidget = ({ artistName }) => {
       </div>
     )
   }
-  if (!isReady) {
-    return (
-      <div style={{ height: '160px' }}>
-        <TextPressure
-          text="LOADING...!"
-          flex={true}
-          alpha={false}
-          stroke={false}
-          width={true}
-          weight={true}
-          italic={true}
-          textColor="#ffffff"
-          strokeColor="#ff0000"
-          minFontSize={36}
-        />
-      </div>
-    )
-  }
 
   return (
-    <div
-      className="bit-widget-initializer"
-      data-artist-name={artistName}
-      data-text-color="#FFF"
-      data-background-color="transparent"
-      data-display-local-dates="true"
-      data-auto-style="true"
-      data-separator-color="#DDDDDD"
-      data-link-color="#1DB954"
-      data-display-limit="3"
-      data-display-lineup="false"
-      data-display-play-my-city="false"
-    ></div>
+    <>
+      {!isReady ? (
+        <div style={{ height: '160px' }}>
+          <TextPressure
+            text="LOADING...!"
+            flex={true}
+            alpha={false}
+            stroke={false}
+            width={true}
+            weight={true}
+            italic={true}
+            textColor="#ffffff"
+            strokeColor="#ff0000"
+            minFontSize={36}
+          />
+        </div>
+      ) : (
+        <div
+          className="bit-widget-initializer"
+          data-artist-name={artistName}
+          data-text-color="#FFF"
+          data-background-color="transparent"
+          data-display-local-dates="true"
+          data-auto-style="true"
+          data-separator-color="#DDDDDD"
+          data-link-color="#1DB954"
+          data-display-limit="3"
+          data-display-lineup="false"
+          data-display-play-my-city="false"
+        ></div>
+      )}
+    </>
   );
 };
 
