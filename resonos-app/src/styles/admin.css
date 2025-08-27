@@ -724,7 +724,7 @@ html[data-theme="light"] .table-dark {
 
 /* ul li  */
 /* Dark 모드 ul, li 스타일 */
-.admin ul {
+/* .admin ul {
  list-style: none;
  margin: 0;
  padding: 0;
@@ -747,10 +747,10 @@ html[data-theme="light"] .table-dark {
 
 .admin li:hover {
  background: var(--hover-bg);
-}
+} */
 
 /* Light 모드 ul, li 스타일 */
-html[data-theme='light'] .admin ul {
+/* html[data-theme='light'] .admin ul {
  background: var(--card-bg);
  border-color: var(--border-color);
 }
@@ -762,4 +762,4 @@ html[data-theme='light'] .admin li {
 
 html[data-theme='light'] .admin li:hover {
  background: var(--hover-bg);
-}
+} */
