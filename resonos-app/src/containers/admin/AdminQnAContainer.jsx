@@ -48,9 +48,9 @@ const AdminQnAContainer = () => {
           setPagination(res.data.pagination);
         }
       }
-      // console.log("QnA 목록 조회 성공", res.data);
+      console.log("QnA 목록 조회 성공", res.data);
     } catch (err) {
-      // console.error("QnA 목록 조회 실패", err);
+      console.error("QnA 목록 조회 실패", err);
     }
   };
 

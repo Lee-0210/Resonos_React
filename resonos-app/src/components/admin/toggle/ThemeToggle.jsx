@@ -191,7 +191,6 @@ body {
   margin: 0;
   font-family: var(--font-family);
   font-size: var(--font-size-base);
-
 }
 
 /* 버튼 기본 스타일 */
@@ -242,7 +241,6 @@ a:hover {
 form {
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
 }
 
 /* 입력창 스타일 */
