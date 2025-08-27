@@ -39,25 +39,6 @@ const BandsintownWidget = ({ artistName }) => {
     }
   }, [isReady, artistName]);
 
-  // artistName이 유효할 때만 위젯 div를 반환
-  if (!artistName) {
-    return (
-      <div style={{ height: '160px' }}>
-        <TextPressure
-          text="Something goes wrong..."
-          flex={true}
-          alpha={false}
-          stroke={false}
-          width={true}
-          weight={true}
-          italic={true}
-          textColor="#ffffff"
-          strokeColor="#ff0000"
-          minFontSize={36}
-        />
-      </div>
-    )
-  }
 
   return (
     <>
