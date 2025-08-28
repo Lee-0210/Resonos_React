@@ -157,8 +157,7 @@ const App = () => {
 }
 
 html[data-theme='light'] {
-  --main-color: #3981ffff;
-  --card-color: #fff;
+  --main-color: rgb(162, 99, 245);
   --silver-color: #333;
   --background-color: #f8f9fa;
   --commu-backColor: #f3f3f3ff;
@@ -167,6 +166,10 @@ html[data-theme='light'] {
   --card-border: #ddd;
   --border-color: #ccc;
   --hover-bg: rgba(0, 0, 0, 0.05);
+
+  /* 마이페이지 */
+  --card-color: #fff;
+  --card-color2: #d3d3d3ff;
 
   /* 같은 방식으로 light 테마 변수를 오버라이드 */
   --btn-bg: var(--main-color);
@@ -305,7 +308,6 @@ nav {
 nav a {
   color: var(--text-color);
   text-decoration: none;
-  font-weight: 600;
   transition: color 0.2s ease;
 }
 

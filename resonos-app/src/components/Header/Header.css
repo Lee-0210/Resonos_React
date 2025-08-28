@@ -187,7 +187,7 @@
 }
 
 .header-menu-wrapper a {
-    color: white;
+    color: var(--text-color);
     display: inline-block;
     text-decoration: none;
 }
@@ -224,7 +224,7 @@
 .header-submenu li a {
     display: block;
     width: 100%;
-    color: white;
+    color: var(--text-color);
     text-decoration: none;
 }
 

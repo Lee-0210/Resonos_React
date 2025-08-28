@@ -146,12 +146,12 @@ section.resonos-card {
 /* ======================
    버튼
 ====================== */
-.admin .btn { 
+.admin .btn {
   background: var(--main-color) !important;
   color: var(--text-color) !important;
   margin: 0.2rem !important;
 }
-.admin .btn-default { 
+.admin .btn-default {
     color: var(--text-color) !important;
     padding: auto !important;
     margin: 0.2rem !important;
@@ -160,7 +160,7 @@ section.resonos-card {
     padding: 0.1rem 0.5rem !important;
     font-size: 1rem;
 }
-.admin .btn-default:hover { 
+.admin .btn-default:hover {
   background: var(--main-color) !important;
   color: var(--text-color) !important;
 }
@@ -279,7 +279,7 @@ div.admin.mb-3 button {
 .report-table .col-date { min-width: 120px; white-space: nowrap; }
 
 /* ======================
-   폼 
+   폼
 ====================== */
 .admin .form-control,
 .admin .form-select,
@@ -520,17 +520,17 @@ div.admin.mb-3 button {
 
 
 /* 회원관리 추가  */
-.width-100 { 
+.width-100 {
   width: 100%;
 }
 
-.admin .right { 
+.admin .right {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 5px;
 }
-.admin .left { 
+.admin .left {
   display: flex !important;
   justify-content: flex-start !important;
   align-items: center !important;
@@ -644,9 +644,9 @@ div.admin.mb-3 button {
    기본 admin.css Dark 테마와 동일한 구조
 =========================== */
 html[data-theme="light"] {
-  --main-color: #C28B00;                /* 골드 계열 포인트 */
+  --main-color: rgb(162, 99, 245);              /* 골드 계열 포인트 */
   --silver-color: #333;                 /* 본문 텍스트 */
-  --background-color: #f8f9fa;          /* 전체 배경 */
+  --background-color: #dfe1e2;          /* 전체 배경 */
   --text-color: #000;                    /* 일반 텍스트 색상 */
 
   --card-bg: #ffffff;                   /* 카드 배경 */
@@ -655,6 +655,12 @@ html[data-theme="light"] {
   --hover-bg: rgba(0, 0, 0, 0.05);        /* Hover 시 배경 */
 
   --danger-color: #dc3545;               /* 경고 빨강 */
+
+  /* 마이페이지 */
+  --card-color: #fff;
+  --card-color2: rgb(238, 238, 238);
+  --mypage-info: rgb(238, 238, 238);
+  --mypage-text: #000;
 
   /* 폰트 동일 */
   --font-family: 'Pretendard', 'Noto Sans KR', sans-serif;

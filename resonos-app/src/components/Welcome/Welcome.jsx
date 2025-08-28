@@ -1,13 +1,27 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Welcome.css';
 import { LoginContext } from '../../contexts/LoginContextProvider';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Galaxy from '../../assets/Galaxy';
+import PrismaticBurst from '../../assets/PrismaticBurst';
 
 const Welcome = () => {
+
+    const location = useLocation();
+
+    const [isLight, setIsLight] = useState(false);
+
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            setIsLight(document.body.classList.contains('light-mode'));
+        });
+        observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        return () => observer.disconnect();
+    }, []);
+
     useEffect(() => {
         const returnTo = sessionStorage.getItem('returnTo');
         if (returnTo) {
@@ -16,36 +30,38 @@ const Welcome = () => {
         }
     }, []);
 
-    const handleFreeClick = (e) => {
-        e.preventDefault();
-        Swal.fire({
-            position: 'center',
-            icon: 'warning',
-            title: '준비중인 페이지입니다.',
-            showConfirmButton: false,
-            timer: 1000,
-            customClass: {
-                popup: 'follow-popup',
-                icon: 'success-icon',
-                title: 'alert-title',
-            },
-        });
-    };
-
     const { isLogin, userInfo } = useContext(LoginContext)
+    console.log(isLight)
 
     return (
         <div className="welcome" style={{ position: 'relative' }}>
-            <div style={{ width: '100%', height: '100%',
-                position: 'absolute', zIndex: -1, top: 0 }}>
-                <Galaxy
-                    density={1}
-                    glowIntensity={0.8}
-                    saturation={0.1}
-                    rotationSpeed={0.1}
-                    hueShift={130}
-                    starSpeed={0.5}
-                />
+            <div style={{
+                width: '100%', height: '100%',
+                position: 'absolute', zIndex: -1, top: 0
+            }}>
+                {isLight ? (
+                    <PrismaticBurst
+                        animationType="rotate3d"
+                        intensity={2}
+                        speed={0.8}
+                        distort={1.0}
+                        paused={false}
+                        offset={{ x: 0, y: 150 }}
+                        hoverDampness={0.25}
+                        rayCount={14}
+                        mixBlendMode="lighten"
+                        colors={['#713bed', '#6eebe9', '#D4B97F']}
+                    />
+                ) : (
+                    <Galaxy
+                        density={1}
+                        glowIntensity={0.8}
+                        saturation={0.1}
+                        rotationSpeed={0.1}
+                        hueShift={130}
+                        starSpeed={0.5}
+                    />
+                )}
             </div>
             <div className="bg">
                 <main>

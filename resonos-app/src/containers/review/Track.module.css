@@ -13,6 +13,9 @@
         transform: rotate(360deg);
     }
 }
+.ta-wrapper a {
+    color: white;
+}
 .ta-wrapper {
     width: 100%;
     display: flex;
@@ -315,6 +318,10 @@ body {
 }
 .comment p {
     margin: 0;
+}
+.name-and-score .reviewer-name {
+    font-weight: bold;
+    color: var(--main-color);
 }
 .review-util {
     display: flex;
