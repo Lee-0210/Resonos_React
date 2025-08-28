@@ -110,7 +110,7 @@ DROP TABLE IF EXISTS `community`;
 
 CREATE TABLE `community` (
     `id` BIGINT NOT NULL,
-    `category_id` BIGINT NOT NULL,
+    `category_id` BIGINT NULL,
     `creator_id` BIGINT NOT NULL,
     `name` VARCHAR(200) NOT NULL,
     `description` TEXT NULL,

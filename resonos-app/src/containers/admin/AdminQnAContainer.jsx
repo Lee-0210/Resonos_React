@@ -7,6 +7,8 @@ import Pagination from "../../components/admin/Pagination";
 import SearchForm from "../../components/admin/first/SearchForm";
 import FormInput from "../../components/admin/first/FormInput";
 import QuickMenu from "../../components/admin/first/QuickMenu";
+import LoginContextProvider from "../../contexts/LoginContextProvider";
+import CommunityCreate from "../../components/admin/second/CommunityCreate"
 
 const AdminQnAContainer = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -37,22 +39,36 @@ const AdminQnAContainer = () => {
   ];
 
   /** 목록 조회 */
-  const fetchQnaList = async () => {
-    try {
-      const res = await getQnaList(page, pagination.size, keyword);
-      if (res.data.success) {
-        setAllQnaList(res.data.allQnaList || []);
-        setNoAnswerQnaList(res.data.noAnswerQnaList || []);
-        setAnsweredQnaList(res.data.answeredQnaList || []);
-        if (res.data.pagination) {
-          setPagination(res.data.pagination);
-        }
+const fetchQnaList = async () => {
+  try {
+    console.log("요청 페이지, 사이즈, 키워드:", page, pagination.size, keyword);
+
+    const res = await getQnaList(page, pagination.size, keyword);
+
+    if (res.data.success) {
+      setAllQnaList(res.data.allQnaList || []);
+      setNoAnswerQnaList(res.data.noAnswerQnaList || []);
+      setAnsweredQnaList(res.data.answeredQnaList || []);
+      if (res.data.pagination) {
+        // res.data.pagination의 필드명을 콘솔로 확인해서 맞게 세팅
+        console.log("서버에서 받은 페이징 데이터:", res.data.pagination);
+        setPagination({
+          page: res.data.pagination.page,
+          size: res.data.pagination.size,
+          totalPages: res.data.pagination.totalPages,
+          total: res.data.pagination.total,
+          // 만약 totalPages나 total이 없으면 직접 계산 필요할 수도 있음
+        });
       }
-      // console.log("QnA 목록 조회 성공", res.data);
-    } catch (err) {
-      // console.error("QnA 목록 조회 실패", err);
+    } else {
+      console.error("QnA 목록 조회 실패: success=false");
     }
-  };
+    console.log("QnA 목록 조회 성공", res.data);
+  } catch (err) {
+    console.error("QnA 목록 조회 중 오류", err);
+  }
+};
+
 
   // 상세 조회
   const fetchQnaDetail = async (id) => {
@@ -61,6 +77,8 @@ const AdminQnAContainer = () => {
       if (res.data.success) {
         setCurrentQna(res.data.qna);
         setAnswers(res.data.answers || []);
+
+        console.log("QnA 상세 조회 성공-fetchQnaDetail", res.data);
       }
     } catch (err) {
       console.error("QnA 상세 조회 실패", err);
@@ -88,10 +106,12 @@ const AdminQnAContainer = () => {
       : answeredQnaList;
 
   /** 답변 CRUD */
+  // 답변 등록 
   const handleCreateAnswer = async (e) => {
+    const adminId = getAdminIdSomehow();
     e.preventDefault();
     if (!newAnswer.trim()) return;
-    await createQnaAnswer(currentQna.id, newAnswer);
+    await createQnaAnswer(currentQna.id, newAnswer, adminId);
     setNewAnswer("");
     fetchQnaDetail(currentQna.id);
   };
@@ -104,19 +124,39 @@ const AdminQnAContainer = () => {
     }, 0);
   };
 
-  const saveEditAnswer = async (e) => {
-    e.preventDefault();
-    await updateQnaAnswer(editAnswerId, currentQna.id, editAnswerContent);
+    const getAdminIdSomehow = () => {
+    // 실제 어드민 ID를 가져오는 로직 (예: localStorage, context API 등)
+    // 이 예시에서는 하드코딩된 값을 사용합니다.
+    return 1; 
+  };
+  
+  // 답변 수정
+const saveEditAnswer = async (e) => {
+  e.preventDefault();
+  try {
+    const adminId = getAdminIdSomehow();
+    console.log("adminId",adminId )
+    await updateQnaAnswer(editAnswerId, currentQna.id, editAnswerContent, adminId);
     setEditAnswerId(null);
     setEditAnswerContent("");
     fetchQnaDetail(currentQna.id);
-  };
+  } catch (error) {
+    console.error("답변 수정 실패", error);
+  }
+};
 
+
+  // 답변 삭제
   const removeAnswer = async (id) => {
     if (!window.confirm("삭제하시겠습니까?")) return;
-    await deleteQnaAnswer(id);
-    fetchQnaDetail(currentQna.id);
+    try {
+      await deleteQnaAnswer(id);
+      fetchQnaDetail(currentQna.id);
+    } catch (error) {
+      console.error("답변 삭제 실패", error);
+    }
   };
+
 
   const removeQnaItem = async (id) => {
     if (!window.confirm("질문을 삭제하시겠습니까?")) return;
@@ -126,11 +166,12 @@ const AdminQnAContainer = () => {
     setAnswers([]);
   };
 
+
   return (
     <main className="admin py-5 bg-resonos-dark min-vh-80">
       <div className="container admin-container max-w-1200">
         <h2 className="mb-4 text-light-gold fw-bold">Q&A 관리</h2>
-
+        <CommunityCreate/>
         <SearchForm
           initialKeyword={keyword}
           onSearch={setKeyword}
@@ -151,25 +192,26 @@ const AdminQnAContainer = () => {
               columns={qnaColumns}
               onRowClick={handleRowClick}   
             />
-            {pagination.totalPages > 1 && (
-            <Pagination
-              page={page}
-              first={1}
-              last={pagination.totalPages}
-              prev={page > 1 ? page - 1 : 1}
-              next={page < pagination.totalPages ? page + 1 : pagination.totalPages}
-              start={Math.max(1, page - 4)}
-              end={Math.min(pagination.totalPages, page + 5)}
-              pageUri={`/admin/qna?keyword=${encodeURIComponent(keyword)}`}
-              onPageChange={setPage}   // ✅
-            />
-
+            {pagination.last > 1 && (
+              <Pagination
+                page={page}
+                first={pagination.first}
+                last={pagination.last}
+                prev={pagination.prev > 0 ? pagination.prev : 1}
+                next={pagination.next <= pagination.last ? pagination.next : pagination.last}
+                start={Math.max(1, page - 4)}
+                end={Math.min(pagination.last, page + 5)}
+                pageUri={`/admin/qna?keyword=${encodeURIComponent(keyword)}`} // 기존에 ?가 포함되어 있어 &page=가 붙는게 맞음
+                onPageChange={setPage}
+              />
             )}
+
           </div>
 
           {/* 우측 상세 */}
           <div className="col-md-8">
             <section className="resonos-card p-4 bg-resonos-dark rounded-3 mt-4 overflow-auto qna-detail">
+              {console.log("currentQna : {}", currentQna )}
               {!currentQna ? (
                 <p className="text-center text-muted fs-5">
                   문의글을 선택하세요.

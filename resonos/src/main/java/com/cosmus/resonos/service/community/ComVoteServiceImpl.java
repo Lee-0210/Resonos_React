@@ -81,7 +81,7 @@ public class ComVoteServiceImpl implements ComVoteService {
     @Override
     @Transactional
     public void createVoteWithArguments(ComVote comVote, List<ComVoteArgument> arguments) throws Exception {
-        comVoteMapper.insert(comVote);
+        // comVoteMapper.insert(comVote);
         Long voteId = comVote.getId();
 
         for (ComVoteArgument arg : arguments) {

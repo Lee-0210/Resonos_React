@@ -44,4 +44,10 @@
     SELECT * FROM qna_answer WHERE qna_id = #{qnaId} ORDER BY answered_at DESC
   </select>
 
+  <!-- qna id 기반 answers 모두 삭제 -->
+  <delete id="deleteByQnaId">
+    DELETE FROM qna_answer WHERE qna_id = #{qnaId}
+  </delete>
+  
+
 </mapper>

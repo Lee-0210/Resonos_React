@@ -32,9 +32,14 @@ public class AdminQnAController {
     public ResponseEntity<?> getQnaList(
             @RequestParam(value="page", defaultValue = "1") int page,
             @RequestParam(value="size", defaultValue = "10") int size,
-            @RequestParam(value="keyword", defaultValue = "") String keyword) {
+            @RequestParam(value="keyword", defaultValue = "") String keyword) throws Exception {
 
-        Pagination pagination = new Pagination(page, size, 10, qnaService.count(keyword )); // 10은 노출 페이지 수
+
+        long total = keyword.isBlank()
+        ? qnaService.list().size()
+        : qnaService.count(keyword);
+
+        Pagination pagination = new Pagination(page, size, 10, total); // 10은 노출 페이지 수
         List<Qna> allQnaList = qnaService.getAll(keyword, pagination.getIndex(), pagination.getSize());
         List<Qna> noAnswerQnaList = qnaService.getNoAnswer(keyword, pagination.getIndex(), pagination.getSize());
         List<Qna> answeredQnaList = qnaService.getAnswered(keyword, pagination.getIndex(), pagination.getSize());
@@ -75,15 +80,19 @@ public class AdminQnAController {
         qnaAnswerService.insert(answer);
         return ResponseEntity.ok(Map.of("success", true));
     }
-
+    // 답변 수정 
     @PutMapping("/{id}/answers/{answerId}")
     public ResponseEntity<?> updateAnswer(@PathVariable("id") Long id, @PathVariable("answerId") Long answerId, @RequestBody QnaAnswer answer) throws Exception {
         answer.setId(answerId);
         answer.setQnaId(id);
+        // answeredAt 값이 없으면 현재 시각 세팅
+    if (answer.getAnsweredAt() == null) {
+        answer.setAnsweredAt(new Date());
+    }
         qnaAnswerService.update(answer);
         return ResponseEntity.ok(Map.of("success", true));
     }
-
+    // 답변 삭제 
     @DeleteMapping("/answers/{answerId}")
     public ResponseEntity<?> deleteAnswer(@PathVariable("answerId") Long answerId) throws Exception {
         qnaAnswerService.delete(answerId);
@@ -93,9 +102,13 @@ public class AdminQnAController {
     // 질문 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteQna(@PathVariable("id") Long id) throws Exception {
+        qnaAnswerService.deleteByQnaId(id);
         qnaService.delete(id);
         return ResponseEntity.ok(Map.of("success", true));
     }
+
+    
+
 
 
 

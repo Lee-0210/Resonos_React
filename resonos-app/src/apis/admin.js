@@ -425,25 +425,30 @@ export const getQnaDetail = (id) =>
   axios.get(`/admin/qna/${id}`);
 
 // QnA 답변 등록
-export const createQnaAnswer = (qnaId, content) =>
-  axios.post(`${qnaPath}/${qnaId}/answer`, { content }, {
+export const createQnaAnswer = (qnaId, content, adminId) =>
+  axios.post(`${qnaPath}/${qnaId}/answers`, { content, adminId}, {
     headers: { "Content-Type": "application/json" },
   });
 
 // QnA 답변 수정
-export const updateQnaAnswer = (answerId, qnaId, content) =>
-  axios.put(`${qnaPath}/answer/${answerId}`, { qnaId, content }, {
+export const updateQnaAnswer = (answerId, qnaId, content, adminId) =>
+  axios.put(`${qnaPath}/${qnaId}/answers/${answerId}`, { content, adminId }, {
     headers: { "Content-Type": "application/json" },
   });
 
 // QnA 답변 삭제
 export const deleteQnaAnswer = (answerId) =>
-  axios.delete(`${qnaPath}/answer/${answerId}`);
+  axios.delete(`${qnaPath}/answers/${answerId}`);
 
 // QnA 질문 삭제
 export const deleteQna = (id) =>
   axios.delete(`${qnaPath}/${id}`);
 
+// QnA community 생성
+export const communityCreate = (communityData) =>
+  axios.post("/community", communityData, {
+    headers: { "Content-Type": "application/json" },
+  });
 
 
 // admin - QnA 페이지  하단 ##########################################################################################
