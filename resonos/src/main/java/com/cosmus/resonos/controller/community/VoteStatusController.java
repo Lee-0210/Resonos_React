@@ -101,10 +101,12 @@ public class VoteStatusController {
             if (vote != null) {
                 Long voteId = vote.getId();
                 log.info("voteId : {}", voteId);
-                arguments = boardPostService.getArgumentsByVoteId(voteId + 1);
+                arguments = boardPostService.getArgumentsByVoteId(voteId);
                 log.info("arguments : {}", arguments);
                 
                 // postId 설정 및 arguments 설정
+                
+
                 vote.setPostId(postId);
                 if (arguments != null) {
                     vote.setArguments(arguments);
@@ -114,7 +116,8 @@ public class VoteStatusController {
 
             // 단일 vote 객체로 반환
             response.put("vote", vote);
-            
+                log.info("votestutscontroller");
+                log.info("vote : {}", vote);
             if (result) {
                 response.put("status", "SUCCESS");
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
