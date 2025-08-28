@@ -310,7 +310,6 @@ public class CombinedTrackService {
         }
     }
 
-
     // 플레이리스트에 해당 트랙 추가
     public ResponseEntity<?> addTrackToPlaylist(Long playlistId, String trackId, CustomUser loginUser) {
         if (loginUser == null) {
