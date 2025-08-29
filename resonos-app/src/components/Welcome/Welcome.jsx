@@ -15,12 +15,17 @@ const Welcome = () => {
     const [isLight, setIsLight] = useState(false);
 
     useEffect(() => {
+        // 경로 변경 감지
+        setIsLight(document.body.classList.contains('light-mode'));
+
+        // body 클래스 변경 감지
         const observer = new MutationObserver(() => {
             setIsLight(document.body.classList.contains('light-mode'));
         });
         observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
         return () => observer.disconnect();
-    }, []);
+    }, [location]);
 
     useEffect(() => {
         const returnTo = sessionStorage.getItem('returnTo');
