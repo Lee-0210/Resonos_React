@@ -951,3 +951,10 @@ figure iframe {
   text-align: center;
   margin-bottom: 20px;
 }
+
+.onlywriter.for-manager {
+  border: 1px solid crimson;
+  padding: 10px;
+  border-radius: 10px;
+  color: crimson;
+}

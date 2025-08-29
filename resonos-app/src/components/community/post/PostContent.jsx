@@ -218,7 +218,9 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
         {
           isManager.current
             ?
-            <div className="onlywriter">
+            <div className="onlywriter for-manager">
+              <p className="subtitle">관리자 메뉴</p>
+              <Link className='btn btn-gold' to={`/community/boards/${ids.boardId}`}>목록으로</Link>
               <Link className='btn btn-gold' to={`/community/edit/boards/${ids.boardId}/posts/${ids.postId}`}>수정하기</Link>
               <button className='btn btn-gold' href="#" onClick={() => postDelete(true)}>삭제하기</button>
             </div>
