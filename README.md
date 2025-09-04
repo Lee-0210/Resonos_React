@@ -1,3 +1,74 @@
+🔧 기술 스택 (Tech Stack)
+## 🛠 기술 스택
+- **Backend**: Spring Boot (MVC, Security)
+- **Database**: MyBatis (DB 매퍼)
+- **Frontend**: React (SPA, Vite)
+- **UI**: Tailwind CSS, Bootstrap5, CKEditor5, Chart.js
+- **Auth**: JWT, Spring Security, OAuth2 소셜 로그인 (Kakao, Naver, Google)
+- **Infra**: REST API 서버, 내장 Tomcat
+- **External API**: Spotify, YouTube API
+- **Scheduler**: 자동화 배지 지급
+
+
+📝 주요 기능 (Features)
+1. 커뮤니티 (Community Board)
+- 게시판 생성/조회/삭제
+- 게시판 별 대표 음악(track) 설정 (Spotify 연동)
+- 게시판 소개글 수정 (관리자/매니저 권한)
+
+3. 게시글 (Post)
+- 회원/비회원 게시글 작성
+- 썸네일, 대표 음악 ID 지원
+- 게시글 수정/삭제 (권한 및 비밀번호 기반 검증)
+- 게시글 조회: 조회수 증가 로직 (쿠키 / 세션 기반 중복 방지)
+- 게시글 신고 (로그인 필요), 관리자 검토 프로세스 포함
+
+3. 댓글 (Comment)
+- 회원/비회원 댓글 작성 및 수정/삭제
+- 대댓글(트리 구조) 지원
+- 댓글 좋아요/싫어요 기능
+- 비로그인 사용자는 닉네임+비밀번호 기반 관리 (암호화 저장)
+
+4. 투표 (Vote)
+- 게시글에 투표 생성 가능 (항목 2~7개 제한)
+- 투표 종료일 지정 (최소 3시간 이후)
+- 투표 진행/완료 상태 관리
+- 사용자 투표 여부 체크 (중복 방지)
+- 투표 결과 그래프(Chart.js 시각화)
+
+5. 좋아요 / 싫어요 (LikesDislikes)
+- 게시글 및 댓글 단위 좋아요/싫어요
+- 회원 단위 Reaction 중복 방지 처리
+
+6. 검색 & 메인 페이지
+- 커뮤니티/게시글 통합 검색 (더보기/페이징 기능)
+- 메인 페이지 위젯:
+- 화제글(조회수 상위)
+- 최신글, 인기글 (좋아요/댓글 기반), 실시간 인기글 (72시간 기준), 게시판 순위 (글 수 기준 Top7), 신설 게시판
+
+7. 관리자(Admin) 기능
+- 사용자 관리, 회원 권한 변경
+- 배지, 태그, 정책, 신고 내역 관리
+
+🚀 향후 확장성 (Roadmap)
+- 실시간 기능 강화
+- WebSocket(STOMP) 기반 투표 실시간 반영
+- 실시간 댓글 알림 / 채팅 기능
+- 추천/개인화 서비스
+- 게시판/게시글 추천 알고리즘 (최근 활동 기반)
+- 유저 취향 기반 음악/게시글 추천 (Spotify API 활용 가능)
+- 게시판/커뮤니티 팔로우 기능
+- 신고 게시글 자동 처리 룰 (스팸 필터링)
+- 관리자용 대시보드에 실시간 분석(Charts, Graphs)
+
+
+
+
+
+
+
+
+
 ![Image](https://github.com/user-attachments/assets/bd669b2b-1996-4467-b3a7-971e9b7a52ff)
 ![Image](https://github.com/user-attachments/assets/debc3d7d-cff3-41d2-be44-3083f9f3065d)
 ![Image](https://github.com/user-attachments/assets/73b99852-8607-432e-968e-11d8e3b2d4c0)
