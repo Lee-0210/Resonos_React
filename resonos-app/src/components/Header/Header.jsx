@@ -167,11 +167,11 @@ const Header = () => {
                                     </li>
                                 </>
                             }
-                            <Link to="/todo/1:1문의">
-                                1:1문의
-                            </Link>
-
-
+                            <li className="header-menu-wrapper position-relative">
+                                <Link to="/todo/1:1문의">
+                                    1:1문의
+                                </Link>
+                            </li>
                         </div>
                     </div>
 
