@@ -1,4 +1,4 @@
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Musical%20Notes.png" alt="Musical Notes" width="25" height="25" />Resonos-React
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Musical%20Notes.png" alt="Musical Notes" width="25" height="25" /> Resonos-React
 > 음악(앨범, 아티스트, 트랙, 플레이리스트) 리뷰 및 커뮤니티 플랫폼 + 자유 커뮤니티
 --- 
 
