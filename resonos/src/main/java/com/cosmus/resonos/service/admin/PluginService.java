@@ -19,5 +19,7 @@ public interface PluginService {
     public void toggleEnabled(Long id) throws Exception;
     // 플러그인 설정 업데이트
     public boolean pluginUpdate(Long id, Plugin plugin) throws Exception;
+    // 이름 조회
+    public Plugin selectByName(String name) throws Exception;
 
 }

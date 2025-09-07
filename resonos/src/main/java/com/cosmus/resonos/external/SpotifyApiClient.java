@@ -1,32 +1,52 @@
 package com.cosmus.resonos.external;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.Base64;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.cosmus.resonos.domain.admin.ExternalApiConfig;
 import com.cosmus.resonos.domain.review.Album;
 import com.cosmus.resonos.domain.review.Artist;
 import com.cosmus.resonos.domain.review.Track;
+import com.cosmus.resonos.service.admin.ExternalApiConfigService;
 
 @Component
 public class SpotifyApiClient {
 
     // @Value("${spotify.client-id}")
-    private String clientId;
+    // private String clientId;
     // @Value("${spotify.client-secret}")
-    private String clientSecret;
+    // private String clientSecret;
+
+    @Autowired
+    private ExternalApiConfigService externalApiConfigService;
+
+
 
     private final WebClient webClient = WebClient.create("https://api.spotify.com/v1");
 
     /** 1. 토큰 발급 */
     public String getAccessToken() {
+        ExternalApiConfig config = null;
+        try {
+            config = externalApiConfigService.selectByProvider("spotify");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        String clientId = config.getApiKey().trim();
+        String clientSecret = config.getSecret().trim();
+
         String tokenUrl = "https://accounts.spotify.com/api/token";
         String credentials = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes());
         Map<String, String> formData = Map.of("grant_type", "client_credentials");
