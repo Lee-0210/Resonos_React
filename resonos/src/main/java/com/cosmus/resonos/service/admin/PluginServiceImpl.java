@@ -52,4 +52,9 @@ public class PluginServiceImpl implements PluginService {
         return pluginMapper.update(plugin) > 0;
     }
 
+    @Override
+    public Plugin selectByName(String name) throws Exception {
+        return pluginMapper.selectByName(name);
+    }
+
 }

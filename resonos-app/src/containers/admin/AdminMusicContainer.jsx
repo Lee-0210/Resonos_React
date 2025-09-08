@@ -106,6 +106,7 @@ const AdminMusicContainer = () => {
     setKeyword('');
     setShowAddForm(false);
     fetchData(tab, 1, pagination.size, '');
+    console.log("searchSpotifyArtist", searchSpotifyArtist);
   };
 
   /** DB 검색 */

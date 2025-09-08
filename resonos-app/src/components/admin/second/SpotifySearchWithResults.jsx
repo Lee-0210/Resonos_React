@@ -11,7 +11,7 @@ const handleSearch = async (kw) => {
   try {
     const res = await searchFn(kw);
     const data = res.data || {};
-    // console.log('Spotify artist search response:', data);
+    console.log('Spotify artist search response:', data);
     
 
     // API 구조에 맞게 artists 배열 추출

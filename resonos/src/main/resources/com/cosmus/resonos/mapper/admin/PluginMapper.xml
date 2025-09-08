@@ -46,4 +46,9 @@
     WHERE id = #{id}
   </update>
 
+  <!-- 조회 이름 -->
+  <select id="selectByName" resultMap="PluginResultMap">
+  SELECT * FROM plugin WHERE name = #{name}
+  ㄴ</select>
+
 </mapper>

@@ -52,4 +52,9 @@ public class ExternalApiConfigServiceImpl implements ExternalApiConfigService {
         config.setId(id);
         return mapper.update(config) > 0;
     }
+
+    @Override
+    public ExternalApiConfig selectByProvider(String provider) throws Exception {
+        return mapper.selectByProvider(provider);
+    }
 }
