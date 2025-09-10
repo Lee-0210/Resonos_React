@@ -141,7 +141,8 @@ function JoinForm() {
           }
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate('/list/main')
+            // jwt 인식하게 하려고
+            location.href = '/list/main'
           }
         })
       }
