@@ -161,7 +161,9 @@ const Album = () => {
 
       const updatedResponse = response.data
       setScore(updatedResponse.score);
-      // setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
+      if(reviews.length < 10) {
+        setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
+      }
       swal.fire({
         title: '성공',
         text: '리뷰가 성공적으로 작성되었습니다.',
@@ -393,21 +395,8 @@ const Album = () => {
   }
 
   if (loading) {
-    return (
-      <div style={{ position: 'relative', height: '300px' }}>
-        <TextPressure
-          text="LOADING...!"
-          flex={true}
-          alpha={false}
-          stroke={false}
-          width={true}
-          weight={true}
-          italic={true}
-          textColor="#ffffff"
-          strokeColor="#ff0000"
-          minFontSize={36}
-        />
-      </div>
+      return (
+      <div style={{height: '1000px' }}></div>
     )
   }
   return (

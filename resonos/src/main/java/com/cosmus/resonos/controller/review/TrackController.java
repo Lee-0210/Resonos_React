@@ -67,7 +67,7 @@ public class TrackController {
     @PutMapping("/reviews")
     public ResponseEntity<?> reviewUpdate(@RequestParam("id") String trackId, @RequestBody ReviewForm form) {
         // 폼의 아이디는 리뷰아이디
-        return combinedTrackService.reviewUpdate(form.getId(), form, trackId);
+        return combinedTrackService.reviewUpdate(form, trackId);
     }
 
     // 리뷰 삭제시 트랙 점수 새로 리턴

@@ -139,6 +139,16 @@ export const deleteTrackReview = async (trackId, reviewId) => {
   })
 }
 
+// 트랙 리뷰 수정
+export const updateTrackReview = async (trackId, data) => {
+  return await api.put('/tracks/reviews', data, {
+    params : {
+      id : trackId
+    }
+  })
+}
+
+
 // 트랙 분위기 투표
 export const voteTrackMood = async (dto) => {
   return await api.post('/tracks/vote', dto)
