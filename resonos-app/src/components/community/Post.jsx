@@ -27,6 +27,8 @@ const Post = () => {
   const isManager = useRef(false)
 
   const navigate = useNavigate()
+  const [voteEnd, setVoteEnd] = useState(false)
+
 
 
   // 게시판 초기 로딩
@@ -36,6 +38,7 @@ const Post = () => {
         setIsLoading(true)
         const response = await api.getPostData({ boardId, postId })
         const data = response.data
+        console.log(data)
         setPost(data.post)
         setComments(data.comments)
         setPagination(data.commentsPagination)
@@ -55,8 +58,9 @@ const Post = () => {
           }))
           setComments(formatted)
         }
-        if (userInfo)
+        if (userInfo) {
           isManager.current = data.post.community.creatorId === userInfo.id
+        }
 
         setIsLoading(false)
       } catch (error) {
@@ -74,6 +78,18 @@ const Post = () => {
 
   }, [boardId, postId])
 
+
+  useEffect(() => {
+    if (vote && vote.closedAt) {
+      const voteEstimate = new Date(vote.closedAt)
+      const now = new Date()
+      if (voteEstimate < now) {
+        setVoteEnd(true)
+      } else {
+        setVoteEnd(false)
+      }
+    }
+  }, [vote])
 
   // 회원, 비회원 게시글 삭제
   const deletePost = async (pw, ids, isLogged) => {
@@ -173,7 +189,7 @@ const Post = () => {
 
   if (isLoading) {
     return (
-      <div style={{height: '1000px' }}></div>
+      <div style={{ height: '1000px' }}></div>
     )
   }
   return (
@@ -181,7 +197,7 @@ const Post = () => {
       <div className="post-wrapper">
         <div className="container">
           <PostTitle post={post} />
-          <PostContent post={post} ids={{ boardId, postId }} swal={swal}
+          <PostContent post={post} ids={{ boardId, postId }} swal={swal} voteEnd={voteEnd}
             isLogin={isLogin} userInfo={userInfo} api={api} initVote={vote}
             deletePost={deletePost} reportPost={reportPost} isManager={isManager}
           />
