@@ -48,7 +48,6 @@ const Track = () => {
       try {
         const response = await api.getTrackPage(id);
         const data = response.data;
-        console.log(data)
         // 가져온 데이터를 각각의 상태에 설정합니다.
         setTrack(data.track);
         setAlbum(data.album);
@@ -267,7 +266,6 @@ const Track = () => {
     try {
       const response = await api.writeTrackReview(track.id, reviewForm);
       const data = response.data
-      console.log(data)
       setScore(data.score);
       setReviews(prevReviews => [data.review, ...prevReviews || [] ]);
       swal.fire({
