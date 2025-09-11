@@ -161,9 +161,7 @@ const Album = () => {
 
       const updatedResponse = response.data
       setScore(updatedResponse.score);
-      if(reviews.length < 10) {
-        setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
-      }
+      setReviews(prevReviews => [updatedResponse.review, ...prevReviews]);
       swal.fire({
         title: '성공',
         text: '리뷰가 성공적으로 작성되었습니다.',
@@ -178,6 +176,15 @@ const Album = () => {
           title: '로그인이 필요합니다',
           text: '로그인시 사용 가능한 기능입니다.',
           icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      } else if (error.status === 409) {
+        swal.fire({
+          title: '오류',
+          text: '리뷰를 이미 작성하셨습니다.',
+          icon: 'error',
           customClass: {
             popup: 'album-wrapper'
           }
@@ -395,8 +402,8 @@ const Album = () => {
   }
 
   if (loading) {
-      return (
-      <div style={{height: '1000px' }}></div>
+    return (
+      <div style={{ height: '1000px' }}></div>
     )
   }
   return (

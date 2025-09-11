@@ -1,10 +1,14 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // 테마 컨텍스트 생성
 const ThemeContext = createContext();
 
 // 테마 프로바이더 컴포넌트
 export const ThemeProvider = ({ children }) => {
+
+  // const location = useLocation();
+
   // 초기 테마 상태 (localStorage에서 불러오거나 기본값은 'dark')
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -13,6 +17,16 @@ export const ThemeProvider = ({ children }) => {
     }
     return 'dark';
   });
+
+  // useEffect(() => {
+  //   const forceDarkRoutes = ["/albums", "/tracks", "/artists"];
+  //   if (forceDarkRoutes.includes(location.pathname)) {
+  //     if (theme !== "dark") {
+  //       setTheme("dark");
+  //       window.location.reload();
+  //     }
+  //   }
+  // }, [location.pathname, theme]);
 
   // 테마 변경 시 HTML에 적용하고 localStorage에 저장
   useEffect(() => {
@@ -33,6 +47,7 @@ export const ThemeProvider = ({ children }) => {
       localStorage.setItem('theme', theme);
     }
   }, [theme]);
+
 
   // 테마 토글 함수
   const toggleTheme = () => {
@@ -334,7 +349,7 @@ nav a:hover {
   }, []);
 
   return (
-          <ThemeToggle />
+    <ThemeToggle />
   );
 };
 

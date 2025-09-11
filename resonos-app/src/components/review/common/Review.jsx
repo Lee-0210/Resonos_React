@@ -6,8 +6,8 @@ import Reviews from './Reviews'
 import ReviewForm from './ReviewForm'
 
 const Review = ({ reviewType, score, styles, reviews, hasNext,
-      userId, isAdmin, album, track, handleSubmitReview, deleteReview,
-      loadMoreReviews, page, updateReview, toggleReviewLike, reportReview }) => {
+  userId, isAdmin, album, track, handleSubmitReview, deleteReview,
+  loadMoreReviews, page, updateReview, toggleReviewLike, reportReview }) => {
 
   const location = useLocation();
 
@@ -43,12 +43,26 @@ const Review = ({ reviewType, score, styles, reviews, hasNext,
           {score != null && score.averageScore !== undefined ? (
             <ReviewScore score={score} styles={styles} />
           )
-          :
-          (
-            <h1 className={styles.headline}>첫 리뷰를 작성해보세요 🤩</h1>
-          )}
+            :
+            (
+              <h1 className={styles.headline}>첫 리뷰를 작성해보세요 🤩</h1>
+            )}
         </div>
         <div className="review-container">
+          {/* 로그인 여부에 따른 리뷰 작성 UI */}
+          {userId == null ? (
+            <div className="d-flex gap-3 align-items-center">
+              <p className={styles.headline} style={{ padding: '10px', marginBottom: '0px' }}>
+                로그인시 리뷰작성과 점수투표가 가능합니다.
+              </p>
+              <Link id="login-review" to="/login" className={`btn ${styles['btn-gold']}`}>
+                로그인
+              </Link>
+            </div>
+          ) : (
+            <ReviewForm styles={styles} reviewType={reviewType}
+              handleSubmitReview={handleSubmitReview} />
+          )}
           <ul className={styles.reviewList}>
             {reviews != null && reviews.length > 0 ? (
               <Reviews reviews={reviews} reviewType={reviewType} size={10}
@@ -64,26 +78,13 @@ const Review = ({ reviewType, score, styles, reviews, hasNext,
           {hasNext && (
             <div className="d-flex justify-content-center mb-1">
               <div className="more-box d-flex gap-3">
-                <button id="load-more-btn" onClick={()=> loadMoreReviews(page)} className={`btn ${styles['btn-gold']}`}>
+                <button id="load-more-btn" onClick={() => loadMoreReviews(page)} className={`btn ${styles['btn-gold']}`}>
                   리뷰 더보기
                 </button>
               </div>
             </div>
           )}
-          {/* 로그인 여부에 따른 리뷰 작성 UI */}
-          {userId == null ? (
-            <div className="d-flex gap-3 align-items-center">
-              <p className={styles.headline} style={{ padding: '10px', marginBottom: '0px' }}>
-                로그인시 리뷰작성과 점수투표가 가능합니다.
-              </p>
-              <Link id="login-review" to="/login" className={`btn ${styles['btn-gold']}`}>
-                로그인
-              </Link>
-            </div>
-          ) : (
-            <ReviewForm styles={styles} reviewType={reviewType}
-            handleSubmitReview={handleSubmitReview} />
-          )}
+
         </div>
       </div>
       {/* 평점 리뷰 끝 */}

@@ -117,7 +117,6 @@ const Track = () => {
   const addTrackToPlaylist = async (plId, trackId) => {
     try {
       const response = await api.addTrackToPlaylist(plId, trackId)
-      console.log(response)
       if(response.status === 200) {
         setPlayLists(response.data.playLists)
         setEmptyPlayList(false)
@@ -269,9 +268,7 @@ const Track = () => {
       const response = await api.writeTrackReview(track.id, reviewForm);
       const updatedResponse = response.data
       setScore(updatedResponse.score);
-      if(reviews.length < 10) {
-        setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
-      }
+      setReviews(prevReviews => [updatedResponse.review, ...prevReviews]);
       swal.fire({
         title: '리뷰 작성 완료',
         text: '리뷰가 성공적으로 작성되었습니다.',
@@ -281,14 +278,25 @@ const Track = () => {
         }
       })
     } catch (error) {
-      swal.fire({
-        title: '오류',
-        text: '리뷰 작성 중 오류가 발생했습니다.',
-        icon: 'error',
-        customClass: {
-          popup: 'album-wrapper'
-        }
-      })
+      if(error.status === 429) {
+        swal.fire({
+          title: '오류',
+          text: '리뷰를 이미 작성하셨습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      } else {
+        swal.fire({
+          title: '오류',
+          text: '리뷰 작성 중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
     }
   }
 
