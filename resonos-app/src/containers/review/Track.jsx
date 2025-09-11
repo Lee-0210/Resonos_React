@@ -48,7 +48,7 @@ const Track = () => {
       try {
         const response = await api.getTrackPage(id);
         const data = response.data;
-
+        console.log(data)
         // 가져온 데이터를 각각의 상태에 설정합니다.
         setTrack(data.track);
         setAlbum(data.album);
@@ -117,7 +117,7 @@ const Track = () => {
   const addTrackToPlaylist = async (plId, trackId) => {
     try {
       const response = await api.addTrackToPlaylist(plId, trackId)
-      if(response.status === 200) {
+      if (response.status === 200) {
         setPlayLists(response.data.playLists)
         setEmptyPlayList(false)
         swal.fire({
@@ -266,9 +266,10 @@ const Track = () => {
     }
     try {
       const response = await api.writeTrackReview(track.id, reviewForm);
-      const updatedResponse = response.data
-      setScore(updatedResponse.score);
-      setReviews(prevReviews => [updatedResponse.review, ...prevReviews]);
+      const data = response.data
+      console.log(data)
+      setScore(data.score);
+      setReviews(prevReviews => [data.review, ...prevReviews || [] ]);
       swal.fire({
         title: '리뷰 작성 완료',
         text: '리뷰가 성공적으로 작성되었습니다.',
@@ -278,7 +279,7 @@ const Track = () => {
         }
       })
     } catch (error) {
-      if(error.status === 429) {
+      if (error.status === 429) {
         swal.fire({
           title: '오류',
           text: '리뷰를 이미 작성하셨습니다.',
@@ -301,35 +302,35 @@ const Track = () => {
   }
 
   // 리뷰 수정
-    const updateReview = async (reviewForm) => {
-      try {
-        const reponse = await api.updateTrackReview(id, reviewForm);
-        const data = reponse.data
-        setReviews(prevReviews => prevReviews.map(review =>
-          review.id === data.updatedReview.id
-            ? { ...review, content: data.updatedReview.content, rating: data.updatedReview.rating }
-            : review
-        ));
-        setScore(data.updatedScore)
-        swal.fire({
-          title: '성공',
-          text: '리뷰가 성공적으로 수정되었습니다.',
-          icon: 'success',
-          customClass: {
-            popup: 'album-wrapper'
-          }
-        })
-      } catch (error) {
-        swal.fire({
-          title: '오류',
-          text: '리뷰 수정 중 오류가 발생했습니다.',
-          icon: 'error',
-          customClass: {
-            popup: 'album-wrapper'
-          }
-        })
-      }
+  const updateReview = async (reviewForm) => {
+    try {
+      const reponse = await api.updateTrackReview(id, reviewForm);
+      const data = reponse.data
+      setReviews(prevReviews => prevReviews.map(review =>
+        review.id === data.updatedReview.id
+          ? { ...review, content: data.updatedReview.content, rating: data.updatedReview.rating }
+          : review
+      ));
+      setScore(data.updatedScore)
+      swal.fire({
+        title: '성공',
+        text: '리뷰가 성공적으로 수정되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
+    } catch (error) {
+      swal.fire({
+        title: '오류',
+        text: '리뷰 수정 중 오류가 발생했습니다.',
+        icon: 'error',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     }
+  }
 
   // 리뷰 삭제
   const deleteReview = async (trackId, reviewId) => {
@@ -405,7 +406,7 @@ const Track = () => {
 
   if (loading) {
     return (
-      <div style={{height: '1000px' }}></div>
+      <div style={{ height: '1000px' }}></div>
     )
   }
 
