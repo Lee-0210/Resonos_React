@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import * as api from '../../apis/review'
 import styles from './Artist.module.css'
-import TextPressure from '../../assets/TextPressure';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ArtistInfo from '../../components/review/artist/ArtistInfo';
 import ArtistTop7 from '../../components/review/artist/ArtistTop7';
 import ArtistRecent from '../../components/review/artist/ArtistRecent';
@@ -15,6 +14,7 @@ const Artist = () => {
 
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
+  const navigate = useNavigate();
 
   // 아티스트 기본 정보
   const [artist, setArtist] = useState(null);
@@ -86,6 +86,7 @@ const Artist = () => {
             popup: 'album-wrapper'
           }
         })
+        navigate('/')
       } finally {
         setLoading(false); // 로딩 상태 종료
       }

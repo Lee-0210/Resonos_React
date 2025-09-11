@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import * as api from "../../apis/review"
 import styles from './Track.module.css'
 import TrackInfo from '../../components/review/track/TrackInfo';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
 import MoodStatus from '../../components/review/common/MoodStatus';
-import TextPressure from '../../assets/TextPressure';
-import TrackStatus from '../../components/review/track/TrackStatus';
 import swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
 import SlideIn from '../../components/review/SlideIn';
@@ -16,6 +14,7 @@ const Track = () => {
 
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
+  const navigate = useNavigate();
 
   // DTO의 모든 필드를 개별 useState로 분리
   const [track, setTrack] = useState(null);
@@ -80,6 +79,7 @@ const Track = () => {
             popup: 'album-wrapper'
           }
         })
+        navigate('/')
       } finally {
         setLoading(false);
       }

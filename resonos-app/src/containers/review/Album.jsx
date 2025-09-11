@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as api from "../../apis/review"
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import styles from './Album.module.css'
 import AlbumInfo from '../../components/review/album/AlbumInfo';
 import swal from 'sweetalert2';
@@ -8,7 +8,6 @@ import withReactContent from 'sweetalert2-react-content'
 import AlbumStatus from '../../components/review/album/AlbumStatus';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
-import TextPressure from '../../assets/TextPressure';
 import Element from '../../components/review/album/Element';
 import SlideIn from '../../components/review/SlideIn';
 
@@ -18,6 +17,7 @@ const Album = () => {
 
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
+  const navigate = useNavigate();
 
   // 앨범 기본 정보
   const [album, setAlbum] = useState(null);
@@ -107,6 +107,7 @@ const Album = () => {
               popup: 'album-wrapper'
             }
           })
+          navigate('/')
         } finally {
           setLoading(false);
         }
