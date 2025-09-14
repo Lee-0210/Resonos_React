@@ -161,7 +161,8 @@ const Post = () => {
     if (result.isConfirmed) {
       try {
         const response = await api.reportPost(ids)
-        if (response.status === 200) {
+        // 신고 관련 처리로직이 없는듯?
+        if (response.status === 201) {
           swal.fire({
             title: '신고 완료',
             text: '게시글이 신고되었습니다.',
