@@ -168,7 +168,7 @@ public class BoardPostController {
                 // 로그인한 유저의 투표 참여 여부 확인
                 if (userId != null) {
                     log.info("userId : {}, voteId : {}", userId, vote.getId());
-                    hasUserVoted = boardPostService.hasUserVoted(vote.getId() + 1, userId);
+                    hasUserVoted = boardPostService.hasUserVoted(vote.getId(), userId);
                     log.info("hasUserVoted : {}", hasUserVoted);
                     // argId가 아닌 vote Id로 수정해야함
                 }
