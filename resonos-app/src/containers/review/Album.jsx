@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import * as api from "../../apis/review"
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import styles from './Album.module.css'
 import AlbumInfo from '../../components/review/album/AlbumInfo';
 import swal from 'sweetalert2';
@@ -8,7 +8,6 @@ import withReactContent from 'sweetalert2-react-content'
 import AlbumStatus from '../../components/review/album/AlbumStatus';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
-import TextPressure from '../../assets/TextPressure';
 import Element from '../../components/review/album/Element';
 import SlideIn from '../../components/review/SlideIn';
 
@@ -18,6 +17,7 @@ const Album = () => {
 
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
+  const navigate = useNavigate();
 
   // 앨범 기본 정보
   const [album, setAlbum] = useState(null);
@@ -107,6 +107,7 @@ const Album = () => {
               popup: 'album-wrapper'
             }
           })
+          navigate('/')
         } finally {
           setLoading(false);
         }
@@ -161,7 +162,7 @@ const Album = () => {
 
       const updatedResponse = response.data
       setScore(updatedResponse.score);
-      // setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
+      setReviews(prevReviews => [updatedResponse.review, ...prevReviews || []]);
       swal.fire({
         title: '성공',
         text: '리뷰가 성공적으로 작성되었습니다.',
@@ -176,6 +177,15 @@ const Album = () => {
           title: '로그인이 필요합니다',
           text: '로그인시 사용 가능한 기능입니다.',
           icon: 'warning',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      } else if (error.status === 409) {
+        swal.fire({
+          title: '오류',
+          text: '리뷰를 이미 작성하셨습니다.',
+          icon: 'error',
           customClass: {
             popup: 'album-wrapper'
           }
@@ -394,20 +404,7 @@ const Album = () => {
 
   if (loading) {
     return (
-      <div style={{ position: 'relative', height: '300px' }}>
-        <TextPressure
-          text="LOADING...!"
-          flex={true}
-          alpha={false}
-          stroke={false}
-          width={true}
-          weight={true}
-          italic={true}
-          textColor="#ffffff"
-          strokeColor="#ff0000"
-          minFontSize={36}
-        />
-      </div>
+      <div style={{ height: '1000px' }}></div>
     )
   }
   return (

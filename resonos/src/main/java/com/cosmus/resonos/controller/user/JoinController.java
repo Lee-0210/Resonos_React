@@ -2,9 +2,12 @@ package com.cosmus.resonos.controller.user;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmus.resonos.domain.CustomUser;
+import com.cosmus.resonos.domain.user.UserAuth;
 import com.cosmus.resonos.domain.user.Users;
+import com.cosmus.resonos.security.provider.JwtProvider;
 import com.cosmus.resonos.service.user.UserService;
 import com.cosmus.resonos.util.EmailService;
 import com.cosmus.resonos.util.RandomPassword;
@@ -38,9 +43,8 @@ import lombok.extern.slf4j.Slf4j;
 public class JoinController {
 
   @Autowired private UserService userService;
-
-
   @Autowired EmailService emailSErvice;
+  @Autowired JwtProvider jwtProvider;
 
   /**
    * 로그인 화면
@@ -80,8 +84,8 @@ public class JoinController {
    * @throws Exception
    */
   @PostMapping("/join")
-  public String joinPost(@Validated({UsernameCheck.class, EmailCheck.class, PasswordCheck.class, NicknameCheck.class})
-  @ModelAttribute Users user, BindingResult br, HttpServletRequest request) throws Exception {
+  public ResponseEntity<?> joinPost(@Validated({UsernameCheck.class, EmailCheck.class, PasswordCheck.class, NicknameCheck.class})
+  @RequestBody Users user, BindingResult br, HttpServletRequest request) throws Exception {
 
     log.info("회원가입 시도 유저 정보 : {}", user);
 
@@ -90,27 +94,31 @@ public class JoinController {
     boolean checkNickname = userService.findByNickname(user.getNickname());
     if (br.hasErrors() || checkUsername || checkNickname) {
       log.info("유효성 검사 실패");
-      return "/join";
+      return ResponseEntity.badRequest().body(br.getFieldErrors());
     }
 
-    /* 회원가입 */
-    String plainPassword = user.getPassword();
     // 회원 가입 요청
     boolean result = userService.join(user);
     // 회원 가입 성공 시, 바로 로그인 ⚡🔐
-    boolean loginResult = false;
     if(result) {
-      user.setPassword(plainPassword);
-      loginResult = userService.login(user, request);  // ⚡🔐 바로 로그인
+      List<String> roles = List.of("ROLE_USER");
+
+      String token = jwtProvider.createToken(String.valueOf(user.getId()), user.getUsername(), roles);
+
+      ResponseCookie cookie = ResponseCookie.from("jwt", token)
+              .httpOnly(true)
+              .path("/")
+              .secure(true)
+              .sameSite("Strict")
+              .build();
+
+
+      return ResponseEntity.ok()
+              .header(HttpHeaders.SET_COOKIE, cookie.toString())
+              .body(Map.of("jwt", token, "username", user.getUsername()));
     }
 
-    // 로그인 성공시 메인 화면
-    if(loginResult) return "redirect:/";
-    // 로그인 실패시 로그인 화면
-    if(result) return "redirect:/login";
-
-    // 회원가입 실패
-    return "redirect:/join?error=true";
+    return ResponseEntity.internalServerError().body("서버에러");
   }
 
   /**

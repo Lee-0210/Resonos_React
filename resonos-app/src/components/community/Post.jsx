@@ -27,6 +27,8 @@ const Post = () => {
   const isManager = useRef(false)
 
   const navigate = useNavigate()
+  const [voteEnd, setVoteEnd] = useState(false)
+
 
 
   // 게시판 초기 로딩
@@ -55,8 +57,9 @@ const Post = () => {
           }))
           setComments(formatted)
         }
-        if (userInfo)
+        if (userInfo) {
           isManager.current = data.post.community.creatorId === userInfo.id
+        }
 
         setIsLoading(false)
       } catch (error) {
@@ -74,6 +77,18 @@ const Post = () => {
 
   }, [boardId, postId])
 
+
+  useEffect(() => {
+    if (vote && vote.closedAt) {
+      const voteEstimate = new Date(vote.closedAt)
+      const now = new Date()
+      if (voteEstimate < now) {
+        setVoteEnd(true)
+      } else {
+        setVoteEnd(false)
+      }
+    }
+  }, [vote])
 
   // 회원, 비회원 게시글 삭제
   const deletePost = async (pw, ids, isLogged) => {
@@ -146,7 +161,8 @@ const Post = () => {
     if (result.isConfirmed) {
       try {
         const response = await api.reportPost(ids)
-        if (response.status === 200) {
+        // 신고 관련 처리로직이 없는듯?
+        if (response.status === 201) {
           swal.fire({
             title: '신고 완료',
             text: '게시글이 신고되었습니다.',
@@ -173,20 +189,7 @@ const Post = () => {
 
   if (isLoading) {
     return (
-      <div style={{ position: 'relative', height: '300px' }}>
-        <TextPressure
-          text="LOADING...!"
-          flex={true}
-          alpha={false}
-          stroke={false}
-          width={true}
-          weight={true}
-          italic={true}
-          textColor="#ffffff"
-          strokeColor="#ff0000"
-          minFontSize={36}
-        />
-      </div>
+      <div style={{ height: '1000px' }}></div>
     )
   }
   return (
@@ -194,7 +197,7 @@ const Post = () => {
       <div className="post-wrapper">
         <div className="container">
           <PostTitle post={post} />
-          <PostContent post={post} ids={{ boardId, postId }} swal={swal}
+          <PostContent post={post} ids={{ boardId, postId }} swal={swal} voteEnd={voteEnd}
             isLogin={isLogin} userInfo={userInfo} api={api} initVote={vote}
             deletePost={deletePost} reportPost={reportPost} isManager={isManager}
           />

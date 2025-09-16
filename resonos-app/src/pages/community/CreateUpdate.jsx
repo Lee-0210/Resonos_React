@@ -17,7 +17,6 @@ function CreateUpdate() {
             setIsLoading(true)
             const response = await api.getPostData({ boardId, postId })
             const data = response.data.post
-            console.log(response.data)
             setPost(data)
           }
           else {

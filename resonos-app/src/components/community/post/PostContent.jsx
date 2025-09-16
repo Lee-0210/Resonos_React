@@ -8,7 +8,7 @@ import VoteArguments from '../card/VoteArguments';
 import * as dfmt from '../../../apis/util'
 
 const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
-  ids, deletePost, reportPost, isManager }) => {
+  ids, deletePost, reportPost, isManager, voteEnd }) => {
 
   const [openPw, setOpenPw] = useState(false)
   const [tempPw, setTempPw] = useState(null)
@@ -27,11 +27,19 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
     }
   }, [vote?.closedAt])
 
+  // 첫 진입시에 userHasVoted false 로만 옴
+  // useEffect(() => {
+  //   console.log(vote)
+  // }, [])
+
+
 
   // 투표
   const contributeVote = async (data) => {
     try {
       const res = await api.contributeVote(data)
+      // console.log(res)
+      // 투표시에만 갱신됨
       if (res.status === 201) {
         swal.fire({
           title: '투표 완료',
@@ -167,9 +175,13 @@ const PostContent = ({ post, swal, api, isLogin, userInfo, initVote,
           <p className='headline'>투표명 : {vote.title}</p>
           <p>투표 기간 : {vote.closedAt} 까지</p>
           <VoteChart vote={vote} />
-          <div className="vote-view-util">
-            <button className='btn btn-gold' onClick={openVote}>{vote.hasUserVoted ? '재투표하기' : '투표하기'}</button>
-          </div>
+          {voteEnd ? (
+            <p>투표가 종료되었습니다.</p>
+          ) : (
+            <div className="vote-view-util">
+              <button className='btn btn-gold' onClick={openVote}>{vote.hasUserVoted ? '재투표하기' : '투표하기'}</button>
+            </div>
+          )}
         </div>
       )}
       {voting && (

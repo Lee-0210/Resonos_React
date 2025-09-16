@@ -5,8 +5,8 @@ import Swal from 'sweetalert2';
 
 
 const TrackInfo = ({ styles, track, album, artist, score,
-          userId, isTrackLikedByUser, trackLikeCount, toggleLike,
-          addTrackToPlaylist, userPlaylist, playLists, emptyPlayList }) => {
+  userId, isTrackLikedByUser, trackLikeCount, toggleLike,
+  addTrackToPlaylist, userPlaylist, playLists, emptyPlayList }) => {
 
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
 
@@ -101,27 +101,27 @@ const TrackInfo = ({ styles, track, album, artist, score,
               <span id="likeText">{isTrackLikedByUser ? '좋아요❤️' : '좋아요🤍'}</span>
               <span id="likeCount">{trackLikeCount}</span>
             </button>
-            <div className={`btn ${styles['btn-gold']}`} 
-            id="addToPlaylistBtn" data-track-id={track.id}
-            onClick={handleAddPlayList}>
+            <div className={`btn ${styles['btn-gold']}`}
+              id="addToPlaylistBtn" data-track-id={track.id}
+              onClick={handleAddPlayList}>
               저장 💾
             </div>
           </div>
         </div>
         <div className={`${styles.info} ${styles.plList}`}>
-        <p className={styles.subtitle}>이 트랙을 포함한 플리🎶</p>
-        {(emptyPlayList || !playLists || playLists.length === 0) && (
-          <>
-            <p>해당 음원을 포함한</p>
-            <p>플레이리스트를 만들어보세요! 🤩</p>
-          </>
-        )}
-        {playLists && playLists.map(playList => (
-          <a key={playList.id} href={`/playlists/${playList.id}`}>
-            <p>{`${playList.title} ❤️${playList.likeCount}`}</p>
-          </a>
-        ))}
-      </div>
+          <p className={styles.subtitle}>이 트랙을 포함한 플리🎶</p>
+          {(emptyPlayList || !playLists || playLists.length === 0) ? (
+            <>
+              <p>해당 음원을 포함한</p>
+              <p>플레이리스트를 만들어보세요! 🤩</p>
+            </>
+          ) : (
+            playLists.map(playList => (
+              <a key={playList.id} href={`/playlists/${playList.id}`}>
+                <p>{`${playList.title} ❤️${playList.likeCount}`}</p>
+              </a>
+            )))}
+        </div>
       </div>
       {/* 트랙 카드 끝 */}
     </>

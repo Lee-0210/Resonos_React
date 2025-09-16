@@ -166,13 +166,13 @@ public class CombinedTrackService {
     }
 
     // 트랙 리뷰 수정
-    public ResponseEntity<?> reviewUpdate(Long reviewId, ReviewForm f, String trackId) {
-        boolean success = trackReviewService.update(reviewId, f);
+    public ResponseEntity<?> reviewUpdate(ReviewForm f, String trackId) {
+        boolean success = trackReviewService.update(f.getId(), f);
         if (!success) {
             return new ResponseEntity<>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             Map<String, Object> updatedStatus = new HashMap<>();
-            TrackReview updatedReview = trackReviewService.findById(reviewId);
+            TrackReview updatedReview = trackReviewService.findById(f.getId());
             TrackScore updatedScore = trackReviewService.getTrackScore(trackId);
             updatedStatus.put("updatedReview", updatedReview);
             updatedStatus.put("updatedScore", updatedScore);

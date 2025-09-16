@@ -36,7 +36,6 @@ const Welcome = () => {
     }, []);
 
     const { isLogin, userInfo } = useContext(LoginContext)
-    console.log(isLight)
 
     return (
         <div className="welcome" style={{ position: 'relative' }}>

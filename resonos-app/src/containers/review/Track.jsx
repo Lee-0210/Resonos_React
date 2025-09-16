@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import * as api from "../../apis/review"
 import styles from './Track.module.css'
 import TrackInfo from '../../components/review/track/TrackInfo';
 import MvAndStreaming from '../../components/review/common/MvAndStreaming';
 import Review from '../../components/review/common/Review';
 import MoodStatus from '../../components/review/common/MoodStatus';
-import TextPressure from '../../assets/TextPressure';
-import TrackStatus from '../../components/review/track/TrackStatus';
 import swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
 import SlideIn from '../../components/review/SlideIn';
@@ -16,6 +14,7 @@ const Track = () => {
 
   const [searchParams] = useSearchParams();
   const id = searchParams.get('id');
+  const navigate = useNavigate();
 
   // DTO의 모든 필드를 개별 useState로 분리
   const [track, setTrack] = useState(null);
@@ -48,7 +47,6 @@ const Track = () => {
       try {
         const response = await api.getTrackPage(id);
         const data = response.data;
-
         // 가져온 데이터를 각각의 상태에 설정합니다.
         setTrack(data.track);
         setAlbum(data.album);
@@ -81,6 +79,7 @@ const Track = () => {
             popup: 'album-wrapper'
           }
         })
+        navigate('/')
       } finally {
         setLoading(false);
       }
@@ -117,14 +116,18 @@ const Track = () => {
   const addTrackToPlaylist = async (plId, trackId) => {
     try {
       const response = await api.addTrackToPlaylist(plId, trackId)
-      swal.fire({
-        title: '성공',
-        text: '플레이리스트에 추가되었습니다.',
-        icon: 'success',
-        customClass: {
-          popup: 'album-wrapper'
-        }
-      })
+      if (response.status === 200) {
+        setPlayLists(response.data.playLists)
+        setEmptyPlayList(false)
+        swal.fire({
+          title: '성공',
+          text: '플레이리스트에 추가되었습니다.',
+          icon: 'success',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
       setPlayLists(response.data.playLists)
     } catch (error) {
       if (error.response.data === 'User is null') {
@@ -262,6 +265,9 @@ const Track = () => {
     }
     try {
       const response = await api.writeTrackReview(track.id, reviewForm);
+      const data = response.data
+      setScore(data.score);
+      setReviews(prevReviews => [data.review, ...prevReviews || [] ]);
       swal.fire({
         title: '리뷰 작성 완료',
         text: '리뷰가 성공적으로 작성되었습니다.',
@@ -270,20 +276,58 @@ const Track = () => {
           popup: 'album-wrapper'
         }
       })
-      const updatedResponse = response.data
-      setScore(updatedResponse.score);
-      // setReviews(prevReviews => [...prevReviews, updatedResponse.review]);
+    } catch (error) {
+      if (error.status === 429) {
+        swal.fire({
+          title: '오류',
+          text: '리뷰를 이미 작성하셨습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      } else {
+        swal.fire({
+          title: '오류',
+          text: '리뷰 작성 중 오류가 발생했습니다.',
+          icon: 'error',
+          customClass: {
+            popup: 'album-wrapper'
+          }
+        })
+      }
+    }
+  }
+
+  // 리뷰 수정
+  const updateReview = async (reviewForm) => {
+    try {
+      const reponse = await api.updateTrackReview(id, reviewForm);
+      const data = reponse.data
+      setReviews(prevReviews => prevReviews.map(review =>
+        review.id === data.updatedReview.id
+          ? { ...review, content: data.updatedReview.content, rating: data.updatedReview.rating }
+          : review
+      ));
+      setScore(data.updatedScore)
+      swal.fire({
+        title: '성공',
+        text: '리뷰가 성공적으로 수정되었습니다.',
+        icon: 'success',
+        customClass: {
+          popup: 'album-wrapper'
+        }
+      })
     } catch (error) {
       swal.fire({
         title: '오류',
-        text: '리뷰 작성 중 오류가 발생했습니다.',
+        text: '리뷰 수정 중 오류가 발생했습니다.',
         icon: 'error',
         customClass: {
           popup: 'album-wrapper'
         }
       })
     }
-
   }
 
   // 리뷰 삭제
@@ -360,41 +404,28 @@ const Track = () => {
 
   if (loading) {
     return (
-      <div style={{ position: 'relative', height: '300px' }}>
-        <TextPressure
-          text="LOADING...!"
-          flex={true}
-          alpha={false}
-          stroke={false}
-          width={true}
-          weight={true}
-          italic={true}
-          textColor="#ffffff"
-          strokeColor="#ff0000"
-          minFontSize={36}
-        />
-      </div>
+      <div style={{ height: '1000px' }}></div>
     )
   }
 
   return (
     <div className={styles.taWrapper}>
-      <SlideIn delay={0.5} direction="up">
+      <SlideIn direction="up">
         <TrackInfo styles={styles} track={track} album={album} artist={artist} score={score}
           userId={userId} isTrackLikedByUser={isTrackLikedByUser} trackLikeCount={trackLikeCount}
           toggleLike={toggleLike} userPlaylist={userPlaylist} playLists={playLists} emptyPlayList={emptyPlayList}
           addTrackToPlaylist={addTrackToPlaylist} />
       </SlideIn>
-      <SlideIn delay={1} direction="up">
+      <SlideIn delay={0.5} direction="up">
         <MvAndStreaming styles={styles} tracks={null} track={track} />
       </SlideIn>
-      <SlideIn delay={1.5} direction="up">
+      <SlideIn delay={1} direction="up">
         <Review styles={styles} reviews={reviews} hasNext={hasNext} userId={userId}
           score={score} isAdmin={isAdmin} album={album} track={track} reviewType={reviewType}
-          loadMoreReviews={loadMoreReviews} page={page} toggleReviewLike={toggleReviewLike}
+          loadMoreReviews={loadMoreReviews} page={page} toggleReviewLike={toggleReviewLike} updateReview={updateReview}
           reportReview={reportReview} deleteReview={deleteReview} handleSubmitReview={handleSubmitReview} />
       </SlideIn>
-      <SlideIn delay={2} direction="up">
+      <SlideIn delay={1.5} direction="up">
         <MoodStatus styles={styles} isMoodEmpty={isMoodEmpty} tags={tags}
           userId={userId} artist={artist} track={track} moodValues={moodValues}
           moodStats={moodStats} userVotedMoodId={userVotedMoodId} moodLabels={moodLabels}
