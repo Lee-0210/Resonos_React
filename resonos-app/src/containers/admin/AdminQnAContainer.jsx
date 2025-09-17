@@ -9,6 +9,9 @@ import FormInput from "../../components/admin/first/FormInput";
 import QuickMenu from "../../components/admin/first/QuickMenu";
 import LoginContextProvider from "../../contexts/LoginContextProvider";
 import CommunityCreate from "../../components/admin/second/CommunityCreate"
+import CommunityIdCreate from "../../components/admin/second/CommunityIdCreate"
+import CommunityCategoryList from "../../components/admin/second/CommunityCategoryList"
+
 
 const AdminQnAContainer = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -172,6 +175,8 @@ const saveEditAnswer = async (e) => {
       <div className="container admin-container max-w-1200">
         <h2 className="mb-4 text-light-gold fw-bold">Q&A 관리</h2>
         <CommunityCreate/>
+        <CommunityCategoryList/>
+        <CommunityIdCreate/>
         <SearchForm
           initialKeyword={keyword}
           onSearch={setKeyword}

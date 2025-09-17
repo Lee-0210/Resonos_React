@@ -30,11 +30,11 @@ public class SpotifyApiClient {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SpotifyApiClient.class);
     
 
-    @Value("${spotify.client-id}")
-    private String clientId;
+    // @Value("${spotify.client-id}")
+    // private String clientId;
     
-    @Value("${spotify.client-secret}")
-    private String clientSecret;
+    // @Value("${spotify.client-secret}")
+    // private String clientSecret;
     
 
     @Autowired
@@ -47,7 +47,6 @@ public class SpotifyApiClient {
     /** 1. 토큰 발급 */
     public String getAccessToken() {
         ExternalApiConfig config = null;
-        System.out.println("SpotifyApiClient - getAccessToken() called");
         try {
             config = externalApiConfigService.selectByProvider("spotify");
         } catch (Exception e) {

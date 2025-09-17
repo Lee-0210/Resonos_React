@@ -450,8 +450,80 @@ export const communityCreate = (communityData) =>
     headers: { "Content-Type": "application/json" },
   });
 
+// QnA communityId 생성
+export const communityCategoryCreate = (categoryData) => {
+  return axios.post('/api/admin/community-category', categoryData);
+};
+
+// 생성 기능 
+// apis/communityCategory.js
+
+const BASE_URL = '/communityCategory'; // Spring Boot Controller의 @RequestMapping과 일치
+
+// 1. 전체 목록 조회 (페이징)
+export const getCommunityCategoryList = async (page = 1, size = 10) => {
+  try {
+    const response = await axios.get(BASE_URL, {
+      params: {
+        page,
+        size
+      }
+    });
+    return response;
+  } catch (error) {
+    console.error('커뮤니티 카테고리 목록 조회 오류:', error);
+    throw error;
+  }
+};
+
+// 2. 단일 카테고리 조회
+export const getCommunityCategoryById = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/${id}`);
+    return response;
+  } catch (error) {
+    console.error('커뮤니티 카테고리 조회 오류:', error);
+    throw error;
+  }
+};
+
+// 3. 카테고리 생성
+export const createCommunityCategory = async (categoryData) => {
+  try {
+    const response = await axios.post(BASE_URL, categoryData);
+    return response;
+  } catch (error) {
+    console.error('커뮤니티 카테고리 생성 오류:', error);
+    throw error;
+  }
+};
+
+// 4. 카테고리 수정
+export const updateCommunityCategory = async (categoryData) => {
+  try {
+    const response = await axios.put(BASE_URL, categoryData);
+    return response;
+  } catch (error) {
+    console.error('커뮤니티 카테고리 수정 오류:', error);
+    throw error;
+  }
+};
+
+// 5. 단일 카테고리 삭제
+export const deleteCommunityCategory = async (id) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/${id}`);
+    return response;
+  } catch (error) {
+    console.error('커뮤니티 카테고리 삭제 오류:', error);
+    throw error;
+  }
+};
+
+
 
 // admin - QnA 페이지  하단 ##########################################################################################
+
 
 
 
