@@ -117,10 +117,10 @@ body {
   color: var(--text-color) !important;
   text-align: center !important;
 }
-.admin .resonos-card:hover {
+/* .admin .resonos-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-strong);
-}
+} */
 section.resonos-card {
   padding: 1.5rem;
   margin-bottom: 1rem;
@@ -769,3 +769,14 @@ html[data-theme='light'] .admin li {
 html[data-theme='light'] .admin li:hover {
  background: var(--hover-bg);
 } */
+
+
+
+/* 추가 수정  */
+
+.admin .btn-big { 
+  height: 40px;
+  width: 160px;
+  font-size: 1.2rem;
+  align-content: center;
+}

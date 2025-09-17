@@ -12,4 +12,5 @@ public class ExternalApiConfig {
     private String secret;
     private Boolean enabled;
     private Date createdAt;
+    private String description; 
 }

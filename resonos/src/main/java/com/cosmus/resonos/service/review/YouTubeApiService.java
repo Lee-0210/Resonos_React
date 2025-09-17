@@ -1,23 +1,28 @@
 package com.cosmus.resonos.service.review;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.text.StringEscapeUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import com.cosmus.resonos.domain.admin.ExternalApiConfig;
+import com.cosmus.resonos.service.admin.ExternalApiConfigService;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 public class YouTubeApiService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // @Value("${youtube.api.key}")
-    private String apiKey;
+    @Autowired
+    private ExternalApiConfigService externalApiConfigService;
+
 
     private static final List<String> EXCLUDED_KEYWORDS = List.of(
             // 기존 제외 키워드
@@ -82,7 +87,21 @@ public class YouTubeApiService {
             "official mv", "official", "studio choom", "relay dance");
 
     public String searchVideoId(String title, String artist) {
+        ExternalApiConfig config = null;
+        {
+            try {
+                config = externalApiConfigService.selectByProvider("youtube");
+                System.out.println("YouTubeApiService - Loaded API Key from DB");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // @Value("${youtube.api.key}")
+        String apiKey = (config != null) ? config.getApiKey() : null;
+
         if (apiKey == null || apiKey.isBlank()) {
+            System.out.println("apikey" + apiKey);
             System.out.println("❗ API 키가 설정되지 않았습니다.");
             return null;
         }

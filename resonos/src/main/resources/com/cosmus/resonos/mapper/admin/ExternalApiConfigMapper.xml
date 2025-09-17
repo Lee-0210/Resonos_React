@@ -11,30 +11,37 @@
     <result property="secret" column="secret"/>
     <result property="enabled" column="enabled"/>
     <result property="createdAt" column="created_at"/>
+    <result property="description" column="description"/>
   </resultMap>
 
+  <!-- 전체 목록 조회 -->
   <select id="list" resultMap="ExternalApiConfigResultMap">
     SELECT * FROM external_api_config ORDER BY created_at DESC
   </select>
 
+  <!-- 단건 조회 -->
   <select id="select" resultMap="ExternalApiConfigResultMap">
     SELECT * FROM external_api_config WHERE id = #{id}
   </select>
 
-  <insert id="insert">
-    INSERT INTO external_api_config (id, provider, apiKey, secret)
-    VALUES (#{id}, #{provider}, #{apiKey}, #{secret})
+  <!-- 등록 -->
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO external_api_config (provider, apiKey, secret, enabled, description)
+    VALUES (#{provider}, #{apiKey}, #{secret}, #{enabled}, #{description})
   </insert>
 
+  <!-- 수정 -->
   <update id="update">
     UPDATE external_api_config
     SET provider = #{provider},
-        enabled = NOT enabled,
         apiKey = #{apiKey},
-        secret = #{secret}
+        secret = #{secret},
+        enabled = NOT enabled,
+        description = #{description}
     WHERE id = #{id}
   </update>
 
+  <!-- 삭제 -->
   <delete id="delete">
     DELETE FROM external_api_config WHERE id = #{id}
   </delete>
@@ -46,11 +53,11 @@
     WHERE id = #{id}
   </update>
 
-  <!-- 검색 -->
-  <select id="selectByProvider">
-  SELECT * FROM external_api_config WHERE provider = #{provider} AND enabled = 1
-  LIMIT 1
-</select>
-
+  <!-- provider별 검색 -->
+  <select id="selectByProvider" resultMap="ExternalApiConfigResultMap">
+    SELECT * FROM external_api_config
+    WHERE provider = #{provider} AND enabled = 1
+    LIMIT 1
+  </select>
 
 </mapper>

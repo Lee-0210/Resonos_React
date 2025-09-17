@@ -87,10 +87,10 @@ body {
   color: var(--text-color) !important;
   text-align: center !important;
 }
-.admin .resonos-card:hover {
+/* .admin .resonos-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-strong);
-}
+} */
 .admin .card-title {
   color: var(--main-color);
   font-size: 2rem;

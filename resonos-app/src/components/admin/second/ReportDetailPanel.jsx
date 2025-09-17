@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 
 const ReportDetailPanel = ({ report, onStatusChange, onDelete }) => {
   if (!report) return null;
@@ -12,11 +13,14 @@ return (
         <p><strong>신고 ID:</strong> {report.id}</p>
         <p>
           <strong>게시글 이동:</strong>
-         {(
-            <a href={`http://localhost:5173/community/boards/${report.communityId}/posts/${report.boardPostId}`} target="_blank" rel="noreferrer" className="btn btn-outline-gold btn-xs ms-2">
-              게시글 바로가기
-            </a>
-          )}
+          <Link 
+            to={`/community/boards/${report.communityId}/posts/${report.boardPostId}`} 
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-outline-gold btn-xs ms-2"
+          >
+            게시글 바로가기
+          </Link>
         </p>
         <p><strong>대상 ID:</strong> {report.boardPostId}</p>
         <p><strong>사유:</strong> {report.reason}</p>
