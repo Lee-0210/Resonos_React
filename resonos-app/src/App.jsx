@@ -5,6 +5,7 @@ import LoginContextProvider from './contexts/LoginContextProvider';
 import Track from './pages/review/Track';
 import Album from './pages/review/Album';
 import Artist from './pages/review/Artist';
+import Main from './pages/list/Main';
 import { ThemeProvider } from './components/admin/toggle/ThemeToggle';
 import ThemeRoutes from './ThemeRoutes';
 import { useEffect } from 'react';
@@ -47,6 +48,11 @@ const App = () => {
           <Route path="/tracks" element={
             <ForceDarkRoute>
               <Track />
+            </ForceDarkRoute>
+          } />
+          <Route path="/list/main" element={
+            <ForceDarkRoute>
+              <Main />
             </ForceDarkRoute>
           } />
           <Route path='*' element={

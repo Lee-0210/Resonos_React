@@ -5,7 +5,6 @@ import AdminIndex from './pages/admin/Index';
 import Tailwindtest from './tailwind/Test';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Main from './pages/list/Main';
 import Mypage from './pages/user/Mypage';
 import AdminMembers from './pages/admin/AdminMembersPage';
 import AdminMemberDetail from './pages/admin/AdminMemberDetail';
@@ -64,7 +63,6 @@ const ThemeRoutes = () => {
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/test' element={<Tailwindtest />} />
-      <Route path="/list/main" element={<Main />} />
 
       {/* 컨텐츠 목록 */}
       <Route path="/list/new-albums" element={<NewAlbum />} />
