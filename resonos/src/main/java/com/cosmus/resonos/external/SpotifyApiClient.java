@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -20,13 +21,21 @@ import com.cosmus.resonos.domain.review.Artist;
 import com.cosmus.resonos.domain.review.Track;
 import com.cosmus.resonos.service.admin.ExternalApiConfigService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class SpotifyApiClient {
 
-    // @Value("${spotify.client-id}")
-    // private String clientId;
-    // @Value("${spotify.client-secret}")
-    // private String clientSecret;
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SpotifyApiClient.class);
+    
+
+    @Value("${spotify.client-id}")
+    private String clientId;
+    
+    @Value("${spotify.client-secret}")
+    private String clientSecret;
+    
 
     @Autowired
     private ExternalApiConfigService externalApiConfigService;
@@ -38,6 +47,7 @@ public class SpotifyApiClient {
     /** 1. 토큰 발급 */
     public String getAccessToken() {
         ExternalApiConfig config = null;
+        System.out.println("SpotifyApiClient - getAccessToken() called");
         try {
             config = externalApiConfigService.selectByProvider("spotify");
         } catch (Exception e) {
