@@ -15,8 +15,11 @@ const AppContent = () => {
 
   // ReviewRoutes에 해당하는 경로
   const reviewPaths = [
-    "/artists", "/albums", "/tracks",
-    "/list", "/search"
+    '/artists', '/albums', '/tracks', '/list/main',
+    '/list/new-albums', '/list/hot-albums', '/list/new-tracks',
+    '/list/hot-tracks', '/list/new-playlists', '/list/hot-playlists',
+    '/search', '/search/artists', '/search/albums', '/search/tracks',
+    '/search/users', '/search/playlists'
   ];
 
   // 현재 경로가 ReviewRoutes인지 확인
