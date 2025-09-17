@@ -149,9 +149,9 @@ const LoginContextProvider = ({children}) => {
     // 로그아웃 확인
     Swal.confirm('로그아웃 하시겠습니까?', '로그아웃을 진행합니다.', 'warning', result => {
       if(result.isConfirmed) {
-        Swal.alert("로그아웃 성공", "로그아웃 되었습니다.", "success")
         // 로그아웃 세팅
         logoutSetting()
+        Swal.alert("로그아웃 성공", "로그아웃 되었습니다.", "success")
         // 페이지 이동 -> "/" (메인)
         navigate("/")
         return

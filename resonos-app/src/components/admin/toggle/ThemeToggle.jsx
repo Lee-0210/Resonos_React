@@ -17,16 +17,8 @@ export const ThemeProvider = ({ children }) => {
     }
     return 'dark';
   });
+  const [userTheme, setUserTheme] = useState('dark');
 
-  // useEffect(() => {
-  //   const forceDarkRoutes = ["/albums", "/tracks", "/artists"];
-  //   if (forceDarkRoutes.includes(location.pathname)) {
-  //     if (theme !== "dark") {
-  //       setTheme("dark");
-  //       window.location.reload();
-  //     }
-  //   }
-  // }, [location.pathname, theme]);
 
   // 테마 변경 시 HTML에 적용하고 localStorage에 저장
   useEffect(() => {
@@ -50,12 +42,18 @@ export const ThemeProvider = ({ children }) => {
 
 
   // 테마 토글 함수
+  // const toggleTheme = () => {
+  //   setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
+  // };
+
   const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'dark' ? 'light' : 'dark');
+    const newTheme = userTheme === 'dark' ? 'light' : 'dark';
+    setUserTheme(newTheme);
+    setTheme(newTheme);  // ForceDarkRoute 외부에서만 적용
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme, userTheme }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -75,38 +73,39 @@ const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <button
-      className="theme-toggle-btn"
-      onClick={toggleTheme}
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-      style={{
-        border: '1px solid var(--main-color)',
-        background: 'none',
-        color: 'var(--main-color)',
-        borderRadius: '30px',
-        padding: '8px 16px',
-        fontSize: '14px',
-        fontWeight: 'bold',
-        cursor: 'pointer',
-        transition: 'all 0.25s ease',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px'
-      }}
-      onMouseEnter={(e) => {
-        e.target.style.background = 'var(--main-color)';
-        e.target.style.color = 'var(--background-color)';
-      }}
-      onMouseLeave={(e) => {
-        e.target.style.background = 'none';
-        e.target.style.color = 'var(--main-color)';
-      }}
-    >
-      <span style={{ fontSize: '16px' }}>
-        {theme === 'dark' ? '☀️' : '🌙'}
-      </span>
-      {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-    </button>
+    <></>
+    // <button
+    //   className="btn btn-gold"
+    //   onClick={toggleTheme}
+    // aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+    // style={{
+    //   border: '1px solid var(--main-color)',
+    //   background: 'none',
+    //   color: 'var(--main-color)',
+    //   borderRadius: '30px',
+    //   padding: '8px 16px',
+    //   fontSize: '14px',
+    //   fontWeight: 'bold',
+    //   cursor: 'pointer',
+    //   transition: 'all 0.25s ease',
+    //   display: 'flex',
+    //   alignItems: 'center',
+    //   gap: '8px'
+    // }}
+    //   onMouseEnter={(e) => {
+    //     e.target.style.background = 'var(--main-color)';
+    //     e.target.style.color = 'var(--background-color)';
+    //   }}
+    //   onMouseLeave={(e) => {
+    //     e.target.style.background = 'none';
+    //     e.target.style.color = 'var(--main-color)';
+    //   }}
+    // >
+    //   <span style={{ fontSize: '16px' }}>
+    //     {theme === 'dark' ? '☀️' : '🌙'}
+    //   </span>
+    //   {/* {theme === 'dark' ? 'Light Mode' : 'Dark Mode'} */}
+    // </button>
   );
 };
 

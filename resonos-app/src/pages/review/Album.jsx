@@ -5,7 +5,7 @@ import Footer from '../../components/Footer/Footer'
 
 
 
-const album = () => {
+const AlbumPage = () => {
   return (
     <>
     <Header />
@@ -15,4 +15,4 @@ const album = () => {
   )
 }
 
-export default album
+export default AlbumPage

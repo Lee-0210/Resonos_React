@@ -3,14 +3,14 @@ import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 import Track from '../../containers/review/Track'
 
-const track = () => {
+const TrackPage = () => {
   return (
     <>
-    <Header />
-    <Track />
-    <Footer />
+      <Header />
+      <Track />
+      <Footer />
     </>
   )
 }
 
-export default track
+export default TrackPage

@@ -5,30 +5,17 @@ import AdminIndex from './pages/admin/Index';
 import Tailwindtest from './tailwind/Test';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Main from './pages/list/Main';
 import Mypage from './pages/user/Mypage';
 import AdminMembers from './pages/admin/AdminMembersPage';
 import AdminMemberDetail from './pages/admin/AdminMemberDetail';
-import NewAlbum from './pages/list/NewAlbum';
 import Edit from './pages/user/Edit';
 import Join from './pages/Join';
 import AdminTest from './pages/admin/TestContainer'
-import HotPlaylist from './pages/list/HotPlaylist';
-import HotAlbum from './pages/list/HotAlbum';
-import NewTrack from './pages/list/NewTrack';
-import HotTrack from './pages/list/HotTrack';
-import NewPlaylist from './pages/list/NewPlaylist';
 import Playlist from './pages/user/Playlist';
-import Search from './pages/search/Search';
-import ArtistSearch from './pages/search/ArtistSearch';
-import AlbumSearch from './pages/search/AlbumSearch';
-import TrackSearch from './pages/search/TrackSearch';
 import PlaylistDetail from './pages/user/PlaylistDetail';
 import CreatePlaylist from './pages/user/CreatePlaylist';
 import AdminReportsContainer from './pages/admin/AdminReportsPage';
 import AdminMusicContainer from './containers/admin/AdminMusicContainer';
-import UserSearch from './pages/search/UserSearch';
-import PlaylistSearch from './pages/search/PlaylistSearch';
 import Activity from './pages/user/activity';
 import AdminRoleManagePage from './pages/admin/AdminRoleManagePage';
 import AdminAnPManagePage from './pages/admin/AdminAnPManagePage';
@@ -64,23 +51,7 @@ const ThemeRoutes = () => {
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/test' element={<Tailwindtest />} />
-      <Route path="/list/main" element={<Main />} />
 
-      {/* 컨텐츠 목록 */}
-      <Route path="/list/new-albums" element={<NewAlbum />} />
-      <Route path="/list/hot-albums" element={<HotAlbum />} />
-      <Route path="/list/new-tracks" element={<NewTrack />} />
-      <Route path="/list/hot-tracks" element={<HotTrack />} />
-      <Route path="/list/new-playlists" element={<NewPlaylist />} />
-      <Route path="/list/hot-playlists" element={<HotPlaylist />} />
-
-      {/* 검색 목록 */}
-      <Route path="/search" element={<Search />} />
-      <Route path="/search/artists" element={<ArtistSearch />} />
-      <Route path="/search/albums" element={<AlbumSearch />} />
-      <Route path="/search/tracks" element={<TrackSearch />} />
-      <Route path="/search/users" element={<UserSearch />} />
-      <Route path="/search/playlists" element={<PlaylistSearch />} />
 
       {/* 공용 */}
       <Route path='/login' element={<Login />} />
