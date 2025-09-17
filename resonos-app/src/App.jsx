@@ -1,31 +1,32 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import './index.css'; // Tailwind CSS가 포함된 파일을 import
 import LoginContextProvider from './contexts/LoginContextProvider';
-import Track from './pages/review/Track';
-import Album from './pages/review/Album';
-import Artist from './pages/review/Artist';
-import Main from './pages/list/Main';
 import { ThemeProvider } from './components/admin/toggle/ThemeToggle';
-import ThemeRoutes from './ThemeRoutes';
 import { useEffect } from 'react';
+import ForceDarkRoute from './utils/ForceDarkRoute';
+import ReviewRoutes from './ReviewRoutes';
+import ThemeRoutes from './ThemeRoutes';
 
 
 
-// 범위 한정 css 적용 - 테스트 진행중
+const AppContent = () => {
+  const location = useLocation();
 
-const ForceDarkRoute = ({ children }) => {
-  useEffect(() => {
-    // 항상 다크 모드 강제 적용
-    document.documentElement.setAttribute('data-theme', 'dark');
-    document.body.className = document.body.className
-      .split(' ')
-      .filter(c => c !== 'dark-mode' && c !== 'light-mode')
-      .concat('dark-mode')
-      .join(' ');
-  }, []);
+  // ReviewRoutes에 해당하는 경로
+  const reviewPaths = [
+    "/artists", "/albums", "/tracks",
+    "/list", "/search"
+  ];
 
-  return children;
+  // 현재 경로가 ReviewRoutes인지 확인
+  const isReviewRoute = reviewPaths.some(path => location.pathname.startsWith(path));
+
+  return (
+    <>
+      {isReviewRoute ? <ReviewRoutes /> : <ThemeRoutes />}
+    </>
+  );
 };
 
 const App = () => {
@@ -33,34 +34,13 @@ const App = () => {
   return (
     <BrowserRouter>
       <LoginContextProvider>
-        <Routes>
-          {/* 리뷰 */}
-          <Route path="/artists" element={
-            <ForceDarkRoute>
-              <Artist />
-            </ForceDarkRoute>
-          } />
-          <Route path="/albums" element={
-            <ForceDarkRoute>
-              <Album />
-            </ForceDarkRoute>
-          } />
-          <Route path="/tracks" element={
-            <ForceDarkRoute>
-              <Track />
-            </ForceDarkRoute>
-          } />
-          <Route path="/list/main" element={
-            <ForceDarkRoute>
-              <Main />
-            </ForceDarkRoute>
-          } />
-          <Route path='*' element={
-            <ThemeProvider>
-              <ThemeRoutes />
-            </ThemeProvider>
-          } />
-        </Routes>
+        <ThemeProvider>
+          <ForceDarkRoute>
+            <Routes>
+              <Route path="/*" element={<AppContent />} />
+            </Routes>
+          </ForceDarkRoute>
+        </ThemeProvider>
       </LoginContextProvider>
     </BrowserRouter>
   )

@@ -3,7 +3,7 @@ import Artist from '../../containers/review/Artist'
 import Header from '../../components/Header/Header'
 import Footer from '../../components/Footer/Footer'
 
-const artist = () => {
+const ArtistPage = () => {
   return (
     <>
     <Header />
@@ -13,4 +13,4 @@ const artist = () => {
   )
 }
 
-export default artist
+export default ArtistPage

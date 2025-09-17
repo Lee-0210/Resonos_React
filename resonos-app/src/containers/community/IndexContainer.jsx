@@ -16,7 +16,7 @@ const IndexContainer = () => {
   const getCommunityData = async () => {
     try {
       const response = await cr.getIndex()
-      if(response.status === 200) {
+      if (response.status === 200) {
         const data = response.data
         // console.log(response)
         setHotPosts(data.hotPosts)
@@ -26,7 +26,7 @@ const IndexContainer = () => {
         setNewCommunities(data.newCommunities)
         setTopCommunities(data.topCommunities)
       }
-    } catch(e) {
+    } catch (e) {
       console.error('error :', e)
     }
   }
@@ -37,18 +37,18 @@ const IndexContainer = () => {
 
   return (
     <>
-    <Header />
-    <div className="container">
-      <Index
-        hotPosts={hotPosts}
-        latestPosts={latestPosts}
-        popularPosts={popularPosts}
-        realTimePopularPosts={realTimePopularPosts}
-        topCommunities={topCommunities}
-        newCommunities={newCommunities}
-      />
-    </div>
-    <Footer />
+      <Header />
+      <div className="container">
+        <Index
+          hotPosts={hotPosts}
+          latestPosts={latestPosts}
+          popularPosts={popularPosts}
+          realTimePopularPosts={realTimePopularPosts}
+          topCommunities={topCommunities}
+          newCommunities={newCommunities}
+        />
+      </div>
+      <Footer />
     </>
   )
 }
