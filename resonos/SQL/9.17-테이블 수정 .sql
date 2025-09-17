@@ -15,3 +15,12 @@
 ALTER TABLE `external_api_config`
 ADD COLUMN `description` varchar(255) DEFAULT NULL,
 MODIFY COLUMN `secret` varchar(100) DEFAULT NULL;
+
+
+ALTER TABLE liked_track
+DROP FOREIGN KEY FK_track_TO_liked_track_1;
+
+ALTER TABLE liked_track
+ADD CONSTRAINT FK_track_TO_liked_track_1
+FOREIGN KEY (track_id) REFERENCES track(id)
+ON DELETE CASCADE;
