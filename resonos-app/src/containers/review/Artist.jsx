@@ -122,6 +122,7 @@ const Artist = () => {
       const response = await api.voteArtistMood(artistDTO)
       const data = response.data
       if (data != null) {
+        setIsMoodEmpty(false)
         setUserVotedMoodId(data.votedMoodId)
         setMoodLabels(data.labels)
         setMoodValues(data.values)
